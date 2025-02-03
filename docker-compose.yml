@@ -6,13 +6,13 @@ services:
       context: ./front
       dockerfile: Dockerfile
     ports:
-      - "80:80" # Expose the frontend port to Nginx
+      - "8080:8080" # Expose the frontend port to Nginx
 
   backend:
     build:
       context: ./back
       dockerfile: Dockerfile
     ports:
-      - "9000:9000" # Expose the backend port to Nginx
+      - "8081:8081" # Expose the backend port to Nginx
     environment:
       - NODE_ENV=production
