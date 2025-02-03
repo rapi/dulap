@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  front:
+    build:
+      context: ./front
+      dockerfile: Dockerfile
+    ports:
+      - "80:80" # Expose the frontend port to Nginx
+
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    ports:
+      - "9000:9000" # Expose the backend port to Nginx
+    environment:
+      - NODE_ENV=production

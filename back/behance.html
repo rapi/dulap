@@ -1,0 +1,165 @@
+
+query GetProfileProjects($username: String, $after: String) {
+user(username: $username) {
+profileProjects(first: 12, after: $after) {
+pageInfo {
+endCursor
+hasNextPage
+}
+nodes {
+__typename
+adminFlags {
+mature_lock
+privacy_lock
+dmca_lock
+flagged_lock
+privacy_violation_lock
+trademark_lock
+spam_lock
+eu_ip_lock
+}
+canBeBoosted
+colors {
+r
+g
+b
+}
+covers {
+size_202 {
+url
+}
+size_404 {
+url
+}
+size_808 {
+url
+}
+}
+features {
+url
+name
+featuredOn
+ribbon {
+image
+image2x
+image3x
+}
+}
+fields {
+id
+label
+slug
+url
+}
+hasMatureContent
+id
+isBoosted
+isFeatured
+isHiddenFromWorkTab
+isMatureReviewSubmitted
+isMonaReported
+isOwner
+isFounder
+isPinnedToSubscriptionOverview
+isPrivate
+sourceFiles {
+...sourceFileWithCoverFields
+}
+matureAccess
+modifiedOn
+name
+owners {
+...OwnerFields
+images {
+size_50 {
+url
+}
+}
+}
+premium
+publishedOn
+privacyLevel
+profileSectionId
+stats {
+appreciations {
+all
+}
+views {
+all
+}
+comments {
+all
+}
+}
+slug
+tools {
+id
+title
+category
+categoryLabel
+categoryId
+approved
+url
+backgroundColor
+}
+url
+}
+}
+}
+}
+
+
+fragment sourceFileWithCoverFields on SourceFile {
+__typename
+sourceFileId
+projectId
+userId
+title
+assetId
+renditionUrl
+mimeType
+size
+category
+licenseType
+unitAmount
+currency
+tier
+hidden
+extension
+hasUserPurchased
+description
+cover {
+coverUrl
+coverX
+coverY
+coverScale
+}
+}
+
+
+fragment OwnerFields on User {
+displayName
+hasPremiumAccess
+id
+isFollowing
+isProfileOwner
+location
+locationUrl
+url
+username
+isMessageButtonVisible
+availabilityInfo {
+availabilityTimeline
+isAvailableFullTime
+isAvailableFreelance
+hiringTimeline {
+key
+label
+}
+}
+creatorPro {
+isActive
+initialSubscriptionDate
+}
+}
+

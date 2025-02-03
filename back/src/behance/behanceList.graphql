@@ -1,0 +1,82 @@
+query GetProfileProjects($username: String, $after: String, $projectPassword: String) {
+    user(username: $username) {
+        profileProjects(first: 40, after: $after) {
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
+            nodes {
+
+                allModules(projectPassword: $projectPassword) {
+                    ... on EmbedModule {
+                        id
+                        caption
+                    }
+                    ... on TextModule {
+                        id
+                        text
+                        alignment
+                    }
+                    ... on MediaCollectionModule {
+                        id
+                        fullBleed
+                        caption: captionPlain
+                        components {
+                            id
+                            imageSizes {
+                                allAvailable {
+                                    url
+                                    height
+                                }
+                                size_disp {
+                                    url
+                                }
+                                size_disp_still {
+                                    url
+                                }
+                            }
+                        }
+                    }
+                    ... on TextModule {
+                        id
+                        fullBleed
+                    }
+
+                }
+
+                id
+                description
+                tags {
+                    title
+                }
+                covers {
+                    size_808 {
+                        url
+                    }
+                    size_original_webp {
+                        url
+                    }
+                }
+
+                fields {
+                    label
+                }
+                name
+                publishedOn
+                stats {
+                    appreciations {
+                        all
+                    }
+                    views {
+                        all
+                    }
+                    comments {
+                        all
+                    }
+                }
+                slug
+                url
+            }
+        }
+    }
+}
