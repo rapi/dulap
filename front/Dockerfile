@@ -7,8 +7,6 @@ WORKDIR /app
 # Copy the package.json and package-lock.json to install dependencies
 COPY package.json yarn.lock ./
 
-RUN npm install --global yarn
-
 # Install the dependencies
 RUN npx browserslist@latest --update-db
 RUN yarn install
