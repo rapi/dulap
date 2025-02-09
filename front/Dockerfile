@@ -8,7 +8,6 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 
 # Install the dependencies
-RUN npx browserslist@latest --update-db
 RUN yarn install
 
 # Copy the rest of the app's source code
