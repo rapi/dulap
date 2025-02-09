@@ -1,6 +1,6 @@
 import classes from './CustomButton.module.css'
 import { ReactNode } from 'react'
-import { Button } from '@mui/material'
+import { Button, IconButton } from '@mui/material'
 export const CustomButton = ({
   children,
   icon,
@@ -8,6 +8,9 @@ export const CustomButton = ({
   children?: ReactNode
   icon: ReactNode
 }) => {
+  if (!children && icon) {
+    return <IconButton>{icon}</IconButton>
+  }
   return (
     <>
       <Button className={classes.customButton} {...{ startIcon: icon }}>
