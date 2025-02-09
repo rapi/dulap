@@ -6,7 +6,7 @@ services:
       context: ./front
       dockerfile: Dockerfile
     ports:
-      - "80:80" # Expose the frontend port to Nginx
+      - "8080:8080" # Expose the frontend port to Nginx
 
   backend:
     build:
