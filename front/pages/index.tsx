@@ -1,11 +1,9 @@
 import { FC } from 'react'
-import { Menu } from '~/components/Menu/Menu'
-import { Banner } from '~/components/Banner/Banner'
+import { Landing } from '~/components/Landing/Landing'
 const Index: FC = () => {
   return (
     <>
-      <Menu />
-      <Banner />
+      <Landing />
     </>
   )
 }
