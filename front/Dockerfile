@@ -26,7 +26,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/out /usr/share/nginx/html
 
 # Expose port 80 to access the app
-EXPOSE 8080
+EXPOSE 80
 
 # Start Nginx to serve the app
 CMD ["nginx", "-g", "daemon off;"]
