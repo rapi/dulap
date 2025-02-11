@@ -3,7 +3,7 @@ import './Landing.css'
 
 export const Landing: React.FC = () => {
   return (
-    <div className="landing-page">
+    <div className="landing-page outfit-font">
       <header className="header">
         <div className="logo">
           <img src="/logo.svg" alt="Dulap.md Logo" />
