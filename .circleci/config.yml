@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.10.1  # Import Slack Orb
+
 jobs:
   build-and-push:
     docker:
@@ -8,6 +11,14 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
+      - run:
+          name: Extract Commit Info
+          command: |
+            echo "export COMMIT_AUTHOR='$(git log -1 --pretty=format:'%an')'" >> commit_info.txt
+            echo "export COMMIT_MESSAGE='$(git log -1 --pretty=format:'%s')'" >> commit_info.txt
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
       - run:
           name: Build Docker image
           command: |
@@ -24,6 +35,14 @@ jobs:
           root: .
           paths:
             - .
+            - commit_info.txt  # Persist commit info for later jobs
+      - slack/notify:
+          channel: "#website"  # ✅ Correct channel name
+          event: fail
+          custom: |
+            {
+              "text": "❌ *Build failed!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nPlease check CircleCI logs."
+            }
 
   deploy:
     docker:
@@ -31,6 +50,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
       - add_ssh_keys:
           fingerprints:
             - "SHA256:hwnLNo/98stGbUwBDY5njE9IZ5HdjNTuN+Fz4JdSPms"
@@ -43,6 +65,23 @@ jobs:
             docker run -d --name dulap -p 8080:8080 $DOCKERHUB_USERNAME/dulap:latest &&\
             echo "y" | docker image prune"
 
+  slack-deploy-success:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
+      - slack/notify:
+          channel: "#website"  # ✅ Correct channel name
+          event: pass
+          custom: |
+            {
+              "text": "🚀 *Deployment successful!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nThe latest image is now running on the server."
+            }
+
 workflows:
   version: 2
   build-and-deploy:
@@ -51,3 +90,6 @@ workflows:
       - deploy:
           requires:
             - build-and-push
+      - slack-deploy-success:
+          requires:
+            - deploy
