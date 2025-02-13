@@ -6,7 +6,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - setup_remote_docker:  # Removed version to avoid resource class issue
+      - setup_remote_docker:
           docker_layer_caching: true
       - run:
           name: Build Docker image
@@ -33,18 +33,14 @@ jobs:
           at: .
       - add_ssh_keys:
           fingerprints:
-            - "SHA256:hwnLNo/98stGbUwBDY5njE9IZ5HdjNTuN+Fz4JdSPms"  # SSH key fingerprint
+            - "SHA256:hwnLNo/98stGbUwBDY5njE9IZ5HdjNTuN+Fz4JdSPms"
       - run:
           name: Deploy and restart container on VPS
           command: |
-            ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-              docker pull $DOCKERHUB_USERNAME/dulap:latest
-              if [ "$(docker ps -aq -f name=dulap)" ]; then
-                docker stop dulap
-                docker rm dulap
-              fi
-              docker run -d --name dulap -p 80:80 $DOCKERHUB_USERNAME/dulap:latest
-            EOF
+            ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST \
+            "docker pull $DOCKERHUB_USERNAME/dulap:latest && \
+            if [ \$(docker ps -aq -f name=dulap) ]; then docker stop dulap && docker rm dulap; fi && \
+            docker run -d --name dulap -p 80:80 $DOCKERHUB_USERNAME/dulap:latest"
 
 workflows:
   version: 2
