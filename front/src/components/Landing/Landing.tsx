@@ -88,7 +88,7 @@ export const Landing: React.FC = () => {
         <div className="about-content">
           <img
             src="/banner.jpg"
-            alt="Familia Grînciuc"
+            alt="Familia Grinciuc"
             className="about-image"
           />
           <div>
