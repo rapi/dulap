@@ -32,6 +32,13 @@ jobs:
           root: .
           paths:
             - .
+      - run:
+          name: Notify Slack on Build Failure
+          when: on_fail
+          command: |
+            curl -X POST -H 'Content-type: application/json' --data '{
+              "text": "❌ *Build failed!*\n*Author:* '$COMMIT_AUTHOR'\n*Commit:* '$COMMIT_MESSAGE'\nPlease check CircleCI logs."
+            }' $SLACK_WEBHOOK_URL
 
   deploy:
     docker:
@@ -51,18 +58,6 @@ jobs:
             docker run -d --name dulap -p 8080:8080 $DOCKERHUB_USERNAME/dulap:latest &&\
             echo "y" | docker image prune"
 
-  slack-build-failure:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - slack/notify:
-          channel: "#deployments"
-          event: fail
-          custom: |
-            {
-              "text": "❌ *Build failed!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nPlease check CircleCI logs."
-            }
-
   slack-deploy-success:
     docker:
       - image: cimg/base:stable
@@ -80,13 +75,6 @@ workflows:
   build-and-deploy:
     jobs:
       - build-and-push
-      - slack-build-failure:
-          requires:
-            - build-and-push
-          filters:
-            branches:
-              only: main
-          when: on_fail
       - deploy:
           requires:
             - build-and-push
