@@ -23,17 +23,6 @@ export const Landing: React.FC = () => {
       </header>
 
       <section className="hero">
-<<<<<<< HEAD
-=======
-        <div className="hero-content">
-          <h1>Dulapul tău - exact cum îl vrei</h1>
-          <p>
-            Mobilier creat după dimensiunile tale <span>preferințele</span>{' '}
-            <span>culorile</span>
-          </p>
-          <button className="customize-button">Personalizează!!</button>
-        </div>
->>>>>>> 6f66b5b6577207c8c315ccb40f712c9f66588459
         <img
           className="hero-image"
           src="/banner-2.jpg"
