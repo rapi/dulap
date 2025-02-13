@@ -1,10 +1,10 @@
 import React from 'react'
 import './Landing.css'
-
+import classes from './Landing.module.css'
 export const Landing: React.FC = () => {
   return (
     <div className="landing-page outfit-font">
-      <header className="header">
+      <header className={classes.header}>
         <div className="logo">
           <img src="/logo.svg" alt="Dulap.md Logo" />
         </div>
@@ -32,8 +32,8 @@ export const Landing: React.FC = () => {
           <h1>Dulapul tău - </h1>
           <h1>exact cum îl vrei</h1>
           <p className="hero-subtitle">
-            Mobilier creat după <span>dimensiunile</span>{' '}<span>preferințele</span>{' '}
-            <span>culorile</span> tale
+            Mobilier creat după <span>dimensiunile</span>{' '}
+            <span>preferințele</span> <span>culorile</span> tale
           </p>
           {/* <button className="customize-button">Personalizează</button> */}
           <button className="cta-button">
@@ -41,7 +41,6 @@ export const Landing: React.FC = () => {
             <p className="cta-button-title">Personalizează</p>
           </button>
         </div>
-        
       </section>
 
       <section className="product-types">
