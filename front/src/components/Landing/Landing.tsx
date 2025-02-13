@@ -3,7 +3,11 @@ import './Landing.css'
 import classes from './Landing.module.css'
 import { Menu } from '~/components/Menu/Menu'
 import { Banner } from '~/components/Banner/Banner'
-import Image from 'next/image'
+import { ProductList } from '~/components/ProductList/ProductList'
+import { ProductItem } from '~/components/ProductItem/ProductItem'
+import { WardrobeSecondIcon } from '~/components/Icons/Icons'
+import { CustomButton } from '~/components/CustomButton/CustomButton'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 export const Landing: React.FC = () => {
   return (
     <div className="landing-page outfit-font">
@@ -13,52 +17,44 @@ export const Landing: React.FC = () => {
         <h3 className={classes.productTypesSubtitle}>
           Alege ce tip de dulap ai nevoie și începe personalizarea!
         </h3>
-        <div className={classes.productGrid}>
+        <ProductList>
           {[...Array(6)].map((_, index) => (
-            <div className={classes.productCard} key={index}>
-              <Image
-                width={2056}
-                height={1000}
-                src="/banner.jpg"
-                alt="Comodă"
-                className="productImage"
-              />
-              <h3>Comodă pe picioare</h3>
-              <div className="options">
-                <span className="colorOption" />
-                <span className="colorOption" />
-                <span className="colorOption" />
-              </div>
-              <button className={classes.createButton}>
-                <span className={classes.wardrobeIcon2}></span>
-                <p className="cta-button-title">Creează</p>
-              </button>
-            </div>
+            <ProductItem
+              key={index}
+              button={
+                <CustomButton
+                  icon={<WardrobeSecondIcon />}
+                  outlined
+                  size="medium"
+                >
+                  Creează
+                </CustomButton>
+              }
+            />
           ))}
-        </div>
+        </ProductList>
       </section>
 
       <section className={classes.readyProducts}>
         <h2>
           Alege <span>produse gata</span> din lista noastră
         </h2>
-        <div className={classes.productList}>
-          {[...Array(4)].map((_, index) => (
-            <div className="ready-product-card" key={index}>
-              <img
-                src="/banner.jpg"
-                alt="Comodă scandi wood"
-                className="productImage"
-              />
-              <h3>Comodă scandi wood</h3>
-              <p>1200x400x850mm</p>
-              <button className={classes.addToCartButton}>
-                <span className={classes.cartIcon}></span>
-                <p className="cta-button-title">Adaugă în coș</p>
-              </button>
-            </div>
+        <ProductList>
+          {[...Array(6)].map((_, index) => (
+            <ProductItem
+              key={index}
+              button={
+                <CustomButton
+                  icon={<ShoppingCartIcon />}
+                  outlined
+                  size="medium"
+                >
+                  Adaugă în coș
+                </CustomButton>
+              }
+            />
           ))}
-        </div>
+        </ProductList>
       </section>
 
       <section className={classes.aboutUs}>

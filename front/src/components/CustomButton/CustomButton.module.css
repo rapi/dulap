@@ -18,6 +18,26 @@ button.ctaButton {
   }
 }
 
+.outlined:hover {
+  background-color: #df972e;
+  color: white;
+  & img {
+    filter: invert(1) brightness(1000%);
+  }
+}
+
+button.outlined {
+  color: #df972e;
+  background-color: transparent;
+  border: 3px solid #df972e;
+  border-radius: 10px;
+}
+
 .ctaButtonTitle {
   font-size: 0.9em;
+}
+.mediumSize p {
+  font-size: 1.3rem;
+  padding: 0;
+  margin-block: 0.5rem;
 }
