@@ -1,49 +1,13 @@
 import React from 'react'
 import './Landing.css'
 import classes from './Landing.module.css'
-// import Image from 'next/image'
+import { Menu } from '~/components/Menu/Menu'
+import { Banner } from '~/components/Banner/Banner'
 export const Landing: React.FC = () => {
   return (
     <div className="landing-page outfit-font">
-      <header className={classes.header}>
-        <div className="logo">
-          <img src="/logo.svg" alt="Dulap.md Logo" />
-        </div>
-        <nav className="navigation">
-          <a href="#">Dulapuri</a>
-          <a href="#">Comode</a>
-          <a href="#">Rafturi</a>
-          <button className="ctaButton">
-            <img src="/wardrobe-button.svg" alt="Dulap.md Logo" />
-            <p>Încearcă aici</p>
-          </button>
-          <div className="icons">
-            <img src="/cart.svg" alt="Dulap.md shopping cart" />
-          </div>
-        </nav>
-      </header>
-
-      <section className="hero">
-        <img
-          className="heroImage"
-          src="/banner-2.jpg"
-          alt="Hero showcasing furniture"
-        />
-        <div className="heroContent">
-          <h1>Dulapul tău - </h1>
-          <h1>exact cum îl vrei</h1>
-          <p className="heroSubtitle">
-            Mobilier creat după <span>dimensiunile</span>{' '}
-            <span>preferințele</span> <span>culorile</span> tale
-          </p>
-          {/* <button className="customize-button">Personalizează</button> */}
-          <button className="ctaButton">
-            <img src="/wardrobe-button.svg" alt="Dulap.md Logo" />
-            <p className="cta-button-title">Personalizează</p>
-          </button>
-        </div>
-      </section>
-
+      <Menu />
+      <Banner />
       <section className={classes.productTypes}>
         <h3 className={classes.productTypesSubtitle}>
           Alege ce tip de dulap ai nevoie și începe personalizarea!

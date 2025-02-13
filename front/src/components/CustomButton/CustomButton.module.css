@@ -1,6 +1,23 @@
-button.customButton {
+button.ctaButton {
+  padding: 0.1rem 1rem;
+  width: fit-content;
+  font-size: 0.9em;
+  font-weight: 500;
   background-color: #f4b65d;
-  border-radius: 3px;
-  color: black;
-  font-weight: bold;
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Outfit', serif;
+  display: flex;
+  align-items: center;
+  justify-items: baseline;
+  text-transform: none;
+  & span > img:first-child {
+    height: 25px;
+  }
+}
+
+.ctaButtonTitle {
+  font-size: 0.9em;
 }

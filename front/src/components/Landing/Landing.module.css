@@ -1,14 +1,3 @@
-/*Header*/
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* padding: 1rem 15rem; */
-  padding: 1vw 12vw;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 /*Products section*/
 .productTypes,
 .readyProducts,
@@ -37,10 +26,10 @@
   font-size: 1.2em;
   font-weight: 550;
   background-color: #ffffff;
-  border-color: #DF972E;  
+  border-color: #df972e;
   border-style: solid;
   border-width: 2.5px;
-  color: #DF972E;
+  color: #df972e;
   border-radius: 12px;
   cursor: pointer;
   font-family: 'Outfit', serif;
@@ -62,13 +51,14 @@
 }
 
 .createButton:hover {
-  background-color: #DF972E;
+  background-color: #df972e;
   border: none;
   color: #ffffff;
 }
 
 .createButton:hover .wardrobeIcon2 {
-  filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(249deg) brightness(105%) contrast(103%);
+  filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%)
+    hue-rotate(249deg) brightness(105%) contrast(103%);
 }
 
 .cartIcon {
@@ -85,10 +75,10 @@
   font-size: 1.2em;
   font-weight: 550;
   background-color: #ffffff;
-  border-color: #EF2A15;
+  border-color: #ef2a15;
   border-width: 2.5px;
   border-style: solid;
-  color: #EF2A15;
+  color: #ef2a15;
   border-radius: 12px;
   cursor: pointer;
   font-family: 'Outfit', serif;
@@ -98,12 +88,13 @@
 }
 
 .addToCartButton:hover {
-  background-color: #F46D5E;
-  border-color: #F46D5E;
+  background-color: #f46d5e;
+  border-color: #f46d5e;
   color: #ffffff;
   box-shadow: none;
 }
 
 .addToCartButton:hover .cartIcon {
-  filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(249deg) brightness(105%) contrast(103%);
+  filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%)
+    hue-rotate(249deg) brightness(105%) contrast(103%);
 }

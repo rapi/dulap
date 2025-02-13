@@ -13,8 +13,8 @@ export const CustomButton = ({
   }
   return (
     <>
-      <Button className={classes.customButton} {...{ startIcon: icon }}>
-        {children}
+      <Button className={classes.ctaButton} {...{ startIcon: icon }}>
+        <p className={classes.ctaButtonTitle}>{children}</p>
       </Button>
     </>
   )

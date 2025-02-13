@@ -1,27 +1,15 @@
-.menu {
-  height: 100px;
+/*Header*/
+.header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  width: 76vw;
-  margin: auto;
-  & img {
-    height: 38px;
-  }
-  & a {
-    margin-left: 27px;
-    margin-right: 37px;
-  }
-  & div {
-    flex: 50%;
-    & > button:nth-child(4) {
-      padding: 11px 34px;
-      margin-left: 48px;
-      margin-right: 4px;
-      border-radius: 11px;
-    }
-  }
-  & svg {
-    height: 32px;
-    width: auto;
+  /* padding: 1rem 15rem; */
+  padding: 1vw 12vw;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  img:first-child {
+    height: 30px;
+    display: flex;
+    align-items: center;
   }
 }

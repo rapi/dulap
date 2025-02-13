@@ -1,23 +1,22 @@
-import { CustomButton } from '~/components/CustomButton/CustomButton'
-import CheckroomIcon from '@mui/icons-material/Checkroom'
 import classes from './Menu.module.css'
-import { CustomLink } from '~/components/CustomLink/CustomLink'
-import { FavoriteBorder, ShoppingCart } from '@mui/icons-material'
+import React from 'react'
+import { CustomButton } from '~/components/CustomButton/CustomButton'
+import { WardrobeIcon } from '~/components/Icons/Icons'
 export const Menu = () => {
   return (
-    <div className={classes.menu}>
-      <div>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.svg" alt="Logo dulap.md" />
+    <header className={classes.header}>
+      <div className="logo">
+        <img src="/logo.svg" alt="Dulap.md Logo" />
       </div>
-      <div>
-        <CustomLink href="/about">Dulapuri</CustomLink>
-        <CustomLink href="/contact">Comode</CustomLink>
-        <CustomLink href="/contact">Rafturi</CustomLink>
-        <CustomButton icon={<CheckroomIcon />}>Incearca Aici</CustomButton>
-        <CustomButton icon={<FavoriteBorder />} />
-        <CustomButton icon={<ShoppingCart />} />
-      </div>
-    </div>
+      <nav className="navigation">
+        <a href="#">Dulapuri</a>
+        <a href="#">Comode</a>
+        <a href="#">Rafturi</a>
+        <CustomButton icon={<WardrobeIcon />}>Încearcă aici</CustomButton>
+        <div className="icons">
+          <img src="/cart.svg" alt="Dulap.md shopping cart" />
+        </div>
+      </nav>
+    </header>
   )
 }
