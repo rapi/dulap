@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.10.1  # Import Slack Orb
+
 jobs:
   build-and-push:
     docker:
@@ -8,6 +11,11 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
+      - run:
+          name: Extract Commit Info
+          command: |
+            echo "export COMMIT_AUTHOR=\"$(git log -1 --pretty=format:'%an')\"" >> $BASH_ENV
+            echo "export COMMIT_MESSAGE=\"$(git log -1 --pretty=format:'%s')\"" >> $BASH_ENV
       - run:
           name: Build Docker image
           command: |
@@ -48,6 +56,24 @@ workflows:
   build-and-deploy:
     jobs:
       - build-and-push
+      - slack/notify:  # Notify Slack if the build fails
+          requires:
+            - build-and-push
+          channel: "#deployments"
+          event: fail
+          custom: |
+            {
+              "text": "❌ *Build failed!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nPlease check CircleCI logs."
+            }
       - deploy:
           requires:
             - build-and-push
+      - slack/notify:  # Notify Slack when deployment succeeds
+          requires:
+            - deploy
+          channel: "#deployments"
+          event: pass
+          custom: |
+            {
+              "text": "🚀 *Deployment successful!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nThe latest image is now running on the server."
+            }
