@@ -51,29 +51,45 @@ jobs:
             docker run -d --name dulap -p 8080:8080 $DOCKERHUB_USERNAME/dulap:latest &&\
             echo "y" | docker image prune"
 
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - build-and-push
-      - slack/notify:  # Notify Slack if the build fails
-          requires:
-            - build-and-push
+  slack-build-failure:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - slack/notify:
           channel: "#deployments"
           event: fail
           custom: |
             {
               "text": "❌ *Build failed!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nPlease check CircleCI logs."
             }
-      - deploy:
-          requires:
-            - build-and-push
-      - slack/notify:  # Notify Slack when deployment succeeds
-          requires:
-            - deploy
+
+  slack-deploy-success:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - slack/notify:
           channel: "#deployments"
           event: pass
           custom: |
             {
               "text": "🚀 *Deployment successful!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nThe latest image is now running on the server."
             }
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build-and-push
+      - slack-build-failure:
+          requires:
+            - build-and-push
+          filters:
+            branches:
+              only: main
+          when: on_fail
+      - deploy:
+          requires:
+            - build-and-push
+      - slack-deploy-success:
+          requires:
+            - deploy
