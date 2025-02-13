@@ -2,10 +2,13 @@ import classes from './Banner.module.css'
 import React from 'react'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import { WardrobeIcon } from '~/components/Icons/Icons'
+import Image from 'next/image'
 export const Banner = () => {
   return (
     <section className={classes.hero}>
-      <img
+      <Image
+        width={2056}
+        height={1000}
         className={classes.heroImage}
         src="/banner-2.jpg"
         alt="Hero showcasing furniture"

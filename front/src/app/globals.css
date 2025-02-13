@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,9 +17,14 @@
 }
 
 body {
-  color: var(--foreground);
   background: var(--background);
-  font-family: '../fonts/Outfit-VariableFont_wght.ttf', serif;
+  font-family: 'Outfit', serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  margin: 0;
+  padding: 0;
+  color: #333;
+  background-color: #f9f9f9;
 }
 
 .outfit-font {
@@ -25,4 +32,6 @@ body {
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
+}
+body {
 }

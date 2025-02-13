@@ -3,6 +3,7 @@ import './Landing.css'
 import classes from './Landing.module.css'
 import { Menu } from '~/components/Menu/Menu'
 import { Banner } from '~/components/Banner/Banner'
+import Image from 'next/image'
 export const Landing: React.FC = () => {
   return (
     <div className="landing-page outfit-font">
@@ -15,7 +16,13 @@ export const Landing: React.FC = () => {
         <div className={classes.productGrid}>
           {[...Array(6)].map((_, index) => (
             <div className={classes.productCard} key={index}>
-              <img src="/banner.jpg" alt="Comodă" className="productImage" />
+              <Image
+                width={2056}
+                height={1000}
+                src="/banner.jpg"
+                alt="Comodă"
+                className="productImage"
+              />
               <h3>Comodă pe picioare</h3>
               <div className="options">
                 <span className="colorOption" />
