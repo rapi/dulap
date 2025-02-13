@@ -6,12 +6,12 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - setup_remote_docker:  # Removed the `version` field
+      - setup_remote_docker:  # Removed version to avoid resource class issue
           docker_layer_caching: true
       - run:
           name: Build Docker image
           command: |
-            docker build -t $DOCKERHUB_USERNAME/dulap:latest .
+            docker build -t $DOCKERHUB_USERNAME/dulap:latest -f front/Dockerfile front/
       - run:
           name: Login to Docker Hub
           command: |
