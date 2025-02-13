@@ -1,0 +1,53 @@
+version: 2.1
+
+jobs:
+  build-and-push:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/dulap:latest -f front/Dockerfile front/
+      - run:
+          name: Login to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+      - run:
+          name: Push Docker image to Docker Hub
+          command: |
+            docker push $DOCKERHUB_USERNAME/dulap:latest
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - attach_workspace:
+          at: .
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:hwnLNo/98stGbUwBDY5njE9IZ5HdjNTuN+Fz4JdSPms"
+      - run:
+          name: Deploy and restart container on VPS
+          command: |
+            ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST \
+            "docker pull $DOCKERHUB_USERNAME/dulap:latest && \
+            if [ \$(docker ps -aq -f name=dulap) ]; then docker stop dulap && docker rm dulap;  fi && \
+            docker run -d --name dulap -p 8080:8080 $DOCKERHUB_USERNAME/dulap:latest &&\
+            echo "y" | docker image prune"
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build-and-push
+      - deploy:
+          requires:
+            - build-and-push
