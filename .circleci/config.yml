@@ -63,7 +63,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - slack/notify:
-          channel: "#deployments"
+          channel: "#website"
           event: pass
           custom: |
             {
