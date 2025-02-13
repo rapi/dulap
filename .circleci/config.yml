@@ -34,16 +34,15 @@ jobs:
           at: .
       - add_ssh_keys:
           fingerprints:
-            - "SHA256:hwnLNo/98stGbUwBDY5njE9IZ5HdjNTuN+Fz4JdSPms"  # Set in CircleCI SSH settings
+            - "SHA256:hwnLNo/98stGbUwBDY5njE9IZ5HdjNTuN+Fz4JdSPms"  # SSH key fingerprint
       - run:
           name: Deploy and restart container on VPS
           command: |
-            ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-              docker pull $DOCKERHUB_USERNAME/dulap:latest
-              docker stop dulap || true
-              docker rm dulap || true
-              docker run -d --name dulap -p 80:80 $DOCKERHUB_USERNAME/dulap:latest
-            EOF
+            ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST \
+            "docker pull $DOCKERHUB_USERNAME/dulap:latest && \
+            docker stop dulap || true && \
+            docker rm dulap || true && \
+            docker run -d --name dulap -p 80:80 $DOCKERHUB_USERNAME/dulap:latest"
 
 workflows:
   version: 2
@@ -53,4 +52,3 @@ workflows:
       - deploy:
           requires:
             - build-and-push
-
