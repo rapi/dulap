@@ -37,11 +37,14 @@ jobs:
       - run:
           name: Deploy and restart container on VPS
           command: |
-            ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST \
-            "docker pull $DOCKERHUB_USERNAME/dulap:latest && \
-            docker stop dulap || true && \
-            docker rm dulap || true && \
-            docker run -d --name dulap -p 80:80 $DOCKERHUB_USERNAME/dulap:latest"
+            ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
+              docker pull $DOCKERHUB_USERNAME/dulap:latest
+              if [ "$(docker ps -aq -f name=dulap)" ]; then
+                docker stop dulap
+                docker rm dulap
+              fi
+              docker run -d --name dulap -p 80:80 $DOCKERHUB_USERNAME/dulap:latest
+            EOF
 
 workflows:
   version: 2
