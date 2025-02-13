@@ -6,8 +6,7 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.18
+      - setup_remote_docker:  # Removed the `version` field
           docker_layer_caching: true
       - run:
           name: Build Docker image
