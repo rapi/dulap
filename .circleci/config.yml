@@ -14,8 +14,11 @@ jobs:
       - run:
           name: Extract Commit Info
           command: |
-            echo "export COMMIT_AUTHOR=\"$(git log -1 --pretty=format:'%an')\"" >> $BASH_ENV
-            echo "export COMMIT_MESSAGE=\"$(git log -1 --pretty=format:'%s')\"" >> $BASH_ENV
+            echo "export COMMIT_AUTHOR='$(git log -1 --pretty=format:'%an')'" >> commit_info.txt
+            echo "export COMMIT_MESSAGE='$(git log -1 --pretty=format:'%s')'" >> commit_info.txt
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
       - run:
           name: Build Docker image
           command: |
@@ -32,13 +35,14 @@ jobs:
           root: .
           paths:
             - .
-      - run:
-          name: Notify Slack on Build Failure
-          when: on_fail
-          command: |
-            curl -X POST -H 'Content-type: application/json' --data '{
-              "text": "❌ *Build failed!*\n*Author:* '$COMMIT_AUTHOR'\n*Commit:* '$COMMIT_MESSAGE'\nPlease check CircleCI logs."
-            }' $SLACK_WEBHOOK_URL
+            - commit_info.txt  # Persist commit info for later jobs
+      - slack/notify:
+          channel: "#website"  # ✅ Correct channel name
+          event: fail
+          custom: |
+            {
+              "text": "❌ *Build failed!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nPlease check CircleCI logs."
+            }
 
   deploy:
     docker:
@@ -46,6 +50,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
       - add_ssh_keys:
           fingerprints:
             - "SHA256:hwnLNo/98stGbUwBDY5njE9IZ5HdjNTuN+Fz4JdSPms"
@@ -62,8 +69,13 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
       - slack/notify:
-          channel: "#website"
+          channel: "#website"  # ✅ Correct channel name
           event: pass
           custom: |
             {
