@@ -1,10 +1,109 @@
-/* Header */
+/*Header*/
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   /* padding: 1rem 15rem; */
-  padding: 1vw 15vw;
+  padding: 1vw 12vw;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/*Products section*/
+.productTypes,
+.readyProducts,
+.aboutUs {
+  padding: 2vw 12vw;
+  background-color: white;
+  margin: 1rem 0;
+}
+
+.productTypesSubtitle {
+  display: flex;
+  justify-content: center;
+  font-weight: 500;
+}
+
+.productGrid,
+.productList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1vw;
+}
+
+.createButton {
+  padding: 0.1rem 1rem;
+  width: fit-content;
+  font-size: 1.2em;
+  font-weight: 550;
+  background-color: #ffffff;
+  border-color: #DF972E;  
+  border-style: solid;
+  border-width: 2.5px;
+  color: #DF972E;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Outfit', serif;
+  display: flex;
+  align-items: center;
+  justify-items: baseline;
+}
+
+.createButton p {
+  padding: 0 0.5rem;
+}
+
+.wardrobeIcon2 {
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  background-size: cover;
+  background-image: url(/wardrobe-button-2.svg);
+}
+
+.createButton:hover {
+  background-color: #DF972E;
+  border: none;
+  color: #ffffff;
+}
+
+.createButton:hover .wardrobeIcon2 {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(249deg) brightness(105%) contrast(103%);
+}
+
+.cartIcon {
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+  background-size: cover;
+  background-image: url(/cart2.svg);
+}
+
+.addToCartButton {
+  padding: 0.1rem 1rem;
+  width: fit-content;
+  font-size: 1.2em;
+  font-weight: 550;
+  background-color: #ffffff;
+  border-color: #EF2A15;
+  border-width: 2.5px;
+  border-style: solid;
+  color: #EF2A15;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: 'Outfit', serif;
+  display: flex;
+  align-items: center;
+  justify-items: baseline;
+}
+
+.addToCartButton:hover {
+  background-color: #F46D5E;
+  border-color: #F46D5E;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.addToCartButton:hover .cartIcon {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(100%) saturate(0%) hue-rotate(249deg) brightness(105%) contrast(103%);
 }
