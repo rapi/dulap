@@ -15,18 +15,28 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  /* padding: 1rem 15rem; */
+  padding: 1vw 15vw;
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo img {
-  height: 50px;
+  height: 30px;
+  display: flex;
+  align-items: center;
 }
 
 .navigation {
   display: flex;
   align-items: center;
+}
+
+.icons img {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 0rem 1rem;
 }
 
 .navigation a {
@@ -37,12 +47,32 @@ header {
 }
 
 .cta-button {
-  padding: 0.5rem 1rem;
-  background-color: #ff9500;
-  color: white;
+  padding: 0.1rem 1rem;
+  width: fit-content;
+  font-size: 0.9em;
+  font-weight: 500;
+  background-color: #F4B65D;
+  color: #000;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: 'Outfit', serif;
+  display: flex;
+  align-items: center;
+  justify-items: baseline;
+
+}
+
+.cta-button p {
+  padding: 0 0.5rem;
+}
+
+.cta-button img {
+  height: 25px;
+}
+
+.cta-button-title {
+  font-size: 1.2em;
 }
 
 /* Hero Section */
@@ -50,24 +80,48 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem;
   background-color: #fdf2e9;
   flex-wrap: wrap;
+  width: 100%;
+}
+
+.hero-image {
+  width: 100%;
+  height: 1000px;
+  object-fit: cover;
+  object-position: right bottom;
+  opacity: 0.7;
+  position: relative;
 }
 
 .hero-content {
-  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  height: 300px;
+  position: absolute;
+  margin: 0 15vw;
+  padding: 3rem;
+  border-radius: 10px;
+  background-color: #e8e5d6;
+  
 }
 
 .hero-content h1 {
   font-size: 2.5rem;
   color: #333;
   margin-bottom: 1rem;
+  line-height: 0.2;
 }
 
 .hero-content p span {
   color: #ff9500;
   font-weight: bold;
+  
+}
+
+.hero-subtitle {
+  padding: 2vw 0;
 }
 
 .customize-button {
@@ -78,14 +132,6 @@ header {
   border-radius: 5px;
   cursor: pointer;
   margin-top: 1rem;
-}
-
-.hero-image {
-  width: 100%;
-  max-width: 500px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Products Section */

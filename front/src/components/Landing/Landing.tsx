@@ -12,28 +12,36 @@ export const Landing: React.FC = () => {
           <a href="#">Dulapuri</a>
           <a href="#">Comode</a>
           <a href="#">Rafturi</a>
-          <button className="cta-button">Încearcă aici</button>
+          <button className="cta-button">
+            <img src="/wardrobe-button.svg" alt="Dulap.md Logo" />
+            <p>Încearcă aici</p>
+          </button>
           <div className="icons">
-            <span className="icon-cart" />
-            <span className="icon-user" />
+            <img src="/cart.svg" alt="Dulap.md shopping cart" />
           </div>
         </nav>
       </header>
 
       <section className="hero">
-        <div className="hero-content">
-          <h1>Dulapul tău - exact cum îl vrei</h1>
-          <p>
-            Mobilier creat după dimensiunile tale <span>preferințele</span>{' '}
-            <span>culorile</span>
-          </p>
-          <button className="customize-button">Personalizează</button>
-        </div>
         <img
           className="hero-image"
-          src="/banner.jpg"
+          src="/banner-2.jpg"
           alt="Hero showcasing furniture"
         />
+        <div className="hero-content">
+          <h1>Dulapul tău - </h1>
+          <h1>exact cum îl vrei</h1>
+          <p className="hero-subtitle">
+            Mobilier creat după <span>dimensiunile</span>{' '}<span>preferințele</span>{' '}
+            <span>culorile</span> tale
+          </p>
+          {/* <button className="customize-button">Personalizează</button> */}
+          <button className="cta-button">
+            <img src="/wardrobe-button.svg" alt="Dulap.md Logo" />
+            <p className="cta-button-title">Personalizează</p>
+          </button>
+        </div>
+        
       </section>
 
       <section className="product-types">
