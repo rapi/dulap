@@ -27,7 +27,7 @@ export const Landing: React.FC = () => {
             Mobilier creat după dimensiunile tale <span>preferințele</span>{' '}
             <span>culorile</span>
           </p>
-          <button className="customize-button">Personalizează</button>
+          <button className="customize-button">Personalizează!</button>
         </div>
         <img
           className="hero-image"
