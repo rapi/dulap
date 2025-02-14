@@ -22,7 +22,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker build -t $DOCKERHUB_USERNAME/dulap:latest -f front/Dockerfile front/
+            docker build --no-cache -t $DOCKERHUB_USERNAME/dulap:latest -f front/Dockerfile front/
       - run:
           name: Login to Docker Hub
           command: |
