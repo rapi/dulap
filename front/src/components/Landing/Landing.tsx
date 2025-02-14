@@ -73,25 +73,6 @@ export const Landing: React.FC = () => {
           </div>
         </div>
       </section>
-
-      <footer className="footer">
-        <div className="footerLinks">
-          <a href="#">Dulapuri</a>
-          <a href="#">Comode</a>
-          <a href="#">Rafturi</a>
-          <a href="#">Despre noi</a>
-          <a href="#">Contacte</a>
-        </div>
-        <div className="socialLinks">
-          <a href="#">
-            <span className="iconInstagram" />
-          </a>
-          <a href="#">
-            <span className="iconFacebook" />
-          </a>
-        </div>
-        <p>Chișinău, Republica Moldova</p>
-      </footer>
     </div>
   )
 }
