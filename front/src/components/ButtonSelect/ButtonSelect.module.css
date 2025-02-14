@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-color: #e0e0e0;
+  color: #757575;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out;
+  font-weight: 500; /* Ensure consistent text weight */
+}
+
+.button:hover {
+  background-color: #d6d6d6;
+}
+
+.selected {
+  border-color: #000;
+  background-color: #d6d6d6;
+  color: #000;
+  font-weight: 600;
+}

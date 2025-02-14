@@ -1,7 +1,6 @@
 import React from 'react'
 import './Landing.css'
 import classes from './Landing.module.css'
-import { Menu } from '~/components/Menu/Menu'
 import { Banner } from '~/components/Banner/Banner'
 import { ProductList } from '~/components/ProductList/ProductList'
 import { ProductItem } from '~/components/ProductItem/ProductItem'
@@ -11,7 +10,6 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 export const Landing: React.FC = () => {
   return (
     <div className="landing-page outfit-font">
-      <Menu />
       <Banner />
       <section className={classes.productTypes}>
         <h3 className={classes.productTypesSubtitle}>

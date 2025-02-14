@@ -9,7 +9,7 @@ export const Menu = () => {
       <div className="logo">
         <Image width={134} height={30} src="/logo.svg" alt="Dulap.md Logo" />
       </div>
-      <nav className="navigation">
+      <nav className={classes.navigation}>
         <a href="#">Dulapuri</a>
         <a href="#">Comode</a>
         <a href="#">Rafturi</a>
