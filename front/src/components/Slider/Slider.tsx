@@ -21,7 +21,10 @@ export const Slider: React.FC<SliderProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = Number(e.target.value)
     setSliderValue(newValue.toString())
-    onChange && onChange(newValue)
+
+    if (onChange) {
+      onChange(newValue)
+    }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +34,9 @@ export const Slider: React.FC<SliderProps> = ({
   const handleBlur = () => {
     const numValue = Number(sliderValue)
     if (!isNaN(numValue) && numValue >= min && numValue <= max) {
-      onChange && onChange(numValue)
+      if (onChange) {
+        onChange(numValue)
+      }
     } else {
       setSliderValue(value.toString())
     }

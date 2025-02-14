@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styles from './ProductPage.module.css'
 import { Breadcrumb } from '~/components/Breadcrumb/Breadcrumb'
 import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
@@ -8,16 +8,6 @@ import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
 import Select from '~/components/Select/Select'
 
 export const ProductPage: React.FC = () => {
-  const [sections, setSections] = useState(3)
-  const [dimensions, setDimensions] = useState({
-    width: 2425,
-    height: 2300,
-    depth: 560,
-  })
-  const [color, setColor] = useState('standard-white')
-  const [hinges, setHinges] = useState('standard')
-  const [sliders, setSliders] = useState('standard')
-
   return (
     <>
       <Breadcrumb
