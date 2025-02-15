@@ -5,7 +5,7 @@ import classNames from 'classnames'
 interface SelectColorProps {
   colors: string[]
   onChange: (color: string) => void
-  size: 'small' | 'medium' | 'large'
+  size?: 'small' | 'medium' | 'large'
 }
 
 const SelectColor: React.FC<SelectColorProps> = ({
