@@ -1,3 +1,4 @@
+a.ctaButton,
 button.ctaButton {
   padding: 0.1rem 1rem;
   width: fit-content;
@@ -26,6 +27,7 @@ button.ctaButton {
   }
 }
 
+a.outlined,
 button.outlined {
   color: #df972e;
   background-color: transparent;

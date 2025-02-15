@@ -1,11 +1,11 @@
 import React from 'react'
-import styles from './CheckoutPage.module.css'
+import styles from './CardPage.module.css'
 import { Delete as FaTrash } from '@mui/icons-material'
 import SelectColor from '~/components/SelectColor/SelectColor'
 
-export const CheckoutPage = () => {
+export const CardPage = () => {
   return (
-    <div className={styles.checkoutContainer}>
+    <div className={styles.cardContainer}>
       <h2 className={styles.title}>🛒 Coșul meu</h2>
       <div className={styles.cartTable}>
         <div className={styles.cartHeader}>
@@ -65,7 +65,7 @@ export const CheckoutPage = () => {
         <span className={styles.subtotalLabel}>Subtotal</span>
         <span className={styles.subtotalValue}>10400 MDL</span>
       </div>
-      <button className={styles.checkoutButton}>Finalizați comanda</button>
+      <button className={styles.cardButton}>Finalizați comanda</button>
     </div>
   )
 }

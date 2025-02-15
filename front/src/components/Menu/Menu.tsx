@@ -3,11 +3,14 @@ import React from 'react'
 import Image from 'next/image'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import { WardrobeIcon } from '~/components/Icons/Icons'
+import Link from 'next/link'
 export const Menu = () => {
   return (
     <header className={classes.header}>
       <div className="logo">
-        <Image width={134} height={30} src="/logo.svg" alt="Dulap.md Logo" />
+        <Link href="/">
+          <Image width={134} height={30} src="/logo.svg" alt="Dulap.md Logo" />
+        </Link>
       </div>
       <nav className={classes.navigation}>
         <a href="#">Dulapuri</a>
