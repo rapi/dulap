@@ -55,7 +55,7 @@ jobs:
           command: cat commit_info.txt >> $BASH_ENV
       - add_ssh_keys:
           fingerprints:
-            - "SHA256:hwnLNo/98stGbUwBDY5njE9IZ5HdjNTuN+Fz4JdSPms"
+            - "SHA256:oAA+yJGRiA9Rzx5F/3pABPij+153g3Q4/wI6AKmL8/M"
       - run:
           name: Deploy and restart container on VPS
           command: |
