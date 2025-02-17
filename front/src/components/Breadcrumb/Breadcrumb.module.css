@@ -16,6 +16,6 @@
 }
 
 .breadcrumb .active {
-  color: #111; /* Strong contrast for active item */
+  color: #444; /* Strong contrast for active item */
   font-weight: bold;
 }

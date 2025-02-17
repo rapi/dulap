@@ -1,12 +1,12 @@
 .container {
   display: flex;
-  gap: 8px;
+  gap: 0.7vw;
 }
 
 .button {
-  padding: 8px 16px;
-  border-radius: 20px;
-  border: 1px solid transparent;
+  padding: 10px 25px;
+  border-radius: 25px;
+  border: 2px solid #999;
   background-color: #e0e0e0;
   color: #757575;
   font-size: 14px;
@@ -15,6 +15,7 @@
     background-color 0.2s ease-in-out,
     border-color 0.2s ease-in-out;
   font-weight: 500; /* Ensure consistent text weight */
+  font-family: 'Outfit', serif;
 }
 
 .button:hover {
@@ -22,8 +23,8 @@
 }
 
 .selected {
-  border-color: #000;
+  border-color: #444;
   background-color: #d6d6d6;
-  color: #000;
+  color: #444;
   font-weight: 600;
 }

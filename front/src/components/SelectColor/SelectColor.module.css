@@ -1,23 +1,30 @@
 /* SelectColor.module.css */
 .container {
   display: flex;
-  gap: 10px;
+  gap: 0.3vw;
 }
 
 .colorCircle {
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 2px solid #b4b4b4;
   transition: border 0.3s ease;
 }
+
 .smallSize {
   width: 20px;
   height: 20px;
 }
+
+.largeSize {
+  width: 50px;
+  height: 50px;
+}
+
 .colorCircle:hover {
-  border: 2px solid #888;
+  border: 2px solid #777;
 }
 
 .selected {
