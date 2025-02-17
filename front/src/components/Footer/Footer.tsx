@@ -23,14 +23,14 @@ export const Footer: React.FC = () => {
           <p>Abonează-te!</p>
           <div className={styles.socialIcons}>
             <a
-              href="https://www.instagram.com"
+              href="https://www.instagram.com/dulap.md_?igsh=MTEzNWR4cXBpbXdwbQ=="
               target="_blank"
               rel="noopener noreferrer"
             >
               <img src="/soclial/instagram.png" alt="Instagram" />
             </a>
             <a
-              href="https://www.facebook.com"
+              href="https://www.facebook.com/share/15j84TravW/?mibextid=wwXIfr"
               target="_blank"
               rel="noopener noreferrer"
             >

@@ -1,6 +1,6 @@
 .productGrid,
 .productList {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(270px, 0.5fr));
   gap: 2vw;
 }

@@ -23,7 +23,7 @@ export const Landing: React.FC = () => {
                 <CustomButton
                   icon={<WardrobeSecondIcon />}
                   outlined
-                  size="medium"
+                  size="small"
                 >
                   Creează
                 </CustomButton>
@@ -45,7 +45,7 @@ export const Landing: React.FC = () => {
                 <CustomButton
                   icon={<ShoppingCartIcon />}
                   outlined
-                  size="medium"
+                  size="small"
                 >
                   Adaugă în coș
                 </CustomButton>

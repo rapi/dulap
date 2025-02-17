@@ -44,3 +44,8 @@ button.outlined {
   padding: 0;
   margin-block: 0.5rem;
 }
+
+.smallSize p {
+  font-size: 1rem;
+  margin-block: 0.5rem;
+}
