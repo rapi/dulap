@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import styles from './Slider.module.css'
+import TextField from '@mui/material/TextField';
 
 interface SliderProps {
   min?: number
@@ -44,12 +45,13 @@ export const Slider: React.FC<SliderProps> = ({
 
   return (
     <div className={styles.sliderContainer}>
-      <input
-        type="text"
-        className={styles.valueInput}
-        value={sliderValue}
+      <TextField 
+        id="outlined-basic" 
+        className={styles.valueInput2}
+        value={sliderValue} 
+        variant="outlined"
         onChange={handleInputChange}
-        onBlur={handleBlur}
+        onBlur={handleBlur} 
       />
       <input
         type="range"

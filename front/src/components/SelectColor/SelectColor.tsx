@@ -4,16 +4,18 @@ import classNames from 'classnames'
 
 interface SelectColorProps {
   colors: string[]
+  defaultSelected?: string
   onChange: (color: string) => void
   size?: 'small' | 'medium' | 'large'
 }
 
 const SelectColor: React.FC<SelectColorProps> = ({
   colors,
+  defaultSelected,
   onChange,
   size = 'medium',
 }) => {
-  const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [selectedColor, setSelectedColor] = useState(defaultSelected || colors[0])
 
   const handleSelect = (color: string) => {
     setSelectedColor(color)

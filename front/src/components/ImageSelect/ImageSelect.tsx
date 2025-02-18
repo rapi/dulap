@@ -2,17 +2,17 @@ import { useState } from 'react'
 import styles from './ImageSelect.module.css'
 
 interface ImageSelectProps {
-  images: string[]
+  images: string[],
+  defaultSelected: number,
   onChange: (index: number | null) => void
 }
 
-export const ImageSelect = ({ images, onChange }: ImageSelectProps) => {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+export const ImageSelect = ({ images, onChange, defaultSelected }: ImageSelectProps) => {
+  const [selectedIndex, setSelectedIndex] = useState(defaultSelected - 1 || 0)
 
   const handleSelect = (index: number) => {
-    const newIndex = index === selectedIndex ? null : index
-    setSelectedIndex(newIndex)
-    onChange(newIndex)
+    setSelectedIndex(index)
+    onChange(index)
   }
 
   return (

@@ -44,7 +44,6 @@ export const ProductPage: React.FC = () => {
         {/* Right Side: Product Details */}
         <div className={styles.detailsContainer}>
           <h1 className={styles.title}>Dulap pentru haine</h1>
-
           <ButtonSelect
             options={['2 secții', '3 secții', '4 secții']}
             defaultSelected={'2 secții'}
@@ -55,7 +54,7 @@ export const ProductPage: React.FC = () => {
             <h3>Dimensiuni</h3>
             <div className={styles.dimensionsGrid}>
               <label className={styles.dimensionLabel}>
-                Lățime (mm) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <p className={styles.dimensionTitle}>Lățime (mm)</p>
                 <Slider
                   min={1000}
                   max={5000}
@@ -65,7 +64,8 @@ export const ProductPage: React.FC = () => {
                 />
               </label>
               <label className={styles.dimensionLabel}>
-                Înălțime (mm)&nbsp;&nbsp;&nbsp;&nbsp;
+                <p className={styles.dimensionTitle}>Înălțime (mm)</p>
+                
                 <Slider
                   min={1000}
                   max={5000}
@@ -75,7 +75,7 @@ export const ProductPage: React.FC = () => {
                 />
               </label>
               <label className={styles.dimensionLabel}>
-                Adâncime (mm)
+                <p className={styles.dimensionTitle}>Adâncime (mm)</p>
                 <Slider
                   min={1000}
                   max={5000}
@@ -93,6 +93,7 @@ export const ProductPage: React.FC = () => {
             <SelectColor
               colors={['#eeeeee', '#b5b5b5', '#d7d0c5']}
               onChange={() => {}}
+              defaultSelected={'#eeeeee'}
               size='large'
             />
           </div>
@@ -108,6 +109,7 @@ export const ProductPage: React.FC = () => {
                 '/wardeobe/4.svg',
               ]}
               onChange={() => {}}
+              defaultSelected={1}
             />
           </div>
 
