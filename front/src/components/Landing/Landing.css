@@ -20,13 +20,6 @@
 }
 
 /* About Us Section */
-.aboutContent {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
 .aboutImage {
   width: 300px;
   height: 300px;

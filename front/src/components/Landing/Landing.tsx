@@ -12,9 +12,7 @@ export const Landing: React.FC = () => {
     <div className="landing-page outfit-font">
       <Banner />
       <section className={classes.productTypes}>
-        <h3 className={classes.productTypesSubtitle}>
-          Alege ce tip de dulap ai nevoie și începe personalizarea!
-        </h3>
+        <p className={classes.productTypesTitle}>Alege ce tip de dulap ai nevoie și începe personalizarea!</p>
         <ProductList>
           {[...Array(6)].map((_, index) => (
             <ProductItem
@@ -34,9 +32,7 @@ export const Landing: React.FC = () => {
       </section>
 
       <section className={classes.readyProducts}>
-        <h2>
-          Alege <span>produse gata</span> din lista noastră
-        </h2>
+      <p className={classes.readyProductsTitle}>Alege produse gata din lista noastră</p>
         <ProductList>
           {[...Array(6)].map((_, index) => (
             <ProductItem
@@ -56,22 +52,37 @@ export const Landing: React.FC = () => {
       </section>
 
       <section className={classes.aboutUs}>
-        <div className="aboutContent">
+        <p className={classes.aboutUsTitle}>Despre noi</p>
+        <div className={classes.aboutUsContent}>
           <img
             src="/banner.jpg"
             alt="Familia Grinciuc"
             className="aboutImage"
           />
-          <div>
-            <h2>Despre noi</h2>
+          <div className={classes.aboutUsDescription}>
             <p>
-              dulap.md nu este doar un magazin de mobilier. Este povestea unei{' '}
-              <span>familii...</span> Totul a început dintr-o nevoie simplă: să
-              ne mobilăm casa simplu, clar și gust.
-            </p>
-            <button className="tryNowButton">Încearcă acum</button>
+            dulap.md nu este doar un magazin de mobilier. Este povestea unei familii - Elizabet, Vasile și cei doi băieți ai noștri – care au ales să transforme visurile și provocările într-un proiect plin de sens și emoție.
+            <br />
+            <br />
+            Totul a început dintr-o nevoie simplă: să ne mobilăm casa simplu, dar cu gust. Nu am găsit ceea ce ne doream la preț accesibil, dar am găsit ceva și mai prețios: ideea de a crea noi înșine mobilierul perfect, și ideal customizabil.
+            <br />
+            <br />
+            dulap.md este mai mult decât mobilier. Este o promisiune că orice casă poate deveni acasă.
+            <br />
+            <br />
+            Mulțumim că ai ales să faci parte din povestea noastră!
+            </p>          
           </div>
         </div>
+        <div className={classes.ctaButtonContainer}>
+            <CustomButton
+              icon=''
+              outlined
+              size='large'
+            >
+              Încearcă acum
+            </CustomButton>
+            </div>
       </section>
     </div>
   )
