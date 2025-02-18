@@ -8,11 +8,18 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.titleContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
 .title {
   text-align: center;
-  font-size: 28px;
+  font-size: 26px;
   margin-bottom: 25px;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .cartTable {
@@ -34,19 +41,25 @@
 
 .cartHeader {
   background-color: #f5f5f5;
-  font-weight: bold;
+  font-weight: 500;
+}
+
+.productImageContainer {
+  text-align: center;
 }
 
 .productImage {
-  width: 100px;
+  width: 120px;
   height: auto;
   border-radius: 5px;
+  text-align: center;
 }
 
 .productDetails {
   text-align: left;
   font-size: 15px;
   line-height: 1.6;
+  margin-left: 3vw;
 }
 
 .colorContainer {
@@ -135,4 +148,14 @@
   border-radius: 8px;
   font-weight: bold;
   text-transform: uppercase;
+}
+
+.ctaButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.trashIconContainer {
+  display: flex;
+  justify-content: center;
 }
