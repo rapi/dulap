@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import { CardPage } from '~/components/CardPage/CardPage'
+import { Checkout } from '~/components/Checkout/Checkout'
 const Product: FC = () => {
-  return <CardPage />
+  return <Checkout />
 }
 
 export default Product

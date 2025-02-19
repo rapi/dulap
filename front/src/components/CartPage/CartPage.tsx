@@ -1,21 +1,20 @@
 import React from 'react'
-import styles from './CardPage.module.css'
+import styles from './CartPage.module.css'
 import { Delete as FaTrash } from '@mui/icons-material'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { grey } from '@mui/material/colors';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import { grey } from '@mui/material/colors'
 
-export const CardPage = () => {
+export const CartPage = () => {
   return (
-    <div className={styles.cardContainer}>
+    <div className={styles.cartContainer}>
       <div className={styles.titleContainer}>
-        <ShoppingCartIcon 
-          color='action'
-          fontSize='large'
+        <ShoppingCartIcon
+          color="action"
+          fontSize="large"
           sx={{ color: grey[800] }}
-        >
-        </ShoppingCartIcon>
+        ></ShoppingCartIcon>
         <p className={styles.title}>Coșul meu</p>
       </div>
       <div className={styles.cartTable}>
@@ -44,14 +43,17 @@ export const CardPage = () => {
               Dimensiuni:
               <br /> Înălțime: <b>2700 mm</b>
               <br /> Lungime: <b>1230 mm</b>
-              <br />Adâncime: <b>600 mm</b>
               <br />
-              <br />Aranjare rafturi:
+              Adâncime: <b>600 mm</b>
+              <br />
+              <br />
+              Aranjare rafturi:
               <br /> Secțiunea 1: <b>Opțiunea 2</b>
               <br />
               Secțiunea 2: <b>Opțiunea 1</b>
               <br />
-              <br />Furnitura: <b>premium</b>
+              <br />
+              Furnitura: <b>premium</b>
             </span>
             <div className={styles.colorContainer}>
               <SelectColor
@@ -67,16 +69,10 @@ export const CardPage = () => {
             </div>
             <span className={styles.price}>5200 MDL</span>
             <div className={styles.actions}>
-              <CustomButton 
-                icon='' 
-                size='small'
-                outlined>
+              <CustomButton icon="" size="small" outlined>
                 Editează
               </CustomButton>
-              <CustomButton 
-                icon='' 
-                size='small'
-                outlined>
+              <CustomButton icon="" size="small" outlined>
                 <div className={styles.trashIconContainer}>
                   <FaTrash />
                 </div>
@@ -89,17 +85,12 @@ export const CardPage = () => {
         <span className={styles.subtotalLabel}>Subtotal</span>
         <span className={styles.subtotalValue}>10400 MDL</span>
       </div>
-      {/* <button className={styles.cardButton}>Finalizați comanda</button> */}
+      {/* <button className={styles.cartButton}>Finalizați comanda</button> */}
       <div className={styles.ctaButtonContainer}>
-        <CustomButton 
-          icon='' 
-          size='medium'
-          outlined
-        >
+        <CustomButton icon="" size="medium" outlined>
           Finalizați comanda
         </CustomButton>
       </div>
-      
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { Button, IconButton } from '@mui/material'
 import classNames from 'classnames'
 interface CustomButtonProps {
   children?: ReactNode
-  icon: ReactNode
+  icon?: ReactNode
   outlined?: boolean
   href?: string
   size?: 'small' | 'medium' | 'large'
