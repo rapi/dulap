@@ -1,4 +1,5 @@
 import { CustomButton } from '~/components/CustomButton/CustomButton'
+import { grey } from '@mui/material/colors'
 
 export { Checkout }
 
@@ -10,15 +11,18 @@ const Checkout: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>
-        <ShoppingBagIcon />
-        Comanda mea
-      </h2>
+      <div className={styles.titleContainer}>
+        <ShoppingBagIcon
+          fontSize="large"
+          sx={{ color: grey[800] }}
+        ></ShoppingBagIcon>
+        <p className={styles.title}>Comanda mea</p>
+      </div>
 
       <div className={styles.checkoutWrapper}>
         {/* Left Section: Order Details */}
         <div className={styles.detailsSection}>
-          <h3 className={styles.sectionTitle}>Detalii comandă</h3>
+          <h3 className={styles.subtitle}>Detalii comandă</h3>
 
           {/* Personal Details */}
           <div className={styles.row}>
@@ -30,17 +34,23 @@ const Checkout: React.FC = () => {
               <label>Numărul de telefon</label>
               <input type="text" placeholder="0 (xx) xxx xxx" />
             </div>
+            <div className={styles.formGroup}>
+              <label>Email</label>
+              <input type="text" placeholder="0 (xx) xxx xxx" />
+            </div>
           </div>
 
           {/* Delivery Details */}
           <h4 className={styles.subTitle}>Livrare</h4>
-          <div className={styles.formGroup}>
-            <label>Localitatea</label>
-            <input type="text" placeholder="Alegeți localitatea" />
-          </div>
-          <div className={styles.formGroup}>
-            <label>Adresa completă</label>
-            <input type="text" placeholder="str. XXXX, bl. X, ap. X" />
+          <div className={styles.row}>
+            <div className={styles.formGroup}>
+              <label>Localitatea</label>
+              <input type="text" placeholder="Alegeți localitatea" />
+            </div>
+            <div className={styles.formGroup}>
+              <label>Adresa completă</label>
+              <input type="text" placeholder="str. XXXX, bl. X, ap. X" />
+            </div>
           </div>
           <div className={styles.formGroup}>
             <label>Comentariu la comandă</label>

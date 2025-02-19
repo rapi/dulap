@@ -11,7 +11,6 @@ export const CartPage = () => {
     <div className={styles.cartContainer}>
       <div className={styles.titleContainer}>
         <ShoppingCartIcon
-          color="action"
           fontSize="large"
           sx={{ color: grey[800] }}
         ></ShoppingCartIcon>
