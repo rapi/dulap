@@ -7,6 +7,8 @@ import SelectColor from '~/components/SelectColor/SelectColor'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
 import Select from '~/components/Select/Select'
 import InfoIcon from '@mui/icons-material/Info';
+import { CustomButton } from '../CustomButton/CustomButton'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 
 export const ProductPage: React.FC = () => {
   return (
@@ -37,12 +39,29 @@ export const ProductPage: React.FC = () => {
             <div className={styles.price}>
               <h2>6850 MDL</h2>
             </div>
+            <div className={styles.addToCartButtonContainer}>
+            <CustomButton
+              icon={<ShoppingCartIcon fontSize='large'/>}
+              size="large"
+            >
+              Adaugă în coș
+            </CustomButton>
+          </div>           
           </div>
+           
         </div>
         
 
         {/* Right Side: Product Details */}
         <div className={styles.detailsContainer}>
+          <div className={styles.furnitureTypesContainer}>
+           <ButtonSelect 
+              options={['Dulap pentru haine', 'Comodă', 'Comodă TV', 'Rafturi pentru stocare']}
+              defaultSelected={'Dulap pentru haine'}
+              onChange={() => {}}
+            ></ButtonSelect> 
+          </div>
+          
           <h1 className={styles.title}>Dulap pentru haine</h1>
           <ButtonSelect
             options={['2 secții', '3 secții', '4 secții']}

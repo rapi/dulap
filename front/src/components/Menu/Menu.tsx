@@ -16,7 +16,12 @@ export const Menu = () => {
         <a href="#">Dulapuri</a>
         <a href="#">Comode</a>
         <a href="#">Rafturi</a>
-        <CustomButton icon={<WardrobeIcon />}>Încearcă aici</CustomButton>
+        <CustomButton 
+          icon={<WardrobeIcon />}
+          size='medium'
+        >
+          Încearcă aici
+        </CustomButton>
         <div className="icons">
           <Image
             width={30}

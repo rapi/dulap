@@ -4,8 +4,8 @@ button.ctaButton {
   width: fit-content;
   font-size: 0.9em;
   font-weight: 500;
-  background-color: #f4b65d;
-  color: #000;
+  background-color: #dda045;
+  color: #eeeeee;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -16,14 +16,20 @@ button.ctaButton {
   text-transform: none;
   & span > img:first-child {
     height: 25px;
+    filter: invert(1) brightness(1000%);
   }
+}
+
+a:hover,
+button:hover {
+  background-color: #df972e;
 }
 
 .outlined:hover {
   background-color: #df972e;
   color: white;
   & img {
-    filter: invert(1) brightness(1000%);
+    filter: invert(1) brightness(1000%) !important;
   }
 }
 
@@ -33,6 +39,9 @@ button.outlined {
   background-color: transparent;
   border: 3px solid #df972e;
   border-radius: 10px;
+  & img {
+    filter: brightness(0) saturate(100%) invert(65%) sepia(40%) saturate(776%) hue-rotate(354deg) brightness(90%) contrast(93%) !important;  
+  }
 }
 
 .ctaButtonTitle {
@@ -40,10 +49,14 @@ button.outlined {
 }
 
 .mediumSize p {
-  font-size: 1.3rem;
+  font-size: 1rem;
   padding: 0;
-  margin-block: 0.5rem;
+  margin-block: 0.6rem;
 }
+
+.mediumSize span > img {
+  height: 40px !important;
+} 
 
 .smallSize {
   width: auto;
@@ -53,4 +66,13 @@ button.outlined {
 .smallSize p {
   font-size: 0.9rem;
   margin-block: 0.5rem;
+}
+
+.largeSize p {
+  font-size: 1.2rem;
+  margin-block: 0.8rem;
+}
+
+.largeSize svg {
+  font-size: 32px!important;
 }
