@@ -23,12 +23,14 @@ export const Menu = () => {
           Încearcă aici
         </CustomButton>
         <div className="icons">
-          <Image
-            width={30}
-            height={30}
-            src="/cart.svg"
-            alt="Dulap.md shopping cart"
-          />
+          <Link href="/cart">
+            <Image
+              width={30}
+              height={30}
+              src="/cart.svg"
+              alt="Dulap.md shopping cart"
+            />
+          </Link>
         </div>
       </nav>
     </header>

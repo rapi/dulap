@@ -14,12 +14,20 @@ export const Banner = () => {
         alt="Hero showcasing furniture"
       />
       <div className={classes.heroContent}>
-        <h1>Dulapul tău - </h1>
-        <h1>exact cum îl vrei</h1>
-        <p className="heroSubtitle">
-          Mobilier creat după <span>dimensiunile</span>
-          <span>preferințele</span> <span>culorile</span> tale
-        </p>
+        <h1 className={classes.heroTitle}>Dulapul tău - </h1>
+        <h1 className={classes.heroTitle}>exact cum îl vrei</h1>
+        <div className={classes.heroSubtitle}>
+          <p>Mobilier creat după</p> 
+          <ol className={classes.subtitleAnimationList}>
+            <li className={classes.subtitleAnimationListItem}><span>dimensiunile</span></li>
+            <li className={classes.subtitleAnimationListItem}><span>preferințele</span></li>
+            <li className={classes.subtitleAnimationListItem}><span>culorile</span></li>
+            <li className={classes.subtitleAnimationListItem}><span>gusturile</span></li>
+            {/* <li className={classes.subtitleAnimationListItem}><span>culorile</span></li>
+            <li className={classes.subtitleAnimationListItem}><span>culorile</span></li> */}
+          </ol>
+          <p>tale</p>
+        </div>
         <CustomButton icon={<WardrobeIcon />}>Încearcă aici</CustomButton>
       </div>
     </section>

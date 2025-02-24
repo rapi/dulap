@@ -34,19 +34,63 @@
 
 .heroContent h1 {
   font-size: 2.5rem;
-  color: #333;
+  color: #444;
   line-height: 0.2;
 }
 
-.heroContent p span {
+.heroContent div span {
   color: #ff9500;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.heroTitle {
+  margin: 25px 0;
 }
 
 .heroSubtitle {
-  padding: 2vw 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
+.heroSubtitle p {
+
+  font-size: 18px;
+}
+
+.heroSubtitle ol {
+  list-style: none;
+  padding: 0;
+  --height: 1.7rem;
+  height: var(--height);
+  line-height: var(--height);
+  overflow: hidden;
+}
+
+.heroSubtitle ol li {
+  animation: slide-up 8s infinite;
+}
+
+@keyframes slide-up {
+  0%, 15% {
+    transform: translateY(0%);
+  }
+  25%, 40% {
+    transform: translateY(-100%);
+  }
+  50%, 65% {
+    transform: translateY(-200%);
+  }
+  75%, 90% {
+    transform: translateY(-300%);
+  }
+}
+
+.heroSubtitle ol li span {
+  white-space: nowrap;
+}
 .ctaButton p {
   padding: 0 0.5rem;
 }
@@ -57,4 +101,10 @@
 
 .ctaButtonTitle {
   font-size: 1.2em;
+}
+
+@media screen and (max-width: 600px) {
+  .heroSubtitle {
+     flex-direction: column;
+  }
 }
