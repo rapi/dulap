@@ -22,7 +22,7 @@ const Checkout: React.FC = () => {
       <div className={styles.checkoutWrapper}>
         {/* Left Section: Order Details */}
         <div className={styles.detailsSection}>
-          <h3 className={styles.subtitle}>Detalii comandă</h3>
+          <h4 className={styles.subtitle}>Detalii comandă</h4>
 
           {/* Personal Details */}
           <div className={styles.row}>
@@ -41,26 +41,34 @@ const Checkout: React.FC = () => {
           </div>
 
           {/* Delivery Details */}
-          <h4 className={styles.subTitle}>Livrare</h4>
-          <div className={styles.row}>
-            <div className={styles.formGroup}>
-              <label>Localitatea</label>
-              <input type="text" placeholder="Alegeți localitatea" />
+          <h4 className={styles.subtitle}>Livrare</h4>
+          <div className={styles.deliveryInputContainer}>
+            <div className={styles.row}>
+              <div className={styles.formGroup}>
+                <label>Localitatea</label>
+                <input type="text" placeholder="Alegeți localitatea" />
+              </div>
+              <div className={styles.formGroup}>
+                <label>Adresa completă</label>
+                <input type="text" placeholder="str. XXXX, bl. X, ap. X" />
+              </div>
             </div>
             <div className={styles.formGroup}>
-              <label>Adresa completă</label>
-              <input type="text" placeholder="str. XXXX, bl. X, ap. X" />
+              <label>Comentariu la comandă</label>
+              <textarea placeholder="Alegeți localitatea"></textarea>
             </div>
-          </div>
-          <div className={styles.formGroup}>
-            <label>Comentariu la comandă</label>
-            <textarea placeholder="Alegeți localitatea"></textarea>
           </div>
 
           {/* Payment Method */}
-          <h4 className={styles.subTitle}>Modalitatea de plată</h4>
+          <h4 className={styles.subtitle}>Modalitatea de plată</h4>
           <div className={styles.paymentMethods}>
             <label className={styles.paymentOption}>
+              <img
+                src="/checkout/wallet.svg"
+                alt="Cash"
+                className={styles.paymentIcon}
+              />
+              <p className={styles.paymentTitle}>Numerar la primire</p>
               <input
                 type="radio"
                 name="payment"
@@ -68,14 +76,14 @@ const Checkout: React.FC = () => {
                 checked={paymentMethod === 'cash'}
                 onChange={() => setPaymentMethod('cash')}
               />
+            </label>
+            <label className={styles.paymentOption}>          
               <img
-                src="/checkout/wallet.svg"
-                alt="Cash"
+                src="/checkout/mia.png"
+                alt="MIA"
                 className={styles.paymentIcon}
               />
-              Numerar la primire
-            </label>
-            <label className={styles.paymentOption}>
+              <p className={styles.paymentTitle}>MIA</p>
               <input
                 type="radio"
                 name="payment"
@@ -83,12 +91,6 @@ const Checkout: React.FC = () => {
                 checked={paymentMethod === 'mia'}
                 onChange={() => setPaymentMethod('mia')}
               />
-              <img
-                src="/checkout/mia.png"
-                alt="MIA"
-                className={styles.paymentIcon}
-              />
-              MIA
             </label>
           </div>
         </div>
@@ -102,7 +104,7 @@ const Checkout: React.FC = () => {
                 alt="Comodă"
                 className={styles.productImage}
               />
-              <div>
+              <div className={styles.productdetails}>
                 <p className={styles.productTitle}>Comodă pe piciorușe</p>
                 <p className={styles.productSize}>2400x1200x600mm</p>
                 <p className={styles.productPrice}>5200 MDL</p>
