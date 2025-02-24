@@ -20,8 +20,8 @@ button.ctaButton {
   }
 }
 
-a:hover,
-button:hover {
+a.ctaButton:hover,
+button.ctaButton:hover {
   background-color: #df972e;
 }
 
@@ -40,7 +40,8 @@ button.outlined {
   border: 3px solid #df972e;
   border-radius: 10px;
   & img {
-    filter: brightness(0) saturate(100%) invert(65%) sepia(40%) saturate(776%) hue-rotate(354deg) brightness(90%) contrast(93%) !important;  
+    filter: brightness(0) saturate(100%) invert(65%) sepia(40%) saturate(776%)
+      hue-rotate(354deg) brightness(90%) contrast(93%) !important;
   }
 }
 
@@ -56,7 +57,7 @@ button.outlined {
 
 .mediumSize span > img {
   height: 40px !important;
-} 
+}
 
 .smallSize {
   width: auto;
@@ -74,5 +75,5 @@ button.outlined {
 }
 
 .largeSize svg {
-  font-size: 32px!important;
+  font-size: 32px !important;
 }
