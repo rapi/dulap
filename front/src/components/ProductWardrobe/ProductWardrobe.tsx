@@ -50,6 +50,8 @@ export const ProductWardrobe = () => {
             <CustomButton
               icon={<ShoppingCartIcon fontSize="large" />}
               size="large"
+              outlined
+              variant="danger"
             >
               Adaugă în coș
             </CustomButton>

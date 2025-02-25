@@ -49,7 +49,7 @@ export const Landing: React.FC = () => {
               image={`/products/comoda-alba.jpg`}
               key={index}
               button={
-                <CustomButton icon={<ShoppingCartIcon />} outlined size="small">
+                <CustomButton icon={<ShoppingCartIcon />} outlined size="small" variant="danger">
                   Adaugă în coș
                 </CustomButton>
               }

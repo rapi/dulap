@@ -104,10 +104,11 @@ a.ctaButton.dangerVariant.outlined,
 button.ctaButton.dangerVariant.outlined {
   background-color: transparent;
   color: #ef2a15;
-  border: 3px solid #ef2a15;
+  border: 2px solid #ef2a15;
 }
 a.ctaButton.dangerVariant.outlined:hover,
 button.ctaButton.dangerVariant.outlined:hover {
-  background-color: #ef2a15;
+  background-color: #f15e4d;
   color: white;
+  border: 2px solid #f15e4d;
 }
