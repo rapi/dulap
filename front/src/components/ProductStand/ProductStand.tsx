@@ -2,12 +2,39 @@ import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import InfoIcon from '@mui/icons-material/Info'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
+import { ButtonSelect, ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { Slider } from '~/components/Slider/Slider'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
 import Select from '~/components/Select/Select'
 import React from 'react'
+
+const standOptions: ButtonOptionsType[] = [
+  {
+    value: '3 sertare',
+    label: (
+      <>
+        <img src="/stand/comoda-3-sertare.svg" width={50} align-items={'bottom'}/> 3 sertare
+      </>
+    ),
+  },
+  {
+    value: '4 sertare',
+    label: (
+      <>
+        <img src="/stand/comoda-4-sertare.svg" width={50} /> 4 sertare
+      </>
+    ),
+  },
+  {
+    value: '5 sertare',
+    label: (
+      <>
+        <img src="/stand/comoda-4-sertare.svg" width={50} /> 5 sertare
+      </>
+    ),
+  },
+]
 
 export const ProductStand = () => {
   return (
@@ -45,20 +72,8 @@ export const ProductStand = () => {
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
         <h1 className={styles.title}>Dulap pentru haine</h1>
-        {/* Shelf Arrangement (Dropdowns for Sections) */}
-        <div className={styles.standVariations}>
-          <ImageSelect
-            images={[
-              '/stand/comoda-3-sertare.svg',
-              '/stand/comoda-4-sertare.svg',
-              '/stand/comoda-5-sertare.svg'
-            ]}
-            onChange={() => {}}
-            defaultSelected={1}
-          />
-        </div>
         <ButtonSelect
-          options={['3 sertare', '4 sertare', '5 sertare']}
+          options={standOptions}
           defaultSelected={'3 sertare'}
           onChange={() => {}}
         />
