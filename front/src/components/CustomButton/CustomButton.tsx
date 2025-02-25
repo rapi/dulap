@@ -27,7 +27,6 @@ export const CustomButton: FC<CustomButtonProps> = ({
   return (
     <>
       <Button
-        href={'/product'}
         className={classNames([
           classes.ctaButton,
           outlined && classes.outlined,

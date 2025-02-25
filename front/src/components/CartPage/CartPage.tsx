@@ -3,17 +3,11 @@ import styles from './CartPage.module.css'
 import { Delete as FaTrash } from '@mui/icons-material'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import { grey } from '@mui/material/colors'
 
 export const CartPage = () => {
   return (
     <div className={styles.cartContainer}>
       <div className={styles.titleContainer}>
-        <ShoppingCartIcon
-          fontSize="large"
-          sx={{ color: grey[800] }}
-        ></ShoppingCartIcon>
         <p className={styles.title}>Coșul meu</p>
       </div>
       <div className={styles.cartTable}>
@@ -27,7 +21,7 @@ export const CartPage = () => {
           <span>Preț total</span>
           <span>Acțiuni</span>
         </div>
-        {[1, 2].map((item, index) => (
+        {[1, 2].map((_item, index) => (
           <div className={styles.cartRow} key={index}>
             <span>{index + 1}</span>
             <span className={styles.productName}>Comodă pe piciorușe</span>
@@ -71,11 +65,11 @@ export const CartPage = () => {
               <CustomButton icon="" size="small" outlined>
                 Editează
               </CustomButton>
-              <CustomButton icon="" size="small" outlined>
-                <div className={styles.trashIconContainer}>
-                  <FaTrash />
-                </div>
-              </CustomButton>
+              <CustomButton
+                icon={<FaTrash />}
+                size="small"
+                outlined
+              ></CustomButton>
             </div>
           </div>
         ))}
