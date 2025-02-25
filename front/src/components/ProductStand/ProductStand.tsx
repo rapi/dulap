@@ -8,6 +8,7 @@ import SelectColor from '~/components/SelectColor/SelectColor'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
 import Select from '~/components/Select/Select'
 import React from 'react'
+import { wardrobeOptions } from '~/components/ProductWardrobe/ProductWardrobe'
 
 export const ProductStand = () => {
   return (
@@ -51,14 +52,14 @@ export const ProductStand = () => {
             images={[
               '/stand/comoda-3-sertare.svg',
               '/stand/comoda-4-sertare.svg',
-              '/stand/comoda-5-sertare.svg'
+              '/stand/comoda-5-sertare.svg',
             ]}
             onChange={() => {}}
             defaultSelected={1}
           />
         </div>
         <ButtonSelect
-          options={['3 sertare', '4 sertare', '5 sertare']}
+          options={wardrobeOptions}
           defaultSelected={'3 sertare'}
           onChange={() => {}}
         />
