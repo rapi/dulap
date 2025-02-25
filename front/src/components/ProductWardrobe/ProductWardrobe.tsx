@@ -2,13 +2,28 @@ import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import InfoIcon from '@mui/icons-material/Info'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
+import {
+  ButtonOptionsType,
+  ButtonSelect,
+} from '~/components/ButtonSelect/ButtonSelect'
 import { Slider } from '~/components/Slider/Slider'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
 import Select from '~/components/Select/Select'
 import React from 'react'
-
+const wardrobeOptions: ButtonOptionsType[] = [
+  {
+    value: '1 secție',
+    label: (
+      <>
+        <img src="/products/wardrobe.jpg" height={20} /> 1 secție
+      </>
+    ),
+  },
+  { value: '2 secții', label: '2 secții' },
+  { value: '3 secții', label: '3 secții' },
+  { value: '4 secții', label: '4 secții' },
+]
 export const ProductWardrobe = () => {
   return (
     <>
@@ -46,7 +61,7 @@ export const ProductWardrobe = () => {
       <div className={styles.detailsContainer}>
         <h1 className={styles.title}>Dulap pentru haine</h1>
         <ButtonSelect
-          options={['2 secții', '3 secții', '4 secții']}
+          options={wardrobeOptions}
           defaultSelected={'2 secții'}
           onChange={() => {}}
         />
