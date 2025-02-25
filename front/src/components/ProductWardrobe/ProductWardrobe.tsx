@@ -11,7 +11,7 @@ import SelectColor from '~/components/SelectColor/SelectColor'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
 import Select from '~/components/Select/Select'
 import React from 'react'
-const wardrobeOptions: ButtonOptionsType[] = [
+export const wardrobeOptions: ButtonOptionsType[] = [
   {
     value: '1 secție',
     label: (
