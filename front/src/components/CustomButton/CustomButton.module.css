@@ -4,7 +4,6 @@ button.ctaButton {
   width: fit-content;
   font-size: 0.9em;
   font-weight: 500;
-  background-color: #dda045;
   color: #eeeeee;
   border: none;
   border-radius: 5px;
@@ -19,25 +18,13 @@ button.ctaButton {
     filter: invert(1) brightness(1000%);
   }
 }
-
-a.ctaButton:hover,
-button.ctaButton:hover {
-  background-color: #df972e;
-}
-
-.outlined:hover {
-  background-color: #df972e;
-  color: white;
+a.ctaButton.outlined:hover {
   & img {
     filter: invert(1) brightness(1000%) !important;
   }
 }
-
 a.outlined,
 button.outlined {
-  color: #df972e;
-  background-color: transparent;
-  border: 3px solid #df972e;
   border-radius: 10px;
   & img {
     filter: brightness(0) saturate(100%) invert(65%) sepia(40%) saturate(776%)
@@ -76,4 +63,51 @@ button.outlined {
 
 .largeSize svg {
   font-size: 32px !important;
+}
+
+/*Primary Variant*/
+a.ctaButton.primaryVariant,
+button.ctaButton.primaryVariant {
+  background-color: #dda045;
+}
+a.ctaButton.primaryVariant:hover,
+button.ctaButton.primaryVariant:hover {
+  background-color: #df972e;
+}
+
+a.ctaButton.primaryVariant.outlined,
+button.ctaButton.primaryVariant.outlined {
+  background-color: transparent;
+  color: #dda045;
+  border: 3px solid #dda045;
+}
+a.ctaButton.primaryVariant.outlined:hover,
+button.ctaButton.primaryVariant.outlined:hover {
+  background-color: #dda045;
+}
+a.ctaButton.primaryVariant.outlined:hover {
+  background-color: #dda045;
+  color: white;
+}
+
+/*Danger Variant*/
+a.ctaButton.dangerVariant,
+button.ctaButton.dangerVariant {
+  background-color: #ef2a15;
+}
+a.ctaButton.dangerVariant:hover,
+button.ctaButton.dangerVariant:hover {
+  background-color: #f46d5e;
+}
+
+a.ctaButton.dangerVariant.outlined,
+button.ctaButton.dangerVariant.outlined {
+  background-color: transparent;
+  color: #ef2a15;
+  border: 3px solid #ef2a15;
+}
+a.ctaButton.dangerVariant.outlined:hover,
+button.ctaButton.dangerVariant.outlined:hover {
+  background-color: #ef2a15;
+  color: white;
 }

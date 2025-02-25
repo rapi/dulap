@@ -8,6 +8,7 @@ interface CustomButtonProps {
   outlined?: boolean
   href?: string
   size?: 'small' | 'medium' | 'large'
+  variant?: 'primary' | 'danger'
 }
 export const CustomButton: FC<CustomButtonProps> = ({
   children,
@@ -15,6 +16,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
   outlined,
   size,
   href,
+  variant = 'primary',
 }) => {
   if (!children && icon) {
     return <IconButton>{icon}</IconButton>
@@ -31,6 +33,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
           classes.ctaButton,
           outlined && classes.outlined,
           classes[`${size}Size`],
+          classes[`${variant}Variant`],
         ])}
         {...additionalProps}
       >

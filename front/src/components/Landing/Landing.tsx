@@ -89,7 +89,7 @@ export const Landing: React.FC = () => {
           </div>
         </div>
         <div className={classes.ctaButtonContainer}>
-          <CustomButton icon="" outlined size="large">
+          <CustomButton icon="" outlined size="large" variant="danger">
             Încearcă acum
           </CustomButton>
         </div>
