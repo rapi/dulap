@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import styles from './ButtonSelect.module.css'
 
+export type ButtonOptionsType = {
+  label: React.ReactNode | string
+  value: string
+}
 interface ButtonSelectProps {
-  options: string[]
+  options: ButtonOptionsType[]
   defaultSelected?: string
   onChange?: (value: string) => void
 }
@@ -12,7 +16,7 @@ export const ButtonSelect: React.FC<ButtonSelectProps> = ({
   defaultSelected,
   onChange,
 }) => {
-  const [selected, setSelected] = useState(defaultSelected || options[0])
+  const [selected, setSelected] = useState(defaultSelected || options[0].value)
 
   const handleSelect = (option: string) => {
     setSelected(option)
@@ -25,11 +29,11 @@ export const ButtonSelect: React.FC<ButtonSelectProps> = ({
     <div className={styles.container}>
       {options.map((option) => (
         <button
-          key={option}
-          className={`${styles.button} ${selected === option ? styles.selected : ''}`}
-          onClick={() => handleSelect(option)}
+          key={option.value}
+          className={`${styles.button} ${selected === option.value ? styles.selected : ''}`}
+          onClick={() => handleSelect(option.value)}
         >
-          {option}
+          {option.label}
         </button>
       ))}
     </div>
