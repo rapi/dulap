@@ -1,14 +1,14 @@
 .container {
   display: flex;
-  gap: 0.7vw;
+  gap: 0.8vw;
 }
 
 .button {
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* justify-content: flex-start !important; */
   gap: 9px;
-  padding: 10px 25px;
+  padding: 15px;
   border-radius: 15px;
   border: 2px solid #999;
   background-color: #e0e0e0;
@@ -18,7 +18,7 @@
   transition:
     background-color 0.2s ease-in-out,
     border-color 0.2s ease-in-out;
-  font-weight: 500; /* Ensure consistent text weight */
+  font-weight: 400; /* Ensure consistent text weight */
   font-family: 'Outfit', serif;
   box-shadow:
     rgba(0, 0, 0, 0.12) 0px 1px 3px,

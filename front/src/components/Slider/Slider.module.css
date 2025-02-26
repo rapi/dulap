@@ -1,10 +1,10 @@
 .sliderContainer {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
 }
 
-.valueInput {
+.valueInput2 {
   font-size: 1rem;
   font-weight: 500;
   color: #333;
@@ -14,8 +14,9 @@
   background: transparent;
 }
 
-.valueInput2 {
-  width: 70px;
+.valueInput {
+  font-size: 1rem;
+  width: 60px;
 }
 
 .valueInput:focus {

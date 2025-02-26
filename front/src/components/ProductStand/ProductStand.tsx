@@ -1,5 +1,4 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import InfoIcon from '@mui/icons-material/Info'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { ButtonSelect, ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
@@ -13,7 +12,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '3 sertare',
     label: (
       <>
-        <img src="/stand/comoda-3-sertare.svg" width={50} align-items={'bottom'}/> 3 sertare
+        <img src="/stand/comoda-3-sertare.svg" width={50} />
       </>
     ),
   },
@@ -21,7 +20,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '4 sertare',
     label: (
       <>
-        <img src="/stand/comoda-4-sertare.svg" width={50} /> 4 sertare
+        <img src="/stand/comoda-4-sertare.svg" width={50} />
       </>
     ),
   },
@@ -29,7 +28,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '5 sertare',
     label: (
       <>
-        <img src="/stand/comoda-4-sertare.svg" width={50} /> 5 sertare
+        <img src="/stand/comoda-5-sertare.svg" width={50} />
       </>
     ),
   },
@@ -50,17 +49,15 @@ export const ProductStand = () => {
         <div className={styles.priceContainer}>
           <div className={styles.priceTitle}>
             <h4>Calculator de preț:</h4>
-            <button className={styles.infoButton}>
-              <InfoIcon color="action" sx={{ fontSize: 20 }} />
-            </button>
           </div>
           <div className={styles.price}>
             <h2>6850 MDL</h2>
           </div>
           <div className={styles.addToCartButtonContainer}>
             <CustomButton
-              icon={<ShoppingCartIcon fontSize="large" />}
+              icon={<ShoppingCartIcon />}
               size="large"
+              variant="danger"
             >
               Adaugă în coș
             </CustomButton>
@@ -70,7 +67,7 @@ export const ProductStand = () => {
 
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
-        <h1 className={styles.title}>Dulap pentru haine</h1>
+        <h1 className={styles.title}>Comodă</h1>
         <ButtonSelect
           options={standOptions}
           defaultSelected={'3 sertare'}
@@ -81,33 +78,32 @@ export const ProductStand = () => {
           <h3>Dimensiuni</h3>
           <div className={styles.dimensionsGrid}>
             <label className={styles.dimensionLabel}>
-              <p className={styles.dimensionTitle}>Lățime (mm)</p>
+              <p className={styles.dimensionTitle}>Lățime (cm)</p>
               <Slider
-                min={1000}
-                max={5000}
-                step={5}
-                value={1000}
+                min={60}
+                max={120}
+                step={10}
+                value={80}
                 onChange={(newValue) => console.log(newValue)}
               />
             </label>
             <label className={styles.dimensionLabel}>
-              <p className={styles.dimensionTitle}>Înălțime (mm)</p>
-
+              <p className={styles.dimensionTitle}>Înălțime (cm)</p>
               <Slider
-                min={1000}
-                max={5000}
-                step={5}
-                value={1000}
+                min={80}
+                max={150}
+                step={10}
+                value={120}
                 onChange={(newValue) => console.log(newValue)}
               />
             </label>
             <label className={styles.dimensionLabel}>
-              <p className={styles.dimensionTitle}>Adâncime (mm)</p>
+              <p className={styles.dimensionTitle}>Adâncime (cm)</p>
               <Slider
-                min={1000}
-                max={5000}
-                step={5}
-                value={1000}
+                min={30}
+                max={50}
+                step={10}
+                value={50}
                 onChange={(newValue) => console.log(newValue)}
               />
             </label>

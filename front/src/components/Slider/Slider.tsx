@@ -47,11 +47,12 @@ export const Slider: React.FC<SliderProps> = ({
     <div className={styles.sliderContainer}>
       <TextField 
         id="outlined-basic" 
-        className={styles.valueInput2}
-        value={sliderValue} 
+        className={styles.valueInput}
+        value={sliderValue}
         variant="outlined"
         onChange={handleInputChange}
         onBlur={handleBlur} 
+        size="small"
       />
       <input
         type="range"

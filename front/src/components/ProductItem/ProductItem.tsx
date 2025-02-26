@@ -28,6 +28,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({
           <SelectColor
             colors={['#eeeeee', '#b5b5b5', '#d7d0c5']}
             onChange={() => {}}
+            size='medium'
           />
           {button}
         </div>
