@@ -35,6 +35,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
           classes[`${size}Size`],
           classes[`${variant}Variant`],
         ])}
+        size={size}
         {...additionalProps}
       >
         <p className={classes.ctaButtonTitle}>{children}</p>

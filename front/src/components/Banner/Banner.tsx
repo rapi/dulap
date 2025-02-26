@@ -1,7 +1,7 @@
 import classes from './Banner.module.css'
 import React from 'react'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
-import { WardrobeIcon } from '~/components/Icons/Icons'
+import { WardrobeIconMedium } from '~/components/Icons/Icons'
 import Image from 'next/image'
 export const Banner = () => {
   return (
@@ -23,12 +23,10 @@ export const Banner = () => {
             <li className={classes.subtitleAnimationListItem}><span>preferințele</span></li>
             <li className={classes.subtitleAnimationListItem}><span>culorile</span></li>
             <li className={classes.subtitleAnimationListItem}><span>gusturile</span></li>
-            {/* <li className={classes.subtitleAnimationListItem}><span>culorile</span></li>
-            <li className={classes.subtitleAnimationListItem}><span>culorile</span></li> */}
           </ol>
           <p>tale</p>
         </div>
-        <CustomButton icon={<WardrobeIcon />}>Încearcă aici</CustomButton>
+        <CustomButton size='large' icon={<WardrobeIconMedium/>}>Încearcă aici</CustomButton>
       </div>
     </section>
   )

@@ -1,5 +1,4 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import InfoIcon from '@mui/icons-material/Info'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import {
@@ -11,6 +10,7 @@ import SelectColor from '~/components/SelectColor/SelectColor'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
 import Select from '~/components/Select/Select'
 import React from 'react'
+
 export const wardrobeOptions: ButtonOptionsType[] = [
   {
     value: '1 secție',
@@ -24,6 +24,7 @@ export const wardrobeOptions: ButtonOptionsType[] = [
   { value: '3 secții', label: '3 secții' },
   { value: '4 secții', label: '4 secții' },
 ]
+
 export const ProductWardrobe = () => {
   return (
     <>
@@ -39,18 +40,15 @@ export const ProductWardrobe = () => {
         <div className={styles.priceContainer}>
           <div className={styles.priceTitle}>
             <h4>Calculator de preț:</h4>
-            <button className={styles.infoButton}>
-              <InfoIcon color="action" sx={{ fontSize: 20 }} />
-            </button>
           </div>
           <div className={styles.price}>
             <h2>6850 MDL</h2>
           </div>
           <div className={styles.addToCartButtonContainer}>
             <CustomButton
-              icon={<ShoppingCartIcon fontSize="large" />}
+              icon={<ShoppingCartIcon />}
               size="large"
-              outlined
+              // outlined
               variant="danger"
             >
               Adaugă în coș

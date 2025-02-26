@@ -2,11 +2,11 @@ a.ctaButton,
 button.ctaButton {
   padding: 0.1rem 1rem;
   width: fit-content;
-  font-size: 0.9em;
+  /* font-size: 0.9em; */
   font-weight: 500;
   color: #eeeeee;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   font-family: 'Outfit', serif;
   display: flex;
@@ -14,7 +14,6 @@ button.ctaButton {
   justify-items: baseline;
   text-transform: none;
   & span > img:first-child {
-    height: 25px;
     filter: invert(1) brightness(1000%);
   }
 }
@@ -32,37 +31,19 @@ button.outlined {
   }
 }
 
-.ctaButtonTitle {
-  font-size: 0.9em;
-}
-
-.mediumSize p {
-  font-size: 1rem;
-  padding: 0;
+.smallSize p {
+  font-size: 0.8rem;
   margin-block: 0.6rem;
 }
 
-.mediumSize span > img {
-  height: 40px !important;
-}
-
-.smallSize {
-  width: auto;
-  height: 50px;
-}
-
-.smallSize p {
-  font-size: 0.9rem;
-  margin-block: 0.5rem;
+.mediumSize p {
+  font-size: 0.85rem;
+  margin-block: 0.7rem;
 }
 
 .largeSize p {
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   margin-block: 0.8rem;
-}
-
-.largeSize svg {
-  font-size: 32px !important;
 }
 
 /*Primary Variant*/
@@ -93,18 +74,18 @@ a.ctaButton.primaryVariant.outlined:hover {
 /*Danger Variant*/
 a.ctaButton.dangerVariant,
 button.ctaButton.dangerVariant {
-  background-color: #ef2a15;
+  background-color: #f46d5e;
 }
 a.ctaButton.dangerVariant:hover,
 button.ctaButton.dangerVariant:hover {
-  background-color: #f46d5e;
+  background-color: #eb5646;
 }
 
 a.ctaButton.dangerVariant.outlined,
 button.ctaButton.dangerVariant.outlined {
   background-color: transparent;
-  color: #ef2a15;
-  border: 2px solid #ef2a15;
+  color: #f15e4d;
+  border: 2px solid #f15e4d;
 }
 a.ctaButton.dangerVariant.outlined:hover,
 button.ctaButton.dangerVariant.outlined:hover {

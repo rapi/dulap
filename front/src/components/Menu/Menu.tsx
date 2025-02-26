@@ -2,7 +2,7 @@ import classes from './Menu.module.css'
 import React from 'react'
 import Image from 'next/image'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
-import { WardrobeIcon } from '~/components/Icons/Icons'
+import { WardrobeIconMedium } from '~/components/Icons/Icons'
 import Link from 'next/link'
 export const Menu = () => {
   return (
@@ -17,7 +17,7 @@ export const Menu = () => {
         <a href="#">Comode</a>
         <a href="#">Rafturi</a>
         <CustomButton 
-          icon={<WardrobeIcon />}
+          icon={<WardrobeIconMedium/>}
           size='medium'
         >
           Încearcă aici

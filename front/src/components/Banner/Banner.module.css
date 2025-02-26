@@ -56,7 +56,6 @@
 }
 
 .heroSubtitle p {
-
   font-size: 18px;
 }
 
@@ -90,17 +89,6 @@
 
 .heroSubtitle ol li span {
   white-space: nowrap;
-}
-.ctaButton p {
-  padding: 0 0.5rem;
-}
-
-.ctaButton img {
-  height: 25px;
-}
-
-.ctaButtonTitle {
-  font-size: 1.2em;
 }
 
 @media screen and (max-width: 600px) {
