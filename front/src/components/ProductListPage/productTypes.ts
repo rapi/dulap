@@ -24,4 +24,9 @@ export const productTypes: ProductTypes[] = [
     link: '/products/wardrobe',
     image: '/products/wardrobe.jpg',
   },
+  {
+    name: 'Dulap pentru haine',
+    link: '/products/wardrobe',
+    image: '/products/wardrobe.jpg',
+  },
 ]

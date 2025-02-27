@@ -26,7 +26,13 @@ export const Banner = () => {
           </ol>
           <p>tale</p>
         </div>
-        <CustomButton size='large' icon={<WardrobeIconMedium/>}>Încearcă aici</CustomButton>
+        <CustomButton 
+          size='large' 
+          icon={<WardrobeIconMedium/>}
+          href='/products'
+        >
+          Încearcă aici
+        </CustomButton>
       </div>
     </section>
   )

@@ -13,12 +13,13 @@ export const Menu = () => {
         </Link>
       </div>
       <nav className={classes.navigation}>
-        <a href="#">Dulapuri</a>
-        <a href="#">Comode</a>
-        <a href="#">Rafturi</a>
+        <a href="#">Produse</a>
+        <a href="#">Despre noi</a>
+        <a href="#">Contacte</a>
         <CustomButton 
           icon={<WardrobeIconMedium/>}
           size='medium'
+          href='/products'
         >
           Încearcă aici
         </CustomButton>
