@@ -15,7 +15,7 @@ export const productTypes: ProductTypes[] = [
     image: '/products/dulap-deschis-2x2.jpg',
   },
   {
-    name: 'Comodă TV pe piciorușe',
+    name: 'Comodă TV',
     link: '/products/tv-stand',
     image: '/products/tumba-picioruse-4-white-wood.jpg',
   },
@@ -25,8 +25,8 @@ export const productTypes: ProductTypes[] = [
     image: '/products/wardrobe.jpg',
   },
   {
-    name: 'Dulap pentru haine',
-    link: '/products/wardrobe',
-    image: '/products/wardrobe.jpg',
+    name: 'Noptieră',
+    link: '/products/bedside-table',
+    image: '/products/comoda-pat.jpg',
   },
 ]
