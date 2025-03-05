@@ -32,7 +32,7 @@ export const ProductWardrobe = () => {
       <div className={styles.imagePriceContainer}>
         <div className={styles.imageContainer}>
           <img
-            src="/products/wardrobe.jpg"
+            src="/products/wardrobe-visualization/1.png"
             alt="Wardrobe"
             className={styles.image}
           />

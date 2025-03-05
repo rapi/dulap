@@ -22,7 +22,7 @@ export const productTypes: ProductTypes[] = [
   {
     name: 'Dulap pentru haine',
     link: '/products/wardrobe',
-    image: '/products/wardrobe.jpg',
+    image: '/products/wardrobe-visualization/1.png',
   },
   {
     name: 'Noptieră',
