@@ -70,33 +70,32 @@ export const ProductWardrobe = () => {
           <h3>Dimensiuni</h3>
           <div className={styles.dimensionsGrid}>
             <label className={styles.dimensionLabel}>
-              <p className={styles.dimensionTitle}>Lățime (mm)</p>
+              <p className={styles.dimensionTitle}>Lățime</p>
               <Slider
-                min={1000}
-                max={5000}
-                step={5}
-                value={1000}
+                min={30}
+                max={100}
+                step={1}
+                value={100}
                 onChange={(newValue) => console.log(newValue)}
               />
             </label>
             <label className={styles.dimensionLabel}>
-              <p className={styles.dimensionTitle}>Înălțime (mm)</p>
-
+              <p className={styles.dimensionTitle}>Înălțime</p>
               <Slider
-                min={1000}
-                max={5000}
-                step={5}
-                value={1000}
+                min={180}
+                max={240}
+                step={10}
+                value={210}
                 onChange={(newValue) => console.log(newValue)}
               />
             </label>
             <label className={styles.dimensionLabel}>
-              <p className={styles.dimensionTitle}>Adâncime (mm)</p>
+              <p className={styles.dimensionTitle}>Adâncime</p>
               <Slider
-                min={1000}
-                max={5000}
-                step={5}
-                value={1000}
+                min={45}
+                max={70}
+                step={1}
+                value={50}
                 onChange={(newValue) => console.log(newValue)}
               />
             </label>

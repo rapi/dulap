@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import styles from './Slider.module.css'
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import Typography from '@mui/material/Typography';
 
 interface SliderProps {
   min?: number
@@ -45,14 +47,49 @@ export const Slider: React.FC<SliderProps> = ({
 
   return (
     <div className={styles.sliderContainer}>
-      <TextField 
-        id="outlined-basic" 
+      <TextField
+        id="filled-size-small" 
         className={styles.valueInput}
         value={sliderValue}
         variant="outlined"
         onChange={handleInputChange}
         onBlur={handleBlur} 
         size="small"
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          m: 1, 
+          width: '70px',
+          ".MuiOutlinedInput-root": {
+            paddingRight: "0px",
+            input: {
+              fontFamily: "outfit",
+              fontWeight: 480,
+              fontSize: 15,
+              textAlign: "start",
+              marginRight: "5px",
+              paddingLeft: "10px"
+            }
+          } 
+        }}
+        slotProps={{
+          input: {
+            endAdornment: 
+              <InputAdornment 
+                position="start"
+                sx= {{ 
+                  ".MuiTypography-root": {
+                    fontFamily: "outfit",
+                    fontWeight: 300,
+                    fontSize: 15
+                  }
+                }}
+                >cm</InputAdornment>,
+          },
+          htmlInput: { 
+            sx: { fontSize: '0.9rem' } 
+          }
+        }}
       />
       <input
         type="range"

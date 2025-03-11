@@ -91,13 +91,13 @@
 }
 
 .dimensionTitle {
-  width: 120px;
+  width: 90px;
 }
 
 .dimensionLabel {
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 10px;
 }
 
 .selected {

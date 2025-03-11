@@ -4,19 +4,10 @@
   gap: 15px;
 }
 
-.valueInput2 {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-  width: 50px;
-  text-align: center;
-  border: none;
-  background: transparent;
-}
-
 .valueInput {
-  font-size: 1rem;
-  width: 60px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .valueInput:focus {
@@ -28,8 +19,8 @@
   -webkit-appearance: none;
   width: 220px;
   height: 3px;
-  background: #C2C2C2;
-  border-radius: 3px;
+  background: #e3e3e3;
+  border-radius: 5px;
   outline: none;
   transition: opacity 0.2s;
 }
@@ -37,18 +28,19 @@
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 15px;
-  height: 15px;
-  background: #DC8E1E;
+  width: 19px;
+  height: 19px;
+  background: #FBA85C;
+  /* border-radius: 50%; */
   border-radius: 50%;
-  cursor: pointer;
+  cursor: grabbing;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
 .slider::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
-  background: #DC8E1E;
+  width: 19px;
+  height: 19px;
+  background: #FBA85C;
   border-radius: 50%;
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
