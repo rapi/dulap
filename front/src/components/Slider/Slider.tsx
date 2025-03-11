@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import styles from './Slider.module.css'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import Typography from '@mui/material/Typography';
 
 interface SliderProps {
   min?: number
