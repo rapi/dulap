@@ -1,3 +1,4 @@
+import * as React from 'react';
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
@@ -8,31 +9,38 @@ import {
 import { Slider } from '~/components/Slider/Slider'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
-import Select from '~/components/Select/Select'
-import React from 'react'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 export const wardrobeOptions: ButtonOptionsType[] = [
-  {
-    value: '1 secție',
-    label: (
-      <>
-        <img src="/products/wardrobe.jpg" height={20} /> 1 secție
-      </>
-    ),
-  },
-  { value: '2 secții', label: '2 secții' },
-  { value: '3 secții', label: '3 secții' },
-  { value: '4 secții', label: '4 secții' },
+  { value: '1 secție', label: '1' },
+  { value: '2 secții', label: '2' },
+  { value: '3 secții', label: '3' },
+  { value: '4 secții', label: '4' },
 ]
 
 export const ProductWardrobe = () => {
+  const [furniture1, setFurniture1] = React.useState('');
+
+  const handleChangeFurniture1 = (event: SelectChangeEvent) => {
+    setFurniture1(event.target.value);
+  };
+
+  const [furniture2, setFurniture2] = React.useState('');
+
+  const handleChangeFurniture2 = (event: SelectChangeEvent) => {
+    setFurniture2(event.target.value);
+  };
+
   return (
     <>
       {/* Left Side: Image */}
-      <div className={styles.imagePriceContainer}>
+      <div className={styles.leftContainer}>
         <div className={styles.imageContainer}>
           <img
-            src="/products/wardrobe-visualization/1.png"
+            src="/products/wardrobe-visualization/2.jpg"
             alt="Wardrobe"
             className={styles.image}
           />
@@ -48,7 +56,6 @@ export const ProductWardrobe = () => {
             <CustomButton
               icon={<ShoppingCartIcon />}
               size="large"
-              // outlined
               variant="danger"
             >
               Adaugă în coș
@@ -58,7 +65,7 @@ export const ProductWardrobe = () => {
       </div>
 
       {/* Right Side: Product Details */}
-      <div className={styles.detailsContainer}>
+      <div className={styles.rightContainer}>
         <h1 className={styles.title}>Dulap pentru haine</h1>
         <ButtonSelect
           options={wardrobeOptions}
@@ -67,7 +74,7 @@ export const ProductWardrobe = () => {
         />
         {/* Dimensions Sliders */}
         <div className={styles.dimensions}>
-          <h3>Dimensiuni</h3>
+          <p className={styles.subtitle}>Dimensiuni</p>
           <div className={styles.dimensionsGrid}>
             <label className={styles.dimensionLabel}>
               <p className={styles.dimensionTitle}>Lățime</p>
@@ -103,19 +110,66 @@ export const ProductWardrobe = () => {
         </div>
 
         {/* Color Selection */}
-        <div className={styles.colors}>
-          <h3>Culori</h3>
+        <div className={styles.colorsContainer}>
+          <p className={styles.subtitle}>Culori</p>
           <SelectColor
             colors={['#eeeeee', '#b5b5b5', '#d7d0c5']}
             onChange={() => {}}
             defaultSelected={'#eeeeee'}
-            size="large"
+            size="medium"
           />
+        </div>
+
+        {/* Furniture Options */}
+        <div className={styles.furnitureContainer}>
+          <p className={styles.subtitle}>Furnitura</p>
+          <label className={styles.furnitureLabel}>
+            <p>Balamale</p>
+            {/* <Select options={['Standard', 'Premium', 'Deluxe']} /> */}
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="demo-select-small-label">alege</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={furniture1}
+                label="Age"
+                onChange={handleChangeFurniture1}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Standard</MenuItem>
+                <MenuItem value={20}>Premium</MenuItem>
+                <MenuItem value={30}>Deluxe</MenuItem>
+              </Select>
+            </FormControl>
+          </label>
+          <label className={styles.furnitureLabel}>
+            <p>Glisiere</p>
+            {/* <Select options={['Standard (cu bile)', 'Premium', 'Deluxe']} /> */}
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="demo-select-small-label">alege</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={furniture2}
+                label="Age"
+                onChange={handleChangeFurniture2}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={10}>Standard</MenuItem>
+                <MenuItem value={20}>Premium</MenuItem>
+                <MenuItem value={30}>Deluxe</MenuItem>
+              </Select>
+            </FormControl>
+          </label>
         </div>
 
         {/* Shelf Arrangement (Dropdowns for Sections) */}
         <div className={styles.shelfArrangement}>
-          <h3>Aranjare rafturi</h3>
+          <p className={styles.subtitle}>Aranjare rafturi</p>
           <ImageSelect
             images={[
               '/wardeobe/1.svg',
@@ -126,19 +180,6 @@ export const ProductWardrobe = () => {
             onChange={() => {}}
             defaultSelected={1}
           />
-        </div>
-
-        {/* Furniture Options */}
-        <div className={styles.furniture}>
-          <h3>Furnitura</h3>
-          <label className={styles.furnitureLabel}>
-            <p>Balamale:</p>
-            <Select options={['Standard', 'Premium', 'Deluxe']} />
-          </label>
-          <label className={styles.furnitureLabel}>
-            <p>Glisiere pentru sertare:</p>
-            <Select options={['Standard (cu bile)', 'Premium', 'Deluxe']} />
-          </label>
         </div>
       </div>
     </>

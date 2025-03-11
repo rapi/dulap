@@ -14,7 +14,7 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap"
           rel="stylesheet"
         />
         <link
@@ -27,10 +27,6 @@ export default function Document() {
         />
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       <body>
         <Main />

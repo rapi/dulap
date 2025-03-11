@@ -11,7 +11,7 @@ import { productTypes } from '~/components/ProductListPage/productTypes'
 
 export const Landing: React.FC = () => {
   return (
-    <div className="landing-page outfit-font">
+    <div className="landing-page onest-font">
       <Banner />
       <section className={classes.productTypes}>
         <p className={classes.productTypesTitle}>

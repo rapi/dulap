@@ -58,18 +58,23 @@ export const Slider: React.FC<SliderProps> = ({
           display: "flex",
           alignItems: "center",
           m: 1, 
-          width: '70px',
+          width: "70px",
+          // height: "30px",
+          margin: 0,
           ".MuiOutlinedInput-root": {
             paddingRight: "0px",
             input: {
-              fontFamily: "outfit",
+              fontFamily: "onest",
+              height: "30px",
               fontWeight: 480,
-              fontSize: 15,
+              fontSize: 12,
               textAlign: "start",
               marginRight: "5px",
-              paddingLeft: "10px"
+              paddingLeft: "10px",
+              paddingTop: "0",
+              paddingBottom: "0"
             }
-          } 
+          }
         }}
         slotProps={{
           input: {
@@ -78,9 +83,9 @@ export const Slider: React.FC<SliderProps> = ({
                 position="start"
                 sx= {{ 
                   ".MuiTypography-root": {
-                    fontFamily: "outfit",
+                    fontFamily: "onest",
                     fontWeight: 300,
-                    fontSize: 15
+                    fontSize: 12
                   }
                 }}
                 >cm</InputAdornment>,
