@@ -12,16 +12,21 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 2.5em;
 }
 
-.imageContainer {
-  width: 24vw; 
+.imageContainerFirstRow {
+  width: 600px; 
+}
+
+.imageContainerSecondRow {
+  display: flex;
+  width: 600px;
+  gap: 5px; 
 }
 
 .image {
   width: 100%;
-  border-radius: 8px;
+  border-radius: 3px;
 }
 
 /* Right container */
@@ -29,7 +34,8 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 5px;
+  width: 400px;
 }
 
 .title {
@@ -56,19 +62,24 @@
   font-size: 13px;
 }
 
+.dimensionsSliderContainer {
+  width: 330px;
+}
+
 .dimensionLabel {
   display: flex;
   align-items: center;
 }
 
-.dimensionLabel > p {
+.dimensionLabel p {
   margin: 0;
 }
 
 /* Colors */
 .colorsContainer {
   display: flex;
-
+  align-items: center;
+  margin-top: 20px;
 }
 
 .colorsContainer > .subtitle {
@@ -93,31 +104,60 @@
   width: 100%;
 }
 
+/* Aranjare dulap */
+/* Sectii */
+.sectionsLabel {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.sectionsLabel p {
+  width: 140px;
+}
+
+/* Aranjare rafturi */
+.shelfArrangement {
+  display: flex;
+  margin-top: 15px;
+}
+
+.shelfArrangement p {
+  font-size: 13px;
+  width: 140px;
+  margin: 0;
+}
+
 /* Price container */
 .priceContainer {
   margin-right: 0;
-  margin-left: auto;
+  margin-top: 15px;
+  background-color: #fff;
   border: 1px solid #C2C2C2;
   border-radius: 10px;
-  padding: 20px 25px;
+  padding: 25px 40px;
+  display: flex;
+  justify-content: space-between;
+  width: 380px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.1) 0px 1px 1px;
+}
+
+.priceFirstColumn {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.1) 0px 1px 1px;
+  justify-content: space-between;
+  gap: 5px;
 }
 
 .priceTitle h4 {
   margin: 0;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .price h2 {
   margin: 0;
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 24px;
+  font-weight: 600;
   color: #f15e4d;
-}
-
-.addToCartButtonContainer {
-  margin-top: 5px;
 }

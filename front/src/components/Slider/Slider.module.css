@@ -1,7 +1,7 @@
 .sliderContainer {
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: space-between;
 }
 
 .valueInput {
@@ -17,7 +17,7 @@
 
 .slider {
   -webkit-appearance: none;
-  width: 220px;
+  width: 240px;
   height: 3px;
   background: #e3e3e3;
   border-radius: 5px;

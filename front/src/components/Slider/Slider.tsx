@@ -58,8 +58,8 @@ export const Slider: React.FC<SliderProps> = ({
           display: "flex",
           alignItems: "center",
           m: 1, 
-          width: "70px",
-          // height: "30px",
+          width: "60px",
+          backgroundColor: "#fff",
           margin: 0,
           ".MuiOutlinedInput-root": {
             paddingRight: "0px",
@@ -69,7 +69,6 @@ export const Slider: React.FC<SliderProps> = ({
               fontWeight: 480,
               fontSize: 12,
               textAlign: "start",
-              marginRight: "5px",
               paddingLeft: "10px",
               paddingTop: "0",
               paddingBottom: "0"
