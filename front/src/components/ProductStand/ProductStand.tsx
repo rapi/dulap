@@ -1,7 +1,10 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import { ButtonSelect, ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
+import {
+  ButtonSelect,
+  ButtonOptionsType,
+} from '~/components/ButtonSelect/ButtonSelect'
 import { Slider } from '~/components/Slider/Slider'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import Select from '~/components/Select/Select'
@@ -12,7 +15,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '3 sertare',
     label: (
       <>
-        <img src="/stand/comoda-3-sertare.svg" width={50} />
+        <img alt="" src="/stand/comoda-3-sertare.svg" width={50} />
       </>
     ),
   },
@@ -20,7 +23,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '4 sertare',
     label: (
       <>
-        <img src="/stand/comoda-4-sertare.svg" width={50} />
+        <img alt="" src="/stand/comoda-4-sertare.svg" width={50} />
       </>
     ),
   },
@@ -28,7 +31,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '5 sertare',
     label: (
       <>
-        <img src="/stand/comoda-5-sertare.svg" width={50} />
+        <img alt="" src="/stand/comoda-5-sertare.svg" width={50} />
       </>
     ),
   },

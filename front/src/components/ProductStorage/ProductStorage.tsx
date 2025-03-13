@@ -1,7 +1,10 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import { ButtonSelect, ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
+import {
+  ButtonSelect,
+  ButtonOptionsType,
+} from '~/components/ButtonSelect/ButtonSelect'
 import { Slider } from '~/components/Slider/Slider'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import Select from '~/components/Select/Select'
@@ -12,7 +15,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '1x1',
     label: (
       <>
-        <img src="/storage/1x1.svg" height={20} />
+        <img alt="" src="/storage/1x1.svg" height={20} />
       </>
     ),
   },
@@ -20,7 +23,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '2x1',
     label: (
       <>
-        <img src="/storage/2x1.svg" height={20} />
+        <img alt="" src="/storage/2x1.svg" height={20} />
       </>
     ),
   },
@@ -28,7 +31,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '3x1',
     label: (
       <>
-        <img src="/storage/3x1.svg" height={20} />
+        <img alt="" src="/storage/3x1.svg" height={20} />
       </>
     ),
   },
@@ -36,7 +39,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '1x2',
     label: (
       <>
-        <img src="/storage/1x2.svg" height={40} />
+        <img alt="" src="/storage/1x2.svg" height={40} />
       </>
     ),
   },
@@ -44,7 +47,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '2x2',
     label: (
       <>
-        <img src="/storage/2x2.svg" height={40} />
+        <img alt="" src="/storage/2x2.svg" height={40} />
       </>
     ),
   },
@@ -52,7 +55,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '3x2',
     label: (
       <>
-        <img src="/storage/3x2.svg" height={40} />
+        <img alt="" src="/storage/3x2.svg" height={40} />
       </>
     ),
   },
@@ -60,7 +63,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '1x3',
     label: (
       <>
-        <img src="/storage/1x3.svg" height={60} />
+        <img alt="" src="/storage/1x3.svg" height={60} />
       </>
     ),
   },
@@ -68,7 +71,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '2x3',
     label: (
       <>
-        <img src="/storage/2x3.svg" height={60} />
+        <img alt="" src="/storage/2x3.svg" height={60} />
       </>
     ),
   },
@@ -76,7 +79,7 @@ const standOptions: ButtonOptionsType[] = [
     value: '3x3',
     label: (
       <>
-        <img src="/storage/3x3.svg" height={60} />
+        <img alt="" src="/storage/3x3.svg" height={60} />
       </>
     ),
   },

@@ -1,0 +1,10 @@
+/* Furniture choice*/
+.furnitureLabel {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.furnitureLabel p {
+  width: 140px;
+}

@@ -20,7 +20,7 @@ export const ProductImageSelect: FC<ProductImageSelectProps> = ({
           value: option.value,
           label: (
             <>
-              <img src={option.imageURL} />
+              <img alt="" src={option.imageURL} />
             </>
           ),
         }))}

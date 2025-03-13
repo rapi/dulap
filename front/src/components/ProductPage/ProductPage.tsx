@@ -18,18 +18,34 @@ import {
   ProductSelect,
   ProductSelectComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductSelect'
+import {
+  ProductFurniture,
+  ProductFurnitureComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductFurniture'
+import {
+  ProductSections,
+  ProductSectionsComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductSections'
+import { Carousel } from '~/components/Carousel/Carousel'
 
 export type ProductComponent =
   | ProductImageSelectComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
+  | ProductFurnitureComponent
+  | ProductSectionsComponent
 
 interface ProductPageProps {
   components: () => ProductComponent[]
   name: string
+  images: string[]
 }
-export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
+export const ProductPage: FC<ProductPageProps> = ({
+  components,
+  name,
+  images,
+}) => {
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'imageSelect':
@@ -40,6 +56,10 @@ export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
         return <ProductColors configuration={component} />
       case 'select':
         return <ProductSelect configuration={component} />
+      case 'furniture':
+        return <ProductFurniture configuration={component} />
+      case 'sections':
+        return <ProductSections configuration={component} />
     }
   }
   const currentComponents = components()
@@ -47,13 +67,21 @@ export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
     <>
       {/* Left Side: Image */}
       <div className={styles.imagePriceContainer}>
-        <div className={styles.imageContainer}>
-          <img
-            src="/products/comoda-alba.jpg"
-            alt="Wardrobe"
-            className={styles.image}
-          />
-        </div>
+        <Carousel
+          images={images.map((image) => ({ src: image, alt: image }))}
+        />
+      </div>
+
+      {/* Right Side: Product Details */}
+      <div className={styles.detailsContainer}>
+        <h1 className={styles.title}>{name}</h1>
+        {currentComponents.map((component, index) => {
+          return (
+            <div key={index + component.type}>{getComponent(component)}</div>
+          )
+        })}
+      </div>
+      <div>
         <div className={styles.priceContainer}>
           <div className={styles.priceTitle}>
             <h4>Calculator de preț:</h4>
@@ -71,16 +99,6 @@ export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
             </CustomButton>
           </div>
         </div>
-      </div>
-
-      {/* Right Side: Product Details */}
-      <div className={styles.detailsContainer}>
-        <h1 className={styles.title}>{name}</h1>
-        {currentComponents.map((component, index) => {
-          return (
-            <div key={index + component.type}>{getComponent(component)}</div>
-          )
-        })}
       </div>
     </>
   )

@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
           </ul>
         </div>
         <div className={styles.logoSection}>
-          <img src="/logo.svg" width={100} />
+          <img alt="logo" src="/logo.svg" width={100} />
           <p>Abonează-te!</p>
           <div className={styles.socialIcons}>
             <a
