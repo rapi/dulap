@@ -66,8 +66,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   return (
     <>
       {/* Left Side: Image */}
-      <div className={styles.imagePriceContainer}>
+      <div className={styles.imageContainer}>
         <Carousel
+          width={600}
           images={images.map((image) => ({ src: image, alt: image }))}
         />
       </div>

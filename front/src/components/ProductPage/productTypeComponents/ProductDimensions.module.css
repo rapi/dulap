@@ -1,0 +1,26 @@
+.header {
+  margin-top: 27px;
+  font-size: 15px;
+  font-weight: 700;
+  margin-left: 0;
+  margin-bottom: 9px;
+}
+/* Dimensions */
+.dimensionsGrid {
+  display: flex;
+  flex-direction: column;
+}
+.dimensionLabel {
+  display: flex;
+  align-items: center;
+  > div {
+    margin-left: 3px;
+    margin-top: 5px;
+  }
+}
+.dimensionTitle {
+  width: 140px;
+  font-size: 13px;
+  margin-top: 13px;
+  margin-bottom: 10px;
+}

@@ -1,10 +1,11 @@
 .container {
-  display: flex;
-  --containerHeight: 1200px;
+  --containerHeight: 1300px;
   max-width: var(--containerHeight);
   margin: auto;
-  gap: 2.5em;
-  padding: 20px;
+}
+.contentContainer {
+  display: flex;
+  gap: 3.1em;
 }
 
 /* Left container */
@@ -14,14 +15,7 @@
   justify-content: flex-start;
 }
 
-.imageContainerFirstRow {
-  width: 600px;
-}
-
-.imageContainerSecondRow {
-  display: flex;
-  width: 600px;
-  gap: 5px;
+.imageContainer {
 }
 
 .image {
@@ -42,7 +36,7 @@
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 40px;
-  margin-block: 5px;
+  margin-block: 0;
 }
 
 .subtitle {
@@ -57,18 +51,8 @@
   gap: 8px;
 }
 
-.dimensionTitle {
-  width: 140px;
-  font-size: 13px;
-}
-
 .dimensionsSliderContainer {
   width: 330px;
-}
-
-.dimensionLabel {
-  display: flex;
-  align-items: center;
 }
 
 .dimensionLabel p {
@@ -130,17 +114,12 @@
 
 /* Price container */
 .priceContainer {
-  margin-right: 0;
-  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   border: 1px solid #c2c2c2;
   border-radius: 10px;
   padding: 25px 40px;
-  display: flex;
-  justify-content: space-between;
-  box-shadow:
-    rgba(0, 0, 0, 0.1) 0px 1px 3px,
-    rgba(0, 0, 0, 0.1) 0px 1px 1px;
 }
 
 .priceFirstColumn {
