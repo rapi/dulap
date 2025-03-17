@@ -18,6 +18,12 @@ export const wardrobeProductConfiguration: () => ProductComponent[] = () => {
     {
       type: 'sections',
       maxNumber: 4,
+      possibleSections: [
+        '/wardeobe/1.svg',
+        '/wardeobe/2.svg',
+        '/wardeobe/3.svg',
+        '/wardeobe/4.svg',
+      ],
     },
   ]
 }

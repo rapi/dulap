@@ -41,6 +41,7 @@ interface ProductPageProps {
   name: string
   images: string[]
 }
+
 export const ProductPage: FC<ProductPageProps> = ({
   components,
   name,
