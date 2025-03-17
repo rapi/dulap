@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
@@ -9,34 +9,34 @@ import {
 import { Slider } from '~/components/Slider/Slider'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 export const wardrobeOptions: ButtonOptionsType[] = [
-  { value: '1 secție', label: '1' },
-  { value: '2 secții', label: '2' },
-  { value: '3 secții', label: '3' },
-  { value: '4 secții', label: '4' },
+  { value: '1', label: '1' },
+  { value: '2', label: '2' },
+  { value: '3', label: '3' },
+  { value: '4', label: '4' },
 ]
 
 export const openingOptions: ButtonOptionsType[] = [
   { value: 'maner', label: 'mâner' },
-  { value: 'push', label: 'push-to-open' }
+  { value: 'push', label: 'push-to-open' },
 ]
 
 export const ProductWardrobe = () => {
-  const [furniture1, setFurniture1] = React.useState('');
+  const [furniture1, setFurniture1] = React.useState('')
 
   const handleChangeFurniture1 = (event: SelectChangeEvent) => {
-    setFurniture1(event.target.value);
-  };
+    setFurniture1(event.target.value)
+  }
 
-  const [furniture2, setFurniture2] = React.useState('');
+  const [furniture2, setFurniture2] = React.useState('')
 
   const handleChangeFurniture2 = (event: SelectChangeEvent) => {
-    setFurniture2(event.target.value);
-  };
+    setFurniture2(event.target.value)
+  }
 
   return (
     <>
@@ -70,7 +70,7 @@ export const ProductWardrobe = () => {
       {/* Right Side: Product Details */}
       <div className={styles.rightContainer}>
         <h1 className={styles.title}>Dulap pentru haine</h1>
-        
+
         {/* Dimensions Sliders */}
         <div className={styles.dimensions}>
           <p className={styles.subtitle}>Dimensiuni</p>
@@ -140,13 +140,13 @@ export const ProductWardrobe = () => {
 
           <label className={styles.furnitureLabel}>
             <p>Balamale</p>
-            <FormControl 
-              sx={{ 
-                m: 1, 
+            <FormControl
+              sx={{
+                m: 1,
                 minWidth: 120,
-                margin: "0",
-                backgroundColor: "#fff",
-                height: "35px"
+                margin: '0',
+                backgroundColor: '#fff',
+                height: '35px',
               }}
               size="small"
             >
@@ -156,33 +156,33 @@ export const ProductWardrobe = () => {
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
                 sx={{
-                  fontSize: "12px",
-                  fontFamily: "onest",
-                  color: "#333"
+                  fontSize: '12px',
+                  fontFamily: 'onest',
+                  color: '#333',
                 }}
               >
-                <MenuItem 
+                <MenuItem
                   value=""
                   sx={{
-                    fontSize: "12px",
-                  fontFamily: "onest"
+                    fontSize: '12px',
+                    fontFamily: 'onest',
                   }}
                 >
                   standard
                 </MenuItem>
-                <MenuItem 
+                <MenuItem
                   value="premium"
                   sx={{
-                    fontSize: "12px",
-                    fontFamily: "onest"
+                    fontSize: '12px',
+                    fontFamily: 'onest',
                   }}
                 >
                   premium
                 </MenuItem>
-                <MenuItem 
+                <MenuItem
                   value="deluxe"
                   sx={{
-                    fontSize: "13px"
+                    fontSize: '13px',
                   }}
                 >
                   deluxe
@@ -192,12 +192,12 @@ export const ProductWardrobe = () => {
           </label>
           <label className={styles.furnitureLabel}>
             <p>Glisiere</p>
-            <FormControl 
-              sx={{ 
-                m: 1, 
+            <FormControl
+              sx={{
+                m: 1,
                 minWidth: 120,
-                margin: "0",
-                backgroundColor: "#fff",
+                margin: '0',
+                backgroundColor: '#fff',
               }}
               size="small"
             >
@@ -207,33 +207,33 @@ export const ProductWardrobe = () => {
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
                 sx={{
-                  fontSize: "12px",
-                  fontFamily: "onest",
-                  color: "#333"
+                  fontSize: '12px',
+                  fontFamily: 'onest',
+                  color: '#333',
                 }}
               >
-                <MenuItem 
+                <MenuItem
                   value=""
                   sx={{
-                    fontSize: "12px",
-                  fontFamily: "onest"
+                    fontSize: '12px',
+                    fontFamily: 'onest',
                   }}
                 >
                   standard
                 </MenuItem>
-                <MenuItem 
+                <MenuItem
                   value="premium"
                   sx={{
-                    fontSize: "12px",
-                    fontFamily: "onest"
+                    fontSize: '12px',
+                    fontFamily: 'onest',
                   }}
                 >
                   premium
                 </MenuItem>
-                <MenuItem 
+                <MenuItem
                   value="deluxe"
                   sx={{
-                    fontSize: "13px"
+                    fontSize: '13px',
                   }}
                 >
                   deluxe
@@ -254,18 +254,18 @@ export const ProductWardrobe = () => {
               onChange={() => {}}
             />
           </label>
-          
+
           <label className={styles.shelfArrangement}>
-            <p className=''>Aranjare rafturi</p>
+            <p className="">Aranjare rafturi</p>
             <ImageSelect
-            images={[
-              '/wardeobe/1.svg',
-              '/wardeobe/2.svg',
-              '/wardeobe/3.svg',
-              '/wardeobe/4.svg',
-            ]}
-            onChange={() => {}}
-            defaultSelected={1}
+              images={[
+                '/wardeobe/1.svg',
+                '/wardeobe/2.svg',
+                '/wardeobe/3.svg',
+                '/wardeobe/4.svg',
+              ]}
+              onChange={() => {}}
+              defaultSelected={1}
             />
           </label>
         </div>

@@ -29,8 +29,20 @@ export const ProductSections: FC<ProductSelectProps> = ({
           <p>Numărul de secții</p>
           <ButtonSelect
             options={wardrobeOptions}
-            defaultSelected={'4 secții'}
-            onChange={() => {}}
+            defaultSelected={'4'}
+            onChange={(value) => {
+              const number = parseInt(value)
+              if (selectedSections.length > number) {
+                setSelectedSections(selectedSections.slice(0, number))
+              } else {
+                setSelectedSections([
+                  ...selectedSections,
+                  ...Array(number - selectedSections.length).fill(
+                    possibleSections[0]
+                  ),
+                ])
+              }
+            }}
           />
         </label>
 
@@ -60,13 +72,9 @@ export const ProductSections: FC<ProductSelectProps> = ({
             images={possibleSections}
             defaultSelected={0}
             onChange={(i) => {
-              console.log(activeSection)
-
               if (activeSection !== null && i !== null) {
                 const newSections = [...selectedSections]
                 newSections[activeSection] = possibleSections[i]
-                console.log(activeSection, newSections, i, newSections)
-
                 setSelectedSections(newSections)
                 setActiveSection(null)
               }
