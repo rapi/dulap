@@ -13,7 +13,7 @@
 .dimensionLabel {
   display: flex;
   align-items: center;
-  > div {
+  & > div {
     margin-left: 3px;
     margin-top: 5px;
   }
