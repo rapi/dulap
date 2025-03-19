@@ -10,7 +10,6 @@ button.ctaButton {
   font-family: 'Onest', sans-serif;
   display: flex;
   align-items: center;
-  /* justify-items: baseline; */
   justify-content: space-evenly;
   gap: 5px;
   text-transform: none;

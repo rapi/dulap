@@ -4,6 +4,7 @@ import { wardrobeOptions } from '~/components/ProductWardrobe/ProductWardrobe'
 import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { Modal } from '~/components/Modal/Modal'
+import { CustomButton } from '~/components/CustomButton/CustomButton'
 export type ProductSectionsComponent = {
   type: 'sections'
   maxNumber: number
@@ -24,8 +25,8 @@ export const ProductSections: FC<ProductSelectProps> = ({
   return (
     <>
       <div>
-        <p>Aranjare dulap</p>
-        <label>
+        <p className={styles.sectionTitle}>Aranjare dulap</p>
+        <label className={styles.sectionLabel}>
           <p>Numărul de secții</p>
           <ButtonSelect
             options={wardrobeOptions}
@@ -46,7 +47,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
           />
         </label>
 
-        <label>
+        <label className={styles.sectionArrangementLabel}>
           <p>Aranjare rafturi</p>
           <ImageSelect
             images={selectedSections}
@@ -64,10 +65,10 @@ export const ProductSections: FC<ProductSelectProps> = ({
           setIsModalOpen(false)
         }}
       >
-        <h2 className={styles.title}>
+        <p className={styles.subtitle}>
           Alege aranjarea rafturilor pentru Secțiunea 3
-        </h2>
-        <div>
+        </p>
+        <div className={styles.imageSelectContainer}>
           <ImageSelect
             images={possibleSections}
             defaultSelected={0}
@@ -82,6 +83,14 @@ export const ProductSections: FC<ProductSelectProps> = ({
             }}
           />
         </div>
+        <div className={styles.modalSaveButton}>
+          <CustomButton
+            variant='primary'
+            size='small'
+          >
+            Salvează
+          </CustomButton>
+        </div>        
       </Modal>
     </>
   )

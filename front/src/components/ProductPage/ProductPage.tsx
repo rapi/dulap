@@ -102,6 +102,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           </div>
         </div>
       </div>
+      
     </>
   )
 }

@@ -27,14 +27,14 @@
 }
 
 .arrow {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .options {
   list-style: none;
   margin: 0;
   padding: 0;
-  width: 200px;
+  width: 110px;
   border: 2px solid #b4b4b4;
   border-radius: 8px;
   background-color: #fff;

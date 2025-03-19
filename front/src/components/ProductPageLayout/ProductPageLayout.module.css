@@ -15,9 +15,6 @@
   justify-content: flex-start;
 }
 
-.imageContainer {
-}
-
 .image {
   width: 100%;
   border-radius: 3px;
@@ -60,14 +57,16 @@
 }
 
 /* Colors */
-.colorsContainer {
+.colorsLabel {
   display: flex;
   align-items: center;
   margin-top: 20px;
 }
 
-.colorsContainer > .subtitle {
+.colorsLabel p {
   width: 140px;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 /* Furniture choice*/
@@ -100,6 +99,33 @@
   width: 140px;
 }
 
+.sectionTitle {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sectionLabel {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.sectionLabel p {
+  width: 140px;
+}
+
+.sectionArrangementLabel {
+  display: flex;
+  font-size: 13px;
+  margin-top: 10px;
+  
+}
+
+.sectionArrangementLabel p {
+  width: 140px;
+  margin: 0;
+}
+
 /* Aranjare rafturi */
 .shelfArrangement {
   display: flex;
@@ -112,6 +138,19 @@
   margin: 0;
 }
 
+/* Modal */
+.imageSelectContainer {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.modalSaveButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
 /* Price container */
 .priceContainer {
   display: flex;
@@ -119,7 +158,8 @@
   background-color: #fff;
   border: 1px solid #c2c2c2;
   border-radius: 10px;
-  padding: 25px 40px;
+  padding: 30px 25px;
+  width: 170px;
 }
 
 .priceFirstColumn {

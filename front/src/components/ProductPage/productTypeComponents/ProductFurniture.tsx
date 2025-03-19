@@ -14,8 +14,8 @@ export const ProductFurniture: FC<ProductSelectProps> = () => {
   return (
     <div>
       <p>Furnitura</p>
-
-      <label>
+      
+      <label className={styles.furnitureLabel}>
         <p>Tip deschidere</p>
         <ButtonSelect
           options={openingOptions}
@@ -27,7 +27,7 @@ export const ProductFurniture: FC<ProductSelectProps> = () => {
       <label className={styles.furnitureLabel}>
         <p>Balamale</p>
         <FormControl>
-          <Select options={['standard', 'premium', 'deluxe']} />
+          <Select options={['test standard', 'premium', 'deluxe']} />
         </FormControl>
       </label>
       <label className={styles.furnitureLabel}>
