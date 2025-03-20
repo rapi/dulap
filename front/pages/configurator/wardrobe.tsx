@@ -1,12 +1,12 @@
 import { FC } from 'react'
 import { ProductPageLayout } from '~/components/ProductPageLayout/ProductPageLayout'
 import { ProductPage } from '~/components/ProductPage/ProductPage'
-import { wardrobeProductConfiguration } from '~/components/ProductPage/productTypes/wardrobe'
+import { WardrobeProductConfiguration } from '~/components/ProductPage/productTypes/wardrobe'
 const Product: FC = () => {
   return (
     <ProductPageLayout>
       <ProductPage
-        components={wardrobeProductConfiguration}
+        components={WardrobeProductConfiguration}
         name="Dulap pentru haine"
         images={[
           '/products/wardrobe-visualization/1.png',

@@ -1,6 +1,4 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import { CustomButton } from '~/components/CustomButton/CustomButton'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import React, { FC } from 'react'
 import {
   ProductImageSelect,
@@ -27,6 +25,10 @@ import {
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductSections'
 import { Carousel } from '~/components/Carousel/Carousel'
+import {
+  ProductPrice,
+  ProductPriceComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductPrice'
 
 export type ProductComponent =
   | ProductImageSelectComponent
@@ -35,6 +37,7 @@ export type ProductComponent =
   | ProductSelectComponent
   | ProductFurnitureComponent
   | ProductSectionsComponent
+  | ProductPriceComponent
 
 interface ProductPageProps {
   components: () => ProductComponent[]
@@ -63,7 +66,11 @@ export const ProductPage: FC<ProductPageProps> = ({
         return <ProductSections configuration={component} />
     }
   }
+
   const currentComponents = components()
+  const priceComponent = currentComponents.find(
+    (component) => component.type === 'price'
+  )
   return (
     <>
       {/* Left Side: Image */}
@@ -84,25 +91,8 @@ export const ProductPage: FC<ProductPageProps> = ({
         })}
       </div>
       <div>
-        <div className={styles.priceContainer}>
-          <div className={styles.priceTitle}>
-            <h4>Calculator de preț:</h4>
-          </div>
-          <div className={styles.price}>
-            <h2>6850 MDL</h2>
-          </div>
-          <div className={styles.addToCartButtonContainer}>
-            <CustomButton
-              icon={<ShoppingCartIcon />}
-              size="large"
-              variant="danger"
-            >
-              Adaugă în coș
-            </CustomButton>
-          </div>
-        </div>
+        {priceComponent && <ProductPrice configuration={priceComponent} />}
       </div>
-      
     </>
   )
 }

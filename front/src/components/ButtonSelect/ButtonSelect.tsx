@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './ButtonSelect.module.css'
 
 export type ButtonOptionsType = {
@@ -17,7 +17,9 @@ export const ButtonSelect: React.FC<ButtonSelectProps> = ({
   onChange,
 }) => {
   const [selected, setSelected] = useState(defaultSelected || options[0].value)
-
+  useEffect(() => {
+    setSelected(defaultSelected || options[0].value)
+  }, [defaultSelected, options])
   const handleSelect = (option: string) => {
     setSelected(option)
     if (onChange) {
