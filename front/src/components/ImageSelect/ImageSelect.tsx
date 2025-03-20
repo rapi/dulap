@@ -2,12 +2,18 @@ import { useState } from 'react'
 import styles from './ImageSelect.module.css'
 
 interface ImageSelectProps {
-  images: string[],
-  defaultSelected: number,
+  images: string[]
+  defaultSelected: number
+  gap?: number
   onChange: (index: number | null) => void
 }
 
-export const ImageSelect = ({ images, onChange, defaultSelected }: ImageSelectProps) => {
+export const ImageSelect = ({
+  images,
+  onChange,
+  defaultSelected,
+  gap,
+}: ImageSelectProps) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected - 1 || 0)
 
   const handleSelect = (index: number) => {
@@ -16,7 +22,7 @@ export const ImageSelect = ({ images, onChange, defaultSelected }: ImageSelectPr
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{ gap }}>
       {images.map((src, index) => (
         <div
           key={index}

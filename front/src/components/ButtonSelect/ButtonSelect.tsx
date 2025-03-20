@@ -30,13 +30,13 @@ export const ButtonSelect: React.FC<ButtonSelectProps> = ({
   return (
     <div className={styles.container}>
       {options.map((option) => (
-        <button
+        <div
           key={option.value}
           className={`${styles.button} ${selected === option.value ? styles.selected : ''}`}
           onClick={() => handleSelect(option.value)}
         >
           {option.label}
-        </button>
+        </div>
       ))}
     </div>
   )

@@ -79,6 +79,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
         </p>
         <div className={styles.imageSelectContainer}>
           <ImageSelect
+            gap={15}
             images={possibleSections}
             defaultSelected={0}
             onChange={(i) => {
