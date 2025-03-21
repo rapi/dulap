@@ -6,13 +6,15 @@ interface ImageSelectProps {
   defaultSelected: number
   gap?: number
   onChange: (index: number | null) => void
+  sectionWidths: string[]
 }
 
 export const ImageSelect = ({
   images,
   onChange,
   defaultSelected,
-  gap
+  gap,
+  sectionWidths
 }: ImageSelectProps) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected - 1 || 0)
 
@@ -28,8 +30,14 @@ export const ImageSelect = ({
           key={index}
           className={`${styles.imageWrapper} ${selectedIndex === index ? styles.selected : ''}`}
           onClick={() => handleSelect(index)}
+          style={{ width: sectionWidths[index] || '90px'}}
         >
-          <img src={src} alt={`Option ${index + 1}`} className={styles.image} />
+          <img 
+            src={src} 
+            alt={`Option ${index + 1}`} 
+            className={styles.image}
+            style={{ width: sectionWidths[index] || '90px'}} 
+          />
         </div>
       ))}
     </div>

@@ -5,13 +5,13 @@
 }
 
 .imageWrapper {
+  height: 200px;
   cursor: pointer;
   transition: border 0.3s;
 }
 
 .image {
-  width: 80px;
-  height: auto;
+  height: 200px;
   display: block;
 }
 

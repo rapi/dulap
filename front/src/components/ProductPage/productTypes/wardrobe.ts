@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(40)
   const [price, setPrice] = useState(40)
+  const [sectionWidths, setSectionWidths] = useState<string[]>([])
   const [maxSections, setMaxSections] = useState(5)
   const [minSections, setMinSections] = useState(1)
   useEffect(() => {
@@ -11,10 +12,12 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     if (width < 60) {
       setMinSections(1)
       setMaxSections(1)
+      setSectionWidths([width + 'px'])
     } else {
       if (width >= 60 && width < 100) {
         setMinSections(1)
         setMaxSections(2)
+        setSectionWidths([width + 'px', width + 'px'])
       } else {
         if (width >= 100 && width < 120) {
           setMinSections(2)
@@ -56,11 +59,12 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       type: 'sections',
       maxNumber: maxSections,
       minNumber: minSections,
+      sectionWidths: sectionWidths,
       possibleSections: [
-        '/wardeobe/1.svg',
-        '/wardeobe/2.svg',
-        '/wardeobe/3.svg',
-        '/wardeobe/4.svg',
+        '/wardrobe/1.png',
+        '/wardrobe/2.png',
+        '/wardrobe/3.png',
+        '/wardrobe/4.png',
       ],
     },
     {

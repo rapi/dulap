@@ -10,12 +10,13 @@ export type ProductSectionsComponent = {
   minNumber: number
   onSelect?: (section: number) => void
   possibleSections: string[]
+  sectionWidths: string[]
 }
 interface ProductSelectProps {
   configuration: ProductSectionsComponent
 }
 export const ProductSections: FC<ProductSelectProps> = ({
-  configuration: { possibleSections, maxNumber, minNumber },
+  configuration: { possibleSections, maxNumber, minNumber, sectionWidths },
 }) => {
   const [selectedMaxSections, setSelectedMaxSections] = useState(
     String(maxNumber)
@@ -28,11 +29,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
   const [selectedSections, setSelectedSections] = useState([
     ...possibleSections,
   ])
-
-  // const sections = new Array(maxNumber).fill(0).map((_, i) => ({
-  //   value: String(i + 1),
-  //   label: String(i + 1),
-  // }))
   const sections = new Array(maxNumber).fill(0).map((_, i) => ({
     value: String(i + 1),
     label: String(i + 1),
@@ -77,6 +73,20 @@ export const ProductSections: FC<ProductSelectProps> = ({
               setIsModalOpen(true)
             }}
             defaultSelected={1}
+            sectionWidths={sectionWidths}
+          />
+        </label>
+
+        <label className={styles.sectionArrangementLabel}>
+          <p>Aranjare uși</p>
+          <ImageSelect
+            images={selectedSections}
+            onChange={(i) => {
+              setActiveSection(i)
+              setIsModalOpen(true)
+            }}
+            defaultSelected={1}
+            sectionWidths={sectionWidths}
           />
         </label>
       </div>
@@ -103,6 +113,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
               }
               setIsModalOpen(false)
             }}
+            sectionWidths={sectionWidths}
           />
         </div>
         <div className={styles.modalSaveButton}>

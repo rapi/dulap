@@ -26,6 +26,7 @@ export const ProductImageSelect: FC<ProductImageSelectProps> = ({
         }))}
         defaultSelected={configuration.options[0].value}
         onChange={() => {}}
+        minActiveNumber=''
       />
     </>
   )

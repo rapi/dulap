@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  min-width: 60px;
+  min-width: 45px;
   height: 26px;
   padding: 0 10px;
   justify-content: center;
@@ -38,4 +38,5 @@
 
 .disabled {
   color: #ebebeb;
+  pointer-events: none;
 }
