@@ -7,6 +7,7 @@ import { CustomButton } from '~/components/CustomButton/CustomButton'
 export type ProductSectionsComponent = {
   type: 'sections'
   maxNumber: number
+  minNumber: number
   onSelect?: (section: number) => void
   possibleSections: string[]
 }
@@ -14,10 +15,13 @@ interface ProductSelectProps {
   configuration: ProductSectionsComponent
 }
 export const ProductSections: FC<ProductSelectProps> = ({
-  configuration: { possibleSections, maxNumber },
+  configuration: { possibleSections, maxNumber, minNumber },
 }) => {
   const [selectedMaxSections, setSelectedMaxSections] = useState(
     String(maxNumber)
+  )
+  const [minSections, setMinSections] = useState(
+    String(minNumber)
   )
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<null | number>(null)
@@ -25,6 +29,10 @@ export const ProductSections: FC<ProductSelectProps> = ({
     ...possibleSections,
   ])
 
+  // const sections = new Array(maxNumber).fill(0).map((_, i) => ({
+  //   value: String(i + 1),
+  //   label: String(i + 1),
+  // }))
   const sections = new Array(maxNumber).fill(0).map((_, i) => ({
     value: String(i + 1),
     label: String(i + 1),
@@ -43,6 +51,9 @@ export const ProductSections: FC<ProductSelectProps> = ({
   useEffect(() => {
     setSelectedMaxSections(String(maxNumber))
   }, [maxNumber])
+  useEffect(() => {
+    setMinSections(String(minNumber))
+  }, [minNumber])
   return (
     <>
       <div>
@@ -53,6 +64,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
             options={sections}
             defaultSelected={selectedMaxSections}
             onChange={(value) => setSelectedMaxSections(value)}
+            minActiveNumber={minSections}
           />
         </label>
 

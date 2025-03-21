@@ -5,12 +5,8 @@
 }
 
 .imageWrapper {
-  /* box-sizing: border-box; */
-  /* border: 3px solid transparent; */
-  
   cursor: pointer;
   transition: border 0.3s;
-  /* border-radius: 1px; */
 }
 
 .image {
@@ -27,7 +23,6 @@
 .selected {
   outline: 2px solid #666;
   outline-offset: -2px;
-  /* box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 1px; */
 }
 
 .order {

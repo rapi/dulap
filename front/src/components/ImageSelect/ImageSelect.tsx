@@ -12,7 +12,7 @@ export const ImageSelect = ({
   images,
   onChange,
   defaultSelected,
-  gap,
+  gap
 }: ImageSelectProps) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected - 1 || 0)
 
