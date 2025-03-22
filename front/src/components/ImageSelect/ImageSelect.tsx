@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import styles from './ImageSelect.module.css'
 
+export type ImageOptionProps = {
+  src: string
+  width?: number
+  height?: number
+}
 interface ImageSelectProps {
-  images: string[]
+  images: ImageOptionProps[]
   defaultSelected: number
   gap?: number
   onChange: (index: number | null) => void
-  sectionWidths: string[]
 }
 
 export const ImageSelect = ({
@@ -14,7 +18,6 @@ export const ImageSelect = ({
   onChange,
   defaultSelected,
   gap,
-  sectionWidths
 }: ImageSelectProps) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected - 1 || 0)
 
@@ -25,18 +28,20 @@ export const ImageSelect = ({
 
   return (
     <div className={styles.container} style={{ gap }}>
-      {images.map((src, index) => (
+      {images.map((image, index) => (
         <div
           key={index}
           className={`${styles.imageWrapper} ${selectedIndex === index ? styles.selected : ''}`}
           onClick={() => handleSelect(index)}
-          style={{ width: sectionWidths[index] || '90px'}}
         >
-          <img 
-            src={src} 
-            alt={`Option ${index + 1}`} 
+          <img
+            src={image.src}
+            alt={`Option ${index + 1}`}
             className={styles.image}
-            style={{ width: sectionWidths[index] || '90px'}} 
+            style={{
+              width: image.width ?? 70,
+              height: image.height ?? 210,
+            }}
           />
         </div>
       ))}

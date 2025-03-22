@@ -259,10 +259,10 @@ export const ProductWardrobe = () => {
             <p className="">Aranjare rafturi</p>
             <ImageSelect
               images={[
-                '/wardeobe/1.svg',
-                '/wardeobe/2.svg',
-                '/wardeobe/3.svg',
-                '/wardeobe/4.svg',
+                { src: '/wardeobe/1.svg' },
+                { src: '/wardeobe/2.svg' },
+                { src: '/wardeobe/3.svg' },
+                { src: '/wardeobe/4.svg' },
               ]}
               onChange={() => {}}
               defaultSelected={1}

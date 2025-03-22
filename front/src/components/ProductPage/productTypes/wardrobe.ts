@@ -17,7 +17,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       if (width >= 60 && width < 100) {
         setMinSections(1)
         setMaxSections(2)
-        setSectionWidths([width + 'px', width + 'px'])
+        setSectionWidths([width + 'px', width * 2 + 'px'])
       } else {
         if (width >= 100 && width < 120) {
           setMinSections(2)
@@ -26,19 +26,19 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
           if (width >= 120 && width < 160) {
             setMinSections(2)
             setMaxSections(3)
-          } else {            
-              if (width >= 160 && width <= 200) {
-                setMinSections(2)
-                setMaxSections(4)
-              } else { 
-                  setMinSections(3)           
-                  setMaxSections(5)
-                }
+          } else {
+            if (width >= 160 && width <= 200) {
+              setMinSections(2)
+              setMaxSections(4)
+            } else {
+              setMinSections(3)
+              setMaxSections(5)
             }
           }
         }
       }
-    }, [width])
+    }
+  }, [width])
   return [
     {
       type: 'dimensions',
@@ -61,10 +61,10 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       minNumber: minSections,
       sectionWidths: sectionWidths,
       possibleSections: [
-        '/wardrobe/1.png',
-        '/wardrobe/2.png',
-        '/wardrobe/3.png',
-        '/wardrobe/4.png',
+        { src: '/wardrobe/1.png' },
+        { src: '/wardrobe/2.png' },
+        { src: '/wardrobe/3.png' },
+        { src: '/wardrobe/4.png' },
       ],
     },
     {

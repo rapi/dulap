@@ -1,6 +1,12 @@
 import React, { FC, useEffect, useState } from 'react'
-import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
-import { ImageSelect } from '~/components/ImageSelect/ImageSelect'
+import {
+  ButtonOptionsType,
+  ButtonSelect,
+} from '~/components/ButtonSelect/ButtonSelect'
+import {
+  ImageOptionProps,
+  ImageSelect,
+} from '~/components/ImageSelect/ImageSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { Modal } from '~/components/Modal/Modal'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
@@ -9,21 +15,19 @@ export type ProductSectionsComponent = {
   maxNumber: number
   minNumber: number
   onSelect?: (section: number) => void
-  possibleSections: string[]
+  possibleSections: ImageOptionProps[]
   sectionWidths: string[]
 }
 interface ProductSelectProps {
   configuration: ProductSectionsComponent
 }
 export const ProductSections: FC<ProductSelectProps> = ({
-  configuration: { possibleSections, maxNumber, minNumber, sectionWidths },
+  configuration: { possibleSections, maxNumber, minNumber },
 }) => {
   const [selectedMaxSections, setSelectedMaxSections] = useState(
     String(maxNumber)
   )
-  const [minSections, setMinSections] = useState(
-    String(minNumber)
-  )
+  const [minSections, setMinSections] = useState(String(minNumber))
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<null | number>(null)
   const [selectedSections, setSelectedSections] = useState([
@@ -38,9 +42,15 @@ export const ProductSections: FC<ProductSelectProps> = ({
     if (selectedSections.length > number) {
       setSelectedSections(selectedSections.slice(0, number))
     } else {
-      setSelectedSections([
+      console.log(selectedSections, [
         ...selectedSections,
         ...Array(number - selectedSections.length).fill(possibleSections[0]),
+      ])
+      setSelectedSections([
+        ...selectedSections,
+        ...Array(number - selectedSections.length).fill({
+          src: possibleSections[0].src,
+        }),
       ])
     }
   }, [selectedMaxSections])
@@ -50,6 +60,11 @@ export const ProductSections: FC<ProductSelectProps> = ({
   useEffect(() => {
     setMinSections(String(minNumber))
   }, [minNumber])
+  const formatedSections: ButtonOptionsType[] = sections.map((section) => ({
+    label: section.label,
+    value: section.value,
+    disabled: parseInt(section.value) < parseInt(minSections),
+  }))
   return (
     <>
       <div>
@@ -57,10 +72,9 @@ export const ProductSections: FC<ProductSelectProps> = ({
         <label className={styles.sectionLabel}>
           <p>Numărul de secții</p>
           <ButtonSelect
-            options={sections}
+            options={formatedSections}
             defaultSelected={selectedMaxSections}
             onChange={(value) => setSelectedMaxSections(value)}
-            minActiveNumber={minSections}
           />
         </label>
 
@@ -73,7 +87,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
               setIsModalOpen(true)
             }}
             defaultSelected={1}
-            sectionWidths={sectionWidths}
           />
         </label>
 
@@ -86,7 +99,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
               setIsModalOpen(true)
             }}
             defaultSelected={1}
-            sectionWidths={sectionWidths}
           />
         </label>
       </div>
@@ -107,13 +119,11 @@ export const ProductSections: FC<ProductSelectProps> = ({
             onChange={(i) => {
               if (activeSection !== null && i !== null) {
                 const newSections = [...selectedSections]
-                newSections[activeSection] = possibleSections[i]
                 setSelectedSections(newSections)
                 setActiveSection(null)
               }
               setIsModalOpen(false)
             }}
-            sectionWidths={sectionWidths}
           />
         </div>
         <div className={styles.modalSaveButton}>

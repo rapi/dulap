@@ -5,7 +5,6 @@
 }
 
 .imageWrapper {
-  height: 200px;
   cursor: pointer;
   transition: border 0.3s;
 }
