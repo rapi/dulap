@@ -17,16 +17,19 @@ export type ProductSectionsComponent = {
   onSelect?: (section: number) => void
   possibleSections: ImageOptionProps[]
   activeSections: ImageOptionProps[]
+  activeOpening: ImageOptionProps[]
+  selectedMaxSections: number
+  setSelectedMaxSections: (value: number) => void
 }
 interface ProductSelectProps {
   configuration: ProductSectionsComponent
 }
 export const ProductSections: FC<ProductSelectProps> = ({
-  configuration: { possibleSections, maxNumber, minNumber, activeSections },
+  configuration: { possibleSections, maxNumber, minNumber, activeSections, activeOpening, selectedMaxSections, setSelectedMaxSections }
 }) => {
-  const [selectedMaxSections, setSelectedMaxSections] = useState(
-    String(maxNumber)
-  )
+  // const [selectedMaxSections, setSelectedMaxSections] = useState(
+  //   String(maxNumber)
+  // )
   const [minSections, setMinSections] = useState(String(minNumber))
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<null | number>(null)
@@ -39,7 +42,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
   }))
 
   useEffect(() => {
-    setSelectedMaxSections(String(maxNumber))
+    setSelectedMaxSections(maxNumber)
   }, [maxNumber])
   useEffect(() => {
     setMinSections(String(minNumber))
@@ -49,6 +52,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
     value: section.value,
     disabled: parseInt(section.value) < parseInt(minSections),
   }))
+  console.log('selectedMaxSections ', selectedMaxSections);
   return (
     <>
       <div>
@@ -57,8 +61,10 @@ export const ProductSections: FC<ProductSelectProps> = ({
           <p>Numărul de secții</p>
           <ButtonSelect
             options={formatedSections}
-            defaultSelected={selectedMaxSections}
-            onChange={(value) => setSelectedMaxSections(value)}
+            defaultSelected={String(selectedMaxSections)}
+            onChange={(value) => {
+              setSelectedMaxSections(parseInt(value));
+            }}
           />
         </label>
 
@@ -77,12 +83,12 @@ export const ProductSections: FC<ProductSelectProps> = ({
         <label className={styles.sectionArrangementLabel}>
           <p>Aranjare uși</p>
           <ImageSelect
-            images={selectedSections}
+            images={activeOpening}
             onChange={(i) => {
               setActiveSection(i)
-              setIsModalOpen(true)
+              // setIsModalOpen(true)
             }}
-            defaultSelected={1}
+            defaultSelected={8}
           />
         </label>
       </div>

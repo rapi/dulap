@@ -8,6 +8,8 @@ export type ProductDimensionsComponent = {
   depthRange: [number, number]
   width: number
   setWidth: (value: number) => void
+  height: number
+  setHeight: (value: number) => void
 }
 interface ProductDimensionsProps {
   configuration: ProductDimensionsComponent
@@ -35,8 +37,8 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             min={configuration.heightRange[0]}
             max={configuration.heightRange[1]}
             step={10}
-            value={210}
-            onChange={() => {}}
+            value={configuration.height}
+            onChange={configuration.setHeight}
           />
         </label>
         <label className={styles.dimensionLabel}>

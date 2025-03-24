@@ -23,6 +23,8 @@ export const storageProductConfiguration: () => ProductComponent[] = () => {
       depthRange: [30, 60],
       width: 0,
       setWidth: () => {},
+      height: 0,
+      setHeight: () => {}
     },
     {
       type: 'colors',
