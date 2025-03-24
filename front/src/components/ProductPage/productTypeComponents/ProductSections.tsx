@@ -16,13 +16,13 @@ export type ProductSectionsComponent = {
   minNumber: number
   onSelect?: (section: number) => void
   possibleSections: ImageOptionProps[]
-  sectionWidths: string[]
+  activeSections: ImageOptionProps[]
 }
 interface ProductSelectProps {
   configuration: ProductSectionsComponent
 }
 export const ProductSections: FC<ProductSelectProps> = ({
-  configuration: { possibleSections, maxNumber, minNumber },
+  configuration: { possibleSections, maxNumber, minNumber, activeSections },
 }) => {
   const [selectedMaxSections, setSelectedMaxSections] = useState(
     String(maxNumber)
@@ -37,23 +37,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
     value: String(i + 1),
     label: String(i + 1),
   }))
-  useEffect(() => {
-    const number = parseInt(selectedMaxSections)
-    if (selectedSections.length > number) {
-      setSelectedSections(selectedSections.slice(0, number))
-    } else {
-      console.log(selectedSections, [
-        ...selectedSections,
-        ...Array(number - selectedSections.length).fill(possibleSections[0]),
-      ])
-      setSelectedSections([
-        ...selectedSections,
-        ...Array(number - selectedSections.length).fill({
-          src: possibleSections[0].src,
-        }),
-      ])
-    }
-  }, [selectedMaxSections])
+
   useEffect(() => {
     setSelectedMaxSections(String(maxNumber))
   }, [maxNumber])
@@ -81,7 +65,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
         <label className={styles.sectionArrangementLabel}>
           <p>Aranjare rafturi</p>
           <ImageSelect
-            images={selectedSections}
+            images={activeSections}
             onChange={(i) => {
               setActiveSection(i)
               setIsModalOpen(true)
