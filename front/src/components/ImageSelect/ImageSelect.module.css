@@ -12,6 +12,7 @@
 .image {
   /* height: 200px; */
   display: block;
+  /* object-fit: fill; */
 }
 
 .imageWrapper:hover {
