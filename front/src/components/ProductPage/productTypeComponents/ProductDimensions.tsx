@@ -6,6 +6,7 @@ export type ProductDimensionsComponent = {
   widthRange: [number, number]
   heightRange: [number, number]
   depthRange: [number, number]
+  plintHeightRange: [number, number]
   width: number
   setWidth: (value: number) => void
   height: number
@@ -48,6 +49,16 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             max={configuration.depthRange[1]}
             step={10}
             value={50}
+            onChange={() => {}}
+          />
+        </label>
+        <label className={styles.dimensionLabel}>
+          <p className={styles.dimensionTitle}>Înălțimea plintei </p>
+          <Slider
+            min={configuration.plintHeightRange[0]}
+            max={configuration.plintHeightRange[1]}
+            step={1}
+            value={6}
             onChange={() => {}}
           />
         </label>

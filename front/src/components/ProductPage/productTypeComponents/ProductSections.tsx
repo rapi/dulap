@@ -127,6 +127,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
             onChange={(i) => {
               if (activeSection !== null && i !== null) {
                 const newSections = [...selectedSections]
+                console.log('sections selected ', newSections, 'i ', i)
                 setSelectedSections(newSections)
                 setActiveSection(null)
               }

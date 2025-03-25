@@ -13,7 +13,7 @@ interface ProductSelectProps {
 export const ProductFurniture: FC<ProductSelectProps> = () => {
   return (
     <div>
-      <p>Furnitura</p>
+      <p className={styles.sectionTitle}>Furnitura</p>
       
       <label className={styles.furnitureLabel}>
         <p>Tip deschidere</p>

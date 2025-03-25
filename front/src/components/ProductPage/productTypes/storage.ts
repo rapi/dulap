@@ -21,6 +21,7 @@ export const storageProductConfiguration: () => ProductComponent[] = () => {
       widthRange: [60, 120],
       heightRange: [60, 120],
       depthRange: [30, 60],
+      plintHeightRange: [60, 120],
       width: 0,
       setWidth: () => {},
       height: 0,
