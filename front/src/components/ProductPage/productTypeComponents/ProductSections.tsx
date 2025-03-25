@@ -20,12 +20,17 @@ export type ProductSectionsComponent = {
   activeOpening: ImageOptionProps[]
   selectedMaxSections: number
   setSelectedMaxSections: (value: number) => void
+  mirrorOption?: string
 }
+export const mirroringOptions: ButtonOptionsType[] = [
+  { value: 'standard', label: 'standard' },
+  { value: 'mirrored', label: 'oglindit' },
+]
 interface ProductSelectProps {
   configuration: ProductSectionsComponent
 }
 export const ProductSections: FC<ProductSelectProps> = ({
-  configuration: { possibleSections, maxNumber, minNumber, activeSections, activeOpening, selectedMaxSections, setSelectedMaxSections }
+  configuration: { possibleSections, maxNumber, minNumber, activeSections, activeOpening, selectedMaxSections, setSelectedMaxSections, mirrorOption }
 }) => {
   // const [selectedMaxSections, setSelectedMaxSections] = useState(
   //   String(maxNumber)
@@ -36,6 +41,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
   const [selectedSections, setSelectedSections] = useState([
     ...possibleSections,
   ])
+  const [selectedMirrorOption, setSelectedMirrorOption] = useState(mirrorOption || 'standard');
   const sections = new Array(maxNumber).fill(0).map((_, i) => ({
     value: String(i + 1),
     label: String(i + 1),
@@ -52,7 +58,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
     value: section.value,
     disabled: parseInt(section.value) < parseInt(minSections),
   }))
-  console.log('selectedMaxSections ', selectedMaxSections);
   return (
     <>
       <div>
@@ -67,6 +72,17 @@ export const ProductSections: FC<ProductSelectProps> = ({
             }}
           />
         </label>
+        
+        <label className={styles.mirroringLabel}>
+          <p>Inversare poziție <br></br> dulap</p>
+          <ButtonSelect
+            options={mirroringOptions}
+            defaultSelected={'standard'}
+            onChange={(value) => {
+              setSelectedMirrorOption(value);
+            }}
+          />
+        </label>
 
         <label className={styles.sectionArrangementLabel}>
           <p>Aranjare rafturi</p>
@@ -76,6 +92,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
               setActiveSection(i)
               setIsModalOpen(true)
             }}
+            flipped={selectedMirrorOption === 'mirrored'}
             defaultSelected={1}
           />
         </label>
@@ -88,6 +105,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
               setActiveSection(i)
               // setIsModalOpen(true)
             }}
+            flipped={selectedMirrorOption === 'mirrored'}
             defaultSelected={8}
           />
         </label>

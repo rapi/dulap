@@ -10,6 +10,7 @@ interface ImageSelectProps {
   images: ImageOptionProps[]
   defaultSelected: number
   gap?: number
+  flipped?: boolean
   onChange: (index: number | null) => void
 }
 
@@ -18,6 +19,7 @@ export const ImageSelect = ({
   onChange,
   defaultSelected,
   gap,
+  flipped
 }: ImageSelectProps) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected - 1 || 0)
 
@@ -26,9 +28,11 @@ export const ImageSelect = ({
     onChange(index)
   }
 
+  const displayedImages = flipped ? [...images].reverse() : images
+
   return (
     <div className={styles.container} style={{ gap }}>
-      {images.map((image, index) => (
+      {displayedImages.map((image, index) => (
         <div
           key={index}
           className={`${styles.imageWrapper} ${selectedIndex === index ? styles.selected : ''}`}
@@ -37,7 +41,7 @@ export const ImageSelect = ({
           <img
             src={image.src}
             alt={`Option ${index + 1}`}
-            className={styles.image}
+            className={`${styles.image} ${flipped ? styles.flipped : ''}`}
             style={{
               width: image.width ?? 70,
               height: image.height ?? 210,

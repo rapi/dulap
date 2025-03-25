@@ -27,13 +27,12 @@ const widthMap: WidthMap[] = [
     maxSections: 2,
     activeSections: (width, height, selectedMaxSections) => {
       if (selectedMaxSections === 1) {
-        console.log('height is ', height)
         return [
           { src: defaultSectionSrc, width: width, height: height },
         ]
       } else  return [
-        { src: defaultSectionSrc, width: width / 2, height: height },
-        { src: defaultSectionSrc, width: width / 2, height: height },
+        { src: '/wardrobe/3.png', width: width / 2, height: height },
+        { src: '/wardrobe/2.png', width: width / 2, height: height },
       ]
     }
   },
@@ -52,7 +51,6 @@ const widthMap: WidthMap[] = [
     maxSections: 3,
     activeSections: (width, height, selectedMaxSections) => {
       if (selectedMaxSections === 2) {
-        console.log('here')
         return [
           { src: defaultSectionSrc, width: width / 3 * 2, height: height },
           { src: defaultSectionSrc, width: width / 3, height: height },
@@ -129,7 +127,7 @@ const openingMap: OpeningMap[] = [
     activeOpening: (width, height) => [{ src: leftOpening, width: width, height: height + 14 }],
   },
   {
-    maxWidth: 99,
+    maxWidth: 100,
     minSections: 1,
     maxSections: 2,
     activeOpening: (width, height, selectedMaxSections) => {
@@ -232,10 +230,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [minSections, setMinSections] = useState(1)
   useEffect(() => {
     for (const map of widthMap) {
-      console.log('im in the effect')
       if (width <= map.maxWidth) {
-        console.log(width, map.maxWidth, activeSections)
-
         setMinSections(map.minSections)
         setMaxSections(map.maxSections)
         setActiveSections(map.activeSections(width, height, selectedMaxSections))
@@ -245,7 +240,6 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     //eslint-disable-next-line
   }, [width, height, selectedMaxSections])
   useEffect(() => {
-    // console.log('im in the effect')
     for (const map of openingMap) {
       if (width <= map.maxWidth) {
         setActiveOpening(map.activeOpening(width, height, selectedMaxSections))

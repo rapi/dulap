@@ -114,11 +114,22 @@
   width: 140px;
 }
 
+.mirroringLabel {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.mirroringLabel p {
+  width: 140px;
+  margin: 0;
+}
+
 .sectionArrangementLabel {
   display: flex;
   font-size: 13px;
-  margin-top: 10px;
-  
+  margin-top: 20px;
 }
 
 .sectionArrangementLabel p {
