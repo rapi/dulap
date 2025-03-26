@@ -19,6 +19,7 @@ export type ProductSectionsComponent = {
   activeSections: ImageOptionProps[]
   activeOpening: ImageOptionProps[]
   selectedMaxSections: number
+  selectedSections: ImageOptionProps[]
   setSelectedMaxSections: (value: number) => void
   mirrorOption?: string
 }
@@ -39,7 +40,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<null | number>(null)
   const [selectedSections, setSelectedSections] = useState([
-    ...possibleSections,
+    ...activeSections,
   ])
   const [selectedMirrorOption, setSelectedMirrorOption] = useState(mirrorOption || 'standard');
   const sections = new Array(maxNumber).fill(0).map((_, i) => ({
@@ -53,6 +54,17 @@ export const ProductSections: FC<ProductSelectProps> = ({
   useEffect(() => {
     setMinSections(String(minNumber))
   }, [minNumber])
+  useEffect(() => {
+    console.log('TTTTT', activeSections)
+    console.log('SSS', selectedSections)
+    const updatedSections = activeSections.map((section, index) => ({
+      ...section,
+      src: selectedSections[index]?.src || section.src,
+    }));
+    if (JSON.stringify(updatedSections) !== JSON.stringify(selectedSections)) {
+      setSelectedSections(updatedSections);
+    }
+  }, [activeSections, selectedSections]);
   const formatedSections: ButtonOptionsType[] = sections.map((section) => ({
     label: section.label,
     value: section.value,
@@ -74,7 +86,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
         </label>
         
         <label className={styles.mirroringLabel}>
-          <p>Inversare poziție <br></br> dulap</p>
+          <p>Inversare poziție <br></br>dulap</p>
           <ButtonSelect
             options={mirroringOptions}
             defaultSelected={'standard'}
@@ -87,7 +99,8 @@ export const ProductSections: FC<ProductSelectProps> = ({
         <label className={styles.sectionArrangementLabel}>
           <p>Aranjare rafturi</p>
           <ImageSelect
-            images={activeSections}
+            // images={activeSections}
+            images={selectedSections}
             onChange={(i) => {
               setActiveSection(i)
               setIsModalOpen(true)
@@ -126,9 +139,13 @@ export const ProductSections: FC<ProductSelectProps> = ({
             defaultSelected={0}
             onChange={(i) => {
               if (activeSection !== null && i !== null) {
-                const newSections = [...selectedSections]
-                console.log('sections selected ', newSections, 'i ', i)
-                setSelectedSections(newSections)
+                const currentActiveSections = [...selectedSections]
+                if (selectedMirrorOption === 'standard') {
+                  currentActiveSections[activeSection].src = possibleSections[i].src;
+                } else {
+                  currentActiveSections[currentActiveSections.length - activeSection - 1].src = possibleSections[i].src;
+                }
+                setSelectedSections(currentActiveSections)
                 setActiveSection(null)
               }
               setIsModalOpen(false)

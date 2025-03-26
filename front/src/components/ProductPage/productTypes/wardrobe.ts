@@ -13,7 +13,7 @@ type OpeningMap = {
   maxSections: number
   activeOpening: (width: number, height: number, selectedMaxSections: number) => ImageOptionProps[]
 }
-const defaultSectionSrc = '/wardrobe/3.png'
+const defaultSectionSrc = '/wardrobe/1.png'
 const widthMap: WidthMap[] = [
   {
     maxWidth: 60,
@@ -31,8 +31,8 @@ const widthMap: WidthMap[] = [
           { src: defaultSectionSrc, width: width, height: height },
         ]
       } else  return [
-        { src: '/wardrobe/3.png', width: width / 2, height: height },
-        { src: '/wardrobe/2.png', width: width / 2, height: height },
+        { src: defaultSectionSrc, width: width / 2, height: height },
+        { src: defaultSectionSrc, width: width / 2, height: height },
       ]
     }
   },
@@ -283,6 +283,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
         { src: '/wardrobe/3.png' },
         { src: '/wardrobe/4.png' },
       ],
+      selectedSections: [],
       selectedMaxSections,
       setSelectedMaxSections
     },
