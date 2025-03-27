@@ -1,7 +1,7 @@
 .sliderContainer {
   display: flex;
   align-items: center;
-  width: 290px;
+  width: 310px;
   justify-content: space-between;
 }
 
@@ -18,7 +18,7 @@
 
 .slider {
   -webkit-appearance: none;
-  width: 200px;
+  width: 220px;
   height: 3px;
   background: #e3e3e3;
   border-radius: 5px;

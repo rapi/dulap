@@ -55,14 +55,15 @@ export const ProductSections: FC<ProductSelectProps> = ({
     setMinSections(String(minNumber))
   }, [minNumber])
   useEffect(() => {
-    console.log('TTTTT', activeSections)
-    console.log('SSS', selectedSections)
+    // console.log('TTTTT', activeSections)
+    // console.log('SSS', selectedSections)
     const updatedSections = activeSections.map((section, index) => ({
       ...section,
       src: selectedSections[index]?.src || section.src,
     }));
     if (JSON.stringify(updatedSections) !== JSON.stringify(selectedSections)) {
       setSelectedSections(updatedSections);
+      console.log('test ', selectedSections)
     }
   }, [activeSections, selectedSections]);
   const formatedSections: ButtonOptionsType[] = sections.map((section) => ({

@@ -21,6 +21,10 @@
 }
 
 /* Right container */
+.detailsContainer {
+  width: 450px;
+}
+
 .rightContainer {
   flex: 1;
   display: flex;

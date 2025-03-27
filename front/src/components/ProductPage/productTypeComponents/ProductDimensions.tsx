@@ -53,7 +53,10 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           />
         </label>
         <label className={styles.dimensionLabel}>
-          <p className={styles.dimensionTitle}>Înălțimea plintei </p>
+          <div className={styles.dimensionTitle}>
+            Înălțimea plintei 
+            <span className={styles.tooltipText}>test</span>
+          </div>
           <Slider
             min={configuration.plintHeightRange[0]}
             max={configuration.plintHeightRange[1]}
