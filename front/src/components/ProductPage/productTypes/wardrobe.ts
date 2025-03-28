@@ -14,12 +14,13 @@ type OpeningMap = {
   activeOpening: (width: number, height: number, selectedMaxSections: number) => ImageOptionProps[]
 }
 const defaultSectionSrc = '/wardrobe/1.png'
+const editSrc = '/wardrobe/0-edit.png'
 const widthMap: WidthMap[] = [
   {
     maxWidth: 60,
     minSections: 1,
     maxSections: 1,
-    activeSections: (width, height) => [{ src: defaultSectionSrc, width: width, height: height }],
+    activeSections: (width, height) => [{ src: editSrc, width: width, height: height }],
   },
   {
     maxWidth: 100,
@@ -28,10 +29,10 @@ const widthMap: WidthMap[] = [
     activeSections: (width, height, selectedMaxSections) => {
       if (selectedMaxSections === 1) {
         return [
-          { src: defaultSectionSrc, width: width, height: height },
+          { src: editSrc, width: width, height: height },
         ]
       } else  return [
-        { src: defaultSectionSrc, width: width / 2, height: height },
+        { src: editSrc, width: width / 2, height: height },
         { src: defaultSectionSrc, width: width / 2, height: height },
       ]
     }
@@ -41,7 +42,7 @@ const widthMap: WidthMap[] = [
     minSections: 2,
     maxSections: 2,
     activeSections: (width, height) => [
-      { src: defaultSectionSrc, width: width / 2, height: height },
+      { src: editSrc, width: width / 2, height: height },
       { src: defaultSectionSrc, width: width / 2, height: height },
     ],
   },
@@ -52,11 +53,11 @@ const widthMap: WidthMap[] = [
     activeSections: (width, height, selectedMaxSections) => {
       if (selectedMaxSections === 2) {
         return [
-          { src: defaultSectionSrc, width: width / 3 * 2, height: height },
+          { src: editSrc, width: width / 3 * 2, height: height },
           { src: defaultSectionSrc, width: width / 3, height: height },
         ]
       } else  return [
-        { src: defaultSectionSrc, width: width / 3, height: height },
+        { src: editSrc, width: width / 3, height: height },
         { src: defaultSectionSrc, width: width / 3, height: height },
         { src: defaultSectionSrc, width: width / 3, height: height },
       ]
@@ -69,17 +70,17 @@ const widthMap: WidthMap[] = [
     activeSections: (width, height, selectedMaxSections) => {
       if (selectedMaxSections === 2) {
         return [
-          { src: defaultSectionSrc, width: width / 2, height: height },
+          { src: editSrc, width: width / 2, height: height },
           { src: defaultSectionSrc, width: width / 2, height: height },
         ]
       } else if (selectedMaxSections === 3) {
         return [
-          { src: defaultSectionSrc, width: width / 3, height: height },
+          { src: editSrc, width: width / 3, height: height },
           { src: defaultSectionSrc, width: width / 3, height: height },
           { src: defaultSectionSrc, width: width / 3, height: height },
         ]
       } else return [
-        { src: defaultSectionSrc, width: width / 4, height: height },
+        { src: editSrc, width: width / 4, height: height },
         { src: defaultSectionSrc, width: width / 4, height: height },
         { src: defaultSectionSrc, width: width / 4, height: height },
         { src: defaultSectionSrc, width: width / 4, height: height },
@@ -93,19 +94,19 @@ const widthMap: WidthMap[] = [
     activeSections: (width, height, selectedMaxSections) => {
       if (selectedMaxSections === 3) {
         return [
-          { src: defaultSectionSrc, width: width / 5 * 2, height: height },
+          { src: editSrc, width: width / 5 * 2, height: height },
           { src: defaultSectionSrc, width: width / 5 * 2, height: height },
           { src: defaultSectionSrc, width: width / 5, height: height },
         ]
       }  else if (selectedMaxSections === 4) {
         return [
-          { src: defaultSectionSrc, width: width / 4, height: height },
+          { src: editSrc, width: width / 4, height: height },
           { src: defaultSectionSrc, width: width / 4, height: height },
           { src: defaultSectionSrc, width: width / 4, height: height },
           { src: defaultSectionSrc, width: width / 4, height: height },
         ]
       } else return [
-        { src: defaultSectionSrc, width: width / 5, height: height },
+        { src: editSrc, width: width / 5, height: height },
         { src: defaultSectionSrc, width: width / 5, height: height },
         { src: defaultSectionSrc, width: width / 5, height: height },
         { src: defaultSectionSrc, width: width / 5, height: height },

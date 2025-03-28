@@ -9,7 +9,7 @@ import {
 } from '~/components/ImageSelect/ImageSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { Modal } from '~/components/Modal/Modal'
-import { CustomButton } from '~/components/CustomButton/CustomButton'
+// import { CustomButton } from '~/components/CustomButton/CustomButton'
 export type ProductSectionsComponent = {
   type: 'sections'
   maxNumber: number
@@ -108,6 +108,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
             }}
             flipped={selectedMirrorOption === 'mirrored'}
             defaultSelected={1}
+            effectsEnabled
           />
         </label>
 
@@ -153,11 +154,11 @@ export const ProductSections: FC<ProductSelectProps> = ({
             }}
           />
         </div>
-        <div className={styles.modalSaveButton}>
+        {/* <div className={styles.modalSaveButton}>
           <CustomButton variant="primary" size="small">
             Salvează
           </CustomButton>
-        </div>
+        </div> */}
       </Modal>
     </>
   )

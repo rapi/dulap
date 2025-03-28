@@ -1,6 +1,9 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { Slider } from '~/components/Slider/Slider'
 import styles from './ProductDimensions.module.css'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Modal } from '~/components/Modal/Modal'
+
 export type ProductDimensionsComponent = {
   type: 'dimensions'
   widthRange: [number, number]
@@ -15,9 +18,12 @@ export type ProductDimensionsComponent = {
 interface ProductDimensionsProps {
   configuration: ProductDimensionsComponent
 }
+
 export const ProductDimensions: FC<ProductDimensionsProps> = ({
   configuration,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
     <>
       <h3 className={styles.header}>Dimensiuni</h3>
@@ -54,8 +60,19 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
         </label>
         <label className={styles.dimensionLabel}>
           <div className={styles.dimensionTitle}>
-            Înălțimea plintei 
-            <span className={styles.tooltipText}>test</span>
+            Înălțimea plintei
+            <div 
+              className={styles.tooltipContainer}
+              onClick={() => setIsModalOpen(true)}
+            >
+              <InfoOutlinedIcon
+                color="action"
+                sx={{ fontSize: 20 }}
+              />
+              <span className={styles.tooltipText}>
+                <img src='/wardrobe/base-tooltip.png' alt='base tooltip'></img>
+              </span>
+            </div>
           </div>
           <Slider
             min={configuration.plintHeightRange[0]}
@@ -65,6 +82,33 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             onChange={() => {}}
           />
         </label>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false)
+          }}
+        >   
+          <h4>
+            Ce este înălțimea plintei?
+          </h4>
+          <div className={styles.modalChildren}>
+            <img 
+              src='/wardrobe/base-tooltip.png' 
+              alt='base tooltip' 
+              className={styles.modalImg}
+            ></img>
+            <p className={styles.modalText}>
+              Înălțimea plintei este distanța de la podea până la fațade (ușile dulapului). 
+              <br></br>
+              <br></br>
+              <b>Ce înălțime să alegi?</b>
+              <ul>
+                <li>Dacă optezi pentru un stil minimalist, alege înălțimea plintei 2 cm.</li>
+                <li>Dacă ai plinte la pereți, optează pentru o plintă de aceeași înălțime la dulap, pentru un design uniform.</li>
+              </ul>
+            </p>
+          </div>
+        </Modal>
       </div>
     </>
   )

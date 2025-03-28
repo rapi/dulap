@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
-import FormControl from '@mui/material/FormControl'
 import { openingOptions } from '~/components/ProductWardrobe/ProductWardrobe'
 import styles from './ProductFurniture.module.css'
 import Select from '~/components/Select/Select'
@@ -26,15 +25,11 @@ export const ProductFurniture: FC<ProductSelectProps> = () => {
 
       <label className={styles.furnitureLabel}>
         <p>Balamale</p>
-        <FormControl>
-          <Select options={['test standard', 'premium', 'deluxe']} />
-        </FormControl>
+          <Select options={['standard', 'premium', 'deluxe']} />
       </label>
       <label className={styles.furnitureLabel}>
         <p>Glisiere</p>
-        <FormControl>
           <Select options={['standard', 'premium', 'deluxe']} />
-        </FormControl>
       </label>
     </div>
   )

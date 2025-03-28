@@ -5,22 +5,25 @@
 }
 
 .imageWrapper {
-  cursor: pointer;
   transition: border 0.3s;
 }
 
 .image {
   display: block;
+  margin: -1px;
 }
 
-.imageWrapper:hover {
-  outline: 1px solid #333;
+.hover:hover {
+  cursor: pointer;
+  outline: 2px solid #666;
   outline-offset: -1px;
+  z-index: 1;
 }
 
 .selected {
   outline: 2px solid #666;
-  outline-offset: -2px;
+  outline-offset: -1px;
+  z-index: 1;
 }
 
 .order {
