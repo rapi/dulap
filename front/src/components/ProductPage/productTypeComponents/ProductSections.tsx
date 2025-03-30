@@ -31,18 +31,24 @@ interface ProductSelectProps {
   configuration: ProductSectionsComponent
 }
 export const ProductSections: FC<ProductSelectProps> = ({
-  configuration: { possibleSections, maxNumber, minNumber, activeSections, activeOpening, selectedMaxSections, setSelectedMaxSections, mirrorOption }
+  configuration: {
+    possibleSections,
+    maxNumber,
+    minNumber,
+    activeSections,
+    activeOpening,
+    selectedMaxSections,
+    setSelectedMaxSections,
+    mirrorOption,
+  },
 }) => {
-  // const [selectedMaxSections, setSelectedMaxSections] = useState(
-  //   String(maxNumber)
-  // )
   const [minSections, setMinSections] = useState(String(minNumber))
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<null | number>(null)
-  const [selectedSections, setSelectedSections] = useState([
-    ...activeSections,
-  ])
-  const [selectedMirrorOption, setSelectedMirrorOption] = useState(mirrorOption || 'standard');
+  const [selectedSections, setSelectedSections] = useState([...activeSections])
+  const [selectedMirrorOption, setSelectedMirrorOption] = useState(
+    mirrorOption || 'standard'
+  )
   const sections = new Array(maxNumber).fill(0).map((_, i) => ({
     value: String(i + 1),
     label: String(i + 1),
@@ -55,17 +61,15 @@ export const ProductSections: FC<ProductSelectProps> = ({
     setMinSections(String(minNumber))
   }, [minNumber])
   useEffect(() => {
-    // console.log('TTTTT', activeSections)
-    // console.log('SSS', selectedSections)
     const updatedSections = activeSections.map((section, index) => ({
       ...section,
       src: selectedSections[index]?.src || section.src,
-    }));
+    }))
     if (JSON.stringify(updatedSections) !== JSON.stringify(selectedSections)) {
-      setSelectedSections(updatedSections);
+      setSelectedSections(updatedSections)
       console.log('test ', selectedSections)
     }
-  }, [activeSections, selectedSections]);
+  }, [activeSections, selectedSections])
   const formatedSections: ButtonOptionsType[] = sections.map((section) => ({
     label: section.label,
     value: section.value,
@@ -81,18 +85,20 @@ export const ProductSections: FC<ProductSelectProps> = ({
             options={formatedSections}
             defaultSelected={String(selectedMaxSections)}
             onChange={(value) => {
-              setSelectedMaxSections(parseInt(value));
+              setSelectedMaxSections(parseInt(value))
             }}
           />
         </label>
-        
+
         <label className={styles.mirroringLabel}>
-          <p>Inversare poziție <br></br>dulap</p>
+          <p>
+            Inversare poziție <br></br>dulap
+          </p>
           <ButtonSelect
             options={mirroringOptions}
             defaultSelected={'standard'}
             onChange={(value) => {
-              setSelectedMirrorOption(value);
+              setSelectedMirrorOption(value)
             }}
           />
         </label>
@@ -143,9 +149,12 @@ export const ProductSections: FC<ProductSelectProps> = ({
               if (activeSection !== null && i !== null) {
                 const currentActiveSections = [...selectedSections]
                 if (selectedMirrorOption === 'standard') {
-                  currentActiveSections[activeSection].src = possibleSections[i].src;
+                  currentActiveSections[activeSection].src =
+                    possibleSections[i].src
                 } else {
-                  currentActiveSections[currentActiveSections.length - activeSection - 1].src = possibleSections[i].src;
+                  currentActiveSections[
+                    currentActiveSections.length - activeSection - 1
+                  ].src = possibleSections[i].src
                 }
                 setSelectedSections(currentActiveSections)
                 setActiveSection(null)
