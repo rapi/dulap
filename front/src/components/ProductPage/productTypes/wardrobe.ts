@@ -1,228 +1,16 @@
 import { ProductComponent } from '~/components/ProductPage/ProductPage'
 import { useEffect, useState } from 'react'
 import { ImageOptionProps } from '~/components/ImageSelect/ImageSelect'
-type WidthMap = {
-  maxWidth: number
-  minSections: number
-  maxSections: number
-  activeSections: (width: number, height: number, selectedMaxSections: number) => ImageOptionProps[]
-}
-type OpeningMap = {
-  maxWidth: number
-  minSections: number
-  maxSections: number
-  activeOpening: (width: number, height: number, selectedMaxSections: number) => ImageOptionProps[]
-}
-const defaultSectionSrc = '/wardrobe/1.png'
-const editSrc = '/wardrobe/0-edit.png'
-const widthMap: WidthMap[] = [
-  {
-    maxWidth: 60,
-    minSections: 1,
-    maxSections: 1,
-    activeSections: (width, height) => [{ src: editSrc, width: width, height: height }],
-  },
-  {
-    maxWidth: 100,
-    minSections: 1,
-    maxSections: 2,
-    activeSections: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 1) {
-        return [
-          { src: editSrc, width: width, height: height },
-        ]
-      } else  return [
-        { src: editSrc, width: width / 2, height: height },
-        { src: defaultSectionSrc, width: width / 2, height: height },
-      ]
-    }
-  },
-  {
-    maxWidth: 119,
-    minSections: 2,
-    maxSections: 2,
-    activeSections: (width, height) => [
-      { src: editSrc, width: width / 2, height: height },
-      { src: defaultSectionSrc, width: width / 2, height: height },
-    ],
-  },
-  {
-    maxWidth: 159,
-    minSections: 2,
-    maxSections: 3,
-    activeSections: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 2) {
-        return [
-          { src: editSrc, width: width / 3 * 2, height: height },
-          { src: defaultSectionSrc, width: width / 3, height: height },
-        ]
-      } else  return [
-        { src: editSrc, width: width / 3, height: height },
-        { src: defaultSectionSrc, width: width / 3, height: height },
-        { src: defaultSectionSrc, width: width / 3, height: height },
-      ]
-    }
-  },
-  {
-    maxWidth: 200,
-    minSections: 2,
-    maxSections: 4,
-    activeSections: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 2) {
-        return [
-          { src: editSrc, width: width / 2, height: height },
-          { src: defaultSectionSrc, width: width / 2, height: height },
-        ]
-      } else if (selectedMaxSections === 3) {
-        return [
-          { src: editSrc, width: width / 3, height: height },
-          { src: defaultSectionSrc, width: width / 3, height: height },
-          { src: defaultSectionSrc, width: width / 3, height: height },
-        ]
-      } else return [
-        { src: editSrc, width: width / 4, height: height },
-        { src: defaultSectionSrc, width: width / 4, height: height },
-        { src: defaultSectionSrc, width: width / 4, height: height },
-        { src: defaultSectionSrc, width: width / 4, height: height },
-      ]
-    }
-  },
-  {
-    maxWidth: 250,
-    minSections: 3,
-    maxSections: 5,
-    activeSections: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 3) {
-        return [
-          { src: editSrc, width: width / 5 * 2, height: height },
-          { src: defaultSectionSrc, width: width / 5 * 2, height: height },
-          { src: defaultSectionSrc, width: width / 5, height: height },
-        ]
-      }  else if (selectedMaxSections === 4) {
-        return [
-          { src: editSrc, width: width / 4, height: height },
-          { src: defaultSectionSrc, width: width / 4, height: height },
-          { src: defaultSectionSrc, width: width / 4, height: height },
-          { src: defaultSectionSrc, width: width / 4, height: height },
-        ]
-      } else return [
-        { src: editSrc, width: width / 5, height: height },
-        { src: defaultSectionSrc, width: width / 5, height: height },
-        { src: defaultSectionSrc, width: width / 5, height: height },
-        { src: defaultSectionSrc, width: width / 5, height: height },
-        { src: defaultSectionSrc, width: width / 5, height: height },
-      ]
-    }
-  },
-]
-
-const leftOpening = '/wardrobe/opening-left.png'
-const rightOpening = '/wardrobe/opening-right.png'
-const doubleOpening = '/wardrobe/opening-double.png'
-
-const openingMap: OpeningMap[] = [
-  {
-    maxWidth: 60,
-    minSections: 1,
-    maxSections: 1,
-    activeOpening: (width, height) => [{ src: leftOpening, width: width, height: height + 14 }],
-  },
-  {
-    maxWidth: 100,
-    minSections: 1,
-    maxSections: 2,
-    activeOpening: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 1) {
-        return [
-          { src: doubleOpening, width: width, height: height + 14 },
-        ]
-      } else  return [
-        { src: leftOpening, width: width / 2, height: height + 14 },
-        { src: rightOpening, width: width / 2, height: height + 14 },
-      ]
-    }
-  },
-  {
-    maxWidth: 119,
-    minSections: 2,
-    maxSections: 2,
-    activeOpening: (width, height) => [
-      { src: leftOpening, width: width / 2, height: height + 14 },
-      { src: rightOpening, width: width / 2, height: height + 14 },
-    ],
-  },
-  {
-    maxWidth: 159,
-    minSections: 2,
-    maxSections: 3,
-    activeOpening: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 2) {
-        return [
-          { src: doubleOpening, width: width / 3 * 2, height: height + 14 },
-          { src: rightOpening, width: width / 3, height: height + 14 },
-        ]
-      } else  return [
-        { src: leftOpening, width: width / 3, height: height + 14 },
-        { src: rightOpening, width: width / 3, height: height + 14 },
-        { src: rightOpening, width: width / 3, height: height + 14 },
-      ]
-    }
-  },
-  {
-    maxWidth: 200,
-    minSections: 2,
-    maxSections: 4,
-    activeOpening: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 2) {
-        return [
-          { src: doubleOpening, width: width / 2, height: height + 14 },
-          { src: doubleOpening, width: width / 2, height: height + 14 },
-        ]
-      } else if (selectedMaxSections === 3) {
-        return [
-          { src: leftOpening, width: width / 3, height: height + 14 },
-          { src: rightOpening, width: width / 3, height: height + 14 },
-          { src: rightOpening, width: width / 3, height: height + 14 },
-        ]
-      } else return [
-        { src: leftOpening, width: width / 4, height: height + 14 },
-        { src: rightOpening, width: width / 4, height: height + 14 },
-        { src: leftOpening, width: width / 4, height: height + 14 },
-        { src: rightOpening, width: width / 4, height: height + 14 },
-      ]
-    }
-  },
-  {
-    maxWidth: 250,
-    minSections: 3,
-    maxSections: 5,
-    activeOpening: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 3) {
-        return [
-          { src: doubleOpening, width: width / 5 * 2, height: height + 14 },
-          { src: doubleOpening, width: width / 5 * 2, height: height + 14 },
-          { src: rightOpening, width: width / 5, height: height + 14 },
-        ]
-      }  else if (selectedMaxSections === 4) {
-        return [
-          { src: leftOpening, width: width / 4, height: height + 14 },
-          { src: rightOpening, width: width / 4, height: height + 14 },
-          { src: leftOpening, width: width / 4, height: height + 14 },
-          { src: rightOpening, width: width / 4, height: height + 14 },
-        ]
-      } else return [
-        { src: leftOpening, width: width / 5, height: height + 14 },
-        { src: rightOpening, width: width / 5, height: height + 14 },
-        { src: leftOpening, width: width / 5, height: height + 14 },
-        { src: rightOpening, width: width / 5, height: height + 14 },
-        { src: rightOpening, width: width / 5, height: height + 14 },
-      ]
-    }
-  },
-]
+import {
+  openingMap,
+  widthMap,
+} from '~/components/ProductPage/productTypes/wardrobeMap'
+const imageWidths = [400, 500, 800, 1000, 1200, 1500, 1600, 2000, 2500]
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(50)
   const [height, setHeight] = useState(210)
+  const [imageSide, setImageSide] = useState('left')
+  const [imageWidth, setImageWidth] = useState(50)
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
   const [price, setPrice] = useState(40)
   const [activeSections, setActiveSections] = useState<ImageOptionProps[]>([])
@@ -234,11 +22,12 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       if (width <= map.maxWidth) {
         setMinSections(map.minSections)
         setMaxSections(map.maxSections)
-        setActiveSections(map.activeSections(width, height, selectedMaxSections))
+        setActiveSections(
+          map.activeSections(width, height, selectedMaxSections)
+        )
         break
       }
     }
-    //eslint-disable-next-line
   }, [width, height, selectedMaxSections])
   useEffect(() => {
     for (const map of openingMap) {
@@ -247,16 +36,21 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
         break
       }
     }
-    //eslint-disable-next-line
   }, [width, height, selectedMaxSections])
   useEffect(() => {
+    const newImageWidth = imageWidths.find((w) => w >= width * 10) || 50
+    setImageWidth(newImageWidth)
+    if (selectedMaxSections % 2 === 0) {
+      setImageSide('center')
+    } else {
+      setImageSide('left')
+    }
     setPrice(width)
-  })
-  
+  }, [width, selectedMaxSections])
   return [
     {
       type: 'dimensions',
-      widthRange: [50, 250],
+      widthRange: [40, 250],
       heightRange: [190, 240],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
@@ -286,11 +80,17 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       ],
       selectedSections: [],
       selectedMaxSections,
-      setSelectedMaxSections
+      setSelectedMaxSections,
     },
     {
       type: 'price',
       price,
+    },
+    {
+      type: 'imageCarousel',
+      images: [
+        `/wardrobe/Biege/Handle/Base 20/H2100/${imageWidth}-${selectedMaxSections}-${imageSide}.png`,
+      ],
     },
   ]
 }

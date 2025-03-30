@@ -9,7 +9,6 @@ import {
 } from '~/components/ImageSelect/ImageSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { Modal } from '~/components/Modal/Modal'
-// import { CustomButton } from '~/components/CustomButton/CustomButton'
 export type ProductSectionsComponent = {
   type: 'sections'
   maxNumber: number
@@ -67,7 +66,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
     }))
     if (JSON.stringify(updatedSections) !== JSON.stringify(selectedSections)) {
       setSelectedSections(updatedSections)
-      console.log('test ', selectedSections)
     }
   }, [activeSections, selectedSections])
   const formatedSections: ButtonOptionsType[] = sections.map((section) => ({
@@ -106,7 +104,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
         <label className={styles.sectionArrangementLabel}>
           <p>Aranjare rafturi</p>
           <ImageSelect
-            // images={activeSections}
             images={selectedSections}
             onChange={(i) => {
               setActiveSection(i)
@@ -163,11 +160,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
             }}
           />
         </div>
-        {/* <div className={styles.modalSaveButton}>
-          <CustomButton variant="primary" size="small">
-            Salvează
-          </CustomButton>
-        </div> */}
       </Modal>
     </>
   )

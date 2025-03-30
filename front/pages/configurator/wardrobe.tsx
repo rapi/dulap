@@ -8,11 +8,6 @@ const Product: FC = () => {
       <ProductPage
         components={WardrobeProductConfiguration}
         name="Dulap pentru haine"
-        images={[
-          '/products/wardrobe-visualization/1.png',
-          '/products/wardrobe-visualization/2.png',
-          '/products/wardrobe-visualization/3.png',
-        ]}
       />
     </ProductPageLayout>
   )

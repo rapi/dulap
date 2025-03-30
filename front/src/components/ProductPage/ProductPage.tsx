@@ -24,14 +24,18 @@ import {
   ProductSections,
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductSections'
-import { Carousel } from '~/components/Carousel/Carousel'
 import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
+import {
+  ProductImageCarousel,
+  ProductImageCarouselComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
 
 export type ProductComponent =
   | ProductImageSelectComponent
+  | ProductImageCarouselComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
@@ -42,14 +46,9 @@ export type ProductComponent =
 interface ProductPageProps {
   components: () => ProductComponent[]
   name: string
-  images: string[]
 }
 
-export const ProductPage: FC<ProductPageProps> = ({
-  components,
-  name,
-  images,
-}) => {
+export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'imageSelect':
@@ -71,16 +70,15 @@ export const ProductPage: FC<ProductPageProps> = ({
   const priceComponent = currentComponents.find(
     (component) => component.type === 'price'
   )
+  const imageCarouselComponent = currentComponents.find(
+    (component) => component.type === 'imageCarousel'
+  )
   return (
     <>
       {/* Left Side: Image */}
-      <div className={styles.imageContainer}>
-        <Carousel
-          width={600}
-          images={images.map((image) => ({ src: image, alt: image }))}
-        />
-      </div>
-
+      {imageCarouselComponent && (
+        <ProductImageCarousel configuration={imageCarouselComponent} />
+      )}
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
         <h1 className={styles.title}>{name}</h1>
