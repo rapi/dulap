@@ -5,11 +5,13 @@ import {
   openingMap,
   widthMap,
 } from '~/components/ProductPage/productTypes/wardrobeMap'
+// import { ProductSections } from '../productTypeComponents/ProductSections'
+
 const imageWidths = [400, 500, 800, 1000, 1200, 1500, 1600, 2000, 2500]
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(50)
   const [height, setHeight] = useState(210)
-  const [imageSide, setImageSide] = useState('left')
+  const [imageSide, setImageSide] = useState('right')
   const [imageWidth, setImageWidth] = useState(50)
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
   const [price, setPrice] = useState(40)
@@ -43,8 +45,13 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     if (selectedMaxSections % 2 === 0) {
       setImageSide('center')
     } else {
-      setImageSide('left')
+      setImageSide('right')
     }
+    // if (mirrorOption === 'standard') {
+    //   setImageSide('right')
+    // } else {
+    //   setImageSide('left')
+    // }
     setPrice(width)
   }, [width, selectedMaxSections])
   return [
