@@ -20,7 +20,8 @@ export type ProductSectionsComponent = {
   selectedMaxSections: number
   selectedSections: ImageOptionProps[]
   setSelectedMaxSections: (value: number) => void
-  mirrorOption?: string
+  selectedMirrorOption?: string
+  setSelectedMirrorOption?: (value: string) => void
 }
 export const mirroringOptions: ButtonOptionsType[] = [
   { value: 'standard', label: 'standard' },
@@ -38,16 +39,16 @@ export const ProductSections: FC<ProductSelectProps> = ({
     activeOpening,
     selectedMaxSections,
     setSelectedMaxSections,
-    mirrorOption,
+    selectedMirrorOption,
+    setSelectedMirrorOption,
   },
 }) => {
   const [minSections, setMinSections] = useState(String(minNumber))
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<null | number>(null)
   const [selectedSections, setSelectedSections] = useState([...activeSections])
-  const [selectedMirrorOption, setSelectedMirrorOption] = useState(
-    mirrorOption || 'standard'
-  )
+  selectedMirrorOption = selectedMirrorOption ?? 'standard'
+  setSelectedMirrorOption = setSelectedMirrorOption ?? (() => {})
   const sections = new Array(maxNumber).fill(0).map((_, i) => ({
     value: String(i + 1),
     label: String(i + 1),
@@ -121,7 +122,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
             images={activeOpening}
             onChange={(i) => {
               setActiveSection(i)
-              // setIsModalOpen(true)
             }}
             flipped={selectedMirrorOption === 'mirrored'}
             defaultSelected={8}

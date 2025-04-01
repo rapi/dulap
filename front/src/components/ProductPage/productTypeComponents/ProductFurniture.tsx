@@ -4,12 +4,18 @@ import { openingOptions } from '~/components/ProductWardrobe/ProductWardrobe'
 import styles from './ProductFurniture.module.css'
 import Select from '~/components/Select/Select'
 export type ProductFurnitureComponent = {
-  type: 'furniture'
+  type: 'furniture',
+  selectedOpeningMethod: string,
+  setSelectedOpeningMethod: (value: string) => void
 }
 interface ProductSelectProps {
   configuration: ProductFurnitureComponent
 }
-export const ProductFurniture: FC<ProductSelectProps> = () => {
+export const ProductFurniture: FC<ProductSelectProps> = (
+  { configuration: {
+    setSelectedOpeningMethod
+  } }
+) => {
   return (
     <div>
       <p className={styles.sectionTitle}>Furnitura</p>
@@ -19,7 +25,9 @@ export const ProductFurniture: FC<ProductSelectProps> = () => {
         <ButtonSelect
           options={openingOptions}
           defaultSelected={'maner'}
-          onChange={() => {}}
+          onChange={(value) => {
+            setSelectedOpeningMethod(value)
+          }}
         />
       </label>
 

@@ -14,6 +14,8 @@ export type ProductDimensionsComponent = {
   setWidth: (value: number) => void
   height: number
   setHeight: (value: number) => void
+  plintHeight: number
+  setPlintHeight: (value: number) => void
 }
 interface ProductDimensionsProps {
   configuration: ProductDimensionsComponent
@@ -79,7 +81,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             max={configuration.plintHeightRange[1]}
             step={1}
             value={6}
-            onChange={() => {}}
+            onChange={configuration.setPlintHeight}
           />
         </label>
         <Modal

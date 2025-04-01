@@ -1,4 +1,5 @@
 import { ImageOptionProps } from '~/components/ImageSelect/ImageSelect'
+import { MainImageParams } from './wardrobe'
 const editSrc = '/wardrobe/0-edit.png'
 const defaultSectionSrc = '/wardrobe/1.png'
 type WidthMap = {
@@ -20,6 +21,12 @@ type OpeningMap = {
     height: number,
     selectedMaxSections: number
   ) => ImageOptionProps[]
+}
+type ImageWidthMap = {
+  maxWidth: number
+  imageParams: (
+    selectedMaxSections: number
+  ) => MainImageParams[]
 }
 
 const leftOpening = '/wardrobe/opening-left.png'
@@ -232,6 +239,66 @@ export const widthMap: WidthMap[] = [
           { src: defaultSectionSrc, width: width / 5, height: height },
           { src: defaultSectionSrc, width: width / 5, height: height },
         ]
+    },
+  },
+]
+
+export const imageWidthMap: ImageWidthMap[] = [
+  {
+    maxWidth: 40,
+    imageParams: () => [{ imageWidth: 400, imageSections: 1}]
+  }, 
+  {
+    maxWidth: 60,
+    imageParams: () => [{ imageWidth: 500, imageSections: 1}]
+
+  },
+  {
+    maxWidth: 90,
+    imageParams: () => [{ imageWidth: 800, imageSections: 2}]
+  },
+  {
+    maxWidth: 110,
+    imageParams: () => [{ imageWidth: 1000, imageSections: 2}]
+  },
+  {
+    maxWidth: 130,
+    imageParams: () => [{ imageWidth: 1200, imageSections: 3}]
+  },
+  {
+    maxWidth: 150,
+    imageParams: () => [{ imageWidth: 1500, imageSections: 3}]
+  },
+  {
+    maxWidth: 180,
+    imageParams: (selectedMaxSections) => {
+      if (selectedMaxSections === 2 || selectedMaxSections === 4) {
+        return [{ imageWidth: 1600, imageSections: 4}]
+      } else return [{ imageWidth: 1500, imageSections: 3}]
+    },
+  },
+  {
+    maxWidth: 200,
+    imageParams: (selectedMaxSections) => {
+      if (selectedMaxSections === 2 || selectedMaxSections === 4) {
+        return [{ imageWidth: 2000, imageSections: 4}]
+      } else return [{ imageWidth: 1500, imageSections: 3}]
+    },
+  },
+  {
+    maxWidth: 220,
+    imageParams: (selectedMaxSections) => {
+      if (selectedMaxSections === 3 || selectedMaxSections === 5) {
+        return [{ imageWidth: 2000, imageSections: 5}]
+      } else return [{ imageWidth: 2000, imageSections: 4}]
+    },
+  },
+  {
+    maxWidth: 250,
+    imageParams: (selectedMaxSections) => {
+      if (selectedMaxSections === 3 || selectedMaxSections === 5) {
+        return [{ imageWidth: 2500, imageSections: 5}]
+      } else return [{ imageWidth: 2000, imageSections: 4}]
     },
   },
 ]

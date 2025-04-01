@@ -4,16 +4,22 @@ import { ImageOptionProps } from '~/components/ImageSelect/ImageSelect'
 import {
   openingMap,
   widthMap,
+  imageWidthMap
 } from '~/components/ProductPage/productTypes/wardrobeMap'
-// import { ProductSections } from '../productTypeComponents/ProductSections'
-
-const imageWidths = [400, 500, 800, 1000, 1200, 1500, 1600, 2000, 2500]
+export type MainImageParams = {
+  imageWidth: number
+  imageSections: number
+}
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(50)
   const [height, setHeight] = useState(210)
+  const [plintHeight, setPlintHeight] = useState(2)
   const [imageSide, setImageSide] = useState('right')
   const [imageWidth, setImageWidth] = useState(50)
+  const [imageSections, setImageSections] = useState(1)
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
+  const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
+  const [selectedOpeningMethod, setSelectedOpeningMethod] = useState('maner')
   const [price, setPrice] = useState(40)
   const [activeSections, setActiveSections] = useState<ImageOptionProps[]>([])
   const [activeOpening, setActiveOpening] = useState<ImageOptionProps[]>([])
@@ -40,20 +46,31 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     }
   }, [width, height, selectedMaxSections])
   useEffect(() => {
-    const newImageWidth = imageWidths.find((w) => w >= width * 10) || 50
-    setImageWidth(newImageWidth)
-    if (selectedMaxSections % 2 === 0) {
-      setImageSide('center')
-    } else {
-      setImageSide('right')
-    }
-    // if (mirrorOption === 'standard') {
-    //   setImageSide('right')
-    // } else {
-    //   setImageSide('left')
-    // }
     setPrice(width)
+  }, [width])
+  useEffect(() => {
+    console.log('selectedMirrorOption', selectedMirrorOption)
+    if (selectedMirrorOption === 'standard') {
+      setImageSide('right')
+    } else setImageSide('left')
+  }, [selectedMirrorOption])
+  useEffect(() => {
+    for (const map of imageWidthMap) {
+      if (width <= map.maxWidth) {
+        const params = map.imageParams(selectedMaxSections)
+        setImageSections(params[0].imageSections)
+        setImageWidth(params[0].imageWidth)
+        break
+      }
+    }
   }, [width, selectedMaxSections])
+  useEffect(() => {
+    console.log('plint height? ', plintHeight)
+    if (plintHeight > 2 && plintHeight < 5 ) {
+      setPlintHeight(20)
+    } else setPlintHeight(80)
+
+  }, [plintHeight])
   return [
     {
       type: 'dimensions',
@@ -65,6 +82,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       setWidth,
       height,
       setHeight,
+      plintHeight,
+      setPlintHeight,
     },
     {
       type: 'colors',
@@ -72,6 +91,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     },
     {
       type: 'furniture',
+      selectedOpeningMethod,
+      setSelectedOpeningMethod,
     },
     {
       type: 'sections',
@@ -88,6 +109,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       selectedSections: [],
       selectedMaxSections,
       setSelectedMaxSections,
+      selectedMirrorOption,
+      setSelectedMirrorOption
     },
     {
       type: 'price',
@@ -96,7 +119,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     {
       type: 'imageCarousel',
       images: [
-        `/wardrobe/Biege/Handle/Base 20/H2100/${imageWidth}-${selectedMaxSections}-${imageSide}.png`,
+        `/wardrobe/Biege/${selectedOpeningMethod}/Base ${plintHeight}/H2100/${imageWidth}-${imageSections}-${imageSide}.png`,
       ],
     },
   ]
