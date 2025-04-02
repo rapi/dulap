@@ -80,7 +80,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             min={configuration.plintHeightRange[0]}
             max={configuration.plintHeightRange[1]}
             step={1}
-            value={6}
+            value={2}
             onChange={configuration.setPlintHeight}
           />
         </label>

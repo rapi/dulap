@@ -14,10 +14,13 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(50)
   const [height, setHeight] = useState(210)
   const [plintHeight, setPlintHeight] = useState(2)
+  const [selectedColor, setSelectedColor] = useState('#ded9d3')
   const [imageSide, setImageSide] = useState('right')
   const [imageWidth, setImageWidth] = useState(50)
+  const [imageHeight, setImageHeight] = useState(2100)
   const [imageSections, setImageSections] = useState(1)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
+  const [imageColor, setImageColor] = useState('Biege')
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
   const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
   const [selectedOpeningMethod, setSelectedOpeningMethod] = useState('maner')
@@ -47,6 +50,20 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     }
   }, [width, height, selectedMaxSections])
   useEffect(() => {
+    if (height <= 210) {
+      setImageHeight(2100)
+    } else setImageHeight(2400)
+    }
+  , [height])
+  useEffect(() => {
+    if (selectedColor === '#ded9d3') {
+      setImageColor('Biege')
+    } else if (selectedColor === '#eeeeee') {
+        setImageColor('Biege')
+      } else setImageColor('Biege')
+    }
+  , [selectedColor])
+  useEffect(() => {
     setPrice(width)
   }, [width])
   useEffect(() => {
@@ -67,7 +84,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   }, [width, selectedMaxSections])
   useEffect(() => {
     console.log('plint height? ', plintHeight)
-    if (plintHeight > 2 && plintHeight < 5) {
+    if (plintHeight >= 2 && plintHeight < 5) {
       setImagePlintHeight(20)
     } else {
       setImagePlintHeight(60)
@@ -89,7 +106,9 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     },
     {
       type: 'colors',
-      colors: ['#eeeeee', '#b5b5b5', '#d7d0c5'],
+      colors: ['#ded9d3', '#eeeeee', '#b5b5b5'],
+      selectedColor,
+      setSelectedColor,
     },
     {
       type: 'furniture',
@@ -121,7 +140,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     {
       type: 'imageCarousel',
       images: [
-        `/wardrobe/Biege/${selectedOpeningMethod}/Base ${imagePlintHeight}/H2100/${imageWidth}-${imageSections}-${imageSide}.png`,
+        `/wardrobe/${imageColor}/${selectedOpeningMethod}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}-${imageSections}-${imageSide}.png`,
       ],
     },
   ]
