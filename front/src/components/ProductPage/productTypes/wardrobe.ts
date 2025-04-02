@@ -93,7 +93,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   return [
     {
       type: 'dimensions',
-      widthRange: [40, 250],
+      widthRange: [40, 270],
       heightRange: [190, 240],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
@@ -140,7 +140,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     {
       type: 'imageCarousel',
       images: [
-        `/wardrobe/${imageColor}/${selectedOpeningMethod}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}-${imageSections}-${imageSide}.png`,
+        `/wardrobe/${imageColor}/${selectedOpeningMethod}/Base ${imagePlintHeight}/H${imageHeight}/${imageSide}/${imageWidth}-${imageSections}.png`,
       ],
     },
   ]

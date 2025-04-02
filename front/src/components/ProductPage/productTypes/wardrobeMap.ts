@@ -274,7 +274,7 @@ export const imageWidthMap: ImageWidthMap[] = [
     imageParams: (selectedMaxSections) => {
       if (selectedMaxSections === 2 || selectedMaxSections === 4) {
         return [{ imageWidth: 1600, imageSections: 4}]
-      } else return [{ imageWidth: 1500, imageSections: 3}]
+      } else return [{ imageWidth: 1600, imageSections: 3}]
     },
   },
   {
@@ -286,7 +286,7 @@ export const imageWidthMap: ImageWidthMap[] = [
     },
   },
   {
-    maxWidth: 220,
+    maxWidth: 240,
     imageParams: (selectedMaxSections) => {
       if (selectedMaxSections === 3 || selectedMaxSections === 5) {
         return [{ imageWidth: 2000, imageSections: 5}]
@@ -294,7 +294,7 @@ export const imageWidthMap: ImageWidthMap[] = [
     },
   },
   {
-    maxWidth: 250,
+    maxWidth: 270,
     imageParams: (selectedMaxSections) => {
       if (selectedMaxSections === 3 || selectedMaxSections === 5) {
         return [{ imageWidth: 2500, imageSections: 5}]
