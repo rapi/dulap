@@ -1,8 +1,10 @@
 .footer {
-  background-color: #e4e4e4e4;
+  background-color: #f5f5f7;
   padding: 20px;
   text-align: center;
   margin-top: 100px;
+  width: 100%;
+  margin: 0;
 }
 
 .container {
@@ -10,12 +12,13 @@
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 0;
+  margin: 0;
+  /* padding: 10%; */
 }
 
 .menu {
   text-align: left;
+  font-size: 1em;
 }
 
 .menu ul {
@@ -25,7 +28,7 @@
 
 .menu li {
   margin: 5px 0;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
 }
 
@@ -46,6 +49,55 @@
 
 .location {
   margin-top: 10px;
-  font-size: 14px;
+  font-size: 0.9em;
   color: #555;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .menu {
+    margin-bottom: 15px;
+    font-size: 13px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .menu {
+    text-align: left;
+  }
+
+  .menu ul {
+    padding: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .menu {
+    text-align: center;
+  }
+
+  .menu .li {
+    font-size: 12px;
+  }
+
+  .socialIcons img {
+    width: 25px;
+    height: 25px;
+  }
 }

@@ -51,11 +51,13 @@
 /* Responsive Styles */
 @media (max-width: 768px) {
   header {
-    flex-direction: column;
-    text-align: center;
+    flex-direction: row;
     gap: 1rem;
   }
 
+  .logo img {
+    height: 25px;
+  }
   .navigation {
     flex-direction: column;
     gap: 0.5rem;

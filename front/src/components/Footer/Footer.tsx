@@ -5,19 +5,19 @@ export const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.container}>
-        <div className={styles.menu}>
+        <nav className={styles.menu}>
           <ul>
             <li>Dulapuri</li>
             <li>Comode</li>
             <li>Rafturi</li>
           </ul>
-        </div>
-        <div className={styles.menu}>
+        </nav>
+        <nav className={styles.menu}>
           <ul>
             <li>Despre noi</li>
             <li>Contacte</li>
           </ul>
-        </div>
+        </nav>
         <div className={styles.logoSection}>
           <img alt="logo" src="/logo.svg" width={100} />
           <p>Abonează-te!</p>
