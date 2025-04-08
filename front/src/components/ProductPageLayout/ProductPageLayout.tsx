@@ -15,13 +15,15 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
   const productType = productTypes.find(({ link }) => link === router.pathname)
   return (
     <div className={styles.container}>
-      <Breadcrumb
-        items={[
-          { label: 'Category', link: '' },
-          { label: 'subcategory', link: '/products' },
-          ...(productType?.name ? [{ label: productType.name }] : []),
-        ]}
-      />
+      <div className={styles.breadcrumbContainer}>
+        <Breadcrumb
+          items={[
+            { label: 'Category', link: '' },
+            { label: 'subcategory', link: '/products' },
+            ...(productType?.name ? [{ label: productType.name }] : []),
+          ]}
+        />
+      </div>
       <div className={styles.contentContainer}>{children}</div>
     </div>
   )

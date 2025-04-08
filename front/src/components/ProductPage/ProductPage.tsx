@@ -76,9 +76,11 @@ export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
   return (
     <>
       {/* Left Side: Image */}
-      {imageCarouselComponent && (
-        <ProductImageCarousel configuration={imageCarouselComponent} />
-      )}
+      <div className={styles.leftContainer}>
+        {imageCarouselComponent && (
+          <ProductImageCarousel configuration={imageCarouselComponent} />
+        )}
+      </div>
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
         <h1 className={styles.title}>{name}</h1>

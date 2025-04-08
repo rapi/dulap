@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
 import { Carousel } from '~/components/Carousel/Carousel'
+import classes from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 export type ProductImageCarouselComponent = {
   type: 'imageCarousel'
   images: string[]
@@ -11,9 +12,8 @@ export const ProductImageCarousel: FC<ProductImageCarouselProps> = ({
   configuration: { images },
 }) => {
   return (
-    <div>
+    <div className={classes.productImageCarousel}>
       <Carousel
-        width={600}
         images={images.map((image) => ({
           src: image,
           alt: image,

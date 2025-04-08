@@ -14,8 +14,8 @@ export const Banner = () => {
         alt="Hero showcasing furniture"
       />
       <div className={classes.heroContent}>
-        <h1 className={classes.heroTitle}>Dulapul tău - </h1>
-        <h1 className={classes.heroTitle}>exact cum îl vrei</h1>
+        <p className={classes.heroTitle}>Dulapul tău - </p>
+        <p className={classes.heroTitle}>exact cum îl vrei</p>
         <div className={classes.heroSubtitle}>
           <p>Mobilier creat după</p> 
           <ol className={classes.subtitleAnimationList}>

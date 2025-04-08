@@ -3,7 +3,6 @@ import React from 'react'
 import Link from 'next/link'
 import classes from './ProductItem.module.css'
 import SelectColor from '~/components/SelectColor/SelectColor'
-// import Link from 'next/link'
 
 interface ProductItemProps {
   button: React.ReactNode

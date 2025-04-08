@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
           </ul>
         </nav>
         <div className={styles.logoSection}>
-          <img alt="logo" src="/logo.svg" width={100} />
+          <img alt="logo" src="/logo.svg" width={130} />
           <p>Abonează-te!</p>
           <div className={styles.socialIcons}>
             <a
@@ -37,9 +37,10 @@ export const Footer: React.FC = () => {
               <img src="/soclial/facebook.png" alt="Facebook" />
             </a>
           </div>
+          {/* <p className={styles.location}>Chișinău, Republica Moldova</p> */}
         </div>
       </div>
-      <p className={styles.location}>Chișinău, Republica Moldova</p>
+      
     </footer>
   )
 }

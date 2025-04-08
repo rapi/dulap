@@ -3,10 +3,10 @@ import styles from './Carousel.module.css'
 
 interface CarouselProps {
   images: { src: string; alt: string }[]
-  width?: number
+  width?: number | string
 }
 
-export const Carousel = ({ images, width }: CarouselProps) => {
+  export const Carousel = ({ images, width = '100%' }: CarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const setSlide = (index: number) => {
@@ -15,7 +15,7 @@ export const Carousel = ({ images, width }: CarouselProps) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.slideContainer} style={width ? { width } : {}}>
+      <div className={styles.slideContainer} style={{ width }}>
         <img
           src={images[currentIndex].src}
           alt={images[currentIndex].alt}

@@ -70,32 +70,34 @@ export const Landing: React.FC = () => {
           <img
             src="/banner.jpg"
             alt="Familia Grinciuc"
-            className="aboutImage"
+            className={classes.aboutImage}
           />
           <div className={classes.aboutUsDescription}>
             <p>
-              dulap.md nu este doar un magazin de mobilier. Este povestea unei
-              familii - Elizabet, Vasile și cei doi băieți ai noștri – care au
-              ales să transforme visurile și provocările într-un proiect plin de
-              sens și emoție.
+              La dulap.md facem mobilier personalizat, la prețuri corecte. Simplu.
               <br />
               <br />
-              Totul a început dintr-o nevoie simplă: să ne mobilăm casa simplu,
-              dar cu gust. Nu am găsit ceea ce ne doream la preț accesibil, dar
-              am găsit ceva și mai prețios: ideea de a crea noi înșine
-              mobilierul perfect, și ideal customizabil.
+              Suntem o afacere de familie din Moldova, cu o echipă mică, 
+              dar serioasă. Ne concentrăm pe un singur lucru: să construim 
+              dulapuri care arată bine, țin mult și se potrivesc perfect 
+              în spațiul tău.
               <br />
               <br />
-              dulap.md este mai mult decât mobilier. Este o promisiune că orice
-              casă poate deveni acasă.
+              Lucrăm cu materiale de calitate, meșteri pricepuți și 
+              furnizori în care avem încredere. Nu vindem promisiuni, 
+              ci produse durabile, făcute cu grijă și atenție la detalii.
               <br />
               <br />
-              Mulțumim că ai ales să faci parte din povestea noastră!
+              Suntem la început, dar punem suflet în fiecare proiect. 
+              Pentru noi, fiecare client contează.  
+              <br />
+              <br />
+              <b>dulap.md – fiecare spațiu merită un dulap bun.</b>
             </p>
           </div>
         </div>
         <div className={classes.ctaButtonContainer}>
-          <CustomButton icon="" outlined size="large" variant="danger">
+          <CustomButton icon="" size="large" variant="primary">
             Încearcă acum
           </CustomButton>
         </div>
