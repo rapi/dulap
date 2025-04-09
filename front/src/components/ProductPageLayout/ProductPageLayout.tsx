@@ -19,7 +19,7 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
         <Breadcrumb
           items={[
             { label: 'Category', link: '' },
-            { label: 'subcategory', link: '/products' },
+            { label: 'Subcategory', link: '/products' },
             ...(productType?.name ? [{ label: productType.name }] : []),
           ]}
         />

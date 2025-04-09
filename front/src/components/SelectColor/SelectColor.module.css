@@ -1,7 +1,7 @@
 /* SelectColor.module.css */
 .container {
   display: flex;
-  gap: 0.3vw;
+  gap: 4px;
 }
 
 .colorCircle {

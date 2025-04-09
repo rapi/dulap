@@ -12,11 +12,14 @@ interface ProductPriceProps {
 export const ProductPrice: FC<ProductPriceProps> = ({ configuration }) => {
   return (
     <div className={styles.priceContainer}>
-      <div className={styles.priceTitle}>
-        <h4>Calculator de preț:</h4>
-      </div>
-      <div className={styles.price}>
-        <h2>{configuration.price} MDL</h2>
+      <div className={styles.priceBlock}>
+        <div className={styles.priceTitle}>
+          <h4>Preț flexibil:</h4>
+        </div>
+        <div className={styles.price}>
+          <h2>{configuration.price}</h2>
+          <h2>&nbsp;lei</h2>
+        </div>
       </div>
       <div className={styles.addToCartButtonContainer}>
         <CustomButton icon={<ShoppingCartIcon />} size="large" variant="danger">

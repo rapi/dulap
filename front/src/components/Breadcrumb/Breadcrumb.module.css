@@ -17,3 +17,9 @@
   color: #444; /* Strong contrast for active item */
   /*font-weight: bold;*/
 }
+
+@media (max-width: 480px) {
+  .breadcrumb {
+    font-size: 14px;
+  }
+}

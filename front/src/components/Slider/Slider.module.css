@@ -45,3 +45,24 @@
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
+
+@media (max-width: 480px) {
+  .sliderContainer {
+    flex: 1;
+    gap: 10px;
+    min-width: 0;
+  }
+  .slider {
+    flex: 1;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 350px) {
+  .sliderContainer {
+    gap: 5px;
+  }
+  .slider {
+    min-width: 60px;
+  }
+}

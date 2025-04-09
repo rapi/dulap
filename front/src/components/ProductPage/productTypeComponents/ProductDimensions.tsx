@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { Slider } from '~/components/Slider/Slider'
-import styles from './ProductDimensions.module.css'
+import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Modal } from '~/components/Modal/Modal'
 
@@ -28,7 +28,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
 
   return (
     <>
-      <h3 className={styles.header}>Dimensiuni</h3>
+      <h3 className={styles.dimensionsHeaderTitle}>Dimensiuni</h3>
       <div className={styles.dimensionsGrid}>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}>Lățime </p>
