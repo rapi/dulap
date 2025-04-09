@@ -199,6 +199,10 @@
   gap: 5px;
 }
 
+.price {
+  display: flex;
+}
+
 .priceTitle h4 {
   margin: 0;
   font-size: 14px;
