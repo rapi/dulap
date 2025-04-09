@@ -11,7 +11,7 @@ export type MainImageParams = {
   imageSections: number
 }
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
-  const [width, setWidth] = useState(50)
+  const [width, setWidth] = useState(120)
   const [height, setHeight] = useState(210)
   const [plintHeight, setPlintHeight] = useState(2)
   const [selectedColor, setSelectedColor] = useState('#ded9d3')
@@ -64,8 +64,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     }
   , [selectedColor])
   useEffect(() => {
-    setPrice(width)
-  }, [width])
+    setPrice((width*4.5+height*1.2)*7)
+  }, [width, height])
   useEffect(() => {
     console.log('selectedMirrorOption', selectedMirrorOption)
     if (selectedMirrorOption === 'standard') {
@@ -93,7 +93,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   return [
     {
       type: 'dimensions',
-      widthRange: [40, 270],
+      widthRange: [40, 250],
       heightRange: [190, 240],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],

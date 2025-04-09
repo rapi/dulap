@@ -154,11 +154,11 @@
   } 
 
   .heroSubtitle p {
-    font-size: 15px;
-    line-height: 0.94;
+    font-size: 14px;
+    line-height: 1.12;
   }
   .heroContent div span {
     font-weight: 600;
-    font-size: 17px;
+    font-size: 16px;
   }
 }

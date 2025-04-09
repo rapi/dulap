@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { productTypes } from '~/components/ProductListPage/productTypes'
 import Image from 'next/image'
 import styles from './ProductListPage.module.css'
@@ -6,10 +7,9 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { ProductList } from '../ProductList/ProductList'
 import { ProductItem } from '../ProductItem/ProductItem'
 import { WardrobeIconMedium } from '../Icons/Icons'
-// import { amber } from '@mui/material/colors';
-// import ExtensionIcon from '@mui/icons-material/Extension';
 
 export const ProductListPage: React.FC = () => {
+  const router = useRouter();
   return (
     <>
       <div className={styles.productListContainer}>
@@ -18,7 +18,10 @@ export const ProductListPage: React.FC = () => {
         <div className={styles.productListSelectContainer}>
           {productTypes.map(({ image, link, name }) => (
             <div className={styles.productItemContainer} key={link}>
-              <div className={styles.imageContainer}>
+              <div
+                onClick={() => router.push(link)} style={{ cursor: "pointer" }} 
+                className={styles.imageContainer}
+              >
                 <Image
                   width={2056}
                   height={1000}
@@ -31,7 +34,7 @@ export const ProductListPage: React.FC = () => {
                     icon={<WardrobeIconMedium />}
                     variant='primary'
                     size='small'
-                    href={link}
+                    // href={link}
                   >Creează</CustomButton>
                 </div>
               </div>
