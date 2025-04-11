@@ -25,6 +25,8 @@ export const ProductItem: React.FC<ProductItemProps> = ({
           src={image}
           alt="Comodă"
           className={classes.productImage}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0nNjAwJyBoZWlnaHQ9JzQwMCcgdmlld0JveD0nMCAwIDYwMCA0MDAnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHJlY3Qgd2lkdGg9JzYwMCcgaGVpZ2h0PSc0MDAnIGZpbGw9JyNFMEUwRTAnLz48L3N2Zz4="
         />
       </Link>
       <div className={classes.productDescription}>

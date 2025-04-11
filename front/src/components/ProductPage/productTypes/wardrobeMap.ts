@@ -35,24 +35,16 @@ const doubleOpening = '/wardrobe/opening-double.png'
 
 export const openingMap: OpeningMap[] = [
   {
-    maxWidth: 60,
-    minSections: 1,
-    maxSections: 1,
-    activeOpening: (width, height) => [
-      { src: leftOpening, width: width, height: height + 14 },
-    ],
-  },
-  {
     maxWidth: 100,
     minSections: 1,
-    maxSections: 2,
-    activeOpening: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 1) {
-        return [{ src: doubleOpening, width: width, height: height + 14 }]
-      } else
+    maxSections: 1,
+    activeOpening: (width, height) => {
+      if (width <= 60) {
         return [
-          { src: leftOpening, width: width / 2, height: height + 14 },
-          { src: rightOpening, width: width / 2, height: height + 14 },
+          { src: leftOpening, width: width, height: height + 14 }
+        ]
+      } else return [
+        { src: doubleOpening, width: width, height: height + 14 }
         ]
     },
   },
@@ -68,39 +60,67 @@ export const openingMap: OpeningMap[] = [
   {
     maxWidth: 159,
     minSections: 2,
+    maxSections: 2,
+    activeOpening: (width, height) => [
+      { src: doubleOpening, width: width / 3 * 2, height: height + 14 },
+      { src: rightOpening, width: width / 3, height: height + 14 },
+    ],
+  },
+  {
+    maxWidth: 180,
+    minSections: 2,
     maxSections: 3,
-    activeOpening: (width, height, selectedMaxSections) => {
+    activeOpening: (width, height, selectedMaxSections) =>  {
       if (selectedMaxSections === 2) {
         return [
-          { src: doubleOpening, width: (width / 3) * 2, height: height + 14 },
-          { src: rightOpening, width: width / 3, height: height + 14 },
+          { src: doubleOpening, width: width / 2, height: height + 14 },
+          { src: doubleOpening, width: width / 2, height: height + 14 },
         ]
-      } else
-        return [
-          { src: leftOpening, width: width / 3, height: height + 14 },
-          { src: rightOpening, width: width / 3, height: height + 14 },
-          { src: rightOpening, width: width / 3, height: height + 14 },
+      } else return [
+        { src: leftOpening, width: width / 3, height: height + 14 },
+        { src: rightOpening, width: width / 3, height: height + 14 },
+        { src: rightOpening, width: width / 3, height: height + 14 },
         ]
     },
   },
   {
+    maxWidth: 199,
+    minSections: 2,
+    maxSections: 2,
+    activeOpening: (width, height) => [
+      { src: doubleOpening, width: width / 2, height: height + 14 },
+      { src: doubleOpening, width: width / 2, height: height + 14 },
+    ],
+  },
+  {
     maxWidth: 200,
     minSections: 2,
-    maxSections: 4,
-    activeOpening: (width, height, selectedMaxSections) => {
+    maxSections: 3,
+    activeOpening: (width, height, selectedMaxSections) =>  {
       if (selectedMaxSections === 2) {
         return [
           { src: doubleOpening, width: width / 2, height: height + 14 },
           { src: doubleOpening, width: width / 2, height: height + 14 },
         ]
-      } else if (selectedMaxSections === 3) {
-        return [
-          { src: leftOpening, width: width / 3, height: height + 14 },
-          { src: rightOpening, width: width / 3, height: height + 14 },
-          { src: rightOpening, width: width / 3, height: height + 14 },
+      } else return [
+          { src: doubleOpening, width: (width / 5) * 2, height: height + 14 },
+          { src: doubleOpening, width: (width / 5) * 2, height: height + 14 },
+          { src: rightOpening, width: width / 5, height: height + 14 },
         ]
-      } else
+    },
+  },
+  {
+    maxWidth: 240,
+    minSections: 3,
+    maxSections: 4,
+    activeOpening: (width, height, selectedMaxSections) => {
+      if (selectedMaxSections === 3) {
         return [
+          { src: doubleOpening, width: (width / 5) * 2, height: height + 14 },
+          { src: doubleOpening, width: (width / 5) * 2, height: height + 14 },
+          { src: rightOpening, width: width / 5, height: height + 14 },
+        ]
+      } else return [
           { src: leftOpening, width: width / 4, height: height + 14 },
           { src: rightOpening, width: width / 4, height: height + 14 },
           { src: leftOpening, width: width / 4, height: height + 14 },
@@ -111,55 +131,23 @@ export const openingMap: OpeningMap[] = [
   {
     maxWidth: 250,
     minSections: 3,
-    maxSections: 5,
-    activeOpening: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 3) {
-        return [
-          { src: doubleOpening, width: (width / 5) * 2, height: height + 14 },
-          { src: doubleOpening, width: (width / 5) * 2, height: height + 14 },
-          { src: rightOpening, width: width / 5, height: height + 14 },
-        ]
-      } else if (selectedMaxSections === 4) {
-        return [
-          { src: leftOpening, width: width / 4, height: height + 14 },
-          { src: rightOpening, width: width / 4, height: height + 14 },
-          { src: leftOpening, width: width / 4, height: height + 14 },
-          { src: rightOpening, width: width / 4, height: height + 14 },
-        ]
-      } else
-        return [
-          { src: leftOpening, width: width / 5, height: height + 14 },
-          { src: rightOpening, width: width / 5, height: height + 14 },
-          { src: leftOpening, width: width / 5, height: height + 14 },
-          { src: rightOpening, width: width / 5, height: height + 14 },
-          { src: rightOpening, width: width / 5, height: height + 14 },
-        ]
-    },
-  },
+    maxSections: 3,
+    activeOpening: (width, height) => [
+      { src: doubleOpening, width: (width / 5) * 2, height: height + 14 },
+      { src: doubleOpening, width: (width / 5) * 2, height: height + 14 },
+      { src: rightOpening, width: width / 5, height: height + 14 },
+    ]
+  }
 ]
 
 export const widthMap: WidthMap[] = [
   {
-    maxWidth: 60,
+    maxWidth: 100,
     minSections: 1,
     maxSections: 1,
     activeSections: (width, height) => [
       { src: editSrc, width: width, height: height },
     ],
-  },
-  {
-    maxWidth: 100,
-    minSections: 1,
-    maxSections: 2,
-    activeSections: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 1) {
-        return [{ src: editSrc, width: width, height: height }]
-      } else
-        return [
-          { src: editSrc, width: width / 2, height: height },
-          { src: defaultSectionSrc, width: width / 2, height: height },
-        ]
-    },
   },
   {
     maxWidth: 119,
@@ -173,39 +161,67 @@ export const widthMap: WidthMap[] = [
   {
     maxWidth: 159,
     minSections: 2,
-    maxSections: 3,
-    activeSections: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 2) {
-        return [
-          { src: editSrc, width: (width / 3) * 2, height: height },
-          { src: defaultSectionSrc, width: width / 3, height: height },
-        ]
-      } else
-        return [
-          { src: editSrc, width: width / 3, height: height },
-          { src: defaultSectionSrc, width: width / 3, height: height },
-          { src: defaultSectionSrc, width: width / 3, height: height },
-        ]
-    },
+    maxSections: 2,
+    activeSections: (width, height) => [
+      { src: editSrc, width: width / 3 * 2, height: height },
+      { src: defaultSectionSrc, width: width / 3, height: height },
+    ],
   },
   {
-    maxWidth: 200,
+    maxWidth: 180,
     minSections: 2,
-    maxSections: 4,
-    activeSections: (width, height, selectedMaxSections) => {
+    maxSections: 3,
+    activeSections: (width, height, selectedMaxSections) =>  {
       if (selectedMaxSections === 2) {
         return [
           { src: editSrc, width: width / 2, height: height },
           { src: defaultSectionSrc, width: width / 2, height: height },
         ]
-      } else if (selectedMaxSections === 3) {
-        return [
-          { src: editSrc, width: width / 3, height: height },
-          { src: defaultSectionSrc, width: width / 3, height: height },
-          { src: defaultSectionSrc, width: width / 3, height: height },
+      } else return [
+        { src: editSrc, width: width / 3, height: height },
+        { src: defaultSectionSrc, width: width / 3, height: height },
+        { src: defaultSectionSrc, width: width / 3, height: height },
         ]
-      } else
+    },
+  },
+  {
+    maxWidth: 199,
+    minSections: 2,
+    maxSections: 2,
+    activeSections: (width, height) => [
+      { src: editSrc, width: width / 2, height: height },
+      { src: defaultSectionSrc, width: width / 2, height: height },
+    ],
+  },
+  {
+    maxWidth: 200,
+    minSections: 2,
+    maxSections: 3,
+    activeSections: (width, height, selectedMaxSections) =>  {
+      if (selectedMaxSections === 2) {
         return [
+          { src: editSrc, width: width / 2, height: height },
+          { src: defaultSectionSrc, width: width / 2, height: height },
+        ]
+      } else return [
+          { src: editSrc, width: (width / 5) * 2, height: height },
+          { src: defaultSectionSrc, width: (width / 5) * 2, height: height },
+          { src: defaultSectionSrc, width: width / 5, height: height },
+        ]
+    },
+  },
+  {
+    maxWidth: 240,
+    minSections: 3,
+    maxSections: 4,
+    activeSections: (width, height, selectedMaxSections) => {
+      if (selectedMaxSections === 3) {
+        return [
+          { src: editSrc, width: (width / 5) * 2, height: height },
+          { src: defaultSectionSrc, width: (width / 5) * 2, height: height },
+          { src: defaultSectionSrc, width: width / 5, height: height },
+        ]
+      } else return [
           { src: editSrc, width: width / 4, height: height },
           { src: defaultSectionSrc, width: width / 4, height: height },
           { src: defaultSectionSrc, width: width / 4, height: height },
@@ -216,31 +232,13 @@ export const widthMap: WidthMap[] = [
   {
     maxWidth: 250,
     minSections: 3,
-    maxSections: 5,
-    activeSections: (width, height, selectedMaxSections) => {
-      if (selectedMaxSections === 3) {
-        return [
-          { src: editSrc, width: (width / 5) * 2, height: height },
-          { src: defaultSectionSrc, width: (width / 5) * 2, height: height },
-          { src: defaultSectionSrc, width: width / 5, height: height },
-        ]
-      } else if (selectedMaxSections === 4) {
-        return [
-          { src: editSrc, width: width / 4, height: height },
-          { src: defaultSectionSrc, width: width / 4, height: height },
-          { src: defaultSectionSrc, width: width / 4, height: height },
-          { src: defaultSectionSrc, width: width / 4, height: height },
-        ]
-      } else
-        return [
-          { src: editSrc, width: width / 5, height: height },
-          { src: defaultSectionSrc, width: width / 5, height: height },
-          { src: defaultSectionSrc, width: width / 5, height: height },
-          { src: defaultSectionSrc, width: width / 5, height: height },
-          { src: defaultSectionSrc, width: width / 5, height: height },
-        ]
-    },
-  },
+    maxSections: 3,
+    activeSections: (width, height) => [
+      { src: editSrc, width: (width / 5) * 2, height: height },
+      { src: defaultSectionSrc, width: (width / 5) * 2, height: height },
+      { src: defaultSectionSrc, width: width / 5, height: height },
+    ]
+  }
 ]
 
 export const imageWidthMap: ImageWidthMap[] = [
@@ -254,11 +252,11 @@ export const imageWidthMap: ImageWidthMap[] = [
 
   },
   {
-    maxWidth: 90,
+    maxWidth: 85,
     imageParams: () => [{ imageWidth: 800, imageSections: 2}]
   },
   {
-    maxWidth: 110,
+    maxWidth: 119,
     imageParams: () => [{ imageWidth: 1000, imageSections: 2}]
   },
   {
@@ -272,33 +270,41 @@ export const imageWidthMap: ImageWidthMap[] = [
   {
     maxWidth: 180,
     imageParams: (selectedMaxSections) => {
-      if (selectedMaxSections === 2 || selectedMaxSections === 4) {
+      if (selectedMaxSections === 2 ) {
         return [{ imageWidth: 1600, imageSections: 4}]
       } else return [{ imageWidth: 1600, imageSections: 3}]
     },
   },
   {
+    maxWidth: 199,
+    imageParams: () => [{ imageWidth: 2000, imageSections: 4}]
+  },
+  {
     maxWidth: 200,
     imageParams: (selectedMaxSections) => {
-      if (selectedMaxSections === 2 || selectedMaxSections === 4) {
+      if (selectedMaxSections === 2 ) {
         return [{ imageWidth: 2000, imageSections: 4}]
-      } else return [{ imageWidth: 1500, imageSections: 3}]
+      } else return [{ imageWidth: 2000, imageSections: 5}]
     },
   },
   {
-    maxWidth: 240,
+    maxWidth: 220,
     imageParams: (selectedMaxSections) => {
-      if (selectedMaxSections === 3 || selectedMaxSections === 5) {
+      if (selectedMaxSections === 3 ) {
         return [{ imageWidth: 2000, imageSections: 5}]
       } else return [{ imageWidth: 2000, imageSections: 4}]
     },
   },
   {
-    maxWidth: 270,
+    maxWidth: 240,
     imageParams: (selectedMaxSections) => {
-      if (selectedMaxSections === 3 || selectedMaxSections === 5) {
+      if (selectedMaxSections === 3 ) {
         return [{ imageWidth: 2500, imageSections: 5}]
-      } else return [{ imageWidth: 2000, imageSections: 4}]
+      } else return [{ imageWidth: 2500, imageSections: 4}]
     },
+  },
+  {
+    maxWidth: 250,
+    imageParams: () => [{ imageWidth: 2500, imageSections: 5}]
   },
 ]

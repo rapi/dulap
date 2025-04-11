@@ -58,9 +58,13 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   useEffect(() => {
     if (selectedColor === '#ded9d3') {
       setImageColor('Biege')
-    } else if (selectedColor === '#eeeeee') {
-        setImageColor('Biege')
-      } else setImageColor('Biege')
+    } else if (selectedColor === '#fcfbf5') {
+        setImageColor('White')
+      } else if (selectedColor === '#d6d6d6') {
+        setImageColor('Light Grey')
+      } else if (selectedColor === '#9c9c9c') {
+        setImageColor('Grey')
+      } else setImageColor('Dark Grey')
     }
   , [selectedColor])
   useEffect(() => {
@@ -106,7 +110,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     },
     {
       type: 'colors',
-      colors: ['#ded9d3', '#eeeeee', '#b5b5b5'],
+      colors: ['#ded9d3', '#fcfbf5', '#d6d6d6', '#9c9c9c', '#7a7a7a'],
       selectedColor,
       setSelectedColor,
     },
