@@ -1,0 +1,110 @@
+.customizeButton {
+  padding: 0.8rem 1.5rem;
+  background-color: #ff9500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+/* Products Section */
+
+.productCard,
+.readyProductCard {
+  background-color: #fff;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #333;
+  color: white;
+}
+
+.footerLinks {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footerLinks a {
+  color: white;
+  text-decoration: none;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  header {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .logo img {
+    height: 25px;
+  }
+  .navigation {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .heroContent {
+    max-width: 100%;
+  }
+
+  .heroImage {
+    width: 100%;
+    max-width: 400px;
+    margin: 1rem auto;
+  }
+
+  .productGrid,
+  .productList {
+    grid-template-columns: 1fr;
+  }
+
+  .aboutContent {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .aboutImage {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroContent h1 {
+    font-size: 2rem;
+  }
+
+  .customizeButton {
+    padding: 0.5rem 1rem;
+  }
+
+  .heroImage {
+    max-width: 300px;
+  }
+
+  .productCard,
+  .readyProductCard {
+    padding: 0.5rem;
+  }
+
+  .aboutImage {
+    width: 150px;
+    height: 150px;
+  }
+}

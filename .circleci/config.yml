@@ -1,0 +1,98 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@4.10.1  # Import Slack Orb
+
+jobs:
+  build-and-push:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small  # Use a smaller machine type
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Extract Commit Info
+          command: |
+            echo "export COMMIT_AUTHOR='$(git log -1 --pretty=format:'%an')'" >> commit_info.txt
+            echo "export COMMIT_MESSAGE='$(git log -1 --pretty=format:'%s')'" >> commit_info.txt
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t $DOCKERHUB_USERNAME/dulap:latest -f front/Dockerfile front/
+      - run:
+          name: Login to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+      - run:
+          name: Push Docker image to Docker Hub
+          command: |
+            docker push $DOCKERHUB_USERNAME/dulap:latest
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+            - commit_info.txt  # Persist commit info for later jobs
+      - slack/notify:
+          channel: "#website"  # ✅ Correct channel name
+          event: fail
+          custom: |
+            {
+              "text": "❌ *Build failed!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nPlease check CircleCI logs."
+            }
+
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small  # Use a smaller machine type
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:oAA+yJGRiA9Rzx5F/3pABPij+153g3Q4/wI6AKmL8/M"
+      - run:
+          name: Deploy and restart container on VPS
+          command: |
+            ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST \
+            "docker pull $DOCKERHUB_USERNAME/dulap:latest && \
+            if [ \$(docker ps -aq -f name=dulap) ]; then docker stop dulap && docker rm dulap;  fi && \
+            docker run -d --name dulap -p 8080:8080 $DOCKERHUB_USERNAME/dulap:latest &&\
+            echo "y" | docker image prune"
+
+  slack-deploy-success:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small  # Use a smaller machine type
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Load Commit Info
+          command: cat commit_info.txt >> $BASH_ENV
+      - slack/notify:
+          channel: "#website"  # ✅ Correct channel name
+          event: pass
+          custom: |
+            {
+              "text": "🚀 *Deployment successful!*\n*Author:* $COMMIT_AUTHOR\n*Commit:* $COMMIT_MESSAGE\nThe latest image is now running on the server."
+            }
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build-and-push
+      - deploy:
+          requires:
+            - build-and-push
+      - slack-deploy-success:
+          requires:
+            - deploy

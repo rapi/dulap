@@ -1,0 +1,23 @@
+import type { AppProps } from 'next/app'
+import Layout from '~/components/Layout/Layout'
+import ro from '../locales/ro.json'
+import { IntlProvider } from 'react-intl'
+import { useRouter } from 'next/router'
+import ru from '../locales/ru.json'
+const localeMap: Record<string, Record<string, string>> = {
+  ro,
+  ru,
+}
+function MyApp({ Component, pageProps }: AppProps) {
+  const { locale } = useRouter()
+  const currentLocale = locale as string
+  const messages = localeMap[locale as string] ?? {}
+  return (
+    <IntlProvider locale={currentLocale} messages={messages}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </IntlProvider>
+  )
+}
+export default MyApp

@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.imageWrapper {
+  transition: border 0.3s;
+}
+
+.image {
+  display: block;
+  margin: -1px;
+}
+
+.hover:hover {
+  cursor: pointer;
+  outline: 2px solid #666;
+  outline-offset: -1px;
+  z-index: 1;
+}
+
+.selected {
+  outline: 2px solid #666;
+  outline-offset: -1px;
+  z-index: 1;
+}
+
+.order {
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: black;
+  text-align: center;
+}
+
+.flipped {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}

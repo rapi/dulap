@@ -1,0 +1,309 @@
+.container {
+  --containerHeight: 1300px;
+  max-width: var(--containerHeight);
+  margin: auto;
+}
+.contentContainer {
+  display: flex;
+  gap: 3.1em;
+}
+
+/* I M A G E  /  L E F T  C O N T A I N E R */
+.leftContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.image {
+  width: 100%;
+  border-radius: 3px;
+}
+
+/* C O N F I G U R A T O R  /  R I G H T  C O N T A I N E R */
+.detailsContainer {
+  min-width: 450px;
+}
+
+.rightContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 400px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 40px;
+  margin-block: 0;
+}
+
+/* D I M E N S I O N S */
+.dimensionsHeaderTitle {
+  margin-top: 27px;
+  margin-bottom: 9px;
+}
+
+.dimensionsGrid {
+  display: flex;
+  flex-direction: column;
+}
+
+.dimensionLabel {
+  display: flex;
+}
+
+.dimensionTitle {
+  margin: 13px 0 10px 0;
+  gap: 5px;
+}
+
+.tooltipContainer .tooltipText {
+  visibility: hidden;
+  width: 75px;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -3px;
+}
+
+.tooltipContainer:hover {
+  cursor: pointer;
+}
+
+.tooltipContainer:hover .tooltipText {
+  visibility: visible;
+  cursor: pointer;  
+}
+
+.tooltipContainer:hover .tooltipText img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 50%;
+  border: 1px solid #555;
+  opacity: 95%;
+}
+
+/* M O D A L  1 */
+.modalChildren {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  margin: 30px;
+}
+
+.modalText {
+  font-size: 14px;
+  margin: 0;
+  text-align: start;
+}
+
+.modalImg {
+  width: 200px;
+  height: auto;
+}
+
+/* M O D A L  2 */
+.imageSelectContainer {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.modalSaveButton {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* C O M M O N */
+.dimensionTitle,
+.colorsLabel p, 
+.furnitureLabel p, 
+.sectionsLabel p,
+.sectionLabel p,
+.mirroringLabel p,
+.sectionArrangementLabel p,
+.shelfArrangement p {
+  font-size: 13px;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.sectionTitle,
+.colorsLabel p,
+.dimensionsHeaderTitle,
+.furnitureTitle,
+.subtitle {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sectionLabel, 
+.mirroringLabel,
+.dimensionTitle {
+  display: flex;
+  align-items: center;
+}
+
+/* C O L O R S */
+.colorsLabel {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+/* F U R N I T U R E */
+.furnitureLabel {
+  display: flex;
+  align-items: center;
+}
+
+/* A R A N J A R E   D U L A P   S I   R A F T U R I */
+.mirroringLabel {
+  margin-top: 10px;
+}
+
+.mirroringLabel p, 
+.shelfArrangement p,
+.sectionArrangementLabel p {
+  margin: 0;
+}
+
+.sectionArrangementLabel, 
+.shelfArrangement {
+  display: flex;
+  margin-top: 20px;
+}
+
+/* P R I C E */
+.priceContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid #c2c2c2;
+  border-radius: 10px;
+  padding: 30px 25px;
+  width: 170px;
+}
+
+.priceFirstColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.price {
+  display: flex;
+}
+
+.priceTitle h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.price h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #f15e4d;
+}
+
+/* M O B I L E */
+@media (max-width: 768px) {
+  .contentContainer {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 1.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .breadcrumbContainer {
+    padding: 0 1.5rem;
+  }
+  .leftContainer {
+    padding-bottom: 1rem;
+    background-color: #f9f9f9;
+  }
+  .title {
+    font-size: 20px;
+  }
+  .detailsContainer {
+    width: 100%;
+    align-items: center;
+  }
+  .dimensionTitle, 
+  .colorsLabel p, 
+  .furnitureLabel p, 
+  .sectionsLabel p,
+  .sectionLabel p,
+  .mirroringLabel p,
+  .sectionArrangementLabel p,
+  .shelfArrangement p {
+    width: 130px;
+  }
+  .priceContainer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    padding: 0;
+    height: auto;
+    background: #fff;
+    z-index: 2;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 20px;
+    padding: 15px 20px;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  .priceBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .price {
+    display: flex;
+    justify-content: end;
+    width: 70px;
+    margin-top: 3px;
+  }
+  .price:first-child {
+    width: 100px;
+    align-items: end;
+  }
+  .price h2 {
+    font-size: 22px;
+  }
+  .modalChildren {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 350px) {
+  .dimensionTitle, 
+  .colorsLabel p, 
+  .furnitureLabel p, 
+  .sectionsLabel p,
+  .sectionLabel p,
+  .mirroringLabel p,
+  .sectionArrangementLabel p,
+  .shelfArrangement p {
+    width: 95px;
+  }
+}
