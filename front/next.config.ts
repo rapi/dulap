@@ -7,15 +7,15 @@ const nextConfig: NextConfig = {
     localeDetection: false,
   },
   trailingSlash: true,
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/ro',
-        permanent: false, // use true if it's a permanent redirect
-      },
-    ]
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/ro',
+  //       permanent: false, // use true if it's a permanent redirect
+  //     },
+  //   ]
+  // },
 }
 
 export default nextConfig
