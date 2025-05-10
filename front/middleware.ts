@@ -4,6 +4,7 @@ const PUBLIC_FILE = /\.(.*)$/
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+  const response = NextResponse.next()
 
   if (/\.(png|jpe?g|gif|svg|webp|avif)$/.test(pathname)) {
     const url = req.nextUrl.clone()
@@ -21,6 +22,7 @@ export async function middleware(req: NextRequest) {
   ) {
     return
   }
+  console.log(req.nextUrl.locale)
 
   if (req.nextUrl.locale === 'default') {
     const locale = req.cookies.get('NEXT_LOCALE')?.value || 'ro'
@@ -29,8 +31,8 @@ export async function middleware(req: NextRequest) {
       new URL(`/${locale}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url)
     )
   } else {
-    req.cookies.set('NEXT_LOCALE', req.nextUrl.locale)
+    response.cookies.set('NEXT_LOCALE', req.nextUrl.locale)
   }
 
-  return NextResponse.next()
+  return response
 }
