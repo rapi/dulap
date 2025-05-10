@@ -33,7 +33,7 @@ export async function middleware(req: NextRequest) {
   } else {
     let locale = req.nextUrl.locale
     if (!locale) {
-      locale = pathname.split('/')[0]
+      locale = pathname.split('/')[1]
     }
     if (locale) {
       console.log('set cookie', req.nextUrl.locale)
