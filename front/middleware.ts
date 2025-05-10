@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 const PUBLIC_FILE = /\.(.*)$/
-
+const languages = ['ro', 'ru']
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const response = NextResponse.next()
@@ -25,17 +25,17 @@ export async function middleware(req: NextRequest) {
   console.log({ pathname, locale: req.nextUrl.locale, req })
 
   if (req.nextUrl.locale === 'default') {
-    const locale = req.cookies.get('NEXT_LOCALE')?.value || 'ro'
+    const locale = req.cookies.get('NEXT_LOCALE')?.value || languages[0]
     console.log('get cookie', locale)
     return NextResponse.redirect(
       new URL(`/${locale}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url)
     )
   } else {
     let locale = req.nextUrl.locale
-    if (!locale) {
+    if (!languages.includes(locale)) {
       locale = pathname.split('/')[1]
     }
-    if (locale) {
+    if (languages.includes(locale)) {
       console.log('set cookie', req.nextUrl.locale)
       response.cookies.set('NEXT_LOCALE', locale)
     }
