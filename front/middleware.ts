@@ -22,15 +22,16 @@ export async function middleware(req: NextRequest) {
   ) {
     return
   }
-  console.log(req.nextUrl.locale)
+  console.log(pathname, req, req.nextUrl.locale)
 
   if (req.nextUrl.locale === 'default') {
     const locale = req.cookies.get('NEXT_LOCALE')?.value || 'ro'
-    console.log(locale)
+    console.log('get cookie', locale)
     return NextResponse.redirect(
       new URL(`/${locale}${req.nextUrl.pathname}${req.nextUrl.search}`, req.url)
     )
-  } else {
+  } else if (req.nextUrl.locale) {
+    console.log('set cookie', req.nextUrl.locale)
     response.cookies.set('NEXT_LOCALE', req.nextUrl.locale)
   }
 
