@@ -44,7 +44,7 @@ export const ProductStand = () => {
       <div className={styles.imagePriceContainer}>
         <div className={styles.imageContainer}>
           <img
-            src="/products/comoda-alba.jpg"
+            src="/[locale]/products.tsx/comoda-alba.jpg"
             alt="Wardrobe"
             className={styles.image}
           />

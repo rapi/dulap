@@ -11,7 +11,7 @@ import { productTypes } from '~/components/ProductListPage/productTypes'
 
 export const Dulap: React.FC = () => {
   return (
-    <div className="landing-page onest-font">
+    <div>
       <Banner />
       <section className={classes.productTypes}>
         <p className={classes.productTypesTitle}>

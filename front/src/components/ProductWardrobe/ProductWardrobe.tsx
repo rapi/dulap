@@ -43,7 +43,7 @@ export const ProductWardrobe = () => {
       <div className={styles.leftContainer}>
         <div className={styles.imageContainerFirstRow}>
           <img
-            src="/products/wardrobe-visualization/2.jpg"
+            src="/[locale]/products.tsx/wardrobe-visualization/2.jpg"
             alt="Wardrobe"
             className={styles.image}
           />
@@ -51,14 +51,14 @@ export const ProductWardrobe = () => {
         <div className={styles.imageContainerSecondRow}>
           <div className={styles.imageContainer2}>
             <img
-              src="/products/wardrobe-visualization/2.jpg"
+              src="/[locale]/products.tsx/wardrobe-visualization/2.jpg"
               alt="Wardrobe"
               className={styles.image}
             />
           </div>
           <div className={styles.imageContainer2}>
             <img
-              src="/products/wardrobe-visualization/2.jpg"
+              src="/[locale]/products.tsx/wardrobe-visualization/2.jpg"
               alt="Wardrobe"
               className={styles.image}
             />

@@ -64,7 +64,7 @@ const Checkout: React.FC = () => {
           <div className={styles.paymentMethods}>
             <label className={styles.paymentOption}>
               <img
-                src="/checkout/wallet.svg"
+                src="/[locale]/checkout.tsx/wallet.svg"
                 alt="Cash"
                 className={styles.paymentIcon}
               />
@@ -77,9 +77,9 @@ const Checkout: React.FC = () => {
                 onChange={() => setPaymentMethod('cash')}
               />
             </label>
-            <label className={styles.paymentOption}>          
+            <label className={styles.paymentOption}>
               <img
-                src="/checkout/mia.png"
+                src="/[locale]/checkout.tsx/mia.png"
                 alt="MIA"
                 className={styles.paymentIcon}
               />

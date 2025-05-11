@@ -110,7 +110,7 @@ export const Menu = () => {
             Încearcă aici
           </CustomButton>
           <div className="icons">
-            <Link href="/cart">
+            <Link href="/[locale]/cart">
               <Image
                 width={30}
                 height={30}

@@ -9,8 +9,10 @@ const localeMap: Record<string, Record<string, string>> = {
   ru,
 }
 function MyApp({ Component, pageProps }: AppProps) {
-  const { locale } = useRouter()
-  const currentLocale = locale as string
+  const { query } = useRouter()
+  const { locale } = query
+
+  const currentLocale = 'ro'
   const messages = localeMap[locale as string] ?? {}
   return (
     <IntlProvider locale={currentLocale} messages={messages}>
