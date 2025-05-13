@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './GreenWall.module.css'
+import Grid from '../Grid/grid'
 
 type FeatureProps = {
   icon: string
@@ -50,6 +51,20 @@ export const GreenWall: React.FC = () => {
           Modular phytowall that brings a breath of nature into modern interiors
         </p>
         <button className={styles.heroButton}>Pre‑order now</button>
+      </section>
+
+      <section>
+        <Grid
+          images={[
+            {src: '/greenwall/landing/img01.jpg'},
+            {src: '/greenwall/landing/img02.jpg'},
+            {src: '/greenwall/landing/img03.jpg'},
+            {src: '/greenwall/landing/img04.png'},
+            {src: '/greenwall/landing/img05.png'},
+          ]}
+        >
+
+        </Grid>
       </section>
 
       {/* FEATURES */}

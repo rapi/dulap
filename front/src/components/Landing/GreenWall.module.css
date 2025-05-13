@@ -6,13 +6,13 @@
 
 /* HERO */
 .hero {
-  min-height: 100vh;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: url('https://source.unsplash.com/featured/?plants,interior')
+  background: url('/greenwall/landing/img02.jpg')
     center/cover no-repeat;
   padding: 4rem 1rem;
 }
@@ -143,7 +143,7 @@
 /* CTA */
 .cta {
   padding: 4rem 1rem;
-  background: #256f46;
+  background: #6bc292;
   color: #ffffff;
   text-align: center;
 }

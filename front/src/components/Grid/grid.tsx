@@ -11,7 +11,7 @@ const Grid: React.FC<GridProps> = ({ images }) => {
       <div className={styles.row}>
         <div className={styles.column}>
             <img 
-                src={images[0].src} alt='Image 1' loading="lazy" 
+                src={images[0].src} alt='Image 1' loading="lazy" className={styles.image}
             />
             <img 
                 src={images[1].src} alt='Image 1' loading="lazy" 
