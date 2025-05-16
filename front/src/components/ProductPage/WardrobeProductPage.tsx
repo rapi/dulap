@@ -39,8 +39,8 @@ export type ProductComponent =
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
-  | ProductFurnitureComponent
   | ProductSectionsComponent
+  | ProductFurnitureComponent
   | ProductPriceComponent
 
 interface ProductPageProps {
@@ -59,10 +59,10 @@ export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
         return <ProductColors configuration={component} />
       case 'select':
         return <ProductSelect configuration={component} />
-      case 'furniture':
-        return <ProductFurniture configuration={component} />
       case 'sections':
         return <ProductSections configuration={component} />
+      case 'furniture':
+        return <ProductFurniture configuration={component} />
     }
   }
 

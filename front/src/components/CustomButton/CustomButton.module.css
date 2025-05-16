@@ -1,11 +1,11 @@
 a.ctaButton,
 button.ctaButton {
-  padding: 0.1rem 1rem;
+  padding: 0.1rem 1.5rem;
   width: fit-content;
   font-weight: 500;
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 25px;
   cursor: pointer;
   font-family: 'Onest', sans-serif;
   display: flex;

@@ -124,11 +124,6 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       setSelectedColor,
     },
     {
-      type: 'furniture',
-      selectedOpeningMethod,
-      setSelectedOpeningMethod,
-    },
-    {
       type: 'sections',
       maxNumber: maxSections,
       minNumber: minSections,
@@ -147,6 +142,11 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       setSelectedMaxSections,
       selectedMirrorOption,
       setSelectedMirrorOption,
+    },
+    {
+      type: 'furniture',
+      selectedOpeningMethod,
+      setSelectedOpeningMethod,
     },
     {
       type: 'price',

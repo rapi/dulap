@@ -1,6 +1,8 @@
 import React from 'react'
 import styles from './GreenWall.module.css'
 import Grid from '../Grid/grid'
+import { Banner } from '../Banner/Banner'
+import { BannerContentSecond } from '../BannerContentSecond/BannerContentSecond'
 
 type FeatureProps = {
   icon: string
@@ -45,13 +47,10 @@ export const GreenWall: React.FC = () => {
   return (
     <div className={styles.page}>
       {/* HERO */}
-      <section className={styles.hero}>
-        <h1 className={styles.heroTitle}>VerdeVertical</h1>
-        <p className={styles.heroSubtitle}>
-          Modular phytowall that brings a breath of nature into modern interiors
-        </p>
-        <button className={styles.heroButton}>Pre‑order now</button>
-      </section>
+      <Banner
+        href='/greenwall/landing/img02.jpg'
+        content={ BannerContentSecond }
+      ></Banner>
 
       <section>
         <Grid
