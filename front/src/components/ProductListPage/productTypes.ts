@@ -6,17 +6,17 @@ type ProductTypes = {
 export const productTypes: ProductTypes[] = [
   {
     name: 'Comoda',
-    link: '/configurator/stand',
+    link: '/configurator/wardrobe',
     image: '/products/comoda-alba.jpg',
   },
   {
     name: 'Dulap Deschis',
-    link: '/configurator/storage',
+    link: '/configurator/wardrobe',
     image: '/products/dulap-deschis-2x2.jpg',
   },
   {
     name: 'Comodă TV',
-    link: '/configurator/tv-stand',
+    link: '/configurator/wardrobe',
     image: '/products/tumba-picioruse-4-white-wood.jpg',
   },
   {
@@ -26,7 +26,7 @@ export const productTypes: ProductTypes[] = [
   },
   {
     name: 'Noptieră',
-    link: '/configurator/bedside-table',
+    link: '/configurator/wardrobe',
     image: '/products/comoda-pat.jpg',
   },
 ]

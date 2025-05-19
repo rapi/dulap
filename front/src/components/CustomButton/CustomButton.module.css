@@ -56,6 +56,7 @@ button.ctaButton.primaryVariant {
 a.ctaButton.primaryVariant:hover,
 button.ctaButton.primaryVariant:hover {
   background-color: #f1953f;
+  color: white;
 }
 
 a.ctaButton.primaryVariant.outlined,
