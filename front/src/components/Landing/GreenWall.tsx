@@ -57,7 +57,7 @@ export const GreenWall: React.FC = () => {
           images={[
             {src: '/greenwall/landing/img01.jpg'},
             {src: '/greenwall/landing/img02.jpg'},
-            {src: '/greenwall/landing/img03.jpg'},
+            {src: '/greenwall/landing/greenwall-animation.mp4'},
             {src: '/greenwall/landing/img04.png'},
             {src: '/greenwall/landing/img05.png'},
           ]}

@@ -8,6 +8,19 @@ interface GridProps {
 const Grid: React.FC<GridProps> = ({ images }) => {
   return (
     <div className={styles.gridContainer}>
+      <div>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{ width: '100%', height: 'auto' }}
+          className={styles.video}
+        >
+          <source src={'/greenwall/landing/greenwall-animation.mp4'} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
       <div className={styles.row}>
         <div className={styles.column}>
             <img 
@@ -18,9 +31,21 @@ const Grid: React.FC<GridProps> = ({ images }) => {
             />
         </div>
         <div className={styles.column}>
-            <img 
+            {/* <img 
                 src={images[2].src} alt='Image 1' loading="lazy" 
-            />
+            /> */}
+            <div>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                style={{ width: '100%', height: 'auto' }}
+              >
+                <source src={images[2].src} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
             <img 
                 src={images[3].src} alt='Image 1' loading="lazy" 
             />
