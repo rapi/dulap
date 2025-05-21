@@ -27,8 +27,14 @@ export const mirroringOptions: ButtonOptionsType[] = [
   { value: 'standard', label: 'standard' },
   { value: 'mirrored', label: 'oglindit' },
 ]
+export type ProductSectionPredefinedValue = {
+  number?: number
+  mirror?: string
+  arrangement?: string[]
+}
 interface ProductSelectProps {
   configuration: ProductSectionsComponent
+  predefinedValue?: ProductSectionPredefinedValue
 }
 export const ProductSections: FC<ProductSelectProps> = ({
   configuration: {
@@ -42,6 +48,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
     selectedMirrorOption,
     setSelectedMirrorOption,
   },
+  predefinedValue,
 }) => {
   const [minSections, setMinSections] = useState(String(minNumber))
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -76,41 +83,51 @@ export const ProductSections: FC<ProductSelectProps> = ({
     value: section.value,
     disabled: parseInt(section.value) < parseInt(minSections),
   }))
+  const predefinedSections = predefinedValue ?? {}
   return (
     <>
       <div>
         <p className={styles.sectionTitle}>Aranjare dulap</p>
         <label className={styles.sectionLabel}>
           <p>Numărul de secții</p>
-          <ButtonSelect
-            options={formatedSections}
-            defaultSelected={String(selectedMaxSections)}
-            onChange={(value) => {
-              setSelectedMaxSections(parseInt(value))
-            }}
-          />
+          {predefinedSections?.number ?? (
+            <ButtonSelect
+              options={formatedSections}
+              defaultSelected={String(selectedMaxSections)}
+              onChange={(value) => {
+                setSelectedMaxSections(parseInt(value))
+              }}
+            />
+          )}
         </label>
 
         <label className={styles.mirroringLabel}>
           <p>
             Inversare poziție <br></br>dulap
           </p>
-          <ButtonSelect
-            options={mirroringOptions}
-            defaultSelected={'standard'}
-            onChange={(value) => {
-              setSelectedMirrorOption(value)
-            }}
-          />
+          {predefinedSections?.mirror ?? (
+            <ButtonSelect
+              options={mirroringOptions}
+              defaultSelected={'standard'}
+              onChange={(value) => {
+                setSelectedMirrorOption(value)
+              }}
+            />
+          )}
         </label>
 
         <label className={styles.sectionArrangementLabel}>
           <p>Aranjare rafturi</p>
           <ImageSelect
-            images={selectedSections}
+            images={
+              predefinedSections?.arrangement?.map((src) => ({ src })) ??
+              selectedSections
+            }
             onChange={(i) => {
-              setActiveSection(i)
-              setIsModalOpen(true)
+              if (!predefinedSections?.arrangement) {
+                setActiveSection(i)
+                setIsModalOpen(true)
+              }
             }}
             flipped={selectedMirrorOption === 'mirrored'}
             defaultSelected={1}

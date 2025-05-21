@@ -9,11 +9,15 @@ export type ProductImageSelectComponent = {
 }
 interface ProductImageSelectProps {
   configuration: ProductImageSelectComponent
+  predefinedValue?: string
 }
 export const ProductImageSelect: FC<ProductImageSelectProps> = ({
   configuration,
+  predefinedValue,
 }) => {
-  return (
+  return predefinedValue ? (
+    <img alt="" src={predefinedValue} />
+  ) : (
     <>
       <ButtonSelect
         options={configuration.options.map((option) => ({

@@ -10,6 +10,7 @@ interface ImageSelectProps {
   images: ImageOptionProps[]
   defaultSelected: number
   gap?: number
+  readonly?: boolean
   flipped?: boolean
   effectsEnabled?: boolean
   onChange: (index: number | null) => void
@@ -21,13 +22,16 @@ export const ImageSelect = ({
   defaultSelected,
   gap,
   flipped,
-  effectsEnabled
+  readonly,
+  effectsEnabled,
 }: ImageSelectProps) => {
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected - 1 || 0)
 
   const handleSelect = (index: number) => {
-    setSelectedIndex(index)
-    onChange(index)
+    if (readonly) {
+      setSelectedIndex(index)
+      onChange(index)
+    }
   }
 
   const displayedImages = flipped ? [...images].reverse() : images
@@ -39,7 +43,7 @@ export const ImageSelect = ({
           key={index}
           className={`
             ${styles.imageWrapper} 
-            ${(selectedIndex === index) && effectsEnabled ? styles.selected : ''}
+            ${selectedIndex === index && effectsEnabled ? styles.selected : ''}
             ${effectsEnabled ? styles.hover : ''}
           `}
           onClick={() => handleSelect(index)}

@@ -19,8 +19,10 @@ import {
 import {
   ProductFurniture,
   ProductFurnitureComponent,
+  ProductFurniturePredefinedValue,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductFurniture'
 import {
+  ProductSectionPredefinedValue,
   ProductSections,
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
@@ -46,23 +48,66 @@ export type ProductComponent =
 interface ProductPageProps {
   components: () => ProductComponent[]
   name: string
+  values?: {
+    sections?: ProductSectionPredefinedValue
+    imageSelect?: string
+    imageCarousel?: string[]
+    dimensions?: string
+    colors?: string
+    select?: string
+    furniture?: ProductFurniturePredefinedValue
+  }
 }
 
-export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
+export const ProductPage: FC<ProductPageProps> = ({
+  components,
+  name,
+  values,
+}) => {
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'imageSelect':
-        return <ProductImageSelect configuration={component} />
+        return (
+          <ProductImageSelect
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        )
       case 'dimensions':
-        return <ProductDimensions configuration={component} />
+        return (
+          <ProductDimensions
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        )
       case 'colors':
-        return <ProductColors configuration={component} />
+        return (
+          <ProductColors
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        )
       case 'select':
-        return <ProductSelect configuration={component} />
+        return (
+          <ProductSelect
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        )
       case 'sections':
-        return <ProductSections configuration={component} />
+        return (
+          <ProductSections
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        )
       case 'furniture':
-        return <ProductFurniture configuration={component} />
+        return (
+          <ProductFurniture
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        )
     }
   }
 
@@ -78,7 +123,16 @@ export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
       {/* Left Side: Image */}
       <div className={styles.leftContainer}>
         {imageCarouselComponent && (
-          <ProductImageCarousel configuration={imageCarouselComponent} />
+          <ProductImageCarousel
+            configuration={
+              values?.imageCarousel
+                ? {
+                    type: 'imageCarousel',
+                    images: values.imageCarousel,
+                  }
+                : imageCarouselComponent
+            }
+          />
         )}
       </div>
       {/* Right Side: Product Details */}

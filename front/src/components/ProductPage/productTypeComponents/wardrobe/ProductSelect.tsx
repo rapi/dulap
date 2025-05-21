@@ -8,6 +8,7 @@ export type ProductSelectComponent = {
 }
 interface ProductSelectProps {
   configuration: ProductSelectComponent
+  predefinedValue?: string
 }
 export const ProductSelect: FC<ProductSelectProps> = ({ configuration }) => {
   return (

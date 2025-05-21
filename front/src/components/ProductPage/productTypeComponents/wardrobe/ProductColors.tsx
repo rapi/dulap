@@ -1,5 +1,7 @@
 import React, { FC } from 'react'
-import SelectColor from '~/components/SelectColor/SelectColor'
+import SelectColor, {
+  SelectColorItem,
+} from '~/components/SelectColor/SelectColor'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 export type ProductColorsComponent = {
   type: 'colors'
@@ -9,18 +11,23 @@ export type ProductColorsComponent = {
 }
 interface ProductColorsProps {
   configuration: ProductColorsComponent
+  predefinedValue?: string
 }
-export const ProductColors: FC<ProductColorsProps> = ({ configuration: {
-  colors, 
-  setSelectedColor
-} }) => {
-  return (
+export const ProductColors: FC<ProductColorsProps> = ({
+  configuration: { colors, setSelectedColor },
+  predefinedValue,
+}) => {
+  return predefinedValue ? (
+    <SelectColorItem color={predefinedValue} selected={true} size={'medium'} />
+  ) : (
     <>
       <label className={styles.colorsLabel}>
         <p>Culori</p>
         <SelectColor
           colors={colors}
-          onChange={(value) => { setSelectedColor(value) }}
+          onChange={(value) => {
+            setSelectedColor(value)
+          }}
           defaultSelected={colors[0]}
           size="medium"
         />
