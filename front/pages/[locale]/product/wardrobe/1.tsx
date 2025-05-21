@@ -11,7 +11,7 @@ const Product: FC = () => {
         values={{
           imageCarousel: ['/wardrobe/filling/Biege/2100/1.png'],
           colors: 'black',
-          dimensions: '10x10x10x10',
+          dimensions: '160x210x50x5',
           furniture: {
             openingType: 'maner',
             hinges: 'standard',

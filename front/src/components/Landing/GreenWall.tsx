@@ -62,7 +62,6 @@ export const GreenWall: React.FC = () => {
             {src: '/greenwall/landing/img05.png'},
           ]}
         >
-
         </Grid>
       </section>
 
