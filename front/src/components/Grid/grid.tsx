@@ -15,7 +15,7 @@ const Grid: React.FC<GridProps> = ({ images }) => {
                 src={images[0].src} alt='Image 1' loading="lazy" className={styles.image}
             />
             <img 
-                src={images[1].src} alt='Image 1' loading="lazy" 
+                src={images[1].src} alt='Image 1' loading="lazy" style={{ flexGrow: 1 }} 
             />
         </div>
         <div className={styles.column}>
@@ -32,14 +32,8 @@ const Grid: React.FC<GridProps> = ({ images }) => {
                 autoPlay
                 loop
                 muted
-                playsInline
-                style={{
-                  width: 'auto',
-                  height: '100%',
-                  position: 'absolute',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                }}
+                playsInline                
+                className={styles.video}
               >
                 <source src={images[2].src} type="video/mp4" />
                 Your browser does not support the video tag.
@@ -64,7 +58,7 @@ const Grid: React.FC<GridProps> = ({ images }) => {
                 src={images[3].src} alt='Image 1' loading="lazy" 
             />
             <img 
-                src={images[4].src} alt='Image 1' loading="lazy" 
+                src={images[4].src} alt='Image 1' loading="lazy" style={{ flexGrow: 1 }} 
             />
         </div>
       </div>
