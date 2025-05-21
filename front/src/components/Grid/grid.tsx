@@ -17,7 +17,7 @@ const Grid: React.FC<GridProps> = ({ images }) => {
           style={{ width: '100%', height: 'auto' }}
           className={styles.video}
         >
-          <source src={'/greenwall/landing/greenwall-animation.mp4'} type="video/mp4" />
+          <source src={images[2].src} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
