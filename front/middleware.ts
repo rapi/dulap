@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
   // Check if there is any supported locale in the pathname
   const { pathname } = request.nextUrl
 
-  if (/\.(png|jpe?g|gif|svg|webp|avif)$/.test(pathname)) {
+  if (/\.(png|jpe?g|gif|svg|webp|avif|mp4)$/.test(pathname)) {
     const url = request.nextUrl.clone()
 
     // point it at your remote host:

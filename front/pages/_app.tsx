@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const { locale } = query
 
   const currentLocale = 'ro'
-  const messages = localeMap[locale as string] ?? {}
+  const messages = localeMap[locale as string] ?? ro
   return (
     <IntlProvider locale={currentLocale} messages={messages}>
       <Layout>

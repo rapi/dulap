@@ -7,16 +7,23 @@ export const BannerContent = () => {
   return (
     <div className={classes.heroContent}>
       <p className={classes.heroTitle}>
-        <FormattedMessage id="homepage.banner.title.0" />
+        <FormattedMessage
+          id="homepage.banner.title.0"
+          defaultMessage="Dulapul tău -"
+        />
       </p>
       <p className={classes.heroTitle}>
         <FormattedMessage id="homepage.banner.title.1" />
       </p>
       <div className={classes.heroSubtitle}>
-        <p>Mobilier creat după</p>
+        <p>
+          <FormattedMessage id="homepage.banner.subtitle" />
+        </p>
         <ol className={classes.subtitleAnimationList}>
           <li className={classes.subtitleAnimationListItem}>
-            <span>dimensiunile</span>
+            <span>
+              <FormattedMessage id="homepage.banner.subtitle.1" />
+            </span>
           </li>
           <li className={classes.subtitleAnimationListItem}>
             <span>preferințele</span>
@@ -30,11 +37,7 @@ export const BannerContent = () => {
         </ol>
         <p>tale</p>
       </div>
-      <CustomButton
-        size="large"
-        icon={<WardrobeIconMedium />}
-        href="/products"
-      >
+      <CustomButton size="large" icon={<WardrobeIconMedium />} href="/products">
         Încearcă aici
       </CustomButton>
     </div>
