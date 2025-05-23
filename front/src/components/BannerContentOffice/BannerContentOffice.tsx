@@ -5,9 +5,9 @@ import { CustomButton } from '~/components/CustomButton/CustomButton'
 export const BannerContentOffice = () => {
   return (
     <div className={classes.heroContent}>
-      <p className={classes.heroTitle}>Greenwall</p>
+      <p className={classes.heroTitle}>Office table</p>
       <div className={classes.heroSubtitle}>
-        Modular phytowall that brings a breath of nature into modern interiors
+        The perfect place for your office, designed upon your needs
       </div>
       <CustomButton
         size="medium"

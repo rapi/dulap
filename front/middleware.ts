@@ -19,6 +19,7 @@ export function middleware(request: NextRequest) {
     url.protocol = 'https'
     url.hostname = 'dulap.md'
     url.port = '' // leave blank if default 443
+    url.pathname = url.pathname.replace('/ro', '').replace('/ru', '')
     return NextResponse.rewrite(url)
   }
   const pathnameHasLocale = locales.some(
