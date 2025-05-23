@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './GreenWall.module.css'
 import Grid from '../Grid/grid'
 import { Banner } from '../Banner/Banner'
-import { BannerContentSecond } from '../BannerContentSecond/BannerContentSecond'
+import { BannerContentOffice } from '../BannerContentSecond/BannerContentSecond'
 
 type FeatureProps = {
   icon: string
@@ -48,21 +48,20 @@ export const GreenWall: React.FC = () => {
     <div className={styles.page}>
       {/* HERO */}
       <Banner
-        href='/greenwall/landing/img02.jpg'
-        content={ BannerContentSecond }
+        href="/greenwall/landing/img02.jpg"
+        content={BannerContentOffice}
       ></Banner>
 
       <section>
         <Grid
           images={[
-            {src: '/greenwall/landing/img01.jpg'},
-            {src: '/greenwall/landing/img02.jpg'},
-            {src: '/greenwall/landing/greenwall-animation.mp4'},
-            {src: '/greenwall/landing/img04.png'},
-            {src: '/greenwall/landing/img05.png'},
+            { src: '/greenwall/landing/img01.jpg' },
+            { src: '/greenwall/landing/img02.jpg' },
+            { src: '/greenwall/landing/greenwall-animation.mp4' },
+            { src: '/greenwall/landing/img04.png' },
+            { src: '/greenwall/landing/img05.png' },
           ]}
-        >
-        </Grid>
+        ></Grid>
       </section>
 
       {/* FEATURES */}

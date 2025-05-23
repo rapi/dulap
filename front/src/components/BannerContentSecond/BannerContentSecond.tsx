@@ -1,4 +1,4 @@
-import classes from './BannerContentOffice.module.css'
+import classes from './BannerContentSecond.module.css'
 import React from 'react'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 // import { FormattedMessage } from 'react-intl'
