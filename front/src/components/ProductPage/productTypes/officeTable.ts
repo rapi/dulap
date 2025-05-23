@@ -10,29 +10,25 @@ export const OfficeTableConfiguration: () => ProductComponent[] = () => {
   const [imageColor, setImageColor] = useState('White')
   const [price, setPrice] = useState(1586)
   const [selectedPCstandOption, setSelectedPCstandOption] = useState('noPC')
-  const [selectedPartitionOption, setSelectedPartitionOption] = useState('noPartition')
+  const [selectedPartitionOption, setSelectedPartitionOption] =
+    useState('noPartition')
   useEffect(() => {
     // if (selectedColor === '#ded9d3') {
-      setImageColor('White')
+    setImageColor('White')
     // } else setImageColor('Dark Grey')
   }, [selectedColor])
   useEffect(() => {
-    setPrice(5646)
+    setPrice(0)
   }, [dimension])
   return [
     {
       type: 'dimensions',
       dimension,
-      setDimension
+      setDimension,
     },
     {
       type: 'colors',
-      colors: [
-        '#ded9d3',
-        '#fcfbf5',
-        '#d6d6d6',
-        '#9c9c9c',
-      ],
+      colors: ['#ded9d3', '#fcfbf5', '#d6d6d6', '#9c9c9c'],
       selectedColor,
       setSelectedColor,
     },
@@ -41,7 +37,7 @@ export const OfficeTableConfiguration: () => ProductComponent[] = () => {
       selectedPCstandOption,
       setSelectedPCstandOption,
       selectedPartitionOption,
-      setSelectedPartitionOption
+      setSelectedPartitionOption,
     },
     {
       type: 'price',

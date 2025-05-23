@@ -11,7 +11,7 @@ export const BannerContentOffice = () => {
       </div>
       <CustomButton
         size="medium"
-        href="/configurator/greenwall"
+        href="/configurator/office-table"
         variant="danger"
       >
         Try now

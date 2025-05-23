@@ -102,13 +102,19 @@ export const Menu = () => {
           <a href="#">Produse</a>
           <a href="#">Despre noi</a>
           <a href="#">Contacte</a>
+
+          <CustomButton size="medium" href="/office-table" variant="danger">
+            Office Table
+          </CustomButton>
+
           <CustomButton
             icon={<WardrobeIconMedium />}
             size="medium"
             href="/products"
           >
-            Încearcă aici
+            Dulapul tău
           </CustomButton>
+
           <div className="icons">
             <Link href="/[locale]/cart">
               <Image

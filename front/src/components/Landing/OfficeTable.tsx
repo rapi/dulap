@@ -22,6 +22,7 @@ export const OfficeTable: React.FC = () => {
             { src: '/office-table/landing/img04.jpg' },
             { src: '/office-table/landing/img05.jpg' },
           ]}
+          href="/configurator/office-table"
         ></Grid>
       </section>
     </div>
