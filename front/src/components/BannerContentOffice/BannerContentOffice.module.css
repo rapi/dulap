@@ -70,12 +70,18 @@
   .heroContent {
     position: absolute;
     top: 50%;
-    left: 48%;
+    left: 50%;
     transform: translate(-50%, -50%); 
     width: 70%;
     max-width: 450px;
-    color: white;
+    color: #555;
     border-radius: 10px;
+  }
+
+  .heroTitle, 
+  .heroSubtitle {
+    color: #333;
+    font-weight: 400;
   }
 
   .heroSubtitle p {
