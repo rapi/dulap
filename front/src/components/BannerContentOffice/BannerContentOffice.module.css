@@ -58,7 +58,7 @@
 
 @media (max-width: 480px) {
   .heroContent {
-    /* top: 10vh; */
+    top: 7vh;
     width: 87vw;
     padding: 1.5rem;
   }
