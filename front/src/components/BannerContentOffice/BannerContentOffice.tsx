@@ -5,17 +5,19 @@ import { CustomButton } from '~/components/CustomButton/CustomButton'
 export const BannerContentOffice = () => {
   return (
     <div className={classes.heroContent}>
-      <p className={classes.heroTitle}>Office table</p>
+      <div className={classes.titleRow}>
+        <p className={classes.heroTitle}>OFFICE TABLE</p>
+        <CustomButton
+          size="small"
+          href="/configurator/office-table"
+          variant="danger"
+        >
+          Try now
+        </CustomButton>
+      </div>
       <div className={classes.heroSubtitle}>
         The perfect place for your office, designed upon your needs
       </div>
-      <CustomButton
-        size="medium"
-        href="/configurator/office-table"
-        variant="danger"
-      >
-        Try now
-      </CustomButton>
     </div>
   )
 }

@@ -2,6 +2,7 @@ a.ctaButton,
 button.ctaButton {
   padding: 0.1rem 1.5rem;
   width: fit-content;
+  height: 50px;
   font-weight: 500;
   color: #ffffff;
   border: none;
@@ -32,9 +33,15 @@ button.outlined {
   }
 }
 
+a.ctaButton,
+button.ctaButton 
+
+.smallSize {
+  height: 42px;
+}
+
 .smallSize p {
   font-size: 0.8rem;
-  margin-block: 0.6rem;
 }
 
 .mediumSize p {

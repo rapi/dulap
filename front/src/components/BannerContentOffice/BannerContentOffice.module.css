@@ -1,98 +1,66 @@
 .heroContent {
-  display: flex;
-  flex-direction: column;
-  max-width: 380px;
-  height: auto;
   position: absolute;
-  top: 50%;
-  left: 3vw;
-  transform: translateY(-50%);
+  top: 8vh;
+  left: 50%;
+  transform: translateX(-50%); /* centers horizontally */
+  width: 90vw;  /* fills most of the screen */
+  max-width: 730px;
   padding: 3rem;
-  border-radius: 5px;
+  box-sizing: border-box;
 }
 
-.heroContent div span {
-  color: #ff9500;
-  font-weight: 600;
-  font-size: 18px;
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .heroTitle {
-  font-size: 38px;
-  font-weight: 600;
+  font-size: 58px;
+  font-weight: 300;
   margin: 0;
-  color: #e9e9e9;
+  color: #ffff;
   letter-spacing: 1.5px;
 }
 
 .heroSubtitle {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 24px;
+  font-weight: 300;
   letter-spacing: 0.6px;
-  color: #e9e9e9;
-  margin: 32px 0;
+  color: #ffff;
+  margin: 2px 0;
   display: flex;
   flex-direction: row;
   gap: 10px;
+  text-align: justify;
 }
 
-.heroSubtitle p {
-  font-size: 18px;
-  line-height: 0.8;
-}
-
-.heroSubtitle ol {
-  list-style: none;
-  padding: 0;
-  --height: 1.7rem;
-  height: var(--height);
-  line-height: var(--height);
-  overflow: hidden;
-}
-
-.heroSubtitle ol li {
-  animation: slide-up 8s infinite;
-}
-
-.heroSubtitle ol li span {
-  white-space: nowrap;
-}
-
-@media (max-width: 1024px) {
+@media (max-width: 1400px) {
   .heroContent {
-    left: 10vw;
-    max-width: 450px;
-    padding: 2.8rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .heroContent {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); 
-    width: 70%;
-    max-width: 450px;
-    color: #555;
-    border-radius: 10px;
+    top: 12vh;
+    max-width: 630px;
   }
 
-  .heroTitle, 
+  .heroTitle {
+    font-size: 44px;
+  }
+
   .heroSubtitle {
-    color: #333;
-    font-weight: 400;
+    font-size: 20px;
   }
+}
 
-  .heroSubtitle p {
-    font-size: 18px;
-    line-height: 0.5;
+@media (max-width: 678px) {
+  .heroContent {
+    top: 9vh;
   }
 }
 
 @media (max-width: 480px) {
   .heroContent {
-    padding: 2rem;
+    /* top: 10vh; */
+    width: 87vw;
+    padding: 1.5rem;
   }
 
   .heroTitle {
@@ -100,15 +68,20 @@
   }
 
   .heroSubtitle {
-    margin: 20px 0;
-  } 
-
-  .heroSubtitle p {
-    font-size: 14px;
-    line-height: 1.12;
+    font-size: 18px;
   }
-  .heroContent div span {
-    font-weight: 600;
-    font-size: 16px;
+}
+
+@media (max-width: 380px) {
+  .heroContent {
+    top: 4vh;
+  }
+
+  .heroTitle {
+    font-size: 24px;
+  }
+
+  .heroSubtitle {
+    font-size: 18px;
   }
 }
