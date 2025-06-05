@@ -19,7 +19,7 @@ const AboutUs: React.FC = () => {
                 {/* Founder 1 */}
                 <div className={styles.founderCard}>
                     <img
-                    src="/aboutUs/Elizabet.jpg"
+                    src="/about-us/Elizabet.jpg"
                     alt="Elizabet"
                     className={styles.founderImage}
                     />
@@ -31,7 +31,7 @@ const AboutUs: React.FC = () => {
                 {/* Founder 2 */}
                 <div className={styles.founderCard}>
                     <img
-                    src="/aboutUs/Roman.jpg"
+                    src="/about-us/Roman.jpg"
                     alt="Roman"
                     className={styles.founderImage}
                     />
@@ -43,7 +43,7 @@ const AboutUs: React.FC = () => {
                 {/* Founder 3 */}
                 <div className={styles.founderCard}>
                     <img
-                    src="/aboutUs/Vasile.jpg"
+                    src="/about-us/Vasile.jpg"
                     alt="Vasile"
                     className={styles.founderImage}
                     />
