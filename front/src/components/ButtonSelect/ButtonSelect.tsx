@@ -3,7 +3,7 @@ import styles from './ButtonSelect.module.css'
 import { FormattedMessage } from 'react-intl'
 
 export type ButtonOptionsType = {
-  label: string
+  label: string | React.ReactNode
   value: string
   disabled?: boolean
 }
@@ -41,7 +41,12 @@ export const ButtonSelect: React.FC<ButtonSelectProps> = ({
           `}
           onClick={() => handleSelect(option.value)}
         >
-          <FormattedMessage id={option.label}/>
+          {typeof option.label === 'string' ? (
+            <FormattedMessage id={option.label} />
+          ) : (
+            option.label
+          )}
+
         </div>
       ))}
     </div>
