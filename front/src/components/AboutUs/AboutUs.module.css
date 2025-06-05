@@ -1,65 +1,61 @@
-:root {
-  --color-dark: #333333;
-  --color-gray: #666666;
-  --color-light: #f9f9f9;
-  --color-accent: #c0392b;
-  --spacing-s: 8px;
-  --spacing-m: 16px;
-  --spacing-l: 32px;
-  --max-width: 1200px;
-}
+/* 1. Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
 
-:global(body) {
-  font-family: var(--font-base);
-  font-size: 16px;
-  color: var(--color-dark);
-  background-color: #ffffff;
-  line-height: 1.5;
-}
-
+/* 2. Container (acts as top-level wrapper: apply to your main AboutUs element) */
 .container {
+  /* Base typography & background (formerly in global body) */
+  font-family: 'Onest', sans-serif;
+  font-size: 16px;
+  color: #333333;
+  /* background-color: #ffffff; */
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+
+  /* Layout */
   width: 90%;
-  max-width: var(--max-width);
-  margin: 0 auto;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* About Section */
+/* 3. About Section */
 .aboutSection {
-  background-color: var(--color-light);
-  padding: var(--spacing-l) 0;
+  background-color: #f9f9f9; 
+  padding: 32px 0;            
   text-align: center;
 }
 
 .title {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: var(--spacing-s);
-  color: var(--color-dark);
+  margin-bottom: 8px;   
+  color: #333333;      
 }
 
 .intro {
   font-size: 1rem;
-  color: var(--color-gray);
-  margin-bottom: var(--spacing-l);
+  color: #666666;       
+  margin-bottom: 32px;  
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Team Grid */
+/* 4. Team Grid */
 .teamGrid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--spacing-l);
+  gap: 32px;          
 }
 
-/* Individual Founder Card */
+/* 5. Individual Founder Card */
 .founderCard {
   flex: 1;
   max-width: 280px;
   background-color: #ffffff;
-  padding: var(--spacing-m);
+  padding: 16px;       
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -71,22 +67,22 @@
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: var(--spacing-m);
+  margin-bottom: 16px; 
 }
 
 .founderName {
   font-size: 1.25rem;
   font-weight: 500;
-  margin-bottom: var(--spacing-s);
-  color: var(--color-dark);
+  margin-bottom: 8px;  
+  color: #333333;      
 }
 
 .founderRole {
   font-size: 0.95rem;
-  color: var(--color-gray);
+  color: #666666;      
 }
 
-/* Responsive */
+/* 6. Responsive Breakpoints */
 @media (max-width: 768px) {
   .teamGrid {
     flex-direction: column;

@@ -1,102 +1,95 @@
-/* 1. Font Import & Color Variables */
-:root {
-  --color-dark: #333333;
-  --color-gray: #666666;
-  --color-light: #f9f9f9;
-  --color-accent: #c0392b;
-  --spacing-s: 8px;
-  --spacing-m: 16px;
-  --spacing-l: 32px;
-  --max-width: 1200px;
-}
+/* 1. Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
 
-/* 2. Global Bodies (if not already in a global file) */
-:global(body) {
-  font-family: var(--font-base);
-  font-size: 16px;
-  color: var(--color-dark);
-  background-color: #ffffff;
-  line-height: 1.5;
-}
-
-/* 3. Container Utility */
+/* 2. Container (acts as top-level wrapper: apply to your main Contacts element) */
 .container {
+  /* Base typography & background (formerly in global body) */
+  font-family: 'Onest', sans-serif;
+  font-size: 16px;
+  color: #333333;
+  /* background-color: #ffffff; */
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+
+  /* Layout */
   width: 90%;
-  max-width: var(--max-width);
-  margin: 0 auto;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* 4. Hero / Page Title */
+/* 3. Hero / Page Title */
 .pageHero {
-  background-color: var(--color-light);
-  padding: var(--spacing-l) 0;
+  background-color: #f9f9f9; 
+  padding: 20px 0;           
   text-align: center;
 }
 
 .pageHero h1 {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: var(--spacing-s);
+  margin-bottom: 8px; 
 }
 
 .pageHero p {
   font-size: 1rem;
-  color: var(--color-gray);
+  color: #666666;
 }
 
-/* 5. Contact Section */
+/* 4. Contact Section */
 .contactSection {
-  padding: var(--spacing-l) 0;
+  padding: 20px 0; 
 }
 
 .contactColumns {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-l);
-  margin-top: var(--spacing-m);
+  gap: 32px;       
+  margin-top: 16px; 
 }
 
-/* 5.1. Contact Form */
+/* 4.1. Contact Form */
 .contactFormWrapper {
   flex: 1 1 500px;
-  background-color: #ffffff;
-  padding: var(--spacing-l);
-  /* border: 1px solid #ececec; */
+  padding: 32px;    
   border-radius: 4px;
 }
 
 .contactForm .formGroup {
-  margin-bottom: var(--spacing-m);
+  margin-bottom: 16px; 
 }
 
 .contactForm label {
   display: block;
   font-weight: 500;
-  margin-bottom: var(--spacing-s);
-  color: var(--color-dark);
+  margin-bottom: 8px;  
+  color: #333333;      
 }
 
 .contactForm input,
 .contactForm textarea {
   width: 100%;
-  padding: var(--spacing-s);
+  max-width: 100%;
+  padding: 8px;            
   border: 1px solid #cccccc;
   border-radius: 4px;
   font-size: 1rem;
-  font-family: var(--font-base);
-  color: var(--color-dark);
+  font-family: 'Onest', sans-serif;
+  color: #333333;          
+  box-sizing: border-box;     
 }
 
 .contactForm input:focus,
 .contactForm textarea:focus {
   outline: none;
-  border-color: var(--color-accent);
+  border-color: #c0392b; 
 }
 
 .btnSubmit {
-  background-color: var(--color-accent);
+  background-color: #c0392b; 
   color: #ffffff;
-  padding: var(--spacing-s) var(--spacing-m);
+  padding: 8px 16px;      
   border: none;
   border-radius: 4px;
   font-weight: 500;
@@ -105,19 +98,19 @@
 }
 
 .btnSubmit:hover {
-  background-color: #a8322a; /* puțin mai închis la hover */
+  background-color: #a8322a; 
 }
 
-/* 5.2. Contact Info */
+/* 4.2. Contact Info */
 .contactDetailsContainer {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .contactInfo {
   flex: 1 1 350px;
-  background-color: var(--color-light);
-  padding: var(--spacing-l);
+  background-color: #f9f9f9;
+  padding: 20px;            
   border-radius: 4px;
 }
 
@@ -128,45 +121,46 @@
 
 .contactInfo h2 {
   font-size: 1.5rem;
-  margin-bottom: var(--spacing-m);
+  margin-bottom: 16px; 
 }
 
 .buttonContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .infoList li {
-  margin-bottom: var(--spacing-m);
+  margin-bottom: 16px;
 }
 
 .infoLabel {
   display: block;
   font-weight: 500;
-  color: var(--color-dark);
-  margin-bottom: var(--spacing-s);
+  color: #333333;      
+  margin-bottom: 8px;  
 }
 
 .infoText {
-  color: var(--color-gray);
+  color: #666666;      
   font-size: 0.95rem;
 }
 
 .infoText:hover {
-  color: var(--color-dark);
+  color: #333333;      
   text-decoration: underline;
 }
 
-/* 6. Map Embed */
+/* 5. Map Embed */
 .mapWrapper {
-  margin-top: var(--spacing-l);
+  margin-top: 32px; 
   border-radius: 4px;
   overflow: hidden;
 }
 
+/* 6. Social Icons */
 .socialContainer {
-    text-align: end;
+  text-align: end;
 }
 
 .socialIcons {
@@ -196,7 +190,20 @@
     text-align: end;
   }
 }
+
 @media (max-width: 480px) {
+  .pageHero {
+    padding: 10px 0;
+  }
+  .contactSection {
+    padding: 10px 0; 
+  }
+  .contactFormWrapper {
+    padding: 10px;
+    box-sizing: border-box;     
+    overflow: auto;   
+    max-width: 100%;
+  }
   .contactDetailsContainer {
     display: block;
   }

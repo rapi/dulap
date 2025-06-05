@@ -7,7 +7,7 @@ export { AboutUs }
 const AboutUs: React.FC = () => {
     
   return (
-    <div className={styles.test}>
+    <div className={styles.about}>
         <section className={styles.aboutSection}>
             <div className={styles.container}>
                 <h1 className={styles.title}><FormattedMessage id="aboutUs.title"/></h1>
@@ -19,8 +19,8 @@ const AboutUs: React.FC = () => {
                 {/* Founder 1 */}
                 <div className={styles.founderCard}>
                     <img
-                    src="/assets/founder1.jpg"
-                    alt="Fondator 1"
+                    src="/aboutUs/Elizabet.jpg"
+                    alt="Elizabet"
                     className={styles.founderImage}
                     />
                     <h3 className={styles.founderName}>Elizabet Grinciuc</h3>
@@ -31,8 +31,8 @@ const AboutUs: React.FC = () => {
                 {/* Founder 2 */}
                 <div className={styles.founderCard}>
                     <img
-                    src="/assets/founder2.jpg"
-                    alt="Fondator 2"
+                    src="/aboutUs/Roman.jpg"
+                    alt="Roman"
                     className={styles.founderImage}
                     />
                     <h3 className={styles.founderName}>Roman Picunov</h3>
@@ -43,8 +43,8 @@ const AboutUs: React.FC = () => {
                 {/* Founder 3 */}
                 <div className={styles.founderCard}>
                     <img
-                    src="/assets/founder3.jpg"
-                    alt="Fondator 3"
+                    src="/aboutUs/Vasile.jpg"
+                    alt="Vasile"
                     className={styles.founderImage}
                     />
                     <h3 className={styles.founderName}>Vasile Grinciuc</h3>
