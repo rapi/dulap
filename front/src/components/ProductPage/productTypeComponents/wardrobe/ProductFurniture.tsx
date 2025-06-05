@@ -5,14 +5,16 @@ import {
 } from '~/components/ButtonSelect/ButtonSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import Select from '~/components/Select/Select'
+import { FormattedMessage } from 'react-intl'
+
 export type ProductFurnitureComponent = {
   type: 'furniture'
   selectedOpeningMethod: string
   setSelectedOpeningMethod: (value: string) => void
 }
 export const openingOptions: ButtonOptionsType[] = [
-  { value: 'maner', label: 'mâner' },
-  { value: 'push', label: 'push-to-open' },
+  { value: 'maner', label: 'homepage.configurator.fittings.handle' },
+  { value: 'push', label: 'homepage.configurator.fittings.pushToOpen' },
 ]
 interface ProductSelectProps {
   configuration: ProductFurnitureComponent
@@ -20,8 +22,12 @@ interface ProductSelectProps {
 }
 export type ProductFurniturePredefinedValue = {
   openingType: 'maner' | 'push'
-  hinges: 'standard' | 'premium' | 'deluxe'
-  guides: 'standard' | 'premium' | 'deluxe'
+  hinges: 'homepage.configurator.fittings.hinges.options.1' | 
+          'homepage.configurator.fittings.hinges.options.2' | 
+          'homepage.configurator.fittings.hinges.options.3'
+  guides: 'homepage.configurator.fittings.guides.options.1' | 
+          'homepage.configurator.fittings.guides.options.2' | 
+          'homepage.configurator.fittings.guides.options.3'
 }
 export const ProductFurniture: FC<ProductSelectProps> = ({
   configuration: { setSelectedOpeningMethod },
@@ -29,10 +35,10 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
 }) => {
   return (
     <div>
-      <p className={styles.furnitureTitle}>Furnitura</p>
+      <p className={styles.furnitureTitle}><FormattedMessage id="homepage.configurator.fittings.title" /></p>
 
       <label className={styles.furnitureLabel}>
-        <p>Tip deschidere</p>
+        <p><FormattedMessage id="homepage.configurator.fittings.handleType" /></p>
         <div className={styles.openingTypeContent}>
           {predefinedValue?.openingType ?? (
             <ButtonSelect
@@ -47,15 +53,19 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
       </label>
 
       <label className={styles.furnitureLabel}>
-        <p>Balamale</p>
-        {predefinedValue?.guides ?? (
-          <Select options={['standard', 'premium', 'deluxe']} />
+        <p><FormattedMessage id="homepage.configurator.fittings.hinges" /></p>
+        {predefinedValue?.hinges ?? (
+          <Select options={['homepage.configurator.fittings.hinges.options.1', 
+                            'homepage.configurator.fittings.hinges.options.2', 
+                            'homepage.configurator.fittings.hinges.options.3']} />
         )}
       </label>
       <label className={styles.furnitureLabel}>
-        <p>Glisiere</p>
+        <p><FormattedMessage id="homepage.configurator.fittings.guides" /></p>
         {predefinedValue?.guides ?? (
-          <Select options={['standard', 'premium', 'deluxe']} />
+          <Select options={['homepage.configurator.fittings.hinges.options.1', 
+                            'homepage.configurator.fittings.hinges.options.2', 
+                            'homepage.configurator.fittings.hinges.options.3']} />
         )}
       </label>
     </div>

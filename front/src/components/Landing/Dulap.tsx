@@ -8,6 +8,7 @@ import { WardrobeSecondIcon } from '~/components/Icons/Icons'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { productTypes } from '~/components/ProductListPage/productTypes'
+import { FormattedMessage } from 'react-intl'
 
 export const Dulap: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ export const Dulap: React.FC = () => {
       <Banner />
       <section className={classes.productTypes}>
         <p className={classes.productTypesTitle}>
-          Alege ce tip de dulap ai nevoie și începe personalizarea!
+          <FormattedMessage id="homepage.dulapLanding.title1"/>
         </p>
         <ProductList>
           {productTypes.map(({ image, link, name }) => (
@@ -31,7 +32,7 @@ export const Dulap: React.FC = () => {
                   outlined
                   size="medium"
                 >
-                  Creează
+                  <FormattedMessage id="homepage.button.create"/>
                 </CustomButton>
               }
             />
@@ -41,12 +42,12 @@ export const Dulap: React.FC = () => {
 
       <section className={classes.readyProducts}>
         <p className={classes.readyProductsTitle}>
-          Alege produse gata din lista noastră
+          <FormattedMessage id="homepage.dulapLanding.title2"/>
         </p>
         <ProductList>
           {[...Array(6)].map((_, index) => (
             <ProductItem
-              name={`Comodă ${index + 1}`}
+              name={`products.comoda${index + 1}`}
               image={`/products/comoda-alba.jpg`}
               key={index}
               link=""
@@ -57,7 +58,7 @@ export const Dulap: React.FC = () => {
                   size="medium"
                   variant="danger"
                 >
-                  Adaugă în coș
+                  <FormattedMessage id="homepage.button.addToCart"/>
                 </CustomButton>
               }
             />
@@ -66,7 +67,7 @@ export const Dulap: React.FC = () => {
       </section>
 
       <section className={classes.aboutUs}>
-        <p className={classes.aboutUsTitle}>Despre noi</p>
+        <p className={classes.aboutUsTitle}><FormattedMessage id="homepage.dulapLanding.aboutUs.title"/></p>
         <div className={classes.aboutUsContent}>
           <img
             src="/banner.jpg"
@@ -75,25 +76,19 @@ export const Dulap: React.FC = () => {
           />
           <div className={classes.aboutUsDescription}>
             <p>
-              La dulap.md facem mobilier personalizat, la prețuri corecte.
-              Simplu.
+              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.1"/>
               <br />
               <br />
-              Suntem o afacere de familie din Moldova, cu o echipă mică, dar
-              serioasă. Ne concentrăm pe un singur lucru: să construim dulapuri
-              care arată bine, țin mult și se potrivesc perfect în spațiul tău.
+              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.2"/>
               <br />
               <br />
-              Lucrăm cu materiale de calitate, meșteri pricepuți și furnizori în
-              care avem încredere. Nu vindem promisiuni, ci produse durabile,
-              făcute cu grijă și atenție la detalii.
+              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.3"/>
               <br />
               <br />
-              Suntem la început, dar punem suflet în fiecare proiect. Pentru
-              noi, fiecare client contează.
+              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.4"/>
               <br />
               <br />
-              <b>dulap.md – fiecare spațiu merită un dulap bun.</b>
+              <b><FormattedMessage id="homepage.dulapLanding.aboutUs.body.5"/></b>
             </p>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { Slider } from '~/components/Slider/Slider'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Modal } from '~/components/Modal/Modal'
+import { FormattedMessage } from 'react-intl'
 
 export type ProductDimensionsComponent = {
   type: 'dimensions'
@@ -31,10 +32,10 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
     predefinedValue?.split('x') ?? []
   return (
     <>
-      <h3 className={styles.dimensionsHeaderTitle}>Dimensiuni</h3>
+      <h3 className={styles.dimensionsHeaderTitle}><FormattedMessage id="homepage.configurator.dimensions.title" /></h3>
       <div className={styles.dimensionsGrid}>
         <label className={styles.dimensionLabel}>
-          <p className={styles.dimensionTitle}>Lățime </p>
+          <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.width" /></p>
           {predefinedWidth ?? (
             <Slider
               min={configuration.widthRange[0]}
@@ -46,7 +47,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           )}
         </label>
         <label className={styles.dimensionLabel}>
-          <p className={styles.dimensionTitle}>Înălțime </p>
+          <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.height" /></p>
           {predefinedHeight ?? (
             <Slider
               min={configuration.heightRange[0]}
@@ -58,7 +59,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           )}
         </label>
         <label className={styles.dimensionLabel}>
-          <p className={styles.dimensionTitle}>Adâncime </p>
+          <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.depth" /></p>
           {predefinedDepth ?? (
             <Slider
               min={configuration.depthRange[0]}
@@ -71,7 +72,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
         </label>
         <label className={styles.dimensionLabel}>
           <div className={styles.dimensionTitle}>
-            Înălțimea plintei
+            <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />
             <div
               className={styles.tooltipContainer}
               onClick={() => setIsModalOpen(true)}
@@ -98,7 +99,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             setIsModalOpen(false)
           }}
         >
-          <h4>Ce este înălțimea plintei?</h4>
+          <h4><FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.1" /></h4>
           <div className={styles.modalChildren}>
             <img
               src="/wardrobe/base-tooltip.png"
@@ -106,19 +107,16 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
               className={styles.modalImg}
             ></img>
             <p className={styles.modalText}>
-              Înălțimea plintei este distanța de la podea până la fațade (ușile
-              dulapului).
+              <FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.2" />
               <br></br>
               <br></br>
-              <b>Ce înălțime să alegi?</b>
+              <b><FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.3" /></b>
               <ul>
                 <li>
-                  Dacă optezi pentru un stil minimalist, alege înălțimea plintei
-                  2 cm.
+                  <FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.4" />
                 </li>
                 <li>
-                  Dacă ai plinte la pereți, optează pentru o plintă de aceeași
-                  înălțime la dulap, pentru un design uniform.
+                  <FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.5" />
                 </li>
               </ul>
             </p>

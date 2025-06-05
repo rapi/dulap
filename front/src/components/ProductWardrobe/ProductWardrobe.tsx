@@ -14,10 +14,10 @@ import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 export const wardrobeOptions: ButtonOptionsType[] = [
-  { value: '1', label: '1' },
-  { value: '2', label: '2' },
-  { value: '3', label: '3' },
-  { value: '4', label: '4' },
+  { value: '1', label: 'homepage.configurator.sections.nr.1' },
+  { value: '2', label: 'homepage.configurator.sections.nr.2' },
+  { value: '3', label: 'homepage.configurator.sections.nr.3' },
+  { value: '4', label: 'homepage.configurator.sections.nr.4' },
 ]
 export const openingOptions: ButtonOptionsType[] = [
   { value: 'maner', label: 'mâner' },
@@ -246,7 +246,7 @@ export const ProductWardrobe = () => {
         <div className={styles.wardrobeArrangement}>
           <p className={styles.subtitle}>Aranjare dulap</p>
           <label className={styles.sectionsLabel}>
-            <p>Numărul de secții</p>
+            <p>Numărul de secții test</p>
             <ButtonSelect
               options={wardrobeOptions}
               defaultSelected={'4 secții'}

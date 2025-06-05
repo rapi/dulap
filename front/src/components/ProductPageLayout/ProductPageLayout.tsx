@@ -10,17 +10,21 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
   children,
 }) => {
   const router = useRouter()
-  console.log(router.pathname) // Path without query params (e.g., "/about")
+  console.log(router.pathname)
 
-  const productType = productTypes.find(({ link }) => link === router.pathname)
+  const strippedPath = router.pathname.replace('/[locale]', '')
+  const productType = productTypes.find(({ link }) => link === strippedPath)
   return (
     <div className={styles.container}>
       <div className={styles.breadcrumbContainer}>
         <Breadcrumb
           items={[
-            { label: 'Category', link: '' },
-            { label: 'Subcategory', link: '/products' },
-            ...(productType?.name ? [{ label: productType.name }] : []),
+            { label: 'homepage.configurator.breadcrumb.1', link: '/' },
+            { label: 'homepage.configurator.breadcrumb.2', link: '/products' },
+            // ...(productType?.name ? [{ label: productType.name }] : []),
+            ...(productType
+              ? [{ label: productType.name, link: 'strippedPath' }]
+              : []),
           ]}
         />
       </div>

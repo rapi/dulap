@@ -3,6 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import classes from './ProductItem.module.css'
 import SelectColor from '~/components/SelectColor/SelectColor'
+import { FormattedMessage } from 'react-intl'
 
 interface ProductItemProps {
   button: React.ReactNode
@@ -31,7 +32,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({
       </Link>
       <div className={classes.productDescription}>
         <a className={classes.productName} href="">
-          <h3 className={classes.productName}>{name}</h3>
+          <h3 className={classes.productName}><FormattedMessage id={name}/></h3>
         </a>
         <div className={classes.productDescriptionSecondLine}>
           <SelectColor

@@ -10,6 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { grey } from '@mui/material/colors'
 import Link from 'next/link'
+import { FormattedMessage } from 'react-intl'
 export const Menu = () => {
   const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -61,25 +62,34 @@ export const Menu = () => {
             }}
             className={classes.menuItem}
           >
-            Produse
+            <FormattedMessage id="homepage.menu.productsTitle" />
           </MenuItem>
           <MenuItem
             onClick={() => {
               handleClose()
-              router.push('/')
+              router.push('/about-us')
             }}
             className={classes.menuItem}
           >
-            Despre noi
+            <FormattedMessage id="homepage.menu.aboutUsTitle" />
           </MenuItem>
           <MenuItem
             onClick={() => {
               handleClose()
-              router.push('/products')
+              router.push('/contacts')
             }}
             className={classes.menuItem}
           >
-            Contacte
+            <FormattedMessage id="homepage.menu.contactsTitle" />
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <CustomButton
+              size="medium"
+              href="/office-table"
+              variant='danger'
+            >
+              Office Table
+            </CustomButton>
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <CustomButton
@@ -87,21 +97,21 @@ export const Menu = () => {
               size="medium"
               href="/products"
             >
-              Încearcă aici
+              <FormattedMessage id="homepage.button.yourWardrobe" />
             </CustomButton>
           </MenuItem>
-          <MenuItem onClick={handleClose}>
+          {/* <MenuItem onClick={handleClose}> */}
             {/*<Select*/}
             {/*  options={['ro', 'ru']}*/}
             {/*  onChange={(e) => router.push(`/${e}/`)}*/}
             {/*/>*/}
-          </MenuItem>
+          {/* </MenuItem> */}
         </MenuMui>
 
         <nav className={classes.navigation}>
-          <a href="#">Produse</a>
-          <a href="#">Despre noi</a>
-          <a href="#">Contacte</a>
+          <Link href="/products"><FormattedMessage id="homepage.menu.productsTitle" /></Link>
+          <Link href="/about-us"><FormattedMessage id="homepage.menu.aboutUsTitle" /></Link>
+          <Link href="/contacts"><FormattedMessage id="homepage.menu.contactsTitle" /></Link>
 
           <CustomButton size="medium" href="/office-table" variant="danger">
             Office Table
@@ -112,11 +122,11 @@ export const Menu = () => {
             size="medium"
             href="/products"
           >
-            Dulapul tău
+            <FormattedMessage id="homepage.button.yourWardrobe" />
           </CustomButton>
 
           <div className="icons">
-            <Link href="/[locale]/cart">
+            <Link href="/cart">
               <Image
                 width={30}
                 height={30}

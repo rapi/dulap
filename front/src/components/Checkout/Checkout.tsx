@@ -1,5 +1,7 @@
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import { grey } from '@mui/material/colors'
+import { FormattedMessage } from 'react-intl'
+import { useIntl } from 'react-intl';
 
 export { Checkout }
 
@@ -7,7 +9,8 @@ import React, { useState } from 'react'
 import styles from './Checkout.module.css'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 const Checkout: React.FC = () => {
-  const [paymentMethod, setPaymentMethod] = useState('cash')
+  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const intl = useIntl();
 
   return (
     <div className={styles.container}>
@@ -16,51 +19,51 @@ const Checkout: React.FC = () => {
           fontSize="large"
           sx={{ color: grey[800] }}
         ></ShoppingBagIcon>
-        <p className={styles.title}>Comanda mea</p>
+        <p className={styles.title}><FormattedMessage id="checkout.title"/></p>
       </div>
 
       <div className={styles.checkoutWrapper}>
         {/* Left Section: Order Details */}
         <div className={styles.detailsSection}>
-          <h4 className={styles.subtitle}>Detalii comandă</h4>
+          <h4 className={styles.subtitle}><FormattedMessage id="checkout.subtitle1.orderDetails"/></h4>
 
           {/* Personal Details */}
           <div className={styles.row}>
             <div className={styles.formGroup}>
-              <label>Numele Prenumele</label>
-              <input type="text" placeholder="Numele Prenumele" />
+              <label><FormattedMessage id="checkout.nameSurname"/></label>
+              <input type="text" placeholder={intl.formatMessage({ id: 'checkout.nameSurname' })} />
             </div>
             <div className={styles.formGroup}>
-              <label>Numărul de telefon</label>
-              <input type="text" placeholder="0 (xx) xxx xxx" />
+              <label><FormattedMessage id="checkout.phoneNumber"/></label>
+              <input type="text" placeholder={intl.formatMessage({ id: 'checkout.phoneNumber.placeholder' })} />
             </div>
             <div className={styles.formGroup}>
-              <label>Email</label>
-              <input type="text" placeholder="0 (xx) xxx xxx" />
+              <label><FormattedMessage id="checkout.email"/></label>
+              <input type="text" placeholder={intl.formatMessage({ id: 'checkout.email.placeholder' })} />
             </div>
           </div>
 
           {/* Delivery Details */}
-          <h4 className={styles.subtitle}>Livrare</h4>
+          <h4 className={styles.subtitle}><FormattedMessage id="checkout.subtitle2.delivery"/></h4>
           <div className={styles.deliveryInputContainer}>
             <div className={styles.row}>
               <div className={styles.formGroup}>
-                <label>Localitatea</label>
-                <input type="text" placeholder="Alegeți localitatea" />
+                <label><FormattedMessage id="checkout.city"/></label>
+                <input type="text" placeholder={intl.formatMessage({ id: 'checkout.city.placeholder' })} />
               </div>
               <div className={styles.formGroup}>
-                <label>Adresa completă</label>
-                <input type="text" placeholder="str. XXXX, bl. X, ap. X" />
+                <label><FormattedMessage id="checkout.fullAddress"/></label>
+                <input type="text" placeholder={intl.formatMessage({ id: 'checkout.fullAddress.placeholder' })} />
               </div>
             </div>
             <div className={styles.formGroup}>
-              <label>Comentariu la comandă</label>
-              <textarea placeholder="Alegeți localitatea"></textarea>
+              <label><FormattedMessage id="checkout.comment"/></label>
+              <textarea placeholder={intl.formatMessage({ id: 'checkout.comment.placeholder' })} ></textarea>
             </div>
           </div>
 
           {/* Payment Method */}
-          <h4 className={styles.subtitle}>Modalitatea de plată</h4>
+          <h4 className={styles.subtitle}><FormattedMessage id="checkout.subtitle3.paymentOption"/></h4>
           <div className={styles.paymentMethods}>
             <label className={styles.paymentOption}>
               <img
@@ -68,7 +71,7 @@ const Checkout: React.FC = () => {
                 alt="Cash"
                 className={styles.paymentIcon}
               />
-              <p className={styles.paymentTitle}>Numerar la primire</p>
+              <p className={styles.paymentTitle}><FormattedMessage id="checkout.paymentOption.cash"/></p>
               <input
                 type="radio"
                 name="payment"
@@ -83,7 +86,7 @@ const Checkout: React.FC = () => {
                 alt="MIA"
                 className={styles.paymentIcon}
               />
-              <p className={styles.paymentTitle}>MIA</p>
+              <p className={styles.paymentTitle}><FormattedMessage id="checkout.paymentOption.MIA"/></p>
               <input
                 type="radio"
                 name="payment"
@@ -105,38 +108,25 @@ const Checkout: React.FC = () => {
                 className={styles.productImage}
               />
               <div className={styles.productdetails}>
-                <p className={styles.productTitle}>Comodă pe piciorușe</p>
-                <p className={styles.productSize}>2400x1200x600mm</p>
-                <p className={styles.productPrice}>5200 MDL</p>
-              </div>
-            </div>
-
-            <div className={styles.productItem}>
-              <img
-                src="/sideboard.jpg"
-                alt="Comodă"
-                className={styles.productImage}
-              />
-              <div>
-                <p className={styles.productTitle}>Comodă pe piciorușe</p>
-                <p className={styles.productSize}>2400x1200x600mm</p>
-                <p className={styles.productPrice}>5200 MDL</p>
+                <p className={styles.productTitle}>NAME</p>
+                <p className={styles.productSize}>width x height x depth <FormattedMessage id="homepage.configurator.dimensions.cm"/></p>
+                <p className={styles.productPrice}>5200 <FormattedMessage id="homepage.configurator.price.currencyLei"/></p>
               </div>
             </div>
 
             <div className={styles.totalSection}>
               <p>
-                Total: <span>10400 MDL</span>
+                <FormattedMessage id="checkout.subtotal"/> <span>10400 <FormattedMessage id="homepage.configurator.price.currencyLei"/></span>
               </p>
               <p>
-                Livrare: <span>0 MDL</span>
+                <FormattedMessage id="checkout.delivery"/> <span>0 <FormattedMessage id="homepage.configurator.price.currencyLei"/></span>
               </p>
               <p className={styles.finalTotal}>
-                Total spre achitare: <span>10400 MDL</span>
+                <FormattedMessage id="checkout.totalToPay"/> <span>10400 <FormattedMessage id="homepage.configurator.price.currencyLei"/></span>
               </p>
             </div>
 
-            <CustomButton>Plasează comanda</CustomButton>
+            <CustomButton><FormattedMessage id="homepage.button.placeOrder"/></CustomButton>
           </div>
         </div>
       </div>

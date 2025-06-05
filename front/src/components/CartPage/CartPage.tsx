@@ -3,28 +3,28 @@ import styles from './CartPage.module.css'
 import { Delete as FaTrash } from '@mui/icons-material'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
+import { FormattedMessage } from 'react-intl'
 
 export const CartPage = () => {
   return (
     <div className={styles.cartContainer}>
       <div className={styles.titleContainer}>
-        <p className={styles.title}>Coșul meu</p>
+        <p className={styles.title}><FormattedMessage id="cart.title"/></p>
       </div>
       <div className={styles.cartTable}>
         <div className={styles.cartHeader}>
-          <span>N/o</span>
-          <span>Denumirea produsului</span>
-          <span>Modelul</span>
-          <span>Caracteristici</span>
-          <span>Culoarea</span>
-          <span>Cantitate</span>
-          <span>Preț total</span>
-          <span>Acțiuni</span>
+          <span><FormattedMessage id="cart.tableHeader.no"/></span>
+          <span><FormattedMessage id="cart.tableHeader.productName"/></span>
+          <span><FormattedMessage id="cart.tableHeader.model"/></span>
+          <span><FormattedMessage id="cart.tableHeader.characteristics"/></span>
+          <span><FormattedMessage id="cart.tableHeader.color"/></span>
+          <span><FormattedMessage id="cart.tableHeader.price"/></span>
+          <span><FormattedMessage id="cart.tableHeader.actions"/></span>
         </div>
         {[1, 2].map((_item, index) => (
           <div className={styles.cartRow} key={index}>
             <span>{index + 1}</span>
-            <span className={styles.productName}>Comodă pe piciorușe</span>
+            <span className={styles.productName}>NUME</span>
             <div className={styles.productImageContainer}>
               <img
                 className={styles.productImage}
@@ -33,20 +33,24 @@ export const CartPage = () => {
               />
             </div>
             <span className={styles.productDetails}>
-              Dimensiuni:
-              <br /> Înălțime: <b>2700 mm</b>
-              <br /> Lungime: <b>1230 mm</b>
+              <FormattedMessage id="homepage.configurator.dimensions.title"/>:
+              <br /> <FormattedMessage id="homepage.configurator.dimensions.width"/>:  
+              &nbsp;<b>2700 <FormattedMessage id="homepage.configurator.dimensions.cm"/></b>
+              <br /> <FormattedMessage id="homepage.configurator.dimensions.height"/>: 
+              &nbsp;<b>1230 <FormattedMessage id="homepage.configurator.dimensions.cm"/></b>
               <br />
-              Adâncime: <b>600 mm</b>
+              <FormattedMessage id="homepage.configurator.dimensions.depth"/>: 
+              &nbsp;<b>600 <FormattedMessage id="homepage.configurator.dimensions.cm"/></b>
+              <br />
+              <FormattedMessage id="homepage.configurator.dimensions.plintHeight"/>: 
+              &nbsp;<b>600 <FormattedMessage id="homepage.configurator.dimensions.cm"/></b>
               <br />
               <br />
-              Aranjare rafturi:
-              <br /> Secțiunea 1: <b>Opțiunea 2</b>
+              <FormattedMessage id="homepage.configurator.fittings.title"/>:
+              <br /> <FormattedMessage id="homepage.configurator.fittings.handleType"/>: <b>mâner</b>
+              <br /> <FormattedMessage id="homepage.configurator.fittings.hinges"/>: <b>econom</b>
+              <br /> <FormattedMessage id="homepage.configurator.fittings.guides"/>: <b>econom</b>
               <br />
-              Secțiunea 2: <b>Opțiunea 1</b>
-              <br />
-              <br />
-              Furnitura: <b>premium</b>
             </span>
             <div className={styles.colorContainer}>
               <SelectColor
@@ -55,33 +59,26 @@ export const CartPage = () => {
                 onChange={() => {}}
               />
             </div>
-            <div className={styles.quantityControl}>
-              <button className={styles.quantityButton}>-</button>
-              <span className={styles.quantityValue}>1</span>
-              <button className={styles.quantityButton}>+</button>
-            </div>
-            <span className={styles.price}>5200 MDL</span>
+            <span className={styles.price}>5200 <FormattedMessage id="homepage.configurator.price.currencyLei"/></span>
             <div className={styles.actions}>
-              <CustomButton icon="" size="small" outlined>
-                Editează
+              <CustomButton size="small">
+                <FormattedMessage id="homepage.button.edit"/>
               </CustomButton>
               <CustomButton
                 icon={<FaTrash />}
                 size="small"
-                outlined
               ></CustomButton>
             </div>
           </div>
         ))}
       </div>
       <div className={styles.subtotalContainer}>
-        <span className={styles.subtotalLabel}>Subtotal</span>
-        <span className={styles.subtotalValue}>10400 MDL</span>
+        <span className={styles.subtotalLabel}><FormattedMessage id="cart.subtotal"/></span>
+        <span className={styles.subtotalValue}>10400 <FormattedMessage id="homepage.configurator.price.currencyLei"/></span>
       </div>
-      {/* <button className={styles.cartButton}>Finalizați comanda</button> */}
       <div className={styles.ctaButtonContainer}>
-        <CustomButton icon="" size="medium" outlined>
-          Finalizați comanda
+        <CustomButton icon="" size="medium" href="/checkout">
+          <FormattedMessage id="homepage.button.finalizeOrder"/>
         </CustomButton>
       </div>
     </div>

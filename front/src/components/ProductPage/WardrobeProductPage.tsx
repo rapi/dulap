@@ -1,5 +1,6 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import React, { FC } from 'react'
+import { useEffect } from 'react'
 import {
   ProductImageSelect,
   ProductImageSelectComponent,
@@ -34,6 +35,7 @@ import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
+import { FormattedMessage } from 'react-intl'
 
 export type ProductComponent =
   | ProductImageSelectComponent
@@ -118,6 +120,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   const imageCarouselComponent = currentComponents.find(
     (component) => component.type === 'imageCarousel'
   )
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       {/* Left Side: Image */}
@@ -137,7 +142,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       </div>
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
-        <h1 className={styles.title}>{name}</h1>
+        <h1 className={styles.title}><FormattedMessage id={name}/></h1>
         {currentComponents.map((component, index) => {
           return (
             <div key={index + component.type}>{getComponent(component)}</div>

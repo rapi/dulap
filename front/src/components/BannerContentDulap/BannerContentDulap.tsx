@@ -26,19 +26,25 @@ export const BannerContent = () => {
             </span>
           </li>
           <li className={classes.subtitleAnimationListItem}>
-            <span>preferințele</span>
+            <span>
+              <FormattedMessage id="homepage.banner.subtitle.2" />
+            </span>
           </li>
           <li className={classes.subtitleAnimationListItem}>
-            <span>culorile</span>
+            <span>
+              <FormattedMessage id="homepage.banner.subtitle.3" />
+            </span>
           </li>
           <li className={classes.subtitleAnimationListItem}>
-            <span>gusturile</span>
+            <span>
+              <FormattedMessage id="homepage.banner.subtitle.3" />
+            </span>
           </li>
         </ol>
-        <p>tale</p>
+        <p><FormattedMessage id="homepage.banner.subtitle.4" /></p>
       </div>
       <CustomButton size="large" icon={<WardrobeIconMedium />} href="/products">
-        Încearcă aici
+        <FormattedMessage id="homepage.button.tryIt" />
       </CustomButton>
     </div>
   )

@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import styles from './Slider.module.css'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import { FormattedMessage } from 'react-intl';
+import { Typography } from '@mui/material';
 
 interface SliderProps {
   min?: number
@@ -87,7 +89,9 @@ export const Slider: React.FC<SliderProps> = ({
                     fontSize: 12
                   }
                 }}
-                >cm</InputAdornment>,
+                >
+                  <Typography><FormattedMessage id="homepage.configurator.dimensions.cm"/></Typography>
+                </InputAdornment>,
           },
           htmlInput: { 
             sx: { fontSize: '0.9rem' } 

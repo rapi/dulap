@@ -11,7 +11,7 @@ export type ProductDimensionsComponent = {
 export const dimensionsOptions: ButtonOptionsType[] = [
   { value: '1200x600', label: '120 x 60 cm' },
   { value: '1400x700', label: '140 x 70 cm' },
-  { value: '1800x900', label: '180 x 90 cm' },
+  { value: '1600x800', label: '160 x 80 cm' },
 ]
 interface ProductDimensionsProps {
   configuration: ProductDimensionsComponent

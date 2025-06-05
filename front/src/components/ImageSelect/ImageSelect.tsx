@@ -28,7 +28,7 @@ export const ImageSelect = ({
   const [selectedIndex, setSelectedIndex] = useState(defaultSelected - 1 || 0)
 
   const handleSelect = (index: number) => {
-    if (readonly) {
+    if (!readonly) {
       setSelectedIndex(index)
       onChange(index)
     }

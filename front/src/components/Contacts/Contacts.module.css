@@ -1,0 +1,206 @@
+/* 1. Font Import & Color Variables */
+:root {
+  --color-dark: #333333;
+  --color-gray: #666666;
+  --color-light: #f9f9f9;
+  --color-accent: #c0392b;
+  --spacing-s: 8px;
+  --spacing-m: 16px;
+  --spacing-l: 32px;
+  --max-width: 1200px;
+}
+
+/* 2. Global Bodies (if not already in a global file) */
+:global(body) {
+  font-family: var(--font-base);
+  font-size: 16px;
+  color: var(--color-dark);
+  background-color: #ffffff;
+  line-height: 1.5;
+}
+
+/* 3. Container Utility */
+.container {
+  width: 90%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+/* 4. Hero / Page Title */
+.pageHero {
+  background-color: var(--color-light);
+  padding: var(--spacing-l) 0;
+  text-align: center;
+}
+
+.pageHero h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-s);
+}
+
+.pageHero p {
+  font-size: 1rem;
+  color: var(--color-gray);
+}
+
+/* 5. Contact Section */
+.contactSection {
+  padding: var(--spacing-l) 0;
+}
+
+.contactColumns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-l);
+  margin-top: var(--spacing-m);
+}
+
+/* 5.1. Contact Form */
+.contactFormWrapper {
+  flex: 1 1 500px;
+  background-color: #ffffff;
+  padding: var(--spacing-l);
+  /* border: 1px solid #ececec; */
+  border-radius: 4px;
+}
+
+.contactForm .formGroup {
+  margin-bottom: var(--spacing-m);
+}
+
+.contactForm label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: var(--spacing-s);
+  color: var(--color-dark);
+}
+
+.contactForm input,
+.contactForm textarea {
+  width: 100%;
+  padding: var(--spacing-s);
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: var(--font-base);
+  color: var(--color-dark);
+}
+
+.contactForm input:focus,
+.contactForm textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.btnSubmit {
+  background-color: var(--color-accent);
+  color: #ffffff;
+  padding: var(--spacing-s) var(--spacing-m);
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btnSubmit:hover {
+  background-color: #a8322a; /* puțin mai închis la hover */
+}
+
+/* 5.2. Contact Info */
+.contactDetailsContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contactInfo {
+  flex: 1 1 350px;
+  background-color: var(--color-light);
+  padding: var(--spacing-l);
+  border-radius: 4px;
+}
+
+.infoList {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.contactInfo h2 {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-m);
+}
+
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.infoList li {
+  margin-bottom: var(--spacing-m);
+}
+
+.infoLabel {
+  display: block;
+  font-weight: 500;
+  color: var(--color-dark);
+  margin-bottom: var(--spacing-s);
+}
+
+.infoText {
+  color: var(--color-gray);
+  font-size: 0.95rem;
+}
+
+.infoText:hover {
+  color: var(--color-dark);
+  text-decoration: underline;
+}
+
+/* 6. Map Embed */
+.mapWrapper {
+  margin-top: var(--spacing-l);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.socialContainer {
+    text-align: end;
+}
+
+.socialIcons {
+  margin-top: 10px;
+}
+
+.socialIcons img {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+/* 7. Responsive Tweaks */
+@media (max-width: 768px) {
+  .contactFormWrapper {
+    flex: 1 1 100%;
+  }
+  .contactColumns {
+    flex-direction: column;
+  }
+  .socialIcons img {
+    width: 25px;
+    height: 25px;
+  }
+  .socialContainer {
+    text-align: end;
+  }
+}
+@media (max-width: 480px) {
+  .contactDetailsContainer {
+    display: block;
+  }
+  .socialContainer {
+    text-align: start;
+  }
+}

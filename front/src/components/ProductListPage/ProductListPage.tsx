@@ -7,13 +7,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { ProductList } from '../ProductList/ProductList'
 import { ProductItem } from '../ProductItem/ProductItem'
 import { WardrobeIconMedium } from '../Icons/Icons'
+import { FormattedMessage } from 'react-intl'
 
 export const ProductListPage: React.FC = () => {
   const router = useRouter();
   return (
     <>
       <div className={styles.productListContainer}>
-        <h3 className={styles.title}>Alege tipul de mobilier, ca să începi personalizarea</h3>
+        <h3 className={styles.title}><FormattedMessage id="homepage.productListPage.title.1" /></h3>
 
         <div className={styles.productListSelectContainer}>
           {productTypes.map(({ image, link, name }) => (
@@ -37,25 +38,25 @@ export const ProductListPage: React.FC = () => {
                     variant='primary'
                     size='small'
                     // href={link}
-                  >Creează</CustomButton>
+                  ><FormattedMessage id="homepage.button.create" /></CustomButton>
                 </div>
               </div>
-              <div className={styles.productTypeTitle}>{name}</div>
+              <div className={styles.productTypeTitle}><span><FormattedMessage id={name} /></span></div>
             </div>
           ))}
         </div>
 
         <p className={styles.title}>
-          SAU<br></br>
+          <FormattedMessage id="homepage.productListPage.title.2" /><br></br>
           <br></br>
-          Alege produse gata din lista noastră
+          <FormattedMessage id="homepage.productListPage.title.3" />
         </p>
 
         <section className={styles.readyProducts}>
           <ProductList>
             {[...Array(6)].map((_, index) => (
               <ProductItem
-                name={`Comodă ${index + 1}`}
+                name={`products.comoda${index + 1}`}
                 image={`/products/comoda-alba.jpg`}
                 key={index}
                 link=''
@@ -65,7 +66,7 @@ export const ProductListPage: React.FC = () => {
                     outlined size="medium" 
                     variant="danger"
                   >
-                    Adaugă în coș
+                    <FormattedMessage id="homepage.button.addToCart" />
                   </CustomButton>
                 }
               />

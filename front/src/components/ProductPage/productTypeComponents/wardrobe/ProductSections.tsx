@@ -9,6 +9,7 @@ import {
 } from '~/components/ImageSelect/ImageSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { Modal } from '~/components/Modal/Modal'
+import { FormattedMessage } from 'react-intl'
 export type ProductSectionsComponent = {
   type: 'sections'
   maxNumber: number
@@ -24,8 +25,8 @@ export type ProductSectionsComponent = {
   setSelectedMirrorOption?: (value: string) => void
 }
 export const mirroringOptions: ButtonOptionsType[] = [
-  { value: 'standard', label: 'standard' },
-  { value: 'mirrored', label: 'oglindit' },
+  { value: 'standard', label: 'homepage.configurator.wardrobeArrangement.mirroring.options.1' },
+  { value: 'mirrored', label: 'homepage.configurator.wardrobeArrangement.mirroring.options.2' },
 ]
 export type ProductSectionPredefinedValue = {
   number?: number
@@ -58,7 +59,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
   setSelectedMirrorOption = setSelectedMirrorOption ?? (() => {})
   const sections = new Array(maxNumber).fill(0).map((_, i) => ({
     value: String(i + 1),
-    label: String(i + 1),
+    label: `homepage.configurator.sections.nr.${String(i + 1)}`,
   }))
   useEffect(() => {
     setSelectedSections(activeSections)
@@ -87,9 +88,9 @@ export const ProductSections: FC<ProductSelectProps> = ({
   return (
     <>
       <div>
-        <p className={styles.sectionTitle}>Aranjare dulap</p>
+        <p className={styles.sectionTitle}><FormattedMessage id="homepage.configurator.wardrobeArrangement.title" /></p>
         <label className={styles.sectionLabel}>
-          <p>Numărul de secții</p>
+          <p><FormattedMessage id="homepage.configurator.wardrobeArrangement.sectionsNr" /></p>
           {predefinedSections?.number ?? (
             <ButtonSelect
               options={formatedSections}
@@ -103,7 +104,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
 
         <label className={styles.mirroringLabel}>
           <p>
-            Inversare poziție <br></br>dulap
+            <FormattedMessage id="homepage.configurator.wardrobeArrangement.mirroring" />
           </p>
           {predefinedSections?.mirror ?? (
             <ButtonSelect
@@ -117,7 +118,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
         </label>
 
         <label className={styles.sectionArrangementLabel}>
-          <p>Aranjare rafturi</p>
+          <p><FormattedMessage id="homepage.configurator.wardrobeArrangement.shelvesArrangement" /></p>
           <ImageSelect
             images={
               predefinedSections?.arrangement?.map((src) => ({ src })) ??
@@ -136,7 +137,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
         </label>
 
         <label className={styles.sectionArrangementLabel}>
-          <p>Aranjare uși</p>
+          <p><FormattedMessage id="homepage.configurator.wardrobeArrangement.doorsArrangement" /></p>
           <ImageSelect
             images={activeOpening}
             onChange={(i) => {
@@ -154,7 +155,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
         }}
       >
         <p className={styles.subtitle}>
-          Alege aranjarea rafturilor pentru Secțiunea 3
+          <FormattedMessage id="homepage.configurator.wardrobeArrangement.shelvesArrangement.modal.title" />
         </p>
         <div className={styles.imageSelectContainer}>
           <ImageSelect

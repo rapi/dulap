@@ -14,8 +14,8 @@ const Product: FC = () => {
           dimensions: '160x210x50x5',
           furniture: {
             openingType: 'maner',
-            hinges: 'standard',
-            guides: 'standard',
+            hinges: 'homepage.configurator.fittings.hinges.options.2',
+            guides: 'homepage.configurator.fittings.guides.options.2',
           },
           sections: {
             number: 3,

@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import MuiSelect from '@mui/material/Select'
 import * as React from 'react'
 import styles from './Select.module.css'
+import { FormattedMessage } from 'react-intl'
 interface SelectProps {
   options: string[]
   onChange?: (value: string) => void
@@ -37,7 +38,7 @@ export const Select = ({ options, onChange }: SelectProps) => {
               className={styles.selectOption}
               style={{ fontFamily: 'Onest, sans-serif', fontSize: '12px' }}
             >
-              {option}
+              <FormattedMessage id={option}/>
             </span>
           </MenuItem>
         ))}
