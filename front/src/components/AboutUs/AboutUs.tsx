@@ -25,7 +25,7 @@ const AboutUs: React.FC = () => {
                     />
                     <h3 className={styles.founderName}>Elizabet Grinciuc</h3>
                     <p className={styles.founderRole}><FormattedMessage id="aboutUs.founder1.subtitle"/></p>
-                    <h5><FormattedMessage id="aboutUs.founder1.details"/></h5>
+                    <p className={styles.founderDetails}><FormattedMessage id="aboutUs.founder1.details"/></p>
                 </div>
 
                 {/* Founder 2 */}
@@ -37,7 +37,7 @@ const AboutUs: React.FC = () => {
                     />
                     <h3 className={styles.founderName}>Vasile Grinciuc</h3>
                     <p className={styles.founderRole}><FormattedMessage id="aboutUs.founder3.subtitle"/></p>
-                    <h5><FormattedMessage id="aboutUs.founder3.details"/></h5>
+                    <p className={styles.founderDetails}><FormattedMessage id="aboutUs.founder3.details"/></p>
                 </div>
                 
 
@@ -50,7 +50,7 @@ const AboutUs: React.FC = () => {
                     />
                     <h3 className={styles.founderName}>Roman Picunov</h3>
                     <p className={styles.founderRole}><FormattedMessage id="aboutUs.founder2.subtitle"/></p>
-                    <h5><FormattedMessage id="aboutUs.founder2.details"/></h5>
+                    <p className={styles.founderDetails}><FormattedMessage id="aboutUs.founder2.details"/></p>
                 </div>
 
                 {/* Founder 4 */}
@@ -62,7 +62,7 @@ const AboutUs: React.FC = () => {
                     />
                     <h3 className={styles.founderName}>Iulia Picunova</h3>
                     <p className={styles.founderRole}><FormattedMessage id="aboutUs.founder4.subtitle"/></p>
-                    <h5><FormattedMessage id="aboutUs.founder4.details"/></h5>
+                    <p className={styles.founderDetails}><FormattedMessage id="aboutUs.founder4.details"/></p>
                 </div>
                 </div>
 

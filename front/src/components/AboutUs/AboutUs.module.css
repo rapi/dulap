@@ -53,9 +53,9 @@
 /* 5. Individual Founder Card */
 .founderCard {
   flex: 1;
-  max-width: 200px;
+  max-width: 270px;
   background-color: #ffffff;
-  padding: 16px;       
+  padding: 25px;       
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -63,23 +63,32 @@
 }
 
 .founderImage {
-  width: 180px;
-  height: 180px;
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 16px; 
 }
 
 .founderName {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 500;
-  margin-bottom: 8px;  
+  margin-bottom: 0;  
   color: #333333;      
 }
 
 .founderRole {
-  font-size: 0.95rem;
-  color: #666666;      
+  font-size: 1rem;
+  font-weight: 400;
+  color: #444444;      
+}
+
+.founderDetails {
+  font-size: 1rem;
+  line-height: 1.7;
+  letter-spacing: 0.4;
+  font-weight: 350;
+  color: #888888; 
 }
 
 /* 6. Responsive Breakpoints */
