@@ -13,10 +13,10 @@ import { FormattedMessage } from 'react-intl'
 export const Dulap: React.FC = () => {
   return (
     <div>
-      <Banner />
+      <Banner href={'/banner-wardrobe.jpg'} />
       <section className={classes.productTypes}>
         <p className={classes.productTypesTitle}>
-          <FormattedMessage id="homepage.dulapLanding.title1"/>
+          <FormattedMessage id="homepage.dulapLanding.title1" />
         </p>
         <ProductList>
           {productTypes.map(({ image, link, name }) => (
@@ -32,7 +32,7 @@ export const Dulap: React.FC = () => {
                   outlined
                   size="medium"
                 >
-                  <FormattedMessage id="homepage.button.create"/>
+                  <FormattedMessage id="homepage.button.create" />
                 </CustomButton>
               }
             />
@@ -42,7 +42,7 @@ export const Dulap: React.FC = () => {
 
       <section className={classes.readyProducts}>
         <p className={classes.readyProductsTitle}>
-          <FormattedMessage id="homepage.dulapLanding.title2"/>
+          <FormattedMessage id="homepage.dulapLanding.title2" />
         </p>
         <ProductList>
           {[...Array(6)].map((_, index) => (
@@ -58,7 +58,7 @@ export const Dulap: React.FC = () => {
                   size="medium"
                   variant="danger"
                 >
-                  <FormattedMessage id="homepage.button.addToCart"/>
+                  <FormattedMessage id="homepage.button.addToCart" />
                 </CustomButton>
               }
             />
@@ -67,7 +67,9 @@ export const Dulap: React.FC = () => {
       </section>
 
       <section className={classes.aboutUs}>
-        <p className={classes.aboutUsTitle}><FormattedMessage id="homepage.dulapLanding.aboutUs.title"/></p>
+        <p className={classes.aboutUsTitle}>
+          <FormattedMessage id="homepage.dulapLanding.aboutUs.title" />
+        </p>
         <div className={classes.aboutUsContent}>
           <img
             src="/banner.jpg"
@@ -76,19 +78,21 @@ export const Dulap: React.FC = () => {
           />
           <div className={classes.aboutUsDescription}>
             <p>
-              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.1"/>
+              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.1" />
               <br />
               <br />
-              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.2"/>
+              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.2" />
               <br />
               <br />
-              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.3"/>
+              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.3" />
               <br />
               <br />
-              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.4"/>
+              <FormattedMessage id="homepage.dulapLanding.aboutUs.body.4" />
               <br />
               <br />
-              <b><FormattedMessage id="homepage.dulapLanding.aboutUs.body.5"/></b>
+              <b>
+                <FormattedMessage id="homepage.dulapLanding.aboutUs.body.5" />
+              </b>
             </p>
           </div>
         </div>

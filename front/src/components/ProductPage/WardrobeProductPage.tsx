@@ -111,13 +111,6 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.[component.type] ?? undefined}
           />
         )
-      case 'price':
-        return (
-          <ProductPrice
-            configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
-          />
-        )
     }
   }
 
@@ -129,8 +122,8 @@ export const ProductPage: FC<ProductPageProps> = ({
     (component) => component.type === 'imageCarousel'
   )
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+    window.scrollTo(0, 0)
+  }, [])
   return (
     <>
       {/* Left Side: Image */}
@@ -150,7 +143,9 @@ export const ProductPage: FC<ProductPageProps> = ({
       </div>
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
-        <h1 className={styles.title}><FormattedMessage id={name}/></h1>
+        <h1 className={styles.title}>
+          <FormattedMessage id={name} />
+        </h1>
         {currentComponents.map((component, index) => {
           return (
             <div key={index + component.type}>{getComponent(component)}</div>
@@ -158,7 +153,12 @@ export const ProductPage: FC<ProductPageProps> = ({
         })}
       </div>
       <div>
-        {priceComponent && <ProductPrice configuration={priceComponent} />}
+        {priceComponent && (
+          <ProductPrice
+            configuration={priceComponent}
+            predefinedValue={values?.price ?? undefined}
+          />
+        )}
       </div>
     </>
   )
