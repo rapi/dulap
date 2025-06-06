@@ -29,13 +29,16 @@ export const GreenWallConfiguration: () => ProductComponent[] = () => {
     }
   }, [height]);
   useEffect(() => {
+    setPrice(0)
+  }, [width])
+  useEffect(() => {
     // if (selectedColor === '#ded9d3') {
       setImageColor('White')
     // } else setImageColor('Dark Grey')
   }, [selectedColor])
-  useEffect(() => {
-    setPrice((width * 4.5 + height * 1.2) * 7)
-  }, [width, height])
+  // useEffect(() => {
+  //   setPrice((width * 4.5 + height * 1.2) * 7)
+  // }, [width, height])
   return [
     {
       type: 'dimensions',
