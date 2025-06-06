@@ -53,7 +53,7 @@
 /* 5. Individual Founder Card */
 .founderCard {
   flex: 1;
-  max-width: 280px;
+  max-width: 200px;
   background-color: #ffffff;
   padding: 16px;       
   border: 1px solid #e0e0e0;
@@ -63,8 +63,8 @@
 }
 
 .founderImage {
-  width: 120px;
-  height: 120px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 16px; 

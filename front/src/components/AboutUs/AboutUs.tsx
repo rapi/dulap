@@ -31,6 +31,19 @@ const AboutUs: React.FC = () => {
                 {/* Founder 2 */}
                 <div className={styles.founderCard}>
                     <img
+                    src="/about-us/Vasile.jpg"
+                    alt="Vasile"
+                    className={styles.founderImage}
+                    />
+                    <h3 className={styles.founderName}>Vasile Grinciuc</h3>
+                    <p className={styles.founderRole}><FormattedMessage id="aboutUs.founder3.subtitle"/></p>
+                    <h5><FormattedMessage id="aboutUs.founder3.details"/></h5>
+                </div>
+                
+
+                {/* Founder 3 */}
+                <div className={styles.founderCard}>
+                    <img
                     src="/about-us/Roman.jpg"
                     alt="Roman"
                     className={styles.founderImage}
@@ -40,18 +53,20 @@ const AboutUs: React.FC = () => {
                     <h5><FormattedMessage id="aboutUs.founder2.details"/></h5>
                 </div>
 
-                {/* Founder 3 */}
+                {/* Founder 4 */}
                 <div className={styles.founderCard}>
                     <img
-                    src="/about-us/Vasile.jpg"
-                    alt="Vasile"
+                    src="/about-us/Iulia.jpg"
+                    alt="Iulia"
                     className={styles.founderImage}
                     />
-                    <h3 className={styles.founderName}>Vasile Grinciuc</h3>
-                    <p className={styles.founderRole}><FormattedMessage id="aboutUs.founder3.subtitle"/></p>
-                    <h5><FormattedMessage id="aboutUs.founder3.details"/></h5>
+                    <h3 className={styles.founderName}>Iulia Picunova</h3>
+                    <p className={styles.founderRole}><FormattedMessage id="aboutUs.founder4.subtitle"/></p>
+                    <h5><FormattedMessage id="aboutUs.founder4.details"/></h5>
                 </div>
                 </div>
+
+                
             </div>
         </section>
     </div>
