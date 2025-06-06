@@ -6,6 +6,7 @@ import {
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import Select from '~/components/Select/Select'
 import { FormattedMessage } from 'react-intl'
+import { useIntl } from 'react-intl';
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
@@ -33,6 +34,8 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
   configuration: { setSelectedOpeningMethod },
   predefinedValue,
 }) => {
+  const intl = useIntl();
+  
   return (
     <div>
       <p className={styles.furnitureTitle}><FormattedMessage id="homepage.configurator.fittings.title" /></p>
@@ -54,7 +57,9 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
 
       <label className={styles.furnitureLabel}>
         <p><FormattedMessage id="homepage.configurator.fittings.hinges" /></p>
-        {predefinedValue?.hinges ?? (
+        {predefinedValue?.hinges 
+        ? intl.formatMessage({ id: predefinedValue.hinges }) 
+        : (
           <Select options={['homepage.configurator.fittings.hinges.options.1', 
                             'homepage.configurator.fittings.hinges.options.2', 
                             'homepage.configurator.fittings.hinges.options.3']} />
@@ -62,7 +67,9 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
       </label>
       <label className={styles.furnitureLabel}>
         <p><FormattedMessage id="homepage.configurator.fittings.guides" /></p>
-        {predefinedValue?.guides ?? (
+        {predefinedValue?.guides 
+        ? intl.formatMessage({ id: predefinedValue.guides }) 
+        : (
           <Select options={['homepage.configurator.fittings.hinges.options.1', 
                             'homepage.configurator.fittings.hinges.options.2', 
                             'homepage.configurator.fittings.hinges.options.3']} />

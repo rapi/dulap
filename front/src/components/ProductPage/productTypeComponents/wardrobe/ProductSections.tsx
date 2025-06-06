@@ -31,7 +31,8 @@ export const mirroringOptions: ButtonOptionsType[] = [
 export type ProductSectionPredefinedValue = {
   number?: number
   mirror?: string
-  arrangement?: string[]
+  arrangement?: ImageOptionProps[]
+  opening?: ImageOptionProps[]
 }
 interface ProductSelectProps {
   configuration: ProductSectionsComponent
@@ -121,7 +122,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
           <p><FormattedMessage id="homepage.configurator.wardrobeArrangement.shelvesArrangement" /></p>
           <ImageSelect
             images={
-              predefinedSections?.arrangement?.map((src) => ({ src })) ??
+              predefinedSections?.arrangement?.map(({src, width, height}) => ({ src, width, height })) ??
               selectedSections
             }
             onChange={(i) => {
@@ -139,7 +140,10 @@ export const ProductSections: FC<ProductSelectProps> = ({
         <label className={styles.sectionArrangementLabel}>
           <p><FormattedMessage id="homepage.configurator.wardrobeArrangement.doorsArrangement" /></p>
           <ImageSelect
-            images={activeOpening}
+            images={
+              predefinedSections?.opening?.map(({src, width, height}) => ({ src, width, height })) ??
+              activeOpening
+            }
             onChange={(i) => {
               setActiveSection(i)
             }}

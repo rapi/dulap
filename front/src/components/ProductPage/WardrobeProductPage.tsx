@@ -58,6 +58,7 @@ interface ProductPageProps {
     colors?: string
     select?: string
     furniture?: ProductFurniturePredefinedValue
+    price?: number
   }
 }
 
@@ -106,6 +107,13 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture':
         return (
           <ProductFurniture
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        )
+      case 'price':
+        return (
+          <ProductPrice
             configuration={component}
             predefinedValue={values?.[component.type] ?? undefined}
           />

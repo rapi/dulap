@@ -98,7 +98,8 @@
   "homepage.configurator.fittings.guides.options.2": "standart",
   "homepage.configurator.fittings.guides.options.3": "premium",
 
-  "homepage.configurator.price.title": "Preț flexibil",
+  "homepage.configurator.price.title": "Preț",
+  "homepage.configurator.priceFlexible.title": "Preț flexibil",
   "homepage.configurator.price.currencyLei": "lei",
 
   "cart.title": "Coșul meu",

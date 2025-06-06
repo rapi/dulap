@@ -19,7 +19,11 @@ export const ProductColors: FC<ProductColorsProps> = ({
   predefinedValue,
 }) => {
   return predefinedValue ? (
-    <SelectColorItem color={predefinedValue} selected={true} size={'medium'} />
+    <label className={styles.colorsLabel}>
+      <p><FormattedMessage id="homepage.configurator.colors.title" /></p>
+      <SelectColorItem color={predefinedValue} selected={true} size={'medium'} />
+    </label>
+    
   ) : (
     <>
       <label className={styles.colorsLabel}>

@@ -98,7 +98,8 @@
   "homepage.configurator.fittings.guides.options.2": "стандарт",
   "homepage.configurator.fittings.guides.options.3": "премиум",
 
-  "homepage.configurator.price.title": "Гибкая цена",
+  "homepage.configurator.price.title": "Цена",
+  "homepage.configurator.priceFlexible.title": "Гибкая цена",
   "homepage.configurator.price.currencyLei": "лей",
 
   "cart.title": "Моя корзина",

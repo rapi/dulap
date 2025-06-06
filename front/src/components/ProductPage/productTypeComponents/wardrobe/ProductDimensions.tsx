@@ -36,7 +36,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
       <div className={styles.dimensionsGrid}>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.width" /></p>
-          {predefinedWidth ?? (
+          {predefinedWidth !=null ? `${predefinedWidth} cm` : (
             <Slider
               min={configuration.widthRange[0]}
               max={configuration.widthRange[1]}
@@ -48,7 +48,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
         </label>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.height" /></p>
-          {predefinedHeight ?? (
+          {predefinedHeight !=null ? `${predefinedHeight} cm` : (
             <Slider
               min={configuration.heightRange[0]}
               max={configuration.heightRange[1]}
@@ -60,7 +60,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
         </label>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.depth" /></p>
-          {predefinedDepth ?? (
+          {predefinedDepth !=null ? `${predefinedDepth} cm` : (
             <Slider
               min={configuration.depthRange[0]}
               max={configuration.depthRange[1]}
@@ -83,7 +83,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
               </span>
             </div>
           </div>
-          {predefinedPlint ?? (
+          {predefinedPlint !=null ? `${predefinedPlint} cm` : (
             <Slider
               min={configuration.plintHeightRange[0]}
               max={configuration.plintHeightRange[1]}

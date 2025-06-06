@@ -7,25 +7,50 @@ const Product: FC = () => {
     <ProductPageLayout>
       <ProductPage
         components={WardrobeProductConfiguration}
-        name="Dulap pentru haine"
+        name="Dulap pentru haine 150cm"
         values={{
-          imageCarousel: ['/wardrobe/filling/Biege/2100/1.png'],
-          colors: 'black',
-          dimensions: '160x210x50x5',
+          imageCarousel: ['/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png'],
+          colors: 'Biege',
+          dimensions: '150x210x50x5',
           furniture: {
             openingType: 'maner',
             hinges: 'homepage.configurator.fittings.hinges.options.2',
             guides: 'homepage.configurator.fittings.guides.options.2',
           },
           sections: {
-            number: 3,
+            number: 2,
             mirror: 'standard',
             arrangement: [
-              '/wardrobe/filling/Biege/2100/1.png',
-              '/wardrobe/filling/Biege/2100/1.png',
-              '/wardrobe/filling/Biege/2100/1.png',
+              {
+                src: '/wardrobe/filling/Biege/2100/1.png',
+                width: 100,
+                height: 224,
+              },
+              {
+                src: '/wardrobe/filling/Biege/2100/1.png',
+                width: 50,
+                height: 224,
+              }
             ],
+            opening: [
+              {
+                src: '/wardrobe/opening-left.png',
+                width: 50,
+                height: 224,
+              },
+              {
+                src: '/wardrobe/opening-right.png',
+                width: 50,
+                height: 224,
+              },
+              {
+                src: '/wardrobe/opening-right.png',
+                width: 50,
+                height: 224,
+              }
+            ]
           },
+          price: 1000,
         }}
       />
     </ProductPageLayout>
