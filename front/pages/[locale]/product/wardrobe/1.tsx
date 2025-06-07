@@ -9,7 +9,9 @@ const Product: FC = () => {
         components={WardrobeProductConfiguration}
         name="Dulap pentru haine 150cm"
         values={{
-          imageCarousel: ['/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png'],
+          imageCarousel: [
+            '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+          ],
           colors: 'Biege',
           dimensions: '150x210x50x5',
           furniture: {
@@ -19,7 +21,7 @@ const Product: FC = () => {
           },
           sections: {
             number: 2,
-            mirror: 'standard',
+            mirror: 'nu',
             arrangement: [
               {
                 src: '/wardrobe/filling/Biege/2100/1.png',
@@ -30,7 +32,7 @@ const Product: FC = () => {
                 src: '/wardrobe/filling/Biege/2100/1.png',
                 width: 50,
                 height: 224,
-              }
+              },
             ],
             opening: [
               {
@@ -47,8 +49,8 @@ const Product: FC = () => {
                 src: '/wardrobe/opening-right.png',
                 width: 50,
                 height: 224,
-              }
-            ]
+              },
+            ],
           },
           price: 1000,
         }}

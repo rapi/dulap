@@ -90,13 +90,23 @@
   "homepage.configurator.fittings.handle": "mâner",
   "homepage.configurator.fittings.pushToOpen": "push-to-open",
 
-  "homepage.configurator.fittings.hinges.options.1": "econom",
-  "homepage.configurator.fittings.hinges.options.2": "standart",
-  "homepage.configurator.fittings.hinges.options.3": "premium",
+  "homepage.configurator.fittings.hinges.tooltip.1": "Ce sunt balamalele?",
+  "homepage.configurator.fittings.hinges.tooltip.2": "Balamalele sunt mecanisme care permit deschiderea și închiderea ușilor dulapului.",
+  "homepage.configurator.fittings.hinges.tooltip.3": "Ce balamale să aleg?",
+  "homepage.configurator.fittings.hinges.tooltip.4": "Standard – dacă vrei ca ușile dulapului să se închidă lin și silențios.",
+  "homepage.configurator.fittings.hinges.tooltip.5": "Premium – dacă vrei cele mai bune balamale de pe piață, Blum, producător austriac.",
 
-  "homepage.configurator.fittings.guides.options.1": "econom",
-  "homepage.configurator.fittings.guides.options.2": "standart",
-  "homepage.configurator.fittings.guides.options.3": "premium",
+  "homepage.configurator.fittings.guides.tooltip.1": "Ce sunt glisierele?",
+  "homepage.configurator.fittings.guides.tooltip.2": "Glisierele sunt mecanisme care permit sertarelor dulapului să se deplaseze lin în interior și în exterior.",
+  "homepage.configurator.fittings.guides.tooltip.3": "Ce glisiere să aleg?",
+  "homepage.configurator.fittings.guides.tooltip.4": "Standard – dacă vrei ca sertarele să se miște lin: glisiere cu bile, cu amortizare.",
+  "homepage.configurator.fittings.guides.tooltip.5": "Premium – dacă vrei cele mai bune glisiere de pe piață, Blum, producător austriac.",
+
+  "homepage.configurator.fittings.hinges.options.1": "standart",
+  "homepage.configurator.fittings.hinges.options.2": "premium",
+
+  "homepage.configurator.fittings.guides.options.1": "standart",
+  "homepage.configurator.fittings.guides.options.2": "premium",
 
   "homepage.configurator.price.title": "Preț",
   "homepage.configurator.priceFlexible.title": "Preț flexibil",

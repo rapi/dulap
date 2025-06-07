@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import {
   ButtonOptionsType,
   ButtonSelect,
@@ -6,7 +6,9 @@ import {
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import Select from '~/components/Select/Select'
 import { FormattedMessage } from 'react-intl'
-import { useIntl } from 'react-intl';
+import { useIntl } from 'react-intl'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import { Modal } from '~/components/Modal/Modal'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
@@ -23,25 +25,33 @@ interface ProductSelectProps {
 }
 export type ProductFurniturePredefinedValue = {
   openingType: 'maner' | 'push'
-  hinges: 'homepage.configurator.fittings.hinges.options.1' | 
-          'homepage.configurator.fittings.hinges.options.2' | 
-          'homepage.configurator.fittings.hinges.options.3'
-  guides: 'homepage.configurator.fittings.guides.options.1' | 
-          'homepage.configurator.fittings.guides.options.2' | 
-          'homepage.configurator.fittings.guides.options.3'
+  hinges:
+    | 'homepage.configurator.fittings.hinges.options.1'
+    | 'homepage.configurator.fittings.hinges.options.2'
+  guides:
+    | 'homepage.configurator.fittings.guides.options.1'
+    | 'homepage.configurator.fittings.guides.options.2'
 }
 export const ProductFurniture: FC<ProductSelectProps> = ({
   configuration: { setSelectedOpeningMethod },
   predefinedValue,
 }) => {
-  const intl = useIntl();
-  
+  const intl = useIntl()
+  const [isModalOpen1, setIsModalOpen1] = useState(false)
+  const [isModalOpen2, setIsModalOpen2] = useState(false)
+  const [isModalOpen3, setIsModalOpen3] = useState(false)
+
   return (
     <div>
-      <p className={styles.furnitureTitle}><FormattedMessage id="homepage.configurator.fittings.title" /></p>
+      <p className={styles.furnitureHeaderTitle}>
+        <FormattedMessage id="homepage.configurator.fittings.title" />
+      </p>
 
       <label className={styles.furnitureLabel}>
-        <p><FormattedMessage id="homepage.configurator.fittings.handleType" /></p>
+        <div className={styles.furnitureTitle}>
+          <FormattedMessage id="homepage.configurator.fittings.handleType" />
+        </div>
+
         <div className={styles.openingTypeContent}>
           {predefinedValue?.openingType ?? (
             <ButtonSelect
@@ -56,25 +66,123 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
       </label>
 
       <label className={styles.furnitureLabel}>
-        <p><FormattedMessage id="homepage.configurator.fittings.hinges" /></p>
-        {predefinedValue?.hinges 
-        ? intl.formatMessage({ id: predefinedValue.hinges }) 
-        : (
-          <Select options={['homepage.configurator.fittings.hinges.options.1', 
-                            'homepage.configurator.fittings.hinges.options.2', 
-                            'homepage.configurator.fittings.hinges.options.3']} />
+        <div className={styles.furnitureTitle}>
+          <FormattedMessage id="homepage.configurator.fittings.hinges" />
+          <div
+            className={styles.tooltipContainer}
+            onClick={() => setIsModalOpen2(true)}
+          >
+            <InfoOutlinedIcon color="action" sx={{ fontSize: 20 }} />
+            <span className={styles.tooltipText}>
+              <img
+                src="/wardrobe/hinges-tooltip-onhover.jpg"
+                alt="base tooltip"
+              ></img>
+            </span>
+          </div>
+        </div>
+        {predefinedValue?.hinges ? (
+          intl.formatMessage({ id: predefinedValue.hinges })
+        ) : (
+          <Select
+            options={[
+              'homepage.configurator.fittings.hinges.options.1',
+              'homepage.configurator.fittings.hinges.options.2',
+            ]}
+          />
         )}
       </label>
       <label className={styles.furnitureLabel}>
-        <p><FormattedMessage id="homepage.configurator.fittings.guides" /></p>
-        {predefinedValue?.guides 
-        ? intl.formatMessage({ id: predefinedValue.guides }) 
-        : (
-          <Select options={['homepage.configurator.fittings.hinges.options.1', 
-                            'homepage.configurator.fittings.hinges.options.2', 
-                            'homepage.configurator.fittings.hinges.options.3']} />
+        <div className={styles.furnitureTitle}>
+          <FormattedMessage id="homepage.configurator.fittings.guides" />
+          <div
+            className={styles.tooltipContainer}
+            onClick={() => setIsModalOpen3(true)}
+          >
+            <InfoOutlinedIcon color="action" sx={{ fontSize: 20 }} />
+            <span className={styles.tooltipText}>
+              <img src="/wardrobe/guides-tooltip.png" alt="base tooltip"></img>
+            </span>
+          </div>
+        </div>
+        {predefinedValue?.guides ? (
+          intl.formatMessage({ id: predefinedValue.guides })
+        ) : (
+          <Select
+            options={[
+              'homepage.configurator.fittings.guides.options.1',
+              'homepage.configurator.fittings.guides.options.2',
+            ]}
+          />
         )}
       </label>
+
+      <Modal
+        isOpen={isModalOpen2}
+        onClose={() => {
+          setIsModalOpen2(false)
+        }}
+      >
+        <h4>
+          <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.1" />
+        </h4>
+        <div className={styles.modalChildren}>
+          <img
+            src="/wardrobe/hinges-tooltip-onhover.png"
+            alt="base tooltip"
+            className={styles.modalImg}
+          ></img>
+          <p className={styles.modalText}>
+            <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.2" />
+            <br></br>
+            <br></br>
+            <b>
+              <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.3" />
+            </b>
+            <ul>
+              <li>
+                <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.4" />
+              </li>
+              <li>
+                <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.5" />
+              </li>
+            </ul>
+          </p>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isModalOpen3}
+        onClose={() => {
+          setIsModalOpen3(false)
+        }}
+      >
+        <h4>
+          <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.1" />
+        </h4>
+        <div className={styles.modalChildren}>
+          <img
+            src="/wardrobe/guides-tooltip.png"
+            alt="base tooltip"
+            className={styles.modalImg}
+          ></img>
+          <p className={styles.modalText}>
+            <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.2" />
+            <br></br>
+            <br></br>
+            <b>
+              <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.3" />
+            </b>
+            <ul>
+              <li>
+                <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.4" />
+              </li>
+              <li>
+                <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.5" />
+              </li>
+            </ul>
+          </p>
+        </div>
+      </Modal>
     </div>
   )
 }

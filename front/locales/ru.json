@@ -90,13 +90,23 @@
   "homepage.configurator.fittings.handle": "ручка",
   "homepage.configurator.fittings.pushToOpen": "push-to-open",
 
-  "homepage.configurator.fittings.hinges.options.1": "эконом",
-  "homepage.configurator.fittings.hinges.options.2": "стандарт",
-  "homepage.configurator.fittings.hinges.options.3": "премиум",
+  "homepage.configurator.fittings.hinges.tooltip.1": "Что такое петли?",
+  "homepage.configurator.fittings.hinges.tooltip.2": "Петли — это механизм, который позволяет открывать и закрывать двери шкафа.",
+  "homepage.configurator.fittings.hinges.tooltip.3": "Какие петли выбрать?",
+  "homepage.configurator.fittings.hinges.tooltip.4": "Стандарт - если ты хочешь, чтобы двери шкафа закрывались плавно и бесшумно.",
+  "homepage.configurator.fittings.hinges.tooltip.5": "Премиум - если ты хочешь лучшие на рынке петли Blum, австрийского производителя.",
 
-  "homepage.configurator.fittings.guides.options.1": "эконом",
-  "homepage.configurator.fittings.guides.options.2": "стандарт",
-  "homepage.configurator.fittings.guides.options.3": "премиум",
+  "homepage.configurator.fittings.guides.tooltip.1": "Что такое направляющие?",
+  "homepage.configurator.fittings.guides.tooltip.2": "Направляющие — это механизм, который позволяет ящикам шкафа плавно выдвигаться и задвигаться.",
+  "homepage.configurator.fittings.guides.tooltip.3": "Какие направляющие выбрать?",
+  "homepage.configurator.fittings.guides.tooltip.4": "Стандарт - если ты хочешь, чтобы ящики плавно выдвигались и задвигались - шариковые направляющие полного выдвижения с доводчиком.",
+  "homepage.configurator.fittings.guides.tooltip.5": "Премиум - если ты хочешь лучшие на рынке направляющие Blum, австрийского производителя.",
+
+  "homepage.configurator.fittings.hinges.options.1": "стандарт",
+  "homepage.configurator.fittings.hinges.options.2": "премиум",
+
+  "homepage.configurator.fittings.guides.options.1": "стандарт",
+  "homepage.configurator.fittings.guides.options.2": "премиум",
 
   "homepage.configurator.price.title": "Цена",
   "homepage.configurator.priceFlexible.title": "Гибкая цена",

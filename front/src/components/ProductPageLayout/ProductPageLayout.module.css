@@ -55,9 +55,15 @@
   display: flex;
 }
 
-.dimensionTitle {
+.dimensionTitle,
+.furnitureTitle {
   margin: 13px 0 10px 0;
   gap: 5px;
+}
+
+.tooltipContainer {
+  position: relative;
+  cursor: pointer;
 }
 
 .tooltipContainer .tooltipText {
@@ -68,9 +74,8 @@
   padding: 5px 0;
   position: absolute;
   z-index: 1;
-  bottom: 100%;
-  left: 50%;
-  margin-left: -3px;
+  bottom: calc(100% + 5px);
+  margin-left: -45px;
 }
 
 .tooltipContainer:hover {
@@ -79,7 +84,7 @@
 
 .tooltipContainer:hover .tooltipText {
   visibility: visible;
-  cursor: pointer;  
+  cursor: pointer;
 }
 
 .tooltipContainer:hover .tooltipText img {
@@ -87,7 +92,6 @@
   height: auto;
   border-radius: 50%;
   border: 1px solid #555;
-  opacity: 95%;
 }
 
 /* M O D A L  1 */
@@ -124,13 +128,14 @@
 
 /* C O M M O N */
 .dimensionTitle,
-.colorsLabel p, 
-.furnitureLabel p, 
+.colorsLabel p,
+.furnitureLabel p,
 .sectionsLabel p,
 .sectionLabel p,
 .mirroringLabel p,
 .sectionArrangementLabel p,
-.shelfArrangement p {
+.shelfArrangement p,
+.furnitureTitle {
   font-size: 13px;
   width: 150px;
   flex-shrink: 0;
@@ -139,15 +144,16 @@
 .sectionTitle,
 .colorsLabel p,
 .dimensionsHeaderTitle,
-.furnitureTitle,
+.furnitureHeaderTitle,
 .subtitle {
   font-size: 15px;
   font-weight: 700;
 }
 
-.sectionLabel, 
+.sectionLabel,
 .mirroringLabel,
-.dimensionTitle {
+.dimensionTitle,
+.furnitureTitle {
   display: flex;
   align-items: center;
 }
@@ -170,13 +176,13 @@
   margin-top: 10px;
 }
 
-.mirroringLabel p, 
+.mirroringLabel p,
 .shelfArrangement p,
 .sectionArrangementLabel p {
   margin: 0;
 }
 
-.sectionArrangementLabel, 
+.sectionArrangementLabel,
 .shelfArrangement {
   display: flex;
   margin-top: 20px;
@@ -191,9 +197,10 @@
   border-radius: 10px;
   padding: 30px 25px;
   width: 170px;
+  gap: 8px;
 }
 
-.priceFirstColumn {
+.priceBlock {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -226,6 +233,12 @@
     width: 100%;
     box-sizing: border-box;
   }
+  .detailsContainer {
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+    margin-inline: auto;
+  }
   .breadcrumbContainer {
     padding: 0 1.5rem;
   }
@@ -236,18 +249,15 @@
   .title {
     font-size: 20px;
   }
-  .detailsContainer {
-    width: 100%;
-    align-items: center;
-  }
-  .dimensionTitle, 
-  .colorsLabel p, 
-  .furnitureLabel p, 
+  .dimensionTitle,
+  .colorsLabel p,
+  .furnitureLabel p,
   .sectionsLabel p,
   .sectionLabel p,
   .mirroringLabel p,
   .sectionArrangementLabel p,
-  .shelfArrangement p {
+  .shelfArrangement p,
+  .dimensionTitle {
     width: 130px;
   }
   .priceContainer {
@@ -296,9 +306,9 @@
 }
 
 @media (max-width: 350px) {
-  .dimensionTitle, 
-  .colorsLabel p, 
-  .furnitureLabel p, 
+  .dimensionTitle,
+  .colorsLabel p,
+  .furnitureLabel p,
   .sectionsLabel p,
   .sectionLabel p,
   .mirroringLabel p,
