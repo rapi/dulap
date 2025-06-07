@@ -53,6 +53,7 @@
 
 .dimensionLabel {
   display: flex;
+  align-items: center;
 }
 
 .dimensionTitle,
