@@ -4,12 +4,12 @@ import { ProductPage } from '~/components/ProductPage/WardrobeProductPage'
 import { WardrobeProductConfiguration } from '~/components/ProductPage/productTypes/wardrobe'
 
 export const preview = {
-  name: 'products.wardrobe.1.name',
-  link: '/product/wardrobe/2',
-  src: '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
-  dimensions: '150x210x50',
-  color: '#ded9d3',
-  price: 5950,
+  name: 'products.wardrobe.4.name',
+  link: '/product/wardrobe/4',
+  src: '/wardrobe/Light Grey/push/Base 20/H2400/right/2500-5.png',
+  dimensions: '240x260x50',
+  color: '#d6d6d6',
+  price: 13600,
 }
 
 const Product: FC = () => {
@@ -20,45 +20,50 @@ const Product: FC = () => {
         name={preview.name}
         values={{
           imageCarousel: [
-            '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+            '/wardrobe/Light Grey/push/Base 20/H2400/right/2500-5.png',
           ],
           colors: preview.color,
-          dimensions: `${preview.dimensions}x5`,
+          dimensions: `${preview.dimensions}x2`,
           furniture: {
-            openingType: 'maner',
+            openingType: 'push',
             hinges: 'homepage.configurator.fittings.hinges.options.2',
             guides: 'homepage.configurator.fittings.guides.options.2',
           },
           sections: {
-            number: 2,
+            number: 3,
             mirror: 'nu',
             arrangement: [
               {
-                src: '/wardrobe/filling/Biege/2100/1.png',
-                width: 100,
-                height: 210,
+                src: '/wardrobe/filling/Light Grey/2100/1.png',
+                width: 96,
+                height: 224,
               },
               {
-                src: '/wardrobe/filling/Biege/2100/1.png',
-                width: 50,
-                height: 210,
+                src: '/wardrobe/filling/Light Grey/2100/1.png',
+                width: 96,
+                height: 224,
+              },
+              {
+                src: '/wardrobe/filling/Light Grey/2100/1.png',
+                width: 48,
+                height: 224,
               },
             ],
             opening: [
               {
-                src: '/wardrobe/opening-left.png',
-                width: 50,
-                height: 224,
+                src: '/wardrobe/opening-double.png',
+                width: 96,
+                height: 254,
+              },
+              {
+                src: '/wardrobe/opening-double.png',
+                width: 96,
+                height: 254,
               },
               {
                 src: '/wardrobe/opening-right.png',
-                width: 50,
-                height: 224,
-              },
-              {
-                src: '/wardrobe/opening-right.png',
-                width: 50,
-                height: 224,
+                width: 48,
+                height: 254,
               },
             ],
           },

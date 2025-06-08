@@ -1,13 +1,7 @@
-/* 1. Font Import */
-@import url('https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap');
-
-/* 2. Container (acts as top-level wrapper: apply to your main AboutUs element) */
 .container {
-  /* Base typography & background (formerly in global body) */
   font-family: 'Onest', sans-serif;
   font-size: 16px;
   color: #333333;
-  /* background-color: #ffffff; */
   line-height: 1.5;
   margin: 0;
   padding: 0;
@@ -19,24 +13,22 @@
   margin-right: auto;
 }
 
-/* 3. About Section */
 .aboutSection {
-  background-color: #f9f9f9; 
-  padding: 32px 0;            
+  padding: 32px 0;
   text-align: center;
 }
 
 .title {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 8px;   
-  color: #333333;      
+  margin-bottom: 8px;
+  color: #333333;
 }
 
 .intro {
   font-size: 1rem;
-  color: #666666;       
-  margin-bottom: 32px;  
+  color: #666666;
+  margin-bottom: 32px;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -47,7 +39,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 32px;          
+  gap: 32px;
 }
 
 /* 5. Individual Founder Card */
@@ -55,7 +47,7 @@
   flex: 1;
   max-width: 270px;
   background-color: #ffffff;
-  padding: 25px;       
+  padding: 25px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -67,20 +59,20 @@
   height: 220px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
 }
 
 .founderName {
   font-size: 1.3rem;
   font-weight: 500;
-  margin-bottom: 0;  
-  color: #333333;      
+  margin-bottom: 0;
+  color: #333333;
 }
 
 .founderRole {
   font-size: 1rem;
   font-weight: 400;
-  color: #444444;      
+  color: #444444;
 }
 
 .founderDetails {
@@ -88,10 +80,9 @@
   line-height: 1.7;
   letter-spacing: 0.4;
   font-weight: 350;
-  color: #888888; 
+  color: #888888;
 }
 
-/* 6. Responsive Breakpoints */
 @media (max-width: 768px) {
   .teamGrid {
     flex-direction: column;

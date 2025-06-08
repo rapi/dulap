@@ -4,12 +4,12 @@ import { ProductPage } from '~/components/ProductPage/WardrobeProductPage'
 import { WardrobeProductConfiguration } from '~/components/ProductPage/productTypes/wardrobe'
 
 export const preview = {
-  name: 'products.wardrobe.1.name',
+  name: 'products.wardrobe.2.name',
   link: '/product/wardrobe/2',
-  src: '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
-  dimensions: '150x210x50',
-  color: '#ded9d3',
-  price: 5950,
+  src: '/wardrobe/White/maner/Base 20/H2100/right/500-1.png',
+  dimensions: '50x210x50',
+  color: '#fcfbf5',
+  price: 3900,
 }
 
 const Product: FC = () => {
@@ -20,7 +20,7 @@ const Product: FC = () => {
         name={preview.name}
         values={{
           imageCarousel: [
-            '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+            '/wardrobe/White/maner/Base 20/H2100/right/500-1.png',
           ],
           colors: preview.color,
           dimensions: `${preview.dimensions}x5`,
@@ -30,31 +30,16 @@ const Product: FC = () => {
             guides: 'homepage.configurator.fittings.guides.options.2',
           },
           sections: {
-            number: 2,
+            number: 1,
             mirror: 'nu',
             arrangement: [
               {
-                src: '/wardrobe/filling/Biege/2100/1.png',
-                width: 100,
-                height: 210,
-              },
-              {
-                src: '/wardrobe/filling/Biege/2100/1.png',
+                src: '/wardrobe/filling/White/2100/1.png',
                 width: 50,
                 height: 210,
               },
             ],
             opening: [
-              {
-                src: '/wardrobe/opening-left.png',
-                width: 50,
-                height: 224,
-              },
-              {
-                src: '/wardrobe/opening-right.png',
-                width: 50,
-                height: 224,
-              },
               {
                 src: '/wardrobe/opening-right.png',
                 width: 50,

@@ -19,6 +19,13 @@
   position: relative;
 }
 
+.desktop {
+  display: block;
+}
+.mobile {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .hero {
     flex-direction: column;
@@ -27,6 +34,13 @@
   .heroImage {
     height: 70vh;
     opacity: 1;
+  }
+
+  .desktop {
+    display: none;
+  }
+  .mobile {
+    display: block;
   }
 }
 

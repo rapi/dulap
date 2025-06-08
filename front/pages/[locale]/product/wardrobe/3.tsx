@@ -4,12 +4,12 @@ import { ProductPage } from '~/components/ProductPage/WardrobeProductPage'
 import { WardrobeProductConfiguration } from '~/components/ProductPage/productTypes/wardrobe'
 
 export const preview = {
-  name: 'products.wardrobe.1.name',
-  link: '/product/wardrobe/2',
-  src: '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
-  dimensions: '150x210x50',
-  color: '#ded9d3',
-  price: 5950,
+  name: 'products.wardrobe.3.name',
+  link: '/product/wardrobe/4',
+  src: '/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png',
+  dimensions: '200x240x50',
+  color: '#9c9c9c',
+  price: 11700,
 }
 
 const Product: FC = () => {
@@ -20,10 +20,10 @@ const Product: FC = () => {
         name={preview.name}
         values={{
           imageCarousel: [
-            '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+            '/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png',
           ],
           colors: preview.color,
-          dimensions: `${preview.dimensions}x5`,
+          dimensions: `${preview.dimensions}x6`,
           furniture: {
             openingType: 'maner',
             hinges: 'homepage.configurator.fittings.hinges.options.2',
@@ -34,31 +34,26 @@ const Product: FC = () => {
             mirror: 'nu',
             arrangement: [
               {
-                src: '/wardrobe/filling/Biege/2100/1.png',
+                src: '/wardrobe/filling/Grey/2400/1.png',
                 width: 100,
-                height: 210,
+                height: 240,
               },
               {
-                src: '/wardrobe/filling/Biege/2100/1.png',
-                width: 50,
-                height: 210,
+                src: '/wardrobe/filling/Grey/2400/1.png',
+                width: 100,
+                height: 240,
               },
             ],
             opening: [
               {
-                src: '/wardrobe/opening-left.png',
-                width: 50,
-                height: 224,
+                src: '/wardrobe/opening-double.png',
+                width: 100,
+                height: 254,
               },
               {
-                src: '/wardrobe/opening-right.png',
-                width: 50,
-                height: 224,
-              },
-              {
-                src: '/wardrobe/opening-right.png',
-                width: 50,
-                height: 224,
+                src: '/wardrobe/opening-double.png',
+                width: 100,
+                height: 254,
               },
             ],
           },

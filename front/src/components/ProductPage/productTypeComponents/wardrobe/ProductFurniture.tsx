@@ -37,7 +37,6 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
   predefinedValue,
 }) => {
   const intl = useIntl()
-  const [isModalOpen1, setIsModalOpen1] = useState(false)
   const [isModalOpen2, setIsModalOpen2] = useState(false)
   const [isModalOpen3, setIsModalOpen3] = useState(false)
 

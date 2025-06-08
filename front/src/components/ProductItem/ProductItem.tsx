@@ -2,7 +2,6 @@ import Image from 'next/image'
 import React from 'react'
 import Link from 'next/link'
 import classes from './ProductItem.module.css'
-import SelectColor from '~/components/SelectColor/SelectColor'
 import { FormattedMessage } from 'react-intl'
 
 interface ProductItemProps {
@@ -10,12 +9,17 @@ interface ProductItemProps {
   image: string
   name: string
   link: string
+  dimensions: string
+  color?: string
+  price?: number
 }
 export const ProductItem: React.FC<ProductItemProps> = ({
   button,
   image,
   name,
-  link
+  link,
+  dimensions,
+  price,
 }) => {
   return (
     <div className={classes.productItemContainer}>
@@ -31,16 +35,28 @@ export const ProductItem: React.FC<ProductItemProps> = ({
         />
       </Link>
       <div className={classes.productDescription}>
-        <a className={classes.productName} href="">
-          <h3 className={classes.productName}><FormattedMessage id={name}/></h3>
-        </a>
+        <div className={classes.titleRow}>
+          <a className={classes.productName} href={link}>
+            <h3 className={classes.productName}>
+              <FormattedMessage id={name} />
+            </h3>
+          </a>
+        </div>
         <div className={classes.productDescriptionSecondLine}>
-          <SelectColor
-            colors={['#eeeeee', '#b5b5b5', '#d7d0c5']}
-            onChange={() => {}}
-            size='medium'
-          />
-          {button}
+          {dimensions ? (
+            <p className={classes.dimensions}>{dimensions} cm</p>
+          ) : (
+            ''
+          )}
+          <div className={classes.priceAndCTA}>
+            <p className={classes.price}>
+              {price ? price : ''}&nbsp;
+              <FormattedMessage
+                id={'homepage.configurator.price.currencyLei'}
+              />
+            </p>
+            {button}
+          </div>
         </div>
       </div>
     </div>

@@ -14,12 +14,16 @@ export const CustomButton: FC<CustomButtonProps> = ({
   children,
   icon,
   outlined,
-  size,
+  size = 'medium',
   href,
   variant = 'primary',
 }) => {
   if (!children && icon) {
-    return <IconButton>{icon}</IconButton>
+    return (
+      <IconButton size={size} color="warning">
+        {icon}
+      </IconButton>
+    )
   }
   const additionalProps = {
     startIcon: icon,

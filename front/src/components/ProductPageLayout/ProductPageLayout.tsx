@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './ProductPageLayout.module.css'
 import { Breadcrumb } from '~/components/Breadcrumb/Breadcrumb'
-import { productTypes } from '~/components/ProductListPage/productTypes'
+import { productTypes } from '~/components/ProductTypesList/productTypes'
 import { useRouter } from 'next/router'
 interface ProductPageLayoutProps {
   children: React.ReactNode
@@ -21,7 +21,6 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
           items={[
             { label: 'homepage.configurator.breadcrumb.1', link: '/' },
             { label: 'homepage.configurator.breadcrumb.2', link: '/products' },
-            // ...(productType?.name ? [{ label: productType.name }] : []),
             ...(productType
               ? [{ label: productType.name, link: 'strippedPath' }]
               : []),

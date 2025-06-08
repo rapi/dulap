@@ -12,6 +12,7 @@
   "homepage.button.create": "Создать",
   "homepage.button.edit": "Редактировать",
   "homepage.button.addToCart": "В корзину",
+  "homepage.button.addToCartShort": "В корзину",
   "homepage.button.finalizeOrder": "Завершить заказ",
   "homepage.button.placeOrder": "Оформить заказ",
   "homepage.button.sendMessage": "Отправить сообщение",
@@ -46,7 +47,12 @@
   "products.comoda4": "Тумба 4",
   "products.comoda5": "Тумба 5",
   "products.comoda6": "Тумба 6",
- 
+
+  "products.wardrobe.1.name": "Шкаф для вещей 150см",
+  "products.wardrobe.2.name": "Шкаф для вещей 50см",
+  "products.wardrobe.3.name": "Шкаф для вещей 200см",
+  "products.wardrobe.4.name": "Шкаф для вещей 240см",
+
   "homepage.configurator.breadcrumb.1": "Главная страница",
   "homepage.configurator.breadcrumb.2": "Товары",
   "homepage.configurator.breadcrumb.3": "Шкаф для одежды",

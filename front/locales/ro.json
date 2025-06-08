@@ -12,6 +12,7 @@
   "homepage.button.create": "Creează",
   "homepage.button.edit": "Editează",
   "homepage.button.addToCart": "Adaugă în coș",
+  "homepage.button.addToCartShort": "în coș",
   "homepage.button.finalizeOrder": "Finalizează comanda",
   "homepage.button.placeOrder": "Plasează comanda",
   "homepage.button.sendMessage": "Trimite mesajul",
@@ -46,6 +47,11 @@
   "products.comoda4": "Comodă 4",
   "products.comoda5": "Comodă 5",
   "products.comoda6": "Comodă 6",
+
+  "products.wardrobe.1.name": "Dulap pentru haine 150cm",
+  "products.wardrobe.2.name": "Dulap pentru haine 150cm",
+  "products.wardrobe.3.name": "Dulap pentru haine 200cm",
+  "products.wardrobe.4.name": "Dulap pentru haine 240cm",
  
   "homepage.configurator.breadcrumb.1": "Pagina principală",
   "homepage.configurator.breadcrumb.2": "Produse",
