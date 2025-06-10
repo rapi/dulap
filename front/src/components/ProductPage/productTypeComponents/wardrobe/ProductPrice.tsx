@@ -10,9 +10,11 @@ export type ProductPriceComponent = {
 interface ProductPriceProps {
   configuration: ProductPriceComponent
   predefinedValue?: number
+  onAddItem: () => void
 }
 export const ProductPrice: FC<ProductPriceProps> = ({
   configuration,
+  onAddItem,
   predefinedValue,
 }) => {
   return predefinedValue ? (
@@ -54,7 +56,12 @@ export const ProductPrice: FC<ProductPriceProps> = ({
         </div>
       </div>
       <div className={styles.addToCartButtonContainer}>
-        <CustomButton icon={<ShoppingCartIcon />} size="large" variant="danger">
+        <CustomButton
+          icon={<ShoppingCartIcon />}
+          size="large"
+          variant="danger"
+          onClick={onAddItem}
+        >
           <FormattedMessage id="homepage.button.addToCart" />
         </CustomButton>
       </div>

@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Button from '@mui/material/Button'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
-import { WardrobeIconMedium } from '~/components/Icons/Icons'
+import { CartIcon, WardrobeIconMedium } from '~/components/Icons/Icons'
 import MenuMui from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -12,6 +12,8 @@ import { grey } from '@mui/material/colors'
 import Link from 'next/link'
 import { FormattedMessage } from 'react-intl'
 import Select from '~/components/Select/Select'
+import { useCart } from '~/context/cartContext'
+import { Badge } from '@mui/material'
 export const Menu = () => {
   const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -22,6 +24,7 @@ export const Menu = () => {
   const handleClose = () => {
     setAnchorEl(null)
   }
+  const { itemCount } = useCart()
   return (
     <header className={classes.header}>
       <div className={classes.headerContainer}>
@@ -133,12 +136,9 @@ export const Menu = () => {
           />
           <div className="icons">
             <Link href="/cart">
-              <Image
-                width={30}
-                height={30}
-                src="/cart.svg"
-                alt="Dulap.md shopping cart"
-              />
+              <Badge badgeContent={itemCount} color="primary">
+                <CartIcon />
+              </Badge>
             </Link>
           </div>
         </nav>

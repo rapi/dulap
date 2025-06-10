@@ -9,6 +9,7 @@ interface CustomButtonProps {
   href?: string
   size?: 'small' | 'medium' | 'large'
   variant?: 'primary' | 'danger'
+  onClick?: () => void
 }
 export const CustomButton: FC<CustomButtonProps> = ({
   children,
@@ -17,6 +18,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
   size = 'medium',
   href,
   variant = 'primary',
+  onClick,
 }) => {
   if (!children && icon) {
     return (
@@ -29,6 +31,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
     startIcon: icon,
     ...(icon && { startIcon: icon }),
     ...(href && { href }),
+    ...(onClick && { onClick }),
   }
   return (
     <>

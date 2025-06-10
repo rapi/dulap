@@ -36,6 +36,7 @@ import {
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
 import { FormattedMessage } from 'react-intl'
+import { useCart } from '~/context/cartContext'
 
 export type ProductComponent =
   | ProductImageSelectComponent
@@ -67,6 +68,7 @@ export const ProductPage: FC<ProductPageProps> = ({
   name,
   values,
 }) => {
+  const { addItem } = useCart()
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'imageSelect':
@@ -155,6 +157,9 @@ export const ProductPage: FC<ProductPageProps> = ({
       <div>
         {priceComponent && (
           <ProductPrice
+            onAddItem={() => {
+              addItem('wardrobe', currentComponents)
+            }}
             configuration={priceComponent}
             predefinedValue={values?.price ?? undefined}
           />
