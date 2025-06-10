@@ -11,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { grey } from '@mui/material/colors'
 import Link from 'next/link'
 import { FormattedMessage } from 'react-intl'
+import Select from '~/components/Select/Select'
 export const Menu = () => {
   const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -83,11 +84,7 @@ export const Menu = () => {
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <CustomButton
-              size="medium"
-              href="/office-table"
-              variant='danger'
-            >
+            <CustomButton size="medium" href="/office-table" variant="danger">
               Office Table
             </CustomButton>
           </MenuItem>
@@ -101,17 +98,23 @@ export const Menu = () => {
             </CustomButton>
           </MenuItem>
           {/* <MenuItem onClick={handleClose}> */}
-            {/*<Select*/}
-            {/*  options={['ro', 'ru']}*/}
-            {/*  onChange={(e) => router.push(`/${e}/`)}*/}
-            {/*/>*/}
+          {/*<Select*/}
+          {/*  options={['ro', 'ru']}*/}
+          {/*  onChange={(e) => router.push(`/${e}/`)}*/}
+          {/*/>*/}
           {/* </MenuItem> */}
         </MenuMui>
 
         <nav className={classes.navigation}>
-          <Link href="/products"><FormattedMessage id="homepage.menu.productsTitle" /></Link>
-          <Link href="/about-us"><FormattedMessage id="homepage.menu.aboutUsTitle" /></Link>
-          <Link href="/contacts"><FormattedMessage id="homepage.menu.contactsTitle" /></Link>
+          <Link href="/products">
+            <FormattedMessage id="homepage.menu.productsTitle" />
+          </Link>
+          <Link href="/about-us">
+            <FormattedMessage id="homepage.menu.aboutUsTitle" />
+          </Link>
+          <Link href="/contacts">
+            <FormattedMessage id="homepage.menu.contactsTitle" />
+          </Link>
 
           <CustomButton size="medium" href="/office-table" variant="danger">
             Office Table
@@ -124,7 +127,10 @@ export const Menu = () => {
           >
             <FormattedMessage id="homepage.button.yourWardrobe" />
           </CustomButton>
-
+          <Select
+            options={['ro', 'ru']}
+            onChange={(e) => router.push(`/${e}/`)}
+          />
           <div className="icons">
             <Link href="/cart">
               <Image
@@ -134,10 +140,6 @@ export const Menu = () => {
                 alt="Dulap.md shopping cart"
               />
             </Link>
-            {/*<Select*/}
-            {/*  options={['ro', 'ru']}*/}
-            {/*  onChange={(e) => router.push(`/${e}/`)}*/}
-            {/*/>*/}
           </div>
         </nav>
       </div>
