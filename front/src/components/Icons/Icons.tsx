@@ -58,8 +58,8 @@ export const WardrobeSecondIconLarge = () => (
 // Cart Icon
 export const CartIcon = () => (
   <Image
-    width="20"
-    height="20"
+    width="30"
+    height="30"
     src="/cart.svg"
     alt="cart icon"
   />

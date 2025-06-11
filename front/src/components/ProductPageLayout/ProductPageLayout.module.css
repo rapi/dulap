@@ -225,6 +225,14 @@
   color: #f15e4d;
 }
 
+/* MODAL ORDER CONFIRMATION */
+.buttonRow {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
 /* M O B I L E */
 @media (max-width: 768px) {
   .contentContainer {

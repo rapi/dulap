@@ -59,6 +59,12 @@ export const Menu = () => {
             fontFamily: 'Onest, sans-serif',
           }}
         >
+          <MenuItem onClick={handleClose}>
+            <Select
+              options={['ro', 'ru']}
+              onChange={(e) => router.push(`/${e}/`)}
+            />
+          </MenuItem>
           <MenuItem
             onClick={() => {
               handleClose()
@@ -86,10 +92,17 @@ export const Menu = () => {
           >
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </MenuItem>
-          <MenuItem onClick={handleClose}>
+          {/* <MenuItem onClick={handleClose}>
             <CustomButton size="medium" href="/office-table" variant="danger">
               Office Table
             </CustomButton>
+          </MenuItem> */}
+          <MenuItem onClick={handleClose}>
+            <Link href="/cart">
+              <Badge badgeContent={itemCount} color="primary">
+                <CartIcon />
+              </Badge>
+            </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <CustomButton
@@ -100,12 +113,6 @@ export const Menu = () => {
               <FormattedMessage id="homepage.button.yourWardrobe" />
             </CustomButton>
           </MenuItem>
-          {/* <MenuItem onClick={handleClose}> */}
-          {/*<Select*/}
-          {/*  options={['ro', 'ru']}*/}
-          {/*  onChange={(e) => router.push(`/${e}/`)}*/}
-          {/*/>*/}
-          {/* </MenuItem> */}
         </MenuMui>
 
         <nav className={classes.navigation}>
@@ -119,9 +126,9 @@ export const Menu = () => {
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </Link>
 
-          <CustomButton size="medium" href="/office-table" variant="danger">
+          {/* <CustomButton size="medium" href="/office-table" variant="danger">
             Office Table
-          </CustomButton>
+          </CustomButton> */}
 
           <CustomButton
             icon={<WardrobeIconMedium />}

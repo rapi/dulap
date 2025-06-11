@@ -2,6 +2,7 @@ import { CustomButton } from '~/components/CustomButton/CustomButton'
 import { grey } from '@mui/material/colors'
 import { FormattedMessage } from 'react-intl'
 import { useIntl } from 'react-intl'
+import { useCart } from '~/context/cartContext'
 
 export { Checkout }
 
@@ -11,6 +12,14 @@ import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 const Checkout: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('cash')
   const intl = useIntl()
+
+  const { items } = useCart(); // Assuming useCart is defined in your context
+  console.log('items ', items);
+  const totalPrice = items.reduce(
+    (sum, { config }) => sum + (config[4]?.price ?? 0),
+    0
+  );
+  const deliveryPrice = 0;
 
   return (
     <div className={styles.container}>
@@ -152,44 +161,48 @@ const Checkout: React.FC = () => {
         {/* Right Section: Order Summary */}
         <div className={styles.summarySection}>
           <div className={styles.summaryCard}>
-            <div className={styles.productItem}>
-              <img
-                src="/sideboard.jpg"
-                alt="Comodă"
-                className={styles.productImage}
-              />
-              <div className={styles.productdetails}>
-                <p className={styles.productTitle}>NAME</p>
-                <p className={styles.productSize}>
-                  width x height x depth{' '}
-                  <FormattedMessage id="homepage.configurator.dimensions.cm" />
-                </p>
-                <p className={styles.productPrice}>
-                  5200{' '}
-                  <FormattedMessage id="homepage.configurator.price.currencyLei" />
-                </p>
+            {items.map((_item, index) => (
+              <div className={styles.productItem} key={index}>
+                <img
+                  src={_item.config[5].images[0]}
+                  alt="Comodă"
+                  className={styles.productImage}
+                />
+                <div className={styles.productdetails}>
+                  <p className={styles.productTitle}>
+                    {_item.name === 'wardrobe' ? intl.formatMessage({ id: 'homepage.products.wardrobe' }) : intl.formatMessage({ id: 'homepage.products.dulap' })}
+                  </p>
+                  <p className={styles.productSize}>
+                    {_item.config[0].width} x {_item.config[0].height} x {_item.config[0].depth}{' '}
+                    <FormattedMessage id="homepage.configurator.dimensions.cm" />
+                  </p>
+                  <p className={styles.productPrice}>
+                    {_item.config[4].price}{' '}
+                    <FormattedMessage id="homepage.configurator.price.currencyLei" />
+                  </p>
+                </div>
               </div>
-            </div>
+            ))}
 
             <div className={styles.totalSection}>
               <p>
                 <FormattedMessage id="checkout.subtotal" />{' '}
                 <span>
-                  10400{' '}
+                  {totalPrice}{' '}
                   <FormattedMessage id="homepage.configurator.price.currencyLei" />
                 </span>
               </p>
               <p>
                 <FormattedMessage id="checkout.delivery" />{' '}
                 <span>
-                  0{' '}
+                  {deliveryPrice}{' '}
                   <FormattedMessage id="homepage.configurator.price.currencyLei" />
                 </span>
               </p>
               <p className={styles.finalTotal}>
                 <FormattedMessage id="checkout.totalToPay" />{' '}
                 <span>
-                  10400{' '}
+                  {totalPrice + deliveryPrice}{' '}
                   <FormattedMessage id="homepage.configurator.price.currencyLei" />
                 </span>
               </p>

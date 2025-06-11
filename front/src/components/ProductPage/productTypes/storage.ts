@@ -26,6 +26,8 @@ export const StorageProductConfiguration: () => ProductComponent[] = () => {
       setWidth: () => {},
       height: 0,
       setHeight: () => {},
+      depth: 0,
+      setDepth: () => {},
       plintHeight: 0,
       setPlintHeight: () => {},
     },

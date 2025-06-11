@@ -33,7 +33,12 @@
   color: #333;
 }
 
-.menu li:hover {
+.menu li a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.menu li a:hover {
   color: #585858;
   cursor: pointer;
 }

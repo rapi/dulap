@@ -16,11 +16,17 @@
   "homepage.button.finalizeOrder": "Завершить заказ",
   "homepage.button.placeOrder": "Оформить заказ",
   "homepage.button.sendMessage": "Отправить сообщение",
+  "homepage.button.openCart": "Посмотреть корзину",
+  "homepage.button.backToPurchase": "Назад к покупкам",
 
   "homepage.menu.productsTitle": "Товары",
   "homepage.menu.aboutUsTitle": "О нас",
   "homepage.menu.contactsTitle": "Контакты",
   "homepage.menu.tryIt": "Попробуй здесь",
+  "homepage.footer.products": "Шкафы",
+  "homepage.footer.officeTable": "Офисный стол",
+  "homepage.footer.greenwall": "Стеллажи",
+  "homepage.footer.followUs": "Подпишись!",
   
   "homepage.dulapLanding.title1": "Выбери тип шкафа, который тебе нужен, и начни персонализацию!",
   "homepage.dulapLanding.title2": "Выбери готовые товары из нашего списка",
@@ -40,6 +46,7 @@
   "homepage.products.TVstand": "Тумба под ТВ",
   "homepage.products.wardrobe": "Шкаф для одежды",
   "homepage.products.bedside": "Тумбочка",
+  "homepage.products.dulap": "Шкаф",
 
   "products.comoda1": "Тумба 1",
   "products.comoda2": "Тумба 2",
@@ -107,7 +114,8 @@
   "homepage.configurator.fittings.guides.tooltip.3": "Какие направляющие выбрать?",
   "homepage.configurator.fittings.guides.tooltip.4": "Стандарт - если ты хочешь, чтобы ящики плавно выдвигались и задвигались - шариковые направляющие полного выдвижения с доводчиком.",
   "homepage.configurator.fittings.guides.tooltip.5": "Премиум - если ты хочешь лучшие на рынке направляющие Blum, австрийского производителя.",
-
+  
+  "standart": "стандарт",
   "homepage.configurator.fittings.hinges.options.1": "стандарт",
   "homepage.configurator.fittings.hinges.options.2": "премиум",
 
@@ -117,6 +125,8 @@
   "homepage.configurator.price.title": "Цена",
   "homepage.configurator.priceFlexible.title": "Гибкая цена",
   "homepage.configurator.price.currencyLei": "лей",
+
+  "modal.addedToCart.title": "Шкаф был успешно добавлен в корзину",
 
   "cart.title": "Моя корзина",
   "cart.tableHeader.no": "№",

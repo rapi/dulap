@@ -1,5 +1,7 @@
 import React from 'react'
 import styles from './Footer.module.css'
+import Link from 'next/link'
+import { FormattedMessage } from 'react-intl'
 
 export const Footer: React.FC = () => {
   return (
@@ -7,20 +9,22 @@ export const Footer: React.FC = () => {
       <div className={styles.container}>
         <nav className={styles.menu}>
           <ul>
-            <li>Dulapuri</li>
-            <li>Comode</li>
-            <li>Rafturi</li>
+            <li><Link href="/products"><FormattedMessage id="homepage.footer.products"/></Link></li>
+            <li><Link href="/office-table"><FormattedMessage id="homepage.footer.officeTable"/></Link></li>
+            <li><Link href="/greenwall"><FormattedMessage id="homepage.footer.greenwall"/></Link></li>
           </ul>
         </nav>
         <nav className={styles.menu}>
           <ul>
-            <li>Despre noi</li>
-            <li>Contacte</li>
+            <li><Link href="/about-us"><FormattedMessage id="homepage.menu.aboutUsTitle"/></Link></li>
+            <li><Link href="/contacts"><FormattedMessage id="homepage.menu.contactsTitle"/></Link></li>
           </ul>
         </nav>
         <div className={styles.logoSection}>
-          <img alt="logo" src="/logo.svg" width={130} />
-          <p>Abonează-te!</p>
+          <Link href="/">
+            <img alt="logo" src="/logo.svg" width={130}/>
+          </Link>
+          <p><FormattedMessage id="homepage.footer.followUs"/></p>
           <div className={styles.socialIcons}>
             <a
               href="https://www.instagram.com/dulap.md_?igsh=MTEzNWR4cXBpbXdwbQ=="

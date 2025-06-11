@@ -1,13 +1,25 @@
 import React from 'react'
+import { useRouter } from 'next/router'
 import styles from './CartPage.module.css'
 import { Delete as FaTrash } from '@mui/icons-material'
 import SelectColor from '~/components/SelectColor/SelectColor'
+import { IconButton } from '@mui/material'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import { FormattedMessage } from 'react-intl'
+import { useIntl } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 
 export const CartPage = () => {
-  const { items } = useCart() // Assuming useCart is defined in your context
+  const router = useRouter()
+  
+  const { items, removeItem } = useCart(); // Assuming useCart is defined in your context
+  console.log('items ', items);
+  const intl = useIntl();
+  const totalPrice = items.reduce(
+    (sum, { config }) => sum + (config[4]?.price ?? 0),
+    0
+  )
+  
   return (
     <div className={styles.cartContainer}>
       <div className={styles.titleContainer}>
@@ -42,11 +54,13 @@ export const CartPage = () => {
         {items.map((_item, index) => (
           <div className={styles.cartRow} key={index}>
             <span>{index + 1}</span>
-            <span className={styles.productName}>NUME</span>
+            <span className={styles.productName}>
+              {_item.name === 'wardrobe' ? intl.formatMessage({ id: 'homepage.products.wardrobe' }) : intl.formatMessage({ id: 'homepage.products.dulap' })}
+            </span>
             <div className={styles.productImageContainer}>
               <img
                 className={styles.productImage}
-                src="/sideboard.jpg"
+                src={_item.config[5].images[0]}
                 alt="Comodă"
               />
             </div>
@@ -56,28 +70,28 @@ export const CartPage = () => {
               <FormattedMessage id="homepage.configurator.dimensions.width" />:
               &nbsp;
               <b>
-                2700{' '}
+                {_item.config[0].width}{' '}
                 <FormattedMessage id="homepage.configurator.dimensions.cm" />
               </b>
               <br />{' '}
               <FormattedMessage id="homepage.configurator.dimensions.height" />:
               &nbsp;
               <b>
-                1230{' '}
+                {_item.config[0].height}{' '}
                 <FormattedMessage id="homepage.configurator.dimensions.cm" />
               </b>
               <br />
               <FormattedMessage id="homepage.configurator.dimensions.depth" />:
               &nbsp;
               <b>
-                600{' '}
+                {_item.config[0].depth}{' '}
                 <FormattedMessage id="homepage.configurator.dimensions.cm" />
               </b>
               <br />
               <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />
               : &nbsp;
               <b>
-                600{' '}
+                {_item.config[0].plintHeight}{' '}
                 <FormattedMessage id="homepage.configurator.dimensions.cm" />
               </b>
               <br />
@@ -85,31 +99,34 @@ export const CartPage = () => {
               <FormattedMessage id="homepage.configurator.fittings.title" />:
               <br />{' '}
               <FormattedMessage id="homepage.configurator.fittings.handleType" />
-              : <b>mâner</b>
+              : <b>{_item.config[3].selectedOpeningMethod}</b>
               <br />{' '}
               <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
-              <b>econom</b>
+              <b>{intl.formatMessage({ id: _item.config[3].hinges })}</b>
+              {/* _item.config[3].hinges */}
               <br />{' '}
               <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
-              <b>econom</b>
+              <b>{intl.formatMessage({ id: _item.config[3].guides })}</b>
               <br />
             </span>
             <div className={styles.colorContainer}>
               <SelectColor
                 size="medium"
-                colors={['#d7d0c5']}
+                colors={[_item.config[1].selectedColor]}
                 onChange={() => {}}
               />
             </div>
             <span className={styles.price}>
-              5200{' '}
+              {_item.config[4].price}{' '}
               <FormattedMessage id="homepage.configurator.price.currencyLei" />
             </span>
             <div className={styles.actions}>
-              <CustomButton size="small">
-                <FormattedMessage id="homepage.button.edit" />
-              </CustomButton>
-              <CustomButton icon={<FaTrash />} size="small"></CustomButton>
+              <IconButton
+                size="large"
+                onClick={() => removeItem(index)}
+              >
+                <FaTrash />
+              </IconButton>
             </div>
           </div>
         ))}
@@ -119,12 +136,12 @@ export const CartPage = () => {
           <FormattedMessage id="cart.subtotal" />
         </span>
         <span className={styles.subtotalValue}>
-          10400{' '}
+          {totalPrice}{' '}
           <FormattedMessage id="homepage.configurator.price.currencyLei" />
         </span>
       </div>
       <div className={styles.ctaButtonContainer}>
-        <CustomButton icon="" size="medium" href="/checkout">
+        <CustomButton icon="" size="medium" onClick={() => router.push('/checkout')}>
           <FormattedMessage id="homepage.button.finalizeOrder" />
         </CustomButton>
       </div>

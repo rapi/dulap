@@ -16,11 +16,14 @@
   "homepage.button.finalizeOrder": "Finalizează comanda",
   "homepage.button.placeOrder": "Plasează comanda",
   "homepage.button.sendMessage": "Trimite mesajul",
+  "homepage.button.openCart": "Vezi coșul",
+  "homepage.button.backToPurchase": "Înapoi la cumpărături",
 
   "homepage.menu.productsTitle": "Produse",
   "homepage.menu.aboutUsTitle": "Despre noi",
   "homepage.menu.contactsTitle": "Contacte",
   "homepage.menu.tryIt": "Încearcă aici",
+  "homepage.footer.followUs": "Abonează-te!",
 
   "homepage.dulapLanding.title1": "Alege ce tip de dulap ai nevoie și începe personalizarea!",
   "homepage.dulapLanding.title2": "Alege produse gata din lista noastră",
@@ -40,6 +43,7 @@
   "homepage.products.TVstand": "Comodă TV",
   "homepage.products.wardrobe": "Dulap pentru haine",
   "homepage.products.bedside": "Noptieră",
+  "homepage.products.dulap": "Dulap",
 
   "products.comoda1": "Comodă 1",
   "products.comoda2": "Comodă 2",
@@ -108,6 +112,7 @@
   "homepage.configurator.fittings.guides.tooltip.4": "Standard – dacă vrei ca sertarele să se miște lin: glisiere cu bile, cu amortizare.",
   "homepage.configurator.fittings.guides.tooltip.5": "Premium – dacă vrei cele mai bune glisiere de pe piață, Blum, producător austriac.",
 
+  "standart": "standart",
   "homepage.configurator.fittings.hinges.options.1": "standart",
   "homepage.configurator.fittings.hinges.options.2": "premium",
 
@@ -118,6 +123,8 @@
   "homepage.configurator.priceFlexible.title": "Preț flexibil",
   "homepage.configurator.price.currencyLei": "lei",
 
+  "modal.addedToCart.title": "Produsul a fost adăgat în coș cu succes",
+
   "cart.title": "Coșul meu",
   "cart.tableHeader.no": "Nr.",
   "cart.tableHeader.productName": "Denumirea produsului",
@@ -127,8 +134,6 @@
   "cart.tableHeader.price": "Preț total",
   "cart.tableHeader.actions": "Acțiuni",
   "cart.subtotal": "Subtotal",
-
-
 
   "checkout.title": "Comanda mea",
   "checkout.subtitle1.orderDetails": "Detalii comandă",

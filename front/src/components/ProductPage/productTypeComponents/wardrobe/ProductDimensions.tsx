@@ -15,6 +15,8 @@ export type ProductDimensionsComponent = {
   setWidth: (value: number) => void
   height: number
   setHeight: (value: number) => void
+  depth: number
+  setDepth: (value: number) => void
   plintHeight: number
   setPlintHeight: (value: number) => void
 }
@@ -66,7 +68,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
               max={configuration.depthRange[1]}
               step={5}
               value={50}
-              onChange={() => {}}
+              onChange={configuration.setDepth}
             />
           )}
         </label>

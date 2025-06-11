@@ -33,7 +33,7 @@ export const Dulap: React.FC = () => {
         <AboutUs></AboutUs>
         <div className={classes.ctaButtonContainer}>
           <CustomButton icon="" size="large" variant="primary">
-            Încearcă acum
+            <FormattedMessage id="homepage.button.tryIt" />
           </CustomButton>
         </div>
       </section>

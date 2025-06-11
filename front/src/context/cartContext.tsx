@@ -13,6 +13,7 @@ type CartItem = { name: string; config: ProductComponent[] }
 type CartContextType = {
   items: CartItem[]
   addItem: (name: string, config: ProductComponent[]) => void
+  removeItem: (index: number) => void
   itemCount: number
 }
 
@@ -37,8 +38,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     [items]
   )
 
+  const removeItem = useCallback((index: number) => {
+    const next = items.filter((_, i) => i !== index)
+    setItems(next)
+    localStorage.setItem('cartItems', JSON.stringify(next))
+  }, [items])
+
   return (
-    <CartContext.Provider value={{ items, addItem, itemCount: items.length }}>
+    <CartContext.Provider value={{ items, addItem, removeItem, itemCount: items.length }}>
       {children}
     </CartContext.Provider>
   )

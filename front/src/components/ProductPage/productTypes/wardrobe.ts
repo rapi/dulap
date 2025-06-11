@@ -13,6 +13,7 @@ export type MainImageParams = {
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(160)
   const [height, setHeight] = useState(210)
+  const [depth, setDepth] = useState(50)
   const [plintHeight, setPlintHeight] = useState(5)
   const [selectedColor, setSelectedColor] = useState('#ded9d3')
   const [imageSide, setImageSide] = useState('right')
@@ -21,6 +22,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [imageSections, setImageSections] = useState(1)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
   const [imageColor, setImageColor] = useState('Biege')
+  const [hinges, setHinges] = useState('standart')
+  const [guides, setGuides] = useState('standart')
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
   const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
   const [selectedOpeningMethod, setSelectedOpeningMethod] = useState('maner')
@@ -35,6 +38,15 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     } else setImageHeight(2400)
     }
   , [height])
+  useEffect(() => {
+    setDepth(depth)
+  }, [depth])
+  useEffect(() => {
+    setHinges(hinges)
+  }, [hinges])
+  useEffect(() => {
+    setGuides(guides)
+  }, [guides])
   useEffect(() => {
     if (selectedColor === '#ded9d3') {
       setImageColor('Biege')
@@ -110,6 +122,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       setHeight,
       plintHeight,
       setPlintHeight,
+      depth,
+      setDepth,
     },
     {
       type: 'colors',
@@ -147,6 +161,10 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       type: 'furniture',
       selectedOpeningMethod,
       setSelectedOpeningMethod,
+      hinges,
+      setHinges,
+      guides,
+      setGuides,
     },
     {
       type: 'price',

@@ -14,6 +14,10 @@ export type ProductFurnitureComponent = {
   type: 'furniture'
   selectedOpeningMethod: string
   setSelectedOpeningMethod: (value: string) => void
+  hinges: string
+  setHinges: (value: string) => void
+  guides: string
+  setGuides: (value: string) => void
 }
 export const openingOptions: ButtonOptionsType[] = [
   { value: 'maner', label: 'homepage.configurator.fittings.handle' },
@@ -33,7 +37,7 @@ export type ProductFurniturePredefinedValue = {
     | 'homepage.configurator.fittings.guides.options.2'
 }
 export const ProductFurniture: FC<ProductSelectProps> = ({
-  configuration: { setSelectedOpeningMethod },
+  configuration: { setSelectedOpeningMethod, setHinges, setGuides },
   predefinedValue,
 }) => {
   const intl = useIntl()
@@ -88,6 +92,9 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
               'homepage.configurator.fittings.hinges.options.1',
               'homepage.configurator.fittings.hinges.options.2',
             ]}
+            onChange={(value) => {
+              setHinges(value)
+            }}
           />
         )}
       </label>
@@ -112,6 +119,9 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
               'homepage.configurator.fittings.guides.options.1',
               'homepage.configurator.fittings.guides.options.2',
             ]}
+            onChange={(value) => {
+              setGuides(value)
+            }}
           />
         )}
       </label>
