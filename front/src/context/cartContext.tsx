@@ -6,13 +6,20 @@ import React, {
   useState,
   useCallback,
 } from 'react'
-import { ProductComponent } from '~/components/ProductPage/WardrobeProductPage'
+import {
+  PredefinedValue,
+  ProductComponent,
+} from '~/components/ProductPage/WardrobeProductPage'
 
 type CartItem = { name: string; config: ProductComponent[] }
 
 type CartContextType = {
   items: CartItem[]
-  addItem: (name: string, config: ProductComponent[]) => void
+  addItem: (
+    name: string,
+    config: ProductComponent[],
+    predefinedValues: PredefinedValue
+  ) => void
   removeItem: (index: number) => void
   itemCount: number
 }
@@ -30,8 +37,22 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   const addItem = useCallback(
-    (name: string, config: ProductComponent[]) => {
-      const newItems = [...items, { name, config }]
+    (
+      name: string,
+      config: ProductComponent[],
+      predefinedValues: PredefinedValue
+    ) => {
+      const newConfig = config.map((component) => {
+        const predefinedValue = predefinedValues[component.type]
+        if (predefinedValue) {
+          return {
+            ...component,
+            predefinedValue,
+          }
+        }
+        return component
+      })
+      const newItems = [...items, { name, config: newConfig }]
       setItems(newItems)
       localStorage.setItem('cartItems', JSON.stringify(newItems))
     },

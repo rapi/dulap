@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import FormControl from '@mui/material/FormControl'
 import MenuItem from '@mui/material/MenuItem'
 import MuiSelect from '@mui/material/Select'
@@ -9,10 +9,17 @@ interface SelectProps {
   options: string[]
   onChange?: (value: string) => void
   label?: string
+  defaultValue?: string
 }
 
-export const Select = ({ options, onChange }: SelectProps) => {
+export const Select = ({ options, onChange, defaultValue }: SelectProps) => {
   const [selected, setSelected] = useState(options[0])
+  useEffect(() => {
+    if (defaultValue) {
+      setSelected(defaultValue)
+    }
+  }, [defaultValue])
+
   return (
     <FormControl size="small" sx={{ minWidth: 120 }}>
       <MuiSelect
@@ -31,6 +38,7 @@ export const Select = ({ options, onChange }: SelectProps) => {
           fontFamily: 'Onest, sans-serif',
         }}
         inputProps={{ 'aria-label': 'Without label' }}
+        defaultValue={defaultValue ?? 'ro'}
       >
         {options.map((option) => (
           <MenuItem key={option} value={option}>
@@ -38,7 +46,7 @@ export const Select = ({ options, onChange }: SelectProps) => {
               className={styles.selectOption}
               style={{ fontFamily: 'Onest, sans-serif', fontSize: '12px' }}
             >
-              <FormattedMessage id={option}/>
+              <FormattedMessage id={option} />
             </span>
           </MenuItem>
         ))}
