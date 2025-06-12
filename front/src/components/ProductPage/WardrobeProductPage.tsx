@@ -47,20 +47,20 @@ export type ProductComponent =
   | ProductSectionsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
-
+export type PredefinedValue = {
+  sections?: ProductSectionPredefinedValue
+  imageSelect?: string
+  imageCarousel?: string[]
+  dimensions?: string
+  colors?: string
+  select?: string
+  furniture?: ProductFurniturePredefinedValue
+  price?: number
+}
 interface ProductPageProps {
   components: () => ProductComponent[]
   name: string
-  values?: {
-    sections?: ProductSectionPredefinedValue
-    imageSelect?: string
-    imageCarousel?: string[]
-    dimensions?: string
-    colors?: string
-    select?: string
-    furniture?: ProductFurniturePredefinedValue
-    price?: number
-  }
+  values?: PredefinedValue
 }
 
 export const ProductPage: FC<ProductPageProps> = ({
@@ -158,7 +158,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {priceComponent && (
           <ProductPrice
             onAddItem={() => {
-              addItem('wardrobe', currentComponents)
+              addItem('wardrobe', currentComponents, values ?? {})
             }}
             configuration={priceComponent}
             predefinedValue={values?.price ?? undefined}

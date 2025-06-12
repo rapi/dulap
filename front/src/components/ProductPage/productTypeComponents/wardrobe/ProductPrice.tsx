@@ -34,7 +34,12 @@ export const ProductPrice: FC<ProductPriceProps> = ({
         </div>
       </div>
       <div className={styles.addToCartButtonContainer}>
-        <CustomButton icon={<ShoppingCartIcon />} size="large" variant="danger">
+        <CustomButton
+          icon={<ShoppingCartIcon />}
+          size="large"
+          variant="danger"
+          onClick={onAddItem}
+        >
           <FormattedMessage id="homepage.button.addToCart" />
         </CustomButton>
       </div>
