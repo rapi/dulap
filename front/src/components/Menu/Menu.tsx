@@ -132,6 +132,7 @@ export const Menu = () => {
           </CustomButton>
           <Select
             options={['ro', 'ru']}
+            defaultValue={(router.query.locale as string) ?? 'ro'}
             onChange={(e) => router.push(`/${e}/`)}
           />
           <div className="icons">
