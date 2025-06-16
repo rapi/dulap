@@ -4,6 +4,7 @@ import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Modal } from '~/components/Modal/Modal'
 import { FormattedMessage } from 'react-intl'
+import { Dimension } from '~/components/ProductListPage/products'
 
 export type ProductDimensionsComponent = {
   type: 'dimensions'
@@ -22,7 +23,7 @@ export type ProductDimensionsComponent = {
 }
 interface ProductDimensionsProps {
   configuration: ProductDimensionsComponent
-  predefinedValue?: string
+  predefinedValue?: Dimension
 }
 
 export const ProductDimensions: FC<ProductDimensionsProps> = ({
@@ -30,15 +31,15 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   predefinedValue,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [predefinedWidth, predefinedHeight, predefinedDepth, predefinedPlint] =
-    predefinedValue?.split('x') ?? []
+  // const [predefinedWidth, predefinedHeight, predefinedDepth, predefinedPlint] =
+  //   predefinedValue?.split('x') ?? []
   return (
     <>
       <h3 className={styles.dimensionsHeaderTitle}><FormattedMessage id="homepage.configurator.dimensions.title" /></h3>
       <div className={styles.dimensionsGrid}>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.width" /></p>
-          {predefinedWidth !=null ? `${predefinedWidth} cm` : (
+          {predefinedValue?.width !=null ? `${predefinedValue?.width} cm` : (
             <Slider
               min={configuration.widthRange[0]}
               max={configuration.widthRange[1]}
@@ -50,7 +51,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
         </label>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.height" /></p>
-          {predefinedHeight !=null ? `${predefinedHeight} cm` : (
+          {predefinedValue?.height !=null ? `${predefinedValue.height} cm` : (
             <Slider
               min={configuration.heightRange[0]}
               max={configuration.heightRange[1]}
@@ -62,7 +63,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
         </label>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.depth" /></p>
-          {predefinedDepth !=null ? `${predefinedDepth} cm` : (
+          {predefinedValue?.depth !=null ? `${predefinedValue.depth} cm` : (
             <Slider
               min={configuration.depthRange[0]}
               max={configuration.depthRange[1]}
@@ -85,7 +86,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
               </span>
             </div>
           </div>
-          {predefinedPlint !=null ? `${predefinedPlint} cm` : (
+          {predefinedValue?.plintheight !=null ? `${predefinedValue.plintheight} cm` : (
             <Slider
               min={configuration.plintHeightRange[0]}
               max={configuration.plintHeightRange[1]}

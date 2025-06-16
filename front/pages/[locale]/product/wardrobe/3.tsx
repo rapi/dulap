@@ -23,7 +23,12 @@ const Product: FC = () => {
             '/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png',
           ],
           colors: preview.color,
-          dimensions: `${preview.dimensions}x6`,
+          dimensions: {
+            width: 200,
+            height: 240,
+            depth: 50,
+            plintheight: 6
+          },
           furniture: {
             openingType: 'maner',
             hinges: 'homepage.configurator.fittings.hinges.options.2',

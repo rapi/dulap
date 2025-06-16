@@ -1,0 +1,41 @@
+import { GetStaticPaths, GetStaticProps } from 'next'
+import { ProductPageLayout } from '~/components/ProductPageLayout/ProductPageLayout'
+import { ProductPage } from '~/components/ProductPage/WardrobeProductPage'
+import { WardrobeProductConfiguration } from '~/components/ProductPage/productTypes/wardrobe'
+import { products, Product } from '~/components/ProductListPage/products'
+
+interface Props {
+  product: Product
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = products.map(p => ({
+    params: { id: p.id },
+  }))
+  return { paths, fallback: false }
+}
+
+export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
+  const product = products.find(p => p.id === params!.id)
+  if (!product) return { notFound: true }
+  return { props: { product } }
+}
+
+export default function WardrobeProductPage({ product }: Props) {
+  return (
+    <ProductPageLayout>
+      <ProductPage
+        components={WardrobeProductConfiguration}
+        name={product.name}
+        values={{
+          imageCarousel: product.imageCarousel,
+          colors: product.color,
+          dimensions: product.dimensions,
+          furniture: product.furniture,
+          sections: product.sections,
+          price: product.price,
+        }}
+      />
+    </ProductPageLayout>
+  )
+}

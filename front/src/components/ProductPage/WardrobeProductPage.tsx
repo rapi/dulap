@@ -37,6 +37,7 @@ import {
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
+import { Dimension } from '../ProductListPage/products'
 
 export type ProductComponent =
   | ProductImageSelectComponent
@@ -51,7 +52,7 @@ export type PredefinedValue = {
   sections?: ProductSectionPredefinedValue
   imageSelect?: string
   imageCarousel?: string[]
-  dimensions?: string
+  dimensions?: Dimension
   colors?: string
   select?: string
   furniture?: ProductFurniturePredefinedValue

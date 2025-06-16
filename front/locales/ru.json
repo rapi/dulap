@@ -138,7 +138,7 @@
   "cart.tableHeader.color": "Цвет",
   "cart.tableHeader.price": "Итоговая цена",
   "cart.tableHeader.actions": "Действия",
-  "cart.subtotal": "Промежуточный итог",
+  "cart.subtotal": "Итог",
 
   "checkout.title": "Мой заказ",
   "checkout.subtitle1.orderDetails": "Детали заказа",

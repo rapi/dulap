@@ -23,7 +23,12 @@ const Product: FC = () => {
             '/wardrobe/Light Grey/push/Base 20/H2400/right/2500-5.png',
           ],
           colors: preview.color,
-          dimensions: `${preview.dimensions}x2`,
+          dimensions: {
+            width: 240,
+            height: 260,
+            depth: 50,
+            plintheight: 5
+          },
           furniture: {
             openingType: 'push',
             hinges: 'homepage.configurator.fittings.hinges.options.2',

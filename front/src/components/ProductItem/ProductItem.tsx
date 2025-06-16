@@ -3,13 +3,14 @@ import React from 'react'
 import Link from 'next/link'
 import classes from './ProductItem.module.css'
 import { FormattedMessage } from 'react-intl'
+import { Dimension } from '../ProductListPage/products'
 
 interface ProductItemProps {
   button: React.ReactNode
   image: string
   name: string
   link: string
-  dimensions: string
+  dimensions: Dimension
   color?: string
   price?: number
 }
@@ -44,7 +45,7 @@ export const ProductItem: React.FC<ProductItemProps> = ({
         </div>
         <div className={classes.productDescriptionSecondLine}>
           {dimensions ? (
-            <p className={classes.dimensions}>{dimensions} cm</p>
+            <p className={classes.dimensions}>{dimensions.width}x{dimensions.height}x{dimensions.depth} cm</p>
           ) : (
             ''
           )}
