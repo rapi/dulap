@@ -7,7 +7,7 @@ export const productTypes: ProductTypes[] = [
   {
     name: 'homepage.products.wardrobe',
     link: '/configurator/wardrobe',
-    image: '/products/wardrobe-visualization/1.png',
+    image: '/products/product-type-wardrobe.jpg',
   },
   {
     name: 'homepage.products.stand',

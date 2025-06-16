@@ -24,7 +24,8 @@
   cursor: pointer;
   margin-bottom: 10px;
 }
-.productItemContainer:hover {
+
+/* .productItemContainer:hover {
   .imageContainer > .productImage {
     opacity: 0.65;
     border: 2px solid #8f8f8f;
@@ -33,6 +34,17 @@
     display: block;
     z-index: 9999;
   }
+} */
+
+.productItemContainer:not(.unavailable):hover .imageContainer > .productImage {
+  opacity: 0.65;
+  border: 2px solid #8f8f8f;
+}
+
+/* only show the button when NOT .unavailable */
+.productItemContainer:not(.unavailable):hover .imageButton {
+  display: block;
+  z-index: 9999;
 }
 
 .imageContainer {
@@ -66,6 +78,37 @@
   font-size: 18px;
   font-weight: 500;
   color: #333;
+}
+
+.nameLink {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* not available product types */
+.blurredImage {
+  opacity: 0.55;
+  transition: filter 0.3s ease;
+}
+
+.comingSoonOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.5em 1em;
+  background-color: #888888bd;
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.disabledName {
+  color: #999;
+  cursor: default;
 }
 
 @keyframes fadeInOut {
