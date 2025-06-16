@@ -10,7 +10,7 @@ import {
   ProductComponent,
 } from '~/components/ProductPage/WardrobeProductPage'
 
-type CartItem = { name: string; config: ProductComponent[] }
+export type CartItem = { name: string; config: ProductComponent[] }
 
 type CartContextType = {
   items: CartItem[]
@@ -52,20 +52,27 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         return component
       })
       const newItems = [...items, { name, config: newConfig }]
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       setItems(newItems)
       localStorage.setItem('cartItems', JSON.stringify(newItems))
     },
     [items]
   )
 
-  const removeItem = useCallback((index: number) => {
-    const next = items.filter((_, i) => i !== index)
-    setItems(next)
-    localStorage.setItem('cartItems', JSON.stringify(next))
-  }, [items])
+  const removeItem = useCallback(
+    (index: number) => {
+      const next = items.filter((_, i) => i !== index)
+      setItems(next)
+      localStorage.setItem('cartItems', JSON.stringify(next))
+    },
+    [items]
+  )
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, itemCount: items.length }}>
+    <CartContext.Provider
+      value={{ items, addItem, removeItem, itemCount: items.length }}
+    >
       {children}
     </CartContext.Provider>
   )

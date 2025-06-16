@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl'
 import { Dimension } from '~/components/ProductListPage/products'
 
 export type ProductDimensionsComponent = {
+  predefinedValue?: string
   type: 'dimensions'
   widthRange: [number, number]
   heightRange: [number, number]
@@ -35,11 +36,17 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   //   predefinedValue?.split('x') ?? []
   return (
     <>
-      <h3 className={styles.dimensionsHeaderTitle}><FormattedMessage id="homepage.configurator.dimensions.title" /></h3>
+      <h3 className={styles.dimensionsHeaderTitle}>
+        <FormattedMessage id="homepage.configurator.dimensions.title" />
+      </h3>
       <div className={styles.dimensionsGrid}>
         <label className={styles.dimensionLabel}>
-          <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.width" /></p>
-          {predefinedValue?.width !=null ? `${predefinedValue?.width} cm` : (
+          <p className={styles.dimensionTitle}>
+            <FormattedMessage id="homepage.configurator.dimensions.width" />
+          </p>
+          {predefinedValue?.width != null ? (
+            `${predefinedValue?.width} cm`
+          ) : (
             <Slider
               min={configuration.widthRange[0]}
               max={configuration.widthRange[1]}
@@ -50,8 +57,12 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           )}
         </label>
         <label className={styles.dimensionLabel}>
-          <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.height" /></p>
-          {predefinedValue?.height !=null ? `${predefinedValue.height} cm` : (
+          <p className={styles.dimensionTitle}>
+            <FormattedMessage id="homepage.configurator.dimensions.height" />
+          </p>
+          {predefinedValue?.height != null ? (
+            `${predefinedValue.height} cm`
+          ) : (
             <Slider
               min={configuration.heightRange[0]}
               max={configuration.heightRange[1]}
@@ -62,8 +73,12 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           )}
         </label>
         <label className={styles.dimensionLabel}>
-          <p className={styles.dimensionTitle}><FormattedMessage id="homepage.configurator.dimensions.depth" /></p>
-          {predefinedValue?.depth !=null ? `${predefinedValue.depth} cm` : (
+          <p className={styles.dimensionTitle}>
+            <FormattedMessage id="homepage.configurator.dimensions.depth" />
+          </p>
+          {predefinedValue?.depth != null ? (
+            `${predefinedValue.depth} cm`
+          ) : (
             <Slider
               min={configuration.depthRange[0]}
               max={configuration.depthRange[1]}
@@ -86,7 +101,9 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
               </span>
             </div>
           </div>
-          {predefinedValue?.plintheight !=null ? `${predefinedValue.plintheight} cm` : (
+          {predefinedValue?.plintheight != null ? (
+            `${predefinedValue.plintheight} cm`
+          ) : (
             <Slider
               min={configuration.plintHeightRange[0]}
               max={configuration.plintHeightRange[1]}
@@ -102,7 +119,9 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             setIsModalOpen(false)
           }}
         >
-          <h4><FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.1" /></h4>
+          <h4>
+            <FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.1" />
+          </h4>
           <div className={styles.modalChildren}>
             <img
               src="/wardrobe/base-tooltip.png"
@@ -113,7 +132,9 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
               <FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.2" />
               <br></br>
               <br></br>
-              <b><FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.3" /></b>
+              <b>
+                <FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.3" />
+              </b>
               <ul>
                 <li>
                   <FormattedMessage id="homepage.configurator.dimensions.hintPlintHeight.4" />

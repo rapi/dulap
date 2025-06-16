@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
 export type ProductImageSelectComponent = {
   type: 'imageSelect'
+  predefinedValue?: string
   options: {
     value: string
     imageURL: string

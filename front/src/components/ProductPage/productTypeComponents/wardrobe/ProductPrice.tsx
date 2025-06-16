@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl'
 export type ProductPriceComponent = {
   type: 'price'
   price: number
+  predefinedValue?: number
 }
 interface ProductPriceProps {
   configuration: ProductPriceComponent
@@ -20,7 +21,7 @@ export const ProductPrice: FC<ProductPriceProps> = ({
   predefinedValue,
 }) => {
   const router = useRouter()
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const price = predefinedValue ?? configuration.price
@@ -45,12 +46,12 @@ export const ProductPrice: FC<ProductPriceProps> = ({
           </div>
         </div>
         <div className={styles.addToCartButtonContainer}>
-          <CustomButton 
-            icon={<ShoppingCartIcon />} 
-            size="large" 
+          <CustomButton
+            icon={<ShoppingCartIcon />}
+            size="large"
             variant="danger"
             onClick={() => {
-              setIsModalOpen(true);
+              setIsModalOpen(true)
               onAddItem()
             }}
           >
@@ -64,17 +65,15 @@ export const ProductPrice: FC<ProductPriceProps> = ({
           setIsModalOpen(false)
         }}
       >
-        <h3><FormattedMessage id="modal.addedToCart.title" /></h3>
+        <h3>
+          <FormattedMessage id="modal.addedToCart.title" />
+        </h3>
         <div className={styles.buttonRow}>
-          <CustomButton
-            onClick={() => router.push('/cart')}
-          >
-            <FormattedMessage id="homepage.button.openCart"/>
+          <CustomButton onClick={() => router.push('/cart')}>
+            <FormattedMessage id="homepage.button.openCart" />
           </CustomButton>
-          <CustomButton
-            onClick={() => router.push('/')}
-          >
-            <FormattedMessage id="homepage.button.backToPurchase"/>
+          <CustomButton onClick={() => router.push('/')}>
+            <FormattedMessage id="homepage.button.backToPurchase" />
           </CustomButton>
         </div>
       </Modal>

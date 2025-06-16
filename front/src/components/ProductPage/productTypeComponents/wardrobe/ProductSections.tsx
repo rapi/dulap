@@ -23,10 +23,17 @@ export type ProductSectionsComponent = {
   setSelectedMaxSections: (value: number) => void
   selectedMirrorOption?: string
   setSelectedMirrorOption?: (value: string) => void
+  predefinedValue?: string
 }
 export const mirroringOptions: ButtonOptionsType[] = [
-  { value: 'standard', label: 'homepage.configurator.wardrobeArrangement.mirroring.options.1' },
-  { value: 'mirrored', label: 'homepage.configurator.wardrobeArrangement.mirroring.options.2' },
+  {
+    value: 'standard',
+    label: 'homepage.configurator.wardrobeArrangement.mirroring.options.1',
+  },
+  {
+    value: 'mirrored',
+    label: 'homepage.configurator.wardrobeArrangement.mirroring.options.2',
+  },
 ]
 export type ProductSectionPredefinedValue = {
   number?: number
@@ -89,9 +96,13 @@ export const ProductSections: FC<ProductSelectProps> = ({
   return (
     <>
       <div>
-        <p className={styles.sectionTitle}><FormattedMessage id="homepage.configurator.wardrobeArrangement.title" /></p>
+        <p className={styles.sectionTitle}>
+          <FormattedMessage id="homepage.configurator.wardrobeArrangement.title" />
+        </p>
         <label className={styles.sectionLabel}>
-          <p><FormattedMessage id="homepage.configurator.wardrobeArrangement.sectionsNr" /></p>
+          <p>
+            <FormattedMessage id="homepage.configurator.wardrobeArrangement.sectionsNr" />
+          </p>
           {predefinedSections?.number ?? (
             <ButtonSelect
               options={formatedSections}
@@ -119,11 +130,14 @@ export const ProductSections: FC<ProductSelectProps> = ({
         </label>
 
         <label className={styles.sectionArrangementLabel}>
-          <p><FormattedMessage id="homepage.configurator.wardrobeArrangement.shelvesArrangement" /></p>
+          <p>
+            <FormattedMessage id="homepage.configurator.wardrobeArrangement.shelvesArrangement" />
+          </p>
           <ImageSelect
             images={
-              predefinedSections?.arrangement?.map(({src, width, height}) => ({ src, width, height })) ??
-              selectedSections
+              predefinedSections?.arrangement?.map(
+                ({ src, width, height }) => ({ src, width, height })
+              ) ?? selectedSections
             }
             onChange={(i) => {
               if (!predefinedSections?.arrangement) {
@@ -138,11 +152,16 @@ export const ProductSections: FC<ProductSelectProps> = ({
         </label>
 
         <label className={styles.sectionArrangementLabel}>
-          <p><FormattedMessage id="homepage.configurator.wardrobeArrangement.doorsArrangement" /></p>
+          <p>
+            <FormattedMessage id="homepage.configurator.wardrobeArrangement.doorsArrangement" />
+          </p>
           <ImageSelect
             images={
-              predefinedSections?.opening?.map(({src, width, height}) => ({ src, width, height })) ??
-              activeOpening
+              predefinedSections?.opening?.map(({ src, width, height }) => ({
+                src,
+                width,
+                height,
+              })) ?? activeOpening
             }
             onChange={(i) => {
               setActiveSection(i)

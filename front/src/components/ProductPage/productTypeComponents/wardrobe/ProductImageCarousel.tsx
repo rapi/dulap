@@ -3,6 +3,7 @@ import { Carousel } from '~/components/Carousel/Carousel'
 import classes from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 export type ProductImageCarouselComponent = {
   type: 'imageCarousel'
+  predefinedValue?: string
   images: string[]
 }
 interface ProductImageCarouselProps {

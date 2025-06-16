@@ -5,6 +5,7 @@ export type ProductSelectComponent = {
   title: string
   subTitle: string
   options: string[]
+  predefinedValue?: string
 }
 interface ProductSelectProps {
   configuration: ProductSelectComponent
