@@ -47,6 +47,10 @@ export const StorageProductConfiguration: () => ProductComponent[] = () => {
       type: 'furniture',
       selectedOpeningMethod: 'maner',
       setSelectedOpeningMethod: () => {},
+      hinges: '',
+      setHinges: () => {},
+      guides: '',
+      setGuides: () => {},
     },
     {
       type: 'price',
