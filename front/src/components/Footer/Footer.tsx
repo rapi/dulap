@@ -18,6 +18,7 @@ export const Footer: React.FC = () => {
           <ul>
             <li><Link href="/about-us"><FormattedMessage id="homepage.menu.aboutUsTitle"/></Link></li>
             <li><Link href="/contacts"><FormattedMessage id="homepage.menu.contactsTitle"/></Link></li>
+            <li><Link href="/terms"><FormattedMessage id="homepage.footer.termsAndConditions"/></Link></li>
           </ul>
         </nav>
         <div className={styles.logoSection}>

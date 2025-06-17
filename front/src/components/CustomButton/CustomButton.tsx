@@ -8,7 +8,7 @@ interface CustomButtonProps {
   outlined?: boolean
   href?: string
   size?: 'small' | 'medium' | 'large'
-  variant?: 'primary' | 'danger'
+  variant?: 'primary' | 'danger' | 'grey'
   onClick?: () => void
 }
 export const CustomButton: FC<CustomButtonProps> = ({

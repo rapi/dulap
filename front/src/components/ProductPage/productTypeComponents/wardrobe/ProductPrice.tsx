@@ -72,7 +72,7 @@ export const ProductPrice: FC<ProductPriceProps> = ({
           <CustomButton onClick={() => router.push('/cart')}>
             <FormattedMessage id="homepage.button.openCart" />
           </CustomButton>
-          <CustomButton onClick={() => router.push('/')}>
+          <CustomButton variant="grey" onClick={() => router.push('/')}>
             <FormattedMessage id="homepage.button.backToPurchase" />
           </CustomButton>
         </div>

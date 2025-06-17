@@ -1,24 +1,22 @@
+
 a.ctaButton,
 button.ctaButton {
-  padding: 0.1rem 1.5rem;
-  width: fit-content;
-  height: 50px;
+  font-family: 'Onest', sans-serif;
   font-weight: 500;
+  text-transform: none;
   color: #ffffff;
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   border-radius: 25px;
   cursor: pointer;
-  font-family: 'Onest', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  gap: 5px;
-  text-transform: none;
+  border: none;
   & span > img:first-child {
     filter: invert(1) brightness(1000%);
-    padding: 0 0.5rem;
   }
 }
+
 a.ctaButton.outlined:hover {
   & img {
     filter: invert(1) brightness(1000%) !important;
@@ -26,36 +24,55 @@ a.ctaButton.outlined:hover {
 }
 a.outlined,
 button.outlined {
-  border-radius: 25px;
   & img {
     filter: brightness(0) saturate(100%) invert(65%) sepia(40%) saturate(776%)
       hue-rotate(354deg) brightness(90%) contrast(93%) !important;
   }
 }
 
-a.ctaButton,
-button.ctaButton .smallSize {
-  height: 42px;
+/* Small */
+a.ctaButton.smallSize,
+button.ctaButton.smallSize {
+  height: 36px;
+  padding: 0 1rem;
+  border-radius: 18px;
+}
+a.ctaButton.smallSize p,
+button.ctaButton.smallSize p {
+  font-size: 0.75rem;
 }
 
-.smallSize p {
-  font-size: 0.8rem;
+/* Medium */
+a.ctaButton.mediumSize,
+button.ctaButton.mediumSize {
+  height: 46px;
+  padding: 0 1.5rem;
+  border-radius: 23px;
 }
-
-.mediumSize p {
+a.ctaButton.mediumSize p,
+button.ctaButton.mediumSize p {
   font-size: 0.85rem;
-  margin-block: 0.7rem;
 }
 
-.largeSize p {
-  font-size: 0.9rem;
-  margin-block: 0.8rem;
+/* Large */
+a.ctaButton.largeSize,
+button.ctaButton.largeSize {
+  height: 54px;
+  padding: 0 2rem;
+  border-radius: 27px;
+}
+a.ctaButton.largeSize p,
+button.ctaButton.largeSize p {
+  font-size: 1rem;
+}
+
+.ctaButton .MuiIcon-root {
+  margin: 0;
 }
 
 /*Primary Variant*/
 a.ctaButton.primaryVariant,
 button.ctaButton.primaryVariant {
-  /* background-color: #F28C38; */
   background-color: #fba85c;
 }
 a.ctaButton.primaryVariant:hover,
@@ -100,4 +117,30 @@ button.ctaButton.dangerVariant.outlined:hover {
   background-color: #f15e4d;
   color: white;
   border: 2px solid #f15e4d;
+}
+
+/*Grey Variant*/
+a.ctaButton.greyVariant,
+button.ctaButton.greyVariant {
+  background-color: #979797;
+}
+a.ctaButton.greyVariant:hover,
+button.ctaButton.greyVariant:hover {
+  background-color: #8b8b8b;
+  color: white;
+}
+
+a.ctaButton.greyVariant.outlined,
+button.ctaButton.greyVariant.outlined {
+  background-color: transparent;
+  color: #979797;
+  border: 3px solid #979797;
+}
+a.ctaButton.greyVariant.outlined:hover,
+button.ctaButton.greyVariant.outlined:hover {
+  background-color: #8b8b8b;
+}
+a.ctaButton.greyVariant.outlined:hover {
+  background-color: #8b8b8b;
+  color: white;
 }

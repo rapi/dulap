@@ -3,7 +3,6 @@ import { productTypes } from '~/components/ProductTypesList/productTypes'
 import Image from 'next/image'
 import styles from './ProductTypesList.module.css'
 import { CustomButton } from '../CustomButton/CustomButton'
-import { WardrobeIconMedium } from '../Icons/Icons'
 import { FormattedMessage } from 'react-intl'
 import clsx from 'clsx'
 import Link from 'next/link'
@@ -49,7 +48,6 @@ export const ProductTypesList: React.FC = () => {
                 {isAvailable ? (
                 <div className={styles.imageButton}>
                   <CustomButton
-                    icon={<WardrobeIconMedium />}
                     variant="primary"
                     size="small"
                   >
