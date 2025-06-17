@@ -10,12 +10,12 @@ import { useIntl } from 'react-intl'
 import { CartItem, useCart } from '~/context/cartContext'
 const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
   console.log(item)
-  const { removeItem } = useCart() // Assuming useCart is defined in your context
+  const { removeItem } = useCart()
 
   const itemConfig = {
-    dimensions: '',
+    dimensions: { width: 0, height: 0, depth: 0, plintHeight: 0},
     colors: '',
-    furniture: '',
+    furniture: { hinges: '', guides: '', openingType: ''},
     price: 0,
     imageCarousel: '',
   }
@@ -24,12 +24,49 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
   for (const config of item.config)
     switch (config.type) {
       case 'imageCarousel':
-        itemConfig.imageCarousel = config.images[0]
+        if (config.predefinedValue) {
+          itemConfig.imageCarousel = config.predefinedValue
+        } else itemConfig.imageCarousel = config.images[0]
         break
 
       case 'dimensions':
-        itemConfig.dimensions = `${config.width}x${config.height}x${config.depth} cm`
+        if (config.predefinedValue) {
+          itemConfig.dimensions.width = config.predefinedValue.width
+          itemConfig.dimensions.height = config.predefinedValue.height
+          itemConfig.dimensions.depth = config.predefinedValue.depth
+          itemConfig.dimensions.plintHeight = config.predefinedValue.plintHeight
+        } else {
+          itemConfig.dimensions.width = config.width
+          itemConfig.dimensions.height = config.height
+          itemConfig.dimensions.depth = config.depth
+          itemConfig.dimensions.plintHeight = config.plintHeight
+        }
         break
+
+      case 'colors':
+        if (config.predefinedValue) {
+          itemConfig.colors = config.predefinedValue
+        } else itemConfig.colors = config.selectedColor
+        break
+
+      case 'furniture':
+        if (config.predefinedValue) {
+          itemConfig.furniture.guides = config.predefinedValue.guides
+          itemConfig.furniture.hinges = config.predefinedValue.hinges
+          itemConfig.furniture.openingType = config.predefinedValue.openingType
+        } else {
+          itemConfig.furniture.guides = config.guides
+          itemConfig.furniture.hinges = config.hinges
+          itemConfig.furniture.openingType = config.selectedOpeningMethod
+        }
+        break
+
+      case 'colors':
+        if (config.predefinedValue) {
+          itemConfig.colors = config.predefinedValue
+        } else itemConfig.colors = config.selectedColor
+        break
+
       case 'price':
         if (config.predefinedValue) {
           itemConfig.price = config.predefinedValue
@@ -54,20 +91,46 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
       <span className={styles.productDetails}>
         <FormattedMessage id="homepage.configurator.dimensions.title" />
         :
-        <br /> <FormattedMessage id="homepage.configurator.dimensions.width" />:
-        &nbsp;
+        <br />{' '}
+        <FormattedMessage id="homepage.configurator.dimensions.width" />
+        : &nbsp;
         <b>
-          {itemConfig.dimensions}{' '}
+          {itemConfig.dimensions.width}{' '}
           <FormattedMessage id="homepage.configurator.dimensions.cm" />
         </b>
-        <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />:
-        &nbsp;
+        <br />{' '}
+        <FormattedMessage id="homepage.configurator.dimensions.height" />
+        : &nbsp;
+        <b>
+          {itemConfig.dimensions.height}{' '}
+          <FormattedMessage id="homepage.configurator.dimensions.cm" />
+        </b>
+        <br />
+        <FormattedMessage id="homepage.configurator.dimensions.depth" />
+        : &nbsp;
+        <b>
+          {itemConfig.dimensions.depth}{' '}
+          <FormattedMessage id="homepage.configurator.dimensions.cm" />
+        </b>
+        <br />
+        <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />
+        : &nbsp;
+        <b>
+          {itemConfig.dimensions.plintHeight}{' '}
+          <FormattedMessage id="homepage.configurator.dimensions.cm" />
+        </b>
         <br />
         <br />
         <FormattedMessage id="homepage.configurator.fittings.title" />:
         <br />{' '}
-        <FormattedMessage id="homepage.configurator.fittings.handleType" />:{' '}
-        <b>{itemConfig.furniture}</b>
+        <FormattedMessage id="homepage.configurator.fittings.handleType" />
+        : <b>{intl.formatMessage({ id: itemConfig.furniture.openingType })}</b>
+        <br />{' '}
+        <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
+        <b>{intl.formatMessage({ id: itemConfig.furniture.hinges })}</b>
+        <br />{' '}
+        <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
+        <b>{intl.formatMessage({ id: itemConfig.furniture.guides })}</b>
         <br />
       </span>
       <div className={styles.colorContainer}>
@@ -182,50 +245,50 @@ export const CartPage = () => {
           //       />
           //     </div>
           //     <span className={styles.productDetails}>
-          //       <FormattedMessage id="homepage.configurator.dimensions.title" />
-          //       :
-          //       <br />{' '}
-          //       <FormattedMessage id="homepage.configurator.dimensions.width" />
-          //       : &nbsp;
-          //       <b>
-          //         {dimensions.width}{' '}
-          //         <FormattedMessage id="homepage.configurator.dimensions.cm" />
-          //       </b>
-          //       <br />{' '}
-          //       <FormattedMessage id="homepage.configurator.dimensions.height" />
-          //       : &nbsp;
-          //       <b>
-          //         {dimensions.height}{' '}
-          //         <FormattedMessage id="homepage.configurator.dimensions.cm" />
-          //       </b>
-          //       <br />
-          //       <FormattedMessage id="homepage.configurator.dimensions.depth" />
-          //       : &nbsp;
-          //       <b>
-          //         {dimensions.depth}{' '}
-          //         <FormattedMessage id="homepage.configurator.dimensions.cm" />
-          //       </b>
-          //       <br />
-          //       <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />
-          //       : &nbsp;
-          //       <b>
-          //         {dimensions.plintHeight}{' '}
-          //         <FormattedMessage id="homepage.configurator.dimensions.cm" />
-          //       </b>
-          //       <br />
-          //       <br />
-          //       <FormattedMessage id="homepage.configurator.fittings.title" />:
-          //       <br />{' '}
-          //       <FormattedMessage id="homepage.configurator.fittings.handleType" />
-          //       : <b>{furniture.selectedOpeningMethod}</b>
-          //       <br />{' '}
-          //       <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
-          //       <b>{intl.formatMessage({ id: furniture.hinges })}</b>
-          //       {/* item.config[3].hinges */}
-          //       <br />{' '}
-          //       <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
-          //       <b>{intl.formatMessage({ id: furniture.guides })}</b>
-          //       <br />
+                // <FormattedMessage id="homepage.configurator.dimensions.title" />
+                // :
+                // <br />{' '}
+                // <FormattedMessage id="homepage.configurator.dimensions.width" />
+                // : &nbsp;
+                // <b>
+                //   {dimensions.width}{' '}
+                //   <FormattedMessage id="homepage.configurator.dimensions.cm" />
+                // </b>
+                // <br />{' '}
+                // <FormattedMessage id="homepage.configurator.dimensions.height" />
+                // : &nbsp;
+                // <b>
+                //   {dimensions.height}{' '}
+                //   <FormattedMessage id="homepage.configurator.dimensions.cm" />
+                // </b>
+                // <br />
+                // <FormattedMessage id="homepage.configurator.dimensions.depth" />
+                // : &nbsp;
+                // <b>
+                //   {dimensions.depth}{' '}
+                //   <FormattedMessage id="homepage.configurator.dimensions.cm" />
+                // </b>
+                // <br />
+                // <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />
+                // : &nbsp;
+                // <b>
+                //   {dimensions.plintHeight}{' '}
+                //   <FormattedMessage id="homepage.configurator.dimensions.cm" />
+                // </b>
+                // <br />
+                // <br />
+                // <FormattedMessage id="homepage.configurator.fittings.title" />:
+                // <br />{' '}
+                // <FormattedMessage id="homepage.configurator.fittings.handleType" />
+                // : <b>{furniture.selectedOpeningMethod}</b>
+                // <br />{' '}
+                // <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
+                // <b>{intl.formatMessage({ id: furniture.hinges })}</b>
+                // {/* item.config[3].hinges */}
+                // <br />{' '}
+                // <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
+                // <b>{intl.formatMessage({ id: furniture.guides })}</b>
+                // <br />
           //     </span>
           //     <div className={styles.colorContainer}>
           //       <SelectColor

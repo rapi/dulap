@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl'
 import { Dimension } from '~/components/ProductListPage/products'
 
 export type ProductDimensionsComponent = {
-  predefinedValue?: string
+  predefinedValue?: Dimension
   type: 'dimensions'
   widthRange: [number, number]
   heightRange: [number, number]
@@ -101,8 +101,8 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
               </span>
             </div>
           </div>
-          {predefinedValue?.plintheight != null ? (
-            `${predefinedValue.plintheight} cm`
+          {predefinedValue?.plintHeight != null ? (
+            `${predefinedValue.plintHeight} cm`
           ) : (
             <Slider
               min={configuration.plintHeightRange[0]}

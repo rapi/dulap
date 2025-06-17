@@ -104,6 +104,8 @@
   "homepage.configurator.fittings.guides": "Glisiere",
   "homepage.configurator.fittings.handle": "mâner",
   "homepage.configurator.fittings.pushToOpen": "push-to-open",
+  "maner": "mâner",
+  "push": "push-to-open",
 
   "homepage.configurator.fittings.hinges.tooltip.1": "Ce sunt balamalele?",
   "homepage.configurator.fittings.hinges.tooltip.2": "Balamalele sunt mecanisme care permit deschiderea și închiderea ușilor dulapului.",

@@ -2,7 +2,7 @@ export type Dimension = {
   width: number
   height: number
   depth: number
-  plintheight: number
+  plintHeight: number
 }
 
 export type Section = {
@@ -50,7 +50,7 @@ export const products: Product[] = [
       width: 150,
       height: 210,
       depth: 50,
-      plintheight: 5,
+      plintHeight: 5,
     },
     color: '#ded9d3',
     price: 5950,
@@ -84,7 +84,7 @@ export const products: Product[] = [
       width: 50,
       height: 210,
       depth: 50,
-      plintheight: 2,
+      plintHeight: 2,
     },
     color: '#fcfbf5',
     price: 3900,
@@ -123,7 +123,7 @@ export const products: Product[] = [
       width: 200,
       height: 240,
       depth: 50,
-      plintheight: 6,
+      plintHeight: 6,
     },
     color: '#9c9c9c',
     price: 11700,
@@ -172,7 +172,7 @@ export const products: Product[] = [
       width: 240,
       height: 260,
       depth: 50,
-      plintheight: 2,
+      plintHeight: 2,
     },
     color: '#d6d6d6',
     price: 13600,

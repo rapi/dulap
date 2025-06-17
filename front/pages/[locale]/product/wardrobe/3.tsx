@@ -27,7 +27,7 @@ const Product: FC = () => {
             width: 200,
             height: 240,
             depth: 50,
-            plintheight: 6
+            plintHeight: 6
           },
           furniture: {
             openingType: 'maner',

@@ -18,7 +18,7 @@ export type ProductFurnitureComponent = {
   setHinges: (value: string) => void
   guides: string
   setGuides: (value: string) => void
-  predefinedValue?: string
+  predefinedValue?: ProductFurniturePredefinedValue
 }
 export const openingOptions: ButtonOptionsType[] = [
   { value: 'maner', label: 'homepage.configurator.fittings.handle' },
