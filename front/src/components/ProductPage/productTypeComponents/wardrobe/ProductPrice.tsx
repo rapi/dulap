@@ -48,7 +48,7 @@ export const ProductPrice: FC<ProductPriceProps> = ({
         <div className={styles.addToCartButtonContainer}>
           <CustomButton
             icon={<ShoppingCartIcon />}
-            size="large"
+            size="medium"
             variant="danger"
             onClick={() => {
               setIsModalOpen(true)

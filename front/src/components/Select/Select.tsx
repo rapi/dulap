@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl'
 interface SelectProps {
   options: string[]
   onChange?: (value: string) => void
+  label?: string
   defaultValue?: string
   size?: 'small' | 'large'
 }
