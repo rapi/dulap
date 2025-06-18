@@ -132,6 +132,13 @@
   "homepage.configurator.priceFlexible.title": "Гибкая цена",
   "homepage.configurator.price.currencyLei": "лей",
 
+  "configurator.infobox.assembly.title": "Сборка",
+  "configurator.infobox.assembly.1": "Этот шкаф не требует профессиональной сборки, но для удобства мы предлагаем инструкцию по сборке.",
+  "configurator.infobox.assembly.2": "Сборку можно заказать как отдельную услугу в корзине, стоимость — 350 лей.",
+  "configurator.infobox.delivery.title": "Доставка",
+  "configurator.infobox.delivery.1": "Доставка осуществляется бесплатно в пределах мун. Кишинэу.",
+  "configurator.infobox.delivery.2": "Срок доставки — 10–15 рабочих дней с момента оформления заказа.",
+
   "modal.addedToCart.title": "Шкаф был успешно добавлен в корзину",
 
   "cart.title": "Моя корзина",

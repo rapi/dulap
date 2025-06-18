@@ -132,6 +132,13 @@
   "homepage.configurator.priceFlexible.title": "Preț flexibil",
   "homepage.configurator.price.currencyLei": "lei",
 
+  "configurator.infobox.assembly.title": "Asamblarea",
+  "configurator.infobox.assembly.1": "Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare.",
+  "configurator.infobox.assembly.2": "Asamblarea poate fi procurată ca serviciu aparte în coș, prețul fiind de 350 lei.",
+  "configurator.infobox.delivery.title": "Livrarea",
+  "configurator.infobox.delivery.1": "Livrarea se efectuează gratuit, în raza mun. Chișinău.",
+  "configurator.infobox.delivery.2": "Termenul de livrare este de 10-15 zile lucrătare de la plasarea comenzii.",
+
   "modal.addedToCart.title": "Produsul a fost adăgat în coș cu succes",
 
   "cart.title": "Coșul meu",

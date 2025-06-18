@@ -190,7 +190,8 @@
 }
 
 /* P R I C E */
-.priceContainer {
+.priceContainer,
+.infoboxContainer {
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -199,6 +200,24 @@
   padding: 30px 25px;
   width: 170px;
   gap: 8px;
+}
+
+.infoboxContainer {
+  margin-top: 20px;
+  color: #555;
+}
+
+.infoboxTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.infoboxContainer p,
+.infoboxTitle p {
+  margin: 4px 0;
 }
 
 .priceBlock {
@@ -224,6 +243,11 @@
   font-weight: 600;
   color: #f15e4d;
 }
+
+.assemblyNote {
+    color: #666;
+    font-size: 12px;
+  }
 
 /* MODAL ORDER CONFIRMATION */
 .buttonRow {
@@ -289,6 +313,11 @@
     align-items: center;
     box-sizing: border-box;
   }
+  .infoboxContainer {
+    margin-top: 40px;
+    width: 100%;
+    box-sizing: border-box;
+  }
   .priceBlock {
     display: flex;
     flex-direction: column;
@@ -346,7 +375,7 @@
 
 @media (max-width: 374px) {
   .sectionArrangementLabel p {
-    width: 92px;
+    width: 91px;
   }
   .imageWrapper {
     width: 100%;            /* fill the label’s width */

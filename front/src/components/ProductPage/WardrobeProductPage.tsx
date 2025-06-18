@@ -32,6 +32,9 @@ import {
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductPrice'
 import {
+  ProductInfobox,
+} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductInfobox'
+import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
@@ -165,6 +168,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.price ?? undefined}
           />
         )}
+        <ProductInfobox/>
       </div>
     </>
   )

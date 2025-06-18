@@ -4,7 +4,7 @@
   margin: 0 auto;
   padding: 30px;
   box-sizing: border-box;
-  height: 85vh;
+  min-height: 85vh;
 }
 
 .titleContainer {
