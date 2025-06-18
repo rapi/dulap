@@ -176,6 +176,10 @@
   "checkout.modal.title": "Comanda plasată",
   "checkout.modal.message": "Comanda ta a fost plasata, în scurt timp revenim cu un apel pentru confirmarea detaliilor comenzii!",
 
+  "checkout.terms.accept": "Accept {link}",
+  "checkout.terms.termsAndConditions": "Termenii și condițiile",
+  "checkout.terms.required": "Trebuie să acceptați termenii și condițiile",
+
   "contacts.title": "Contactează-ne",
   "contacts.subtitle": "Suntem aici să te ajutăm cu orice întrebări despre mobilierul personalizat.",
   "contacts.nameSurname": "Nume și prenume",

@@ -463,7 +463,7 @@ export const Checkout: FC = () => {
                   <span>
                     <FormattedMessage
                       id="checkout.terms.accept"
-                      defaultMessage="Accept termenii și {link}"
+                      defaultMessage="Accept {link}"
                       values={{
                         link: (
                           <a
@@ -471,7 +471,7 @@ export const Checkout: FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            termenii și condițiile
+                            <FormattedMessage id="checkout.terms.termsAndConditions" />
                           </a>
                         ),
                       }}
@@ -482,9 +482,12 @@ export const Checkout: FC = () => {
               </div>
 
               {/* Place Order */}
-              <CustomButton size="medium" onClick={handlePlaceOrder}>
-                <FormattedMessage id="homepage.button.placeOrder" />
-              </CustomButton>
+              <div className={styles.placeOrderButtonContainer}>
+                <CustomButton size="medium" onClick={handlePlaceOrder}>
+                  <FormattedMessage id="homepage.button.placeOrder" />
+                </CustomButton>
+              </div>
+              
             </div>
           </div>
         </div>

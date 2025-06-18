@@ -144,3 +144,14 @@ a.ctaButton.greyVariant.outlined:hover {
   background-color: #8b8b8b;
   color: white;
 }
+
+/* icon boost */
+.ctaButton.smallSize .MuiSvgIcon-root {
+  font-size: 1.25rem;
+}
+.ctaButton.mediumSize .MuiSvgIcon-root {
+  font-size: 1.5rem;
+}
+.ctaButton.largeSize .MuiSvgIcon-root {
+  font-size: 2rem;
+}

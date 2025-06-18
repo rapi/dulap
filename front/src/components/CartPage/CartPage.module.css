@@ -1,11 +1,12 @@
 .cartContainer {
-  width: 90%;
+  width: 100%;
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
   background: white;
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .titleContainer {
@@ -59,7 +60,6 @@
   text-align: left;
   font-size: 15px;
   line-height: 1.6;
-  margin-left: 3vw;
 }
 
 .colorContainer {
@@ -158,4 +158,101 @@
 .trashIconContainer {
   display: flex;
   justify-content: center;
+}
+
+/* hide header on mobile */
+@media (max-width: 768px) {
+  .cartHeader,
+  .indexRow {
+    display: none;
+  }
+
+  .cartRow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    padding: 25px 50px;
+    margin: 0 auto 16px;
+    transition: padding 0.3s;
+    max-width: 360px;
+    text-align: center;
+  }
+
+  /* slightly bigger image */
+  .productImage {
+    width: 140px;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+
+  .productName {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .productDetails {
+    width: 100%;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .colorContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .price {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f4a261;
+    margin-bottom: 12px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  .actions .MuiIconButton-root {
+    background: #e63946;
+    color: #fff;
+  }
+}
+
+/* add extra left/right padding on slightly larger phones (481px–768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .cartRow {
+    /* undo the old padding hack */
+    padding-left: 16px;
+    padding-right: 16px;
+
+    /* ensure everything is centered horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .productDetails {
+    /* cap its width so it never runs full-bleed */
+    max-width: 200px;
+    /* center that column inside the card */
+    margin: 0 auto 12px;
+    /* keep your left-alignment of text */
+    text-align: left;
+  }
+
+  .productImage {
+    width: 140px; /* as before */
+  }
+
+  /* everything else stays as in your mobile card rules */
 }

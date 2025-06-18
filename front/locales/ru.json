@@ -176,6 +176,10 @@
   "checkout.modal.title": "Заказ оформлен",
   "checkout.modal.message": "Ваш заказ оформлен — вскоре мы перезвоним, чтобы подтвердить детали!",
 
+  "checkout.terms.accept": "Соглашаюсь с {link}",
+  "checkout.terms.termsAndConditions": "Условиями и положениями",
+  "checkout.terms.required": "Вы должны согласиться с условиями и положениями",
+
   "contacts.title": "Свяжитесь с нами",
   "contacts.subtitle": "Мы здесь, чтобы помочь вам с любыми вопросами о персональной мебели.",
   "contacts.nameSurname": "Имя и фамилия",

@@ -1,9 +1,8 @@
 import React, { FC } from 'react'
 import { useRouter } from 'next/router'
 import styles from './CartPage.module.css'
-import { Delete as FaTrash } from '@mui/icons-material'
+import DeleteIcon from '@mui/icons-material/Delete';
 import SelectColor from '~/components/SelectColor/SelectColor'
-import { IconButton } from '@mui/material'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import { FormattedMessage } from 'react-intl'
 import { useIntl } from 'react-intl'
@@ -75,7 +74,7 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
     }
   return (
     <div className={styles.cartRow} key={index}>
-      <span>{index + 1}</span>
+      <span className={styles.indexRow}>{index + 1}</span>
       <span className={styles.productName}>
         {item.name === 'wardrobe'
           ? intl.formatMessage({ id: 'homepage.products.wardrobe' })
@@ -145,14 +144,16 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
         <FormattedMessage id="homepage.configurator.price.currencyLei" />
       </span>
       <div className={styles.actions}>
-        <IconButton
-          size="large"
+        <CustomButton 
+          icon={<DeleteIcon fontSize="inherit" />}
+          size='large'
+          aria-label="delete"
           onClick={() => {
             removeItem(index)
           }}
         >
-          <FaTrash />
-        </IconButton>
+          
+        </CustomButton>
       </div>
     </div>
   )

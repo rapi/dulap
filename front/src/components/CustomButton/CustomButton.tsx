@@ -22,10 +22,9 @@ export const CustomButton: FC<CustomButtonProps> = ({
 }) => {
   if (!children && icon) {
     return (
-      <IconButton 
-        size={size} 
-        color={'warning'}
+      <IconButton
         onClick={onClick}
+        sx={{ fontSize: 30 }}
         {...(href ? { component: 'a', href } : {})}
       >
         {icon}

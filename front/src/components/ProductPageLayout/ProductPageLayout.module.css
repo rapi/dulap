@@ -266,7 +266,8 @@
   .mirroringLabel p,
   .sectionArrangementLabel p,
   .shelfArrangement p,
-  .dimensionTitle {
+  .dimensionTitle,
+  .furnitureTitle {
     width: 130px;
   }
   .priceContainer {
@@ -322,7 +323,34 @@
   .sectionLabel p,
   .mirroringLabel p,
   .sectionArrangementLabel p,
-  .shelfArrangement p {
+  .shelfArrangement p,
+  .furnitureTitle {
     width: 95px;
+  }
+}
+
+@media (max-width: 413px) {
+  .contentContainer {
+    padding: 0 1rem;
+  }
+
+  .sectionArrangementLabel p {
+    width: 100px;
+  }
+  .imageWrapper {
+    width: 100%;            /* fill the label’s width */
+    display: flex;          
+    justify-content: center;/* center the ImageSelect inside */
+}
+}
+
+@media (max-width: 374px) {
+  .sectionArrangementLabel p {
+    width: 92px;
+  }
+  .imageWrapper {
+    width: 100%;            /* fill the label’s width */
+    display: flex;          
+    justify-content: center;/* center the ImageSelect inside */
   }
 }

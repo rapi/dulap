@@ -5,6 +5,7 @@ import { useCart } from '~/context/cartContext'
 import { CustomButton } from '../CustomButton/CustomButton'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import { WardrobeProductConfiguration } from '~/components/ProductPage/productTypes/wardrobe'
+import { deepOrange } from '@mui/material/colors';
 
 export const ProductCatalog: React.FC = () => {
   const { addItem } = useCart()
@@ -25,7 +26,7 @@ export const ProductCatalog: React.FC = () => {
             price={product.price}
             button={
               <CustomButton
-                icon={<ShoppingCartIcon />}
+                icon={<ShoppingCartIcon fontSize="inherit" sx={{ color: deepOrange[300] }}/>}
                 outlined
                 size="large"
                 variant="danger"

@@ -45,7 +45,8 @@
 }
 
 .price {
-  color: #f46d5e;
+  /* color: #f46d5e; */
+  color: #ff8a65;
   font-size: 20px;
   font-weight: 500;
 }

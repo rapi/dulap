@@ -133,42 +133,47 @@ export const ProductSections: FC<ProductSelectProps> = ({
           <p>
             <FormattedMessage id="homepage.configurator.wardrobeArrangement.shelvesArrangement" />
           </p>
-          <ImageSelect
-            images={
-              predefinedSections?.arrangement?.map(
-                ({ src, width, height }) => ({ src, width, height })
-              ) ?? selectedSections
-            }
-            onChange={(i) => {
-              if (!predefinedSections?.arrangement) {
-                setActiveSection(i)
-                setIsModalOpen(true)
+          <div className={styles.imageWrapper}>
+            <ImageSelect
+              images={
+                predefinedSections?.arrangement?.map(
+                  ({ src, width, height }) => ({ src, width, height })
+                ) ?? selectedSections
               }
-            }}
-            flipped={selectedMirrorOption === 'mirrored'}
-            defaultSelected={1}
-            effectsEnabled
-          />
+              onChange={(i) => {
+                if (!predefinedSections?.arrangement) {
+                  setActiveSection(i)
+                  setIsModalOpen(true)
+                }
+              }}
+              flipped={selectedMirrorOption === 'mirrored'}
+              defaultSelected={1}
+              effectsEnabled
+            />
+          </div>
+          
         </label>
 
         <label className={styles.sectionArrangementLabel}>
           <p>
             <FormattedMessage id="homepage.configurator.wardrobeArrangement.doorsArrangement" />
           </p>
-          <ImageSelect
-            images={
-              predefinedSections?.opening?.map(({ src, width, height }) => ({
-                src,
-                width,
-                height,
-              })) ?? activeOpening
-            }
-            onChange={(i) => {
-              setActiveSection(i)
-            }}
-            flipped={selectedMirrorOption === 'mirrored'}
-            defaultSelected={8}
-          />
+          <div className={styles.imageWrapper}>
+            <ImageSelect
+              images={
+                predefinedSections?.opening?.map(({ src, width, height }) => ({
+                  src,
+                  width,
+                  height,
+                })) ?? activeOpening
+              }
+              onChange={(i) => {
+                setActiveSection(i)
+              }}
+              flipped={selectedMirrorOption === 'mirrored'}
+              defaultSelected={8}
+            />
+          </div>
         </label>
       </div>
       <Modal
