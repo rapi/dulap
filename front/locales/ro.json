@@ -143,6 +143,7 @@
   "cart.tableHeader.price": "Preț total",
   "cart.tableHeader.actions": "Acțiuni",
   "cart.subtotal": "Subtotal",
+  "cart.emptyCart": "Coșul este gol :(",
 
   "checkout.title": "Comanda mea",
   "checkout.subtitle1.orderDetails": "Detalii comandă",
@@ -167,18 +168,26 @@
   "checkout.totalToPay": "Total spre achitare",
 
   "checkout.promo.title": "Ai un promocod?",
-  "checkout.promo.placeholder": "Introdu-l aici",
+  "checkout.promo.placeholder": "promocod",
   "checkout.promo.apply": "Aplică",
   "checkout.promo.applied": "Reducere: ",
   "checkout.promo.invalid": "Eroare: cod invalid",
   "checkout.error.required": "Acest câmp este obligatoriu",
+  "checkout.error.onSubmit": "Completați toate câmpurile pentru a finaliza comanda.",
 
-  "checkout.modal.title": "Comanda plasată",
-  "checkout.modal.message": "Comanda ta a fost plasata, în scurt timp revenim cu un apel pentru confirmarea detaliilor comenzii!",
+  "checkout.modal.title": "Yay! Comanda a fost plasată",
+  "checkout.modal.message": "În scurt timp revenim cu un apel pentru confirmarea detaliilor comenzii!",
 
   "checkout.terms.accept": "Accept {link}",
   "checkout.terms.termsAndConditions": "Termenii și condițiile",
   "checkout.terms.required": "Trebuie să acceptați termenii și condițiile",
+
+  "checkout.assembly.title": "Ai nevoie de asamblare?",
+  "checkout.assembly.yes": "da",
+  "checkout.assembly.no": "nu",
+  "checkout.assembly.comment1": "*Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare.",
+  "checkout.assembly.comment2": "**Costul asamblării pentru fiecare produs este de 350 lei.",
+  "checkout.assembly": "Asamblare",
 
   "contacts.title": "Contactează-ne",
   "contacts.subtitle": "Suntem aici să te ajutăm cu orice întrebări despre mobilierul personalizat.",

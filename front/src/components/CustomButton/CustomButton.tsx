@@ -10,6 +10,7 @@ interface CustomButtonProps {
   size?: 'small' | 'medium' | 'large'
   variant?: 'primary' | 'danger' | 'grey'
   onClick?: () => void
+  disabled?: boolean
 }
 export const CustomButton: FC<CustomButtonProps> = ({
   children,
@@ -19,12 +20,14 @@ export const CustomButton: FC<CustomButtonProps> = ({
   href,
   variant = 'primary',
   onClick,
+  disabled = false
 }) => {
   if (!children && icon) {
     return (
       <IconButton
         onClick={onClick}
         sx={{ fontSize: 30 }}
+        disabled={disabled}
         {...(href ? { component: 'a', href } : {})}
       >
         {icon}
@@ -36,6 +39,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
     ...(icon && { startIcon: icon }),
     ...(href && { href }),
     ...(onClick && { onClick }),
+    disabled
   }
   return (
     <>
@@ -45,6 +49,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
           outlined && classes.outlined,
           classes[`${size}Size`],
           classes[`${variant}Variant`],
+          disabled && classes.disabled
         ])}
         size={size}
         {...additionalProps}

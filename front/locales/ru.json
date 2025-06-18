@@ -106,6 +106,8 @@
   "homepage.configurator.fittings.guides": "Направляющие",
   "homepage.configurator.fittings.handle": "ручка",
   "homepage.configurator.fittings.pushToOpen": "push-to-open",
+  "maner": "ручка",
+  "push": "нажимное открывание",
 
   "homepage.configurator.fittings.hinges.tooltip.1": "Что такое петли?",
   "homepage.configurator.fittings.hinges.tooltip.2": "Петли — это механизм, который позволяет открывать и закрывать двери шкафа.",
@@ -141,8 +143,7 @@
   "cart.tableHeader.price": "Итоговая цена",
   "cart.tableHeader.actions": "Действия",
   "cart.subtotal": "Итог",
-  "maner": "ручка",
-  "push": "нажимное открывание",
+  "cart.emptyCart": "Корзина пустая :(",
 
   "checkout.title": "Мой заказ",
   "checkout.subtitle1.orderDetails": "Детали заказа",
@@ -172,13 +173,21 @@
   "checkout.promo.applied": "Скидка: ",
   "checkout.promo.invalid": "Ошибка: код недействителен",
   "checkout.error.required": "Это поле обязательно",
+  "checkout.error.onSubmit": "Заполните все поля, чтобы завершить заказ.",
 
-  "checkout.modal.title": "Заказ оформлен",
-  "checkout.modal.message": "Ваш заказ оформлен — вскоре мы перезвоним, чтобы подтвердить детали!",
+  "checkout.modal.title": "Ура! Ваш заказ оформлен",
+  "checkout.modal.message": "Вскоре мы перезвоним, чтобы подтвердить детали!",
 
   "checkout.terms.accept": "Соглашаюсь с {link}",
   "checkout.terms.termsAndConditions": "Условиями и положениями",
   "checkout.terms.required": "Вы должны согласиться с условиями и положениями",
+
+  "checkout.assembly.title": "Вам нужна сборка?",
+  "checkout.assembly.yes": "да",
+  "checkout.assembly.no": "нет",
+  "checkout.assembly.comment1": "*Этот шкаф не требует профессиональной сборки, а для вашего удобства мы предлагаем инструкцию по сборке.",
+  "checkout.assembly.comment2": "**Стоимость сборки каждого изделия составляет 350 леев.",
+  "checkout.assembly": "Сборка",
 
   "contacts.title": "Свяжитесь с нами",
   "contacts.subtitle": "Мы здесь, чтобы помочь вам с любыми вопросами о персональной мебели.",

@@ -5,30 +5,42 @@ import MuiSelect from '@mui/material/Select'
 import * as React from 'react'
 import styles from './Select.module.css'
 import { FormattedMessage } from 'react-intl'
+
 interface SelectProps {
   options: string[]
   onChange?: (value: string) => void
-  label?: string
   defaultValue?: string
+  size?: 'small' | 'large'
 }
 
-export const Select = ({ options, onChange, defaultValue }: SelectProps) => {
+export const Select = ({
+  options,
+  onChange,
+  defaultValue,
+  size = 'large',
+}: SelectProps) => {
   const [selected, setSelected] = useState(options[0])
+
   useEffect(() => {
     if (defaultValue) {
       setSelected(defaultValue)
     }
   }, [defaultValue])
 
+  const formSize = size === 'small' ? 'small' : 'medium'
+
+  const fcClasses = [
+    styles.formControl,
+    size === 'small' ? styles.formControlSmall : '',
+  ].join(' ')
+
   return (
-    <FormControl size="small" sx={{ minWidth: 120 }}>
+    <FormControl size={formSize} className={fcClasses}>
       <MuiSelect
         value={selected}
-        onChange={(event) => {
-          setSelected(event.target.value)
-          if (onChange) {
-            onChange(event.target.value)
-          }
+        onChange={(e) => {
+          setSelected(e.target.value)
+          onChange?.(e.target.value)
         }}
         displayEmpty
         className={styles.select}
@@ -38,15 +50,14 @@ export const Select = ({ options, onChange, defaultValue }: SelectProps) => {
           fontFamily: 'Onest, sans-serif',
         }}
         inputProps={{ 'aria-label': 'Without label' }}
-        defaultValue={defaultValue ?? 'ro'}
       >
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
+        {options.map((opt) => (
+          <MenuItem key={opt} value={opt}>
             <span
               className={styles.selectOption}
               style={{ fontFamily: 'Onest, sans-serif', fontSize: '12px' }}
             >
-              <FormattedMessage id={option} />
+              <FormattedMessage id={opt} />
             </span>
           </MenuItem>
         ))}

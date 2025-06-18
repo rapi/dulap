@@ -128,9 +128,17 @@
 }
 
 .totalSection,
-.promoSection,
+.assemblySection,
 .termsSection {
   margin-bottom: 25px;
+}
+
+.assemblySection {
+  margin-top: 20px;
+}
+
+.promoSection {
+  margin-top: 30px;
 }
 
 .productItem {
@@ -175,6 +183,8 @@
 .placeOrderButtonContainer {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .buttonRow {
@@ -185,7 +195,6 @@
 /* Promocode */
 .promoFirstRow {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -193,10 +202,12 @@
   font-size: 14px;
   font-weight: 450;
   margin-bottom: 5px;
+  width: 140px;
 }
 
 .promoFirstRow input {
-  width: 100px;
+  width: 70px;
+  margin-right: 10px;
 }
 
 .promoFirstRow input,
@@ -205,6 +216,20 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 14px;
+}
+
+.assemblyFirstRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.assemblyFirstRow label {
+  width: 140px;
+}
+
+.assemblyNote {
+  color: #a0a0a0;
 }
 
 /* 1. Tablet and small desktop: stack the two main sections */

@@ -62,7 +62,9 @@ export const Menu = () => {
           <MenuItem onClick={handleClose}>
             <Select
               options={['ro', 'ru']}
+              defaultValue={(router.query.locale as string) ?? 'ro'}
               onChange={(e) => router.push(`/${e}/`)}
+              size='small'
             />
           </MenuItem>
           <MenuItem
@@ -141,6 +143,7 @@ export const Menu = () => {
             options={['ro', 'ru']}
             defaultValue={(router.query.locale as string) ?? 'ro'}
             onChange={(e) => router.push(`/${e}/`)}
+            size='small'
           />
           <div className="icons">
             <Link href="/cart">

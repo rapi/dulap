@@ -7,6 +7,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { useCart, CartItem } from '~/context/cartContext'
 import { CustomButton } from '../CustomButton/CustomButton'
 import { Modal } from '~/components/Modal/Modal'
+import Select from '~/components//Select/Select'
 
 const PROMO_CODES = [
   { code: 'PROMO15', discount: 15 },
@@ -17,6 +18,7 @@ export const Checkout: FC = () => {
   const router = useRouter()
   const intl = useIntl()
   const { items } = useCart()
+  const { clearCart } = useCart()
 
   // form fields
   const [name, setName] = useState('')
@@ -27,6 +29,7 @@ export const Checkout: FC = () => {
   const [comment, setComment] = useState('')
   const [promoCode, setPromoCode] = useState('')
   const [termsAccepted, setTermsAccepted] = useState(false)
+  const [assemblyNeeded, setAssemblyNeeded] = useState<'checkout.assembly.yes' | 'checkout.assembly.no'>('checkout.assembly.no')
 
   // errors
   const [nameError, setNameError] = useState('')
@@ -36,13 +39,14 @@ export const Checkout: FC = () => {
   const [addressError, setAddressError] = useState('')
   const [promoError, setPromoError] = useState('')
   const [termsError, setTermsError] = useState('')
+  const [commonError, setCommonError] = useState('')
 
   // other state
   const [paymentMethod, setPaymentMethod] = useState('cash')
   const [discountPercent, setDiscountPercent] = useState(0)
   const [orderPlaced, setOrderPlaced] = useState(false)
 
-  // calculate raw total
+  // calculate totals
   const rawTotal = items.reduce((sum, { config }) => {
     let itemPrice = 0
     config.forEach(comp => {
@@ -52,10 +56,10 @@ export const Checkout: FC = () => {
     })
     return sum + itemPrice
   }, 0)
-
   const deliveryPrice = 0
   const discountAmount = Math.round((rawTotal * discountPercent) / 100)
-  const totalToPay = rawTotal - discountAmount + deliveryPrice
+  const assemblyCost = assemblyNeeded === 'checkout.assembly.yes' ? items.length * 350 : 0
+  const totalToPay = rawTotal - discountAmount + deliveryPrice + assemblyCost
 
   const handleApplyPromo = () => {
     if (!promoCode.trim()) {
@@ -67,7 +71,6 @@ export const Checkout: FC = () => {
       )
       return
     }
-
     const entry = PROMO_CODES.find(
       p => p.code === promoCode.trim().toUpperCase()
     )
@@ -93,6 +96,7 @@ export const Checkout: FC = () => {
     setCityError('')
     setAddressError('')
     setTermsError('')
+    setCommonError('')
 
     // validate
     let valid = true
@@ -150,9 +154,17 @@ export const Checkout: FC = () => {
       )
       valid = false
     }
-    if (!valid) return
-
+    if (!valid) {
+      setCommonError(
+        intl.formatMessage({
+          id: 'checkout.error.onSubmit',
+          defaultMessage: 'Completați toate câmpurile pentru a finaliza comanda.',
+        })
+      )
+      return
+    }
     setOrderPlaced(true)
+    clearCart()
   }
 
   const handleCloseModal = () => {
@@ -176,7 +188,6 @@ export const Checkout: FC = () => {
             <h4 className={styles.subtitle}>
               <FormattedMessage id="checkout.subtitle1.orderDetails" />
             </h4>
-
             <div className={styles.row}>
               <div className={styles.formGroup}>
                 <label>
@@ -225,7 +236,6 @@ export const Checkout: FC = () => {
             <h4 className={styles.subtitle}>
               <FormattedMessage id="checkout.subtitle2.delivery" />
             </h4>
-
             <div className={styles.deliveryInputContainer}>
               <div className={styles.row}>
                 <div className={styles.formGroup}>
@@ -240,7 +250,9 @@ export const Checkout: FC = () => {
                       id: 'checkout.city.placeholder',
                     })}
                   />
-                  {cityError && <p className={styles.error}>{cityError}</p>}
+                  {cityError && (
+                    <p className={styles.error}>{cityError}</p>
+                  )}
                 </div>
                 <div className={styles.formGroup}>
                   <label>
@@ -254,7 +266,9 @@ export const Checkout: FC = () => {
                       id: 'checkout.fullAddress.placeholder',
                     })}
                   />
-                  {addressError && <p className={styles.error}>{addressError}</p>}
+                  {addressError && (
+                    <p className={styles.error}>{addressError}</p>
+                  )}
                 </div>
               </div>
               <div className={styles.formGroup}>
@@ -325,12 +339,11 @@ export const Checkout: FC = () => {
                       imageSrc = comp.predefinedValue ?? comp.images[0] ?? ''
                       break
                     case 'dimensions':
-                      const d =
-                        comp.predefinedValue ?? {
-                          width: comp.width,
-                          height: comp.height,
-                          depth: comp.depth,
-                        }
+                      const d = comp.predefinedValue ?? {
+                        width: comp.width,
+                        height: comp.height,
+                        depth: comp.depth,
+                      }
                       dims.width = d.width
                       dims.height = d.height
                       dims.depth = d.depth
@@ -344,7 +357,6 @@ export const Checkout: FC = () => {
                   item.name === 'wardrobe'
                     ? 'homepage.products.wardrobe'
                     : 'homepage.products.dulap'
-
                 return (
                   <div className={styles.productItem} key={idx}>
                     <img
@@ -368,16 +380,11 @@ export const Checkout: FC = () => {
                   </div>
                 )
               })}
-
+              
               {/* Promo Code Section */}
               <div className={styles.promoSection}>
                 <div className={styles.promoFirstRow}>
-                  <label>
-                    {intl.formatMessage({
-                      id: 'checkout.promo.title',
-                      defaultMessage: 'Ai un promocod?',
-                    })}
-                  </label>
+                  <label>{intl.formatMessage({id:'checkout.promo.title',defaultMessage:'Ai un promocod?'})}</label>
                   <input
                     type="text"
                     placeholder={intl.formatMessage({
@@ -388,21 +395,12 @@ export const Checkout: FC = () => {
                     onChange={e => setPromoCode(e.target.value)}
                     className={styles.promoInput}
                   />
-                  <CustomButton
-                    size="small"
-                    variant="grey"
-                    onClick={handleApplyPromo}
-                  >
-                    <FormattedMessage
-                      id="checkout.promo.apply"
-                      defaultMessage="Aplică"
-                    />
+                  <CustomButton size="small" variant="grey" onClick={handleApplyPromo}>
+                    <FormattedMessage id="checkout.promo.apply" defaultMessage="Aplică" />
                   </CustomButton>
                 </div>
                 <div className={styles.promoSecondRow}>
-                  {promoError && (
-                    <p className={styles.promoError}>{promoError}</p>
-                  )}
+                  {promoError && <p className={styles.promoError}>{promoError}</p>}
                   {discountPercent > 0 && (
                     <p className={styles.promoSuccess}>
                       {intl.formatMessage({
@@ -413,6 +411,27 @@ export const Checkout: FC = () => {
                     </p>
                   )}
                 </div>
+              </div>
+
+              {/* Assembly Section */}
+              <div className={styles.assemblySection}>
+                <div className={styles.assemblyFirstRow}>
+                  <label>
+                    <h4><FormattedMessage id="checkout.assembly.title" defaultMessage="Ai nevoie de asamblare?*" /></h4>
+                  </label>
+                  <Select
+                    options={['checkout.assembly.yes', 'checkout.assembly.no']}
+                    defaultValue={assemblyNeeded}
+                    onChange={value => setAssemblyNeeded(value as 'checkout.assembly.yes' | 'checkout.assembly.no')}
+                    size='small'
+                  />
+                </div>
+                <p className={styles.assemblyNote}>
+                  <FormattedMessage id="checkout.assembly.comment1" defaultMessage="*Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare." />
+                </p>
+                <p className={styles.assemblyNote}>
+                  <FormattedMessage id="checkout.assembly.comment2" defaultMessage="**Costul asamblării pentru fiecare produs este de 350 lei." />
+                </p>
               </div>
 
               {/* Totals */}
@@ -426,10 +445,7 @@ export const Checkout: FC = () => {
                 </p>
                 {discountPercent > 0 && (
                   <p>
-                    <FormattedMessage
-                      id="checkout.discount"
-                      defaultMessage="Reducere"
-                    />{' '}
+                    <FormattedMessage id="checkout.discount" defaultMessage="Reducere" />{' '}
                     <span>
                       -{discountAmount}{' '}
                       <FormattedMessage id="homepage.configurator.price.currencyLei" />
@@ -443,6 +459,13 @@ export const Checkout: FC = () => {
                     <FormattedMessage id="homepage.configurator.price.currencyLei" />
                   </span>
                 </p>
+                <p>
+                  <FormattedMessage id="checkout.assembly" defaultMessage="Asamblare" />{' '}
+                  <span>
+                    {assemblyCost}{' '}
+                    <FormattedMessage id="homepage.configurator.price.currencyLei" />
+                  </span>
+                </p>
                 <p className={styles.finalTotal}>
                   <FormattedMessage id="checkout.totalToPay" />{' '}
                   <span>
@@ -452,7 +475,7 @@ export const Checkout: FC = () => {
                 </p>
               </div>
 
-              {/* Terms and Conditions Checkbox */}
+              {/* Terms & Place Order */}
               <div className={styles.termsSection}>
                 <label className={styles.termsLabel}>
                   <input
@@ -481,13 +504,17 @@ export const Checkout: FC = () => {
                 {termsError && <p className={styles.error}>{termsError}</p>}
               </div>
 
-              {/* Place Order */}
               <div className={styles.placeOrderButtonContainer}>
-                <CustomButton size="medium" onClick={handlePlaceOrder}>
+                <CustomButton 
+                  size="medium" 
+                  onClick={handlePlaceOrder}
+                >
                   <FormattedMessage id="homepage.button.placeOrder" />
                 </CustomButton>
+                <div>
+                  {commonError && <p className={styles.error}>{commonError}</p>}
+                </div>
               </div>
-              
             </div>
           </div>
         </div>
@@ -516,3 +543,4 @@ export const Checkout: FC = () => {
     </>
   )
 }
+

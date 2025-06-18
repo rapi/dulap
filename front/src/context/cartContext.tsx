@@ -20,6 +20,7 @@ type CartContextType = {
     predefinedValues: PredefinedValue
   ) => void
   removeItem: (index: number) => void
+  clearCart: () => void
   itemCount: number
 }
 
@@ -69,9 +70,14 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     [items]
   )
 
+  const clearCart = useCallback(() => {
+    setItems([])
+    localStorage.removeItem('cartItems')
+  }, [])
+
   return (
     <CartContext.Provider
-      value={{ items, addItem, removeItem, itemCount: items.length }}
+      value={{ items, addItem, removeItem, clearCart, itemCount: items.length }}
     >
       {children}
     </CartContext.Provider>
