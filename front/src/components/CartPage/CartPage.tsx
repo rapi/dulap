@@ -9,6 +9,7 @@ import { CartItem, useCart } from '~/context/cartContext'
 
 const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
   const { removeItem } = useCart()
+  console.log('CartItem →', item)
   const intl = useIntl()
 
   const itemConfig = {
@@ -29,7 +30,8 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
           width: config.predefinedValue?.width ?? config.width,
           height: config.predefinedValue?.height ?? config.height,
           depth: config.predefinedValue?.depth ?? config.depth,
-          plintHeight: config.predefinedValue?.plintHeight ?? config.plintHeight,
+          plintHeight:
+            config.predefinedValue?.plintHeight ?? config.plintHeight,
         }
         break
       case 'colors':
@@ -39,7 +41,8 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
         itemConfig.furniture = {
           hinges: config.predefinedValue?.hinges ?? config.hinges,
           guides: config.predefinedValue?.guides ?? config.guides,
-          openingType: config.predefinedValue?.openingType ?? config.selectedOpeningMethod,
+          openingType:
+            config.predefinedValue?.openingType ?? config.selectedOpeningMethod,
         }
         break
       case 'price':
@@ -103,7 +106,11 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
         <b>{intl.formatMessage({ id: itemConfig.furniture.guides })}</b>
       </span>
       <div className={styles.colorContainer}>
-        <SelectColor size="medium" colors={[itemConfig.colors]} onChange={() => {}} />
+        <SelectColor
+          size="medium"
+          colors={[itemConfig.colors]}
+          onChange={() => {}}
+        />
       </div>
       <span className={styles.price}>
         {itemConfig.price}{' '}
@@ -126,8 +133,8 @@ export const CartPage: FC = () => {
   const { items } = useCart()
 
   const rawTotal = items.reduce((sum, { config }) => {
-    const priceConfig = config.find(c => c.type === 'price')
-    return sum + (priceConfig?.predefinedValue ?? (priceConfig?.price ?? 0))
+    const priceConfig = config.find((c) => c.type === 'price')
+    return sum + (priceConfig?.predefinedValue ?? priceConfig?.price ?? 0)
   }, 0)
 
   const isEmpty = items.length === 0 || rawTotal === 0
@@ -141,18 +148,34 @@ export const CartPage: FC = () => {
       </div>
 
       {isEmpty ? (
-        <p className={styles.emptyCartMessage}><FormattedMessage id="cart.emptyCart" /></p>
+        <p className={styles.emptyCartMessage}>
+          <FormattedMessage id="cart.emptyCart" />
+        </p>
       ) : (
         <>
           <div className={styles.cartTable}>
             <div className={styles.cartHeader}>
-              <span><FormattedMessage id="cart.tableHeader.no" /></span>
-              <span><FormattedMessage id="cart.tableHeader.productName" /></span>
-              <span><FormattedMessage id="cart.tableHeader.model" /></span>
-              <span><FormattedMessage id="cart.tableHeader.characteristics" /></span>
-              <span><FormattedMessage id="cart.tableHeader.color" /></span>
-              <span><FormattedMessage id="cart.tableHeader.price" /></span>
-              <span><FormattedMessage id="cart.tableHeader.actions" /></span>
+              <span>
+                <FormattedMessage id="cart.tableHeader.no" />
+              </span>
+              <span>
+                <FormattedMessage id="cart.tableHeader.productName" />
+              </span>
+              <span>
+                <FormattedMessage id="cart.tableHeader.model" />
+              </span>
+              <span>
+                <FormattedMessage id="cart.tableHeader.characteristics" />
+              </span>
+              <span>
+                <FormattedMessage id="cart.tableHeader.color" />
+              </span>
+              <span>
+                <FormattedMessage id="cart.tableHeader.price" />
+              </span>
+              <span>
+                <FormattedMessage id="cart.tableHeader.actions" />
+              </span>
             </div>
             {items.map((item, index) => (
               <ItemRow item={item} key={index} index={index} />
@@ -163,22 +186,21 @@ export const CartPage: FC = () => {
               <FormattedMessage id="cart.subtotal" />
             </span>
             <span className={styles.subtotalValue}>
-              {rawTotal} <FormattedMessage id="homepage.configurator.price.currencyLei" />
+              {rawTotal}{' '}
+              <FormattedMessage id="homepage.configurator.price.currencyLei" />
             </span>
           </div>
         </>
       )}
 
       <div className={styles.ctaButtonContainer}>
-        { !isEmpty 
-        ? <CustomButton
-          size="medium"
-          onClick={() => router.push('/checkout')}
-        >
-          <FormattedMessage id="homepage.button.finalizeOrder" />
-        </CustomButton>
-        : ''
-        }
+        {!isEmpty ? (
+          <CustomButton size="medium" onClick={() => router.push('/checkout')}>
+            <FormattedMessage id="homepage.button.finalizeOrder" />
+          </CustomButton>
+        ) : (
+          ''
+        )}
       </div>
     </div>
   )

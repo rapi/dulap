@@ -20,6 +20,7 @@ export type ProductSectionsComponent = {
   activeOpening: ImageOptionProps[]
   selectedMaxSections: number
   selectedSections: ImageOptionProps[]
+  setSelectedSections: React.Dispatch<React.SetStateAction<ImageOptionProps[]>>
   setSelectedMaxSections: (value: number) => void
   selectedMirrorOption?: string
   setSelectedMirrorOption?: (value: string) => void
@@ -52,6 +53,8 @@ export const ProductSections: FC<ProductSelectProps> = ({
     minNumber,
     activeSections,
     activeOpening,
+    selectedSections,
+    setSelectedSections,
     selectedMaxSections,
     setSelectedMaxSections,
     selectedMirrorOption,
@@ -62,7 +65,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
   const [minSections, setMinSections] = useState(String(minNumber))
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeSection, setActiveSection] = useState<null | number>(null)
-  const [selectedSections, setSelectedSections] = useState([...activeSections])
   selectedMirrorOption = selectedMirrorOption ?? 'standard'
   setSelectedMirrorOption = setSelectedMirrorOption ?? (() => {})
   const sections = new Array(maxNumber).fill(0).map((_, i) => ({
@@ -72,21 +74,23 @@ export const ProductSections: FC<ProductSelectProps> = ({
   useEffect(() => {
     setSelectedSections(activeSections)
   }, [activeSections])
+
+  const replaceSection = (index: number, src: string) =>
+    setSelectedSections((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, src } : item))
+    )
+
+  /* 3️⃣ debug: see every successful change */
+  useEffect(() => {
+    console.log('selectedSections:', selectedSections)
+  }, [selectedSections])
+
   useEffect(() => {
     setSelectedMaxSections(minNumber)
   }, [minNumber])
   useEffect(() => {
     setMinSections(String(minNumber))
   }, [minNumber])
-  useEffect(() => {
-    const updatedSections = activeSections.map((section, index) => ({
-      ...section,
-      src: selectedSections[index]?.src || section.src,
-    }))
-    if (JSON.stringify(updatedSections) !== JSON.stringify(selectedSections)) {
-      setSelectedSections(updatedSections)
-    }
-  }, [activeSections, selectedSections])
   const formatedSections: ButtonOptionsType[] = sections.map((section) => ({
     label: section.label,
     value: section.value,
@@ -151,7 +155,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
               effectsEnabled
             />
           </div>
-          
         </label>
 
         <label className={styles.sectionArrangementLabel}>
@@ -192,16 +195,11 @@ export const ProductSections: FC<ProductSelectProps> = ({
             defaultSelected={0}
             onChange={(i) => {
               if (activeSection !== null && i !== null) {
-                const currentActiveSections = [...selectedSections]
-                if (selectedMirrorOption === 'standard') {
-                  currentActiveSections[activeSection].src =
-                    possibleSections[i].src
-                } else {
-                  currentActiveSections[
-                    currentActiveSections.length - activeSection - 1
-                  ].src = possibleSections[i].src
-                }
-                setSelectedSections(currentActiveSections)
+                const physicalIdx =
+                  selectedMirrorOption === 'standard'
+                    ? activeSection
+                    : selectedSections.length - activeSection - 1
+                replaceSection(physicalIdx, possibleSections[i].src)
                 setActiveSection(null)
               }
               setIsModalOpen(false)
