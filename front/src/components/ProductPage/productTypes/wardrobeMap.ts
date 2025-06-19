@@ -28,10 +28,38 @@ type ImageWidthMap = {
     selectedMaxSections: number
   ) => MainImageParams[]
 }
+type DoorsCount = {
+  maxWidth: number,
+  sectionsSelected: number,
+  doors: number
+}
 
 const leftOpening = '/wardrobe/opening-left.png'
 const rightOpening = '/wardrobe/opening-right.png'
 const doubleOpening = '/wardrobe/opening-double.png'
+
+export const doorsCount: DoorsCount[] = [
+  {
+    maxWidth: 60,
+    sectionsSelected: 1,
+    doors: 1
+  },
+  {
+    maxWidth: 119,
+    sectionsSelected: 1,
+    doors: 2
+  },
+  {
+    maxWidth: 60,
+    sectionsSelected: 1,
+    doors: 1
+  },
+  {
+    maxWidth: 60,
+    sectionsSelected: 1,
+    doors: 1
+  }
+] 
 
 export const openingMap: OpeningMap[] = [
   {

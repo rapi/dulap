@@ -32,6 +32,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [activeOpening, setActiveOpening] = useState<ImageOptionProps[]>([])
   const [maxSections, setMaxSections] = useState(5)
   const [minSections, setMinSections] = useState(1)
+
+  const [doorsNr, setDoorsNr] = useState(3)
   useEffect(() => {
     if (height <= 210) {
       setImageHeight(2100)
@@ -60,8 +62,31 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     }
   , [selectedColor])
   useEffect(() => {
-    setPrice((width*4.5+height*1.2)*7)
-  }, [width, height])
+    let newDoors: number
+
+    if (width <= 60) {
+      newDoors = 1
+    } else if (width <= 100) {
+      newDoors = 2
+    } else if (width <= 150) {
+      newDoors = width < 120 ? 2 : 3
+    } else if (width < 200) {
+      newDoors = selectedMaxSections === 2 ? 4 : 3
+    } else if (width === 200) {
+      newDoors = selectedMaxSections === 2 ? 4 : 5
+    } else {
+      newDoors = selectedMaxSections === 3 ? 5 : 4
+    }
+
+    console.log('doors →', newDoors)
+    setDoorsNr(newDoors)
+  }, [width, selectedMaxSections])
+  useEffect(() => {
+    if (selectedMaxSections === 1) {
+      if (width <= 60) { setDoorsNr(1) }
+    }
+    setPrice(width*29+(height-190)*4.5*doorsNr)
+  }, [width, height, selectedMaxSections, doorsNr])
   useEffect(() => {
     if (selectedMirrorOption === 'standard') {
       setImageSide('right')
