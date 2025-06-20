@@ -8,7 +8,7 @@ import { useCart, CartItem } from '~/context/cartContext'
 import { CustomButton } from '../CustomButton/CustomButton'
 import { Modal } from '~/components/Modal/Modal'
 import Select from '~/components//Select/Select'
-
+import axios from 'axios'
 const PROMO_CODES = [
   { code: 'PROMO15', discount: 15 },
   { code: 'PROMO10', discount: 10 },
@@ -29,7 +29,9 @@ export const Checkout: FC = () => {
   const [comment, setComment] = useState('')
   const [promoCode, setPromoCode] = useState('')
   const [termsAccepted, setTermsAccepted] = useState(false)
-  const [assemblyNeeded, setAssemblyNeeded] = useState<'checkout.assembly.yes' | 'checkout.assembly.no'>('checkout.assembly.no')
+  const [assemblyNeeded, setAssemblyNeeded] = useState<
+    'checkout.assembly.yes' | 'checkout.assembly.no'
+  >('checkout.assembly.no')
 
   // errors
   const [nameError, setNameError] = useState('')
@@ -49,7 +51,7 @@ export const Checkout: FC = () => {
   // calculate totals
   const rawTotal = items.reduce((sum, { config }) => {
     let itemPrice = 0
-    config.forEach(comp => {
+    config.forEach((comp) => {
       if (comp.type === 'price') {
         itemPrice = comp.predefinedValue ?? comp.price
       }
@@ -58,7 +60,8 @@ export const Checkout: FC = () => {
   }, 0)
   const deliveryPrice = 0
   const discountAmount = Math.round((rawTotal * discountPercent) / 100)
-  const assemblyCost = assemblyNeeded === 'checkout.assembly.yes' ? items.length * 350 : 0
+  const assemblyCost =
+    assemblyNeeded === 'checkout.assembly.yes' ? items.length * 350 : 0
   const totalToPay = rawTotal - discountAmount + deliveryPrice + assemblyCost
 
   const handleApplyPromo = () => {
@@ -72,7 +75,7 @@ export const Checkout: FC = () => {
       return
     }
     const entry = PROMO_CODES.find(
-      p => p.code === promoCode.trim().toUpperCase()
+      (p) => p.code === promoCode.trim().toUpperCase()
     )
     if (entry) {
       setDiscountPercent(entry.discount)
@@ -88,7 +91,7 @@ export const Checkout: FC = () => {
     }
   }
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     // reset errors
     setNameError('')
     setPhoneError('')
@@ -158,11 +161,19 @@ export const Checkout: FC = () => {
       setCommonError(
         intl.formatMessage({
           id: 'checkout.error.onSubmit',
-          defaultMessage: 'Completați toate câmpurile pentru a finaliza comanda.',
+          defaultMessage:
+            'Completați toate câmpurile pentru a finaliza comanda.',
         })
       )
       return
     }
+    await axios.post('/api/notify', {
+      items: JSON.stringify(items),
+      name,
+      phone,
+      city,
+      fullAddress,
+    })
     setOrderPlaced(true)
     clearCart()
   }
@@ -196,7 +207,7 @@ export const Checkout: FC = () => {
                 <input
                   type="text"
                   value={name}
-                  onChange={e => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   placeholder={intl.formatMessage({
                     id: 'checkout.nameSurname',
                   })}
@@ -210,7 +221,7 @@ export const Checkout: FC = () => {
                 <input
                   type="text"
                   value={phone}
-                  onChange={e => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder={intl.formatMessage({
                     id: 'checkout.phoneNumber.placeholder',
                   })}
@@ -224,7 +235,7 @@ export const Checkout: FC = () => {
                 <input
                   type="text"
                   value={email}
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder={intl.formatMessage({
                     id: 'checkout.email.placeholder',
                   })}
@@ -245,14 +256,12 @@ export const Checkout: FC = () => {
                   <input
                     type="text"
                     value={city}
-                    onChange={e => setCity(e.target.value)}
+                    onChange={(e) => setCity(e.target.value)}
                     placeholder={intl.formatMessage({
                       id: 'checkout.city.placeholder',
                     })}
                   />
-                  {cityError && (
-                    <p className={styles.error}>{cityError}</p>
-                  )}
+                  {cityError && <p className={styles.error}>{cityError}</p>}
                 </div>
                 <div className={styles.formGroup}>
                   <label>
@@ -261,7 +270,7 @@ export const Checkout: FC = () => {
                   <input
                     type="text"
                     value={fullAddress}
-                    onChange={e => setFullAddress(e.target.value)}
+                    onChange={(e) => setFullAddress(e.target.value)}
                     placeholder={intl.formatMessage({
                       id: 'checkout.fullAddress.placeholder',
                     })}
@@ -277,7 +286,7 @@ export const Checkout: FC = () => {
                 </label>
                 <textarea
                   value={comment}
-                  onChange={e => setComment(e.target.value)}
+                  onChange={(e) => setComment(e.target.value)}
                   placeholder={intl.formatMessage({
                     id: 'checkout.comment.placeholder',
                   })}
@@ -333,7 +342,7 @@ export const Checkout: FC = () => {
                 let imageSrc = ''
                 const dims = { width: 0, height: 0, depth: 0 }
                 let itemPrice = 0
-                item.config.forEach(comp => {
+                item.config.forEach((comp) => {
                   switch (comp.type) {
                     case 'imageCarousel':
                       imageSrc = comp.predefinedValue ?? comp.images[0] ?? ''
@@ -380,11 +389,16 @@ export const Checkout: FC = () => {
                   </div>
                 )
               })}
-              
+
               {/* Promo Code Section */}
               <div className={styles.promoSection}>
                 <div className={styles.promoFirstRow}>
-                  <label>{intl.formatMessage({id:'checkout.promo.title',defaultMessage:'Ai un promocod?'})}</label>
+                  <label>
+                    {intl.formatMessage({
+                      id: 'checkout.promo.title',
+                      defaultMessage: 'Ai un promocod?',
+                    })}
+                  </label>
                   <input
                     type="text"
                     placeholder={intl.formatMessage({
@@ -392,15 +406,24 @@ export const Checkout: FC = () => {
                       defaultMessage: 'Introdu-l aici',
                     })}
                     value={promoCode}
-                    onChange={e => setPromoCode(e.target.value)}
+                    onChange={(e) => setPromoCode(e.target.value)}
                     className={styles.promoInput}
                   />
-                  <CustomButton size="small" variant="grey" onClick={handleApplyPromo}>
-                    <FormattedMessage id="checkout.promo.apply" defaultMessage="Aplică" />
+                  <CustomButton
+                    size="small"
+                    variant="grey"
+                    onClick={handleApplyPromo}
+                  >
+                    <FormattedMessage
+                      id="checkout.promo.apply"
+                      defaultMessage="Aplică"
+                    />
                   </CustomButton>
                 </div>
                 <div className={styles.promoSecondRow}>
-                  {promoError && <p className={styles.promoError}>{promoError}</p>}
+                  {promoError && (
+                    <p className={styles.promoError}>{promoError}</p>
+                  )}
                   {discountPercent > 0 && (
                     <p className={styles.promoSuccess}>
                       {intl.formatMessage({
@@ -417,20 +440,37 @@ export const Checkout: FC = () => {
               <div className={styles.assemblySection}>
                 <div className={styles.assemblyFirstRow}>
                   <label>
-                    <h4><FormattedMessage id="checkout.assembly.title" defaultMessage="Ai nevoie de asamblare?*" /></h4>
+                    <h4>
+                      <FormattedMessage
+                        id="checkout.assembly.title"
+                        defaultMessage="Ai nevoie de asamblare?*"
+                      />
+                    </h4>
                   </label>
                   <Select
                     options={['checkout.assembly.yes', 'checkout.assembly.no']}
                     defaultValue={assemblyNeeded}
-                    onChange={value => setAssemblyNeeded(value as 'checkout.assembly.yes' | 'checkout.assembly.no')}
-                    size='small'
+                    onChange={(value) =>
+                      setAssemblyNeeded(
+                        value as
+                          | 'checkout.assembly.yes'
+                          | 'checkout.assembly.no'
+                      )
+                    }
+                    size="small"
                   />
                 </div>
                 <p className={styles.assemblyNote}>
-                  <FormattedMessage id="checkout.assembly.comment1" defaultMessage="*Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare." />
+                  <FormattedMessage
+                    id="checkout.assembly.comment1"
+                    defaultMessage="*Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare."
+                  />
                 </p>
                 <p className={styles.assemblyNote}>
-                  <FormattedMessage id="checkout.assembly.comment2" defaultMessage="**Costul asamblării pentru fiecare produs este de 350 lei." />
+                  <FormattedMessage
+                    id="checkout.assembly.comment2"
+                    defaultMessage="**Costul asamblării pentru fiecare produs este de 350 lei."
+                  />
                 </p>
               </div>
 
@@ -445,7 +485,10 @@ export const Checkout: FC = () => {
                 </p>
                 {discountPercent > 0 && (
                   <p>
-                    <FormattedMessage id="checkout.discount" defaultMessage="Reducere" />{' '}
+                    <FormattedMessage
+                      id="checkout.discount"
+                      defaultMessage="Reducere"
+                    />{' '}
                     <span>
                       -{discountAmount}{' '}
                       <FormattedMessage id="homepage.configurator.price.currencyLei" />
@@ -460,7 +503,10 @@ export const Checkout: FC = () => {
                   </span>
                 </p>
                 <p>
-                  <FormattedMessage id="checkout.assembly" defaultMessage="Asamblare" />{' '}
+                  <FormattedMessage
+                    id="checkout.assembly"
+                    defaultMessage="Asamblare"
+                  />{' '}
                   <span>
                     {assemblyCost}{' '}
                     <FormattedMessage id="homepage.configurator.price.currencyLei" />
@@ -481,7 +527,7 @@ export const Checkout: FC = () => {
                   <input
                     type="checkbox"
                     checked={termsAccepted}
-                    onChange={e => setTermsAccepted(e.target.checked)}
+                    onChange={(e) => setTermsAccepted(e.target.checked)}
                   />{' '}
                   <span>
                     <FormattedMessage
@@ -505,10 +551,7 @@ export const Checkout: FC = () => {
               </div>
 
               <div className={styles.placeOrderButtonContainer}>
-                <CustomButton 
-                  size="medium" 
-                  onClick={handlePlaceOrder}
-                >
+                <CustomButton size="medium" onClick={handlePlaceOrder}>
                   <FormattedMessage id="homepage.button.placeOrder" />
                 </CustomButton>
                 <div>
@@ -543,4 +586,3 @@ export const Checkout: FC = () => {
     </>
   )
 }
-

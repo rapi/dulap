@@ -14,6 +14,9 @@ function getLocaleFromRequest(request: NextRequest): string {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+  if (pathname.startsWith('/api')) {
+    return
+  }
 
   // Skip asset files
   if (/\.(png|jpe?g|gif|svg|webp|avif|mp4)$/.test(pathname)) {

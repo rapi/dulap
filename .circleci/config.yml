@@ -7,38 +7,56 @@ jobs:
   build-and-push:
     docker:
       - image: cimg/base:stable
-    resource_class: small  # Use a smaller machine type
+    resource_class: small
     steps:
       - checkout
+
       - setup_remote_docker:
           docker_layer_caching: true
+
       - run:
           name: Extract Commit Info
           command: |
             echo "export COMMIT_AUTHOR='$(git log -1 --pretty=format:'%an')'" >> commit_info.txt
-            echo "export COMMIT_MESSAGE='$(git log -1 --pretty=format:'%s')'" >> commit_info.txt
+            echo "export COMMIT_MESSAGE='$(git log -1 --pretty=format:'%s')'"    >> commit_info.txt
+
       - run:
           name: Load Commit Info
           command: cat commit_info.txt >> $BASH_ENV
+
+      - run:
+          name: Create Telegram .env
+          command: |
+            mkdir -p front
+            echo "TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}" >  front/.env
+            echo "TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}"   >> front/.env
+
       - run:
           name: Build Docker image
           command: |
-            docker build -t $DOCKERHUB_USERNAME/dulap:latest -f front/Dockerfile front/
+            docker build \
+              -t $DOCKERHUB_USERNAME/dulap:latest \
+              -f front/Dockerfile \
+              front/
+
       - run:
           name: Login to Docker Hub
           command: |
             echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
       - run:
           name: Push Docker image to Docker Hub
           command: |
             docker push $DOCKERHUB_USERNAME/dulap:latest
+
       - persist_to_workspace:
           root: .
           paths:
             - .
             - commit_info.txt  # Persist commit info for later jobs
+
       - slack/notify:
-          channel: "#website"  # ✅ Correct channel name
+          channel: "#website"
           event: fail
           custom: |
             {
@@ -48,37 +66,42 @@ jobs:
   deploy:
     docker:
       - image: cimg/base:stable
-    resource_class: small  # Use a smaller machine type
+    resource_class: small
     steps:
       - attach_workspace:
           at: .
+
       - run:
           name: Load Commit Info
           command: cat commit_info.txt >> $BASH_ENV
+
       - add_ssh_keys:
           fingerprints:
             - "SHA256:oAA+yJGRiA9Rzx5F/3pABPij+153g3Q4/wI6AKmL8/M"
+
       - run:
           name: Deploy and restart container on VPS
           command: |
             ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST \
-            "docker pull $DOCKERHUB_USERNAME/dulap:latest && \
-            if [ \$(docker ps -aq -f name=dulap) ]; then docker stop dulap && docker rm dulap;  fi && \
-            docker run -d --name dulap -p 8080:8080 $DOCKERHUB_USERNAME/dulap:latest &&\
-            echo "y" | docker image prune"
+              "docker pull $DOCKERHUB_USERNAME/dulap:latest && \
+               if [ \$(docker ps -aq -f name=dulap) ]; then docker stop dulap && docker rm dulap; fi && \
+               docker run -d --name dulap -p 8080:8080 $DOCKERHUB_USERNAME/dulap:latest && \
+               echo 'y' | docker image prune"
 
   slack-deploy-success:
     docker:
       - image: cimg/base:stable
-    resource_class: small  # Use a smaller machine type
+    resource_class: small
     steps:
       - attach_workspace:
           at: .
+
       - run:
           name: Load Commit Info
           command: cat commit_info.txt >> $BASH_ENV
+
       - slack/notify:
-          channel: "#website"  # ✅ Correct channel name
+          channel: "#website"
           event: pass
           custom: |
             {
