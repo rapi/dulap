@@ -239,8 +239,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       type: 'imageCarousel',
       images: [
         `/wardrobe/${imageColor}/${selectedOpeningMethod}/Base ${imagePlintHeight}/H${imageHeight}/${imageSide}/${imageWidth}-${imageSections}.png`,
-        `/wardrobe/render-wardrobe-1-${imageColor}.png`,
-        `/wardrobe/render-wardrobe-2-${imageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-1-${imageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
       ],
     },
   ]
