@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react'
 import styles from './Contacts.module.css'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
-import { FormattedMessage } from 'react-intl';
-import { useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl'
+import { useIntl } from 'react-intl'
+import axios from 'axios'
 
 export { Contacts }
 
 const Contacts: React.FC = () => {
-  const intl = useIntl();
-    
+  const intl = useIntl()
+  const [name, setName] = useState('')
+  const [message, setMessage] = useState('')
+  const onClick = async () => {
+    await axios.post('/api/contact-form', {
+      text: `<b>New Contact Request</b>
+<b>Name: </b>${name}
+<b>Email:</b> 
+<b>Message:</b>
+${message}`,
+    })
+  }
   return (
     <div>
       <section className={styles.pageHero}>
         <div className={styles.container}>
-          <h1><FormattedMessage id="contacts.title" /></h1>
-          <p><FormattedMessage id="contacts.subtitle" /></p>
+          <h1>
+            <FormattedMessage id="contacts.title" />
+          </h1>
+          <p>
+            <FormattedMessage id="contacts.subtitle" />
+          </p>
         </div>
       </section>
 
@@ -23,99 +38,135 @@ const Contacts: React.FC = () => {
           <div className={styles.contactColumns}>
             {/* Contact Form */}
             <div className={styles.contactFormWrapper}>
-              <form action="/send-message" method="POST" className={styles.contactForm}>
+              <form
+                action="/send-message"
+                method="POST"
+                className={styles.contactForm}
+              >
                 <div className={styles.formGroup}>
-                  <label htmlFor="nume"><FormattedMessage id="contacts.nameSurname" /></label>
+                  <label htmlFor="nume">
+                    <FormattedMessage id="contacts.nameSurname" />
+                  </label>
                   <input
                     type="text"
                     id="nume"
                     name="nume"
-                    placeholder={intl.formatMessage({ id: 'contacts.nameSurname.placeholder' })}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={intl.formatMessage({
+                      id: 'contacts.nameSurname.placeholder',
+                    })}
                     required
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label htmlFor="email"><FormattedMessage id="contacts.email" /></label>
+                  <label htmlFor="email">
+                    <FormattedMessage id="contacts.email" />
+                  </label>
                   <input
                     type="email"
                     id="email"
                     name="email"
-                    placeholder={intl.formatMessage({ id: 'contacts.email.placeholder' })}
+                    placeholder={intl.formatMessage({
+                      id: 'contacts.email.placeholder',
+                    })}
                     required
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label htmlFor="telefon"><FormattedMessage id="contacts.phoneNumber" /></label>
+                  <label htmlFor="telefon">
+                    <FormattedMessage id="contacts.phoneNumber" />
+                  </label>
                   <input
                     type="tel"
                     id="telefon"
                     name="telefon"
-                    placeholder={intl.formatMessage({ id: 'contacts.phoneNumber.placeholder' })}
+                    placeholder={intl.formatMessage({
+                      id: 'contacts.phoneNumber.placeholder',
+                    })}
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label htmlFor="mesaj"><FormattedMessage id="contacts.message" /></label>
+                  <label htmlFor="mesaj">
+                    <FormattedMessage id="contacts.message" />
+                  </label>
                   <textarea
                     id="mesaj"
                     name="mesaj"
-                    placeholder={intl.formatMessage({ id: 'contacts.message.placeholder' })}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder={intl.formatMessage({
+                      id: 'contacts.message.placeholder',
+                    })}
                     required
                   ></textarea>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <CustomButton>
-                        <FormattedMessage id="homepage.button.sendMessage" />
-                    </CustomButton>
+                  <CustomButton onClick={() => onClick()}>
+                    11 <FormattedMessage id="homepage.button.sendMessage" />
+                    11
+                  </CustomButton>
                 </div>
-                
               </form>
-            
             </div>
 
             {/* Contact Info */}
             <aside className={styles.contactInfo}>
-              <h2><FormattedMessage id="contacts.contactDetails.title" /></h2>
+              <h2>
+                <FormattedMessage id="contacts.contactDetails.title" />
+              </h2>
               <div className={styles.contactDetailsContainer}>
                 <ul className={styles.infoList}>
-                    <li>
-                    <span className={styles.infoLabel}><FormattedMessage id="contacts.ourAddress.title" /></span>
-                    <span className={styles.infoText}>
-                        <FormattedMessage id="contacts.ourAddress" />
+                  <li>
+                    <span className={styles.infoLabel}>
+                      <FormattedMessage id="contacts.ourAddress.title" />
                     </span>
-                    </li>
-                    <li>
-                    <span className={styles.infoLabel}><FormattedMessage id="contacts.ourPhone.title" /></span>
+                    <span className={styles.infoText}>
+                      <FormattedMessage id="contacts.ourAddress" />
+                    </span>
+                  </li>
+                  <li>
+                    <span className={styles.infoLabel}>
+                      <FormattedMessage id="contacts.ourPhone.title" />
+                    </span>
                     <a href="tel:+37360000000" className={styles.infoText}>
-                        <FormattedMessage id="contacts.ourPhone" />
+                      <FormattedMessage id="contacts.ourPhone" />
                     </a>
-                    </li>
-                    <li>
-                    <span className={styles.infoLabel}><FormattedMessage id="contacts.ourEmail.title" /></span>
-                    <a href="mailto:office@dulap.md" className={styles.infoText}>
-                        <FormattedMessage id="contacts.ourEmail" />
+                  </li>
+                  <li>
+                    <span className={styles.infoLabel}>
+                      <FormattedMessage id="contacts.ourEmail.title" />
+                    </span>
+                    <a
+                      href="mailto:office@dulap.md"
+                      className={styles.infoText}
+                    >
+                      <FormattedMessage id="contacts.ourEmail" />
                     </a>
-                    </li>
+                  </li>
                 </ul>
                 <div className={styles.socialContainer}>
-                    <p><FormattedMessage id="contacts.followUs" /></p>
-                    <div className={styles.socialIcons}>
-                        <a
-                        href="https://www.instagram.com/dulap.md_?igsh=MTEzNWR4cXBpbXdwbQ=="
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >
-                        <img src="/soclial/instagram.png" alt="Instagram" />
-                        </a>
-                        <a
-                        href="https://www.facebook.com/share/15j84TravW/?mibextid=wwXIfr"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >
-                        <img src="/soclial/facebook.png" alt="Facebook" />
-                        </a>
-                        </div>
-                    </div>
+                  <p>
+                    <FormattedMessage id="contacts.followUs" />
+                  </p>
+                  <div className={styles.socialIcons}>
+                    <a
+                      href="https://www.instagram.com/dulap.md_?igsh=MTEzNWR4cXBpbXdwbQ=="
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img src="/soclial/instagram.png" alt="Instagram" />
+                    </a>
+                    <a
+                      href="https://www.facebook.com/share/15j84TravW/?mibextid=wwXIfr"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img src="/soclial/facebook.png" alt="Facebook" />
+                    </a>
                   </div>
+                </div>
+              </div>
 
               <div className={styles.mapWrapper}>
                 <iframe
