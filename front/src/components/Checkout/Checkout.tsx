@@ -167,7 +167,7 @@ export const Checkout: FC = () => {
       )
       return
     }
-    await axios.post('/api/notify', {
+    await axios.post('/api/checkout', {
       items: JSON.stringify(items),
       name,
       phone,
