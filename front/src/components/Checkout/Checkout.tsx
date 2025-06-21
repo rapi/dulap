@@ -173,6 +173,7 @@ export const Checkout: FC = () => {
       phone,
       city,
       fullAddress,
+      comment,
     })
     setOrderPlaced(true)
     clearCart()
