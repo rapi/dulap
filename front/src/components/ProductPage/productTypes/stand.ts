@@ -98,6 +98,8 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'furniture',
       openingOption,
+      selectedOpeningMethod: openingOption,
+      hinges: '',
       setOpeningOption,
       guides,
       setGuides,

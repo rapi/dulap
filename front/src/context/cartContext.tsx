@@ -43,6 +43,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       predefinedValues: CartPredefinedValue
     ) => {
       const newConfig = config.map((component) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         const predefinedValue = predefinedValues[component.type]
         if (predefinedValue) {
           return {
@@ -53,8 +55,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         return component
       })
       const newItems = [...items, { name, config: newConfig }]
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       setItems(newItems)
       localStorage.setItem('cartItems', JSON.stringify(newItems))
     },

@@ -13,6 +13,8 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
 
   const [openingOption, setOpeningOption] = useState('push')
   const [imageColor, setImageColor] = useState('White')
+  const [hinges] = useState('standart')
+
   const [imageWidth, setImageWidth] = useState(600)
   const [imageHeight, setImageHeight] = useState(300)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
@@ -88,7 +90,9 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'furniture',
       openingOption,
+      hinges,
       setOpeningOption,
+      selectedOpeningMethod: openingOption,
       guides,
       setGuides,
     },

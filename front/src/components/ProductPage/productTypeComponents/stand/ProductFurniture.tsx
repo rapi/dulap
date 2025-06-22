@@ -13,10 +13,12 @@ import { Modal } from '~/components/Modal/Modal'
 export type ProductFurnitureComponent = {
   type: 'furniture'
   openingOption: string
+  selectedOpeningMethod: string
   setOpeningOption: (openingOption: string) => void
   guides: string
   setGuides: (value: string) => void
   predefinedValue?: ProductFurniturePredefinedValue
+  hinges: string
 }
 export const openingOptions: ButtonOptionsType[] = [
   { value: 'maner', label: 'homepage.configurator.fittings.handle' },
@@ -28,6 +30,10 @@ interface ProductSelectProps {
 }
 export type ProductFurniturePredefinedValue = {
   openingType: 'maner' | 'push'
+
+  hinges:
+    | 'homepage.configurator.fittings.hinges.options.1'
+    | 'homepage.configurator.fittings.hinges.options.2'
   guides:
     | 'homepage.configurator.fittings.guides.options.1'
     | 'homepage.configurator.fittings.guides.options.2'

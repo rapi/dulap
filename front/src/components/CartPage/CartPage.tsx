@@ -38,6 +38,7 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
         itemConfig.colors = config.predefinedValue ?? config.selectedColor
         break
       case 'furniture':
+        console.log(config)
         itemConfig.furniture = {
           hinges: config.predefinedValue?.hinges ?? config.hinges,
           guides: config.predefinedValue?.guides ?? config.guides,

@@ -108,6 +108,8 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'furniture',
       openingOption,
+      selectedOpeningMethod: openingOption,
+      hinges: '',
       setOpeningOption,
       guides,
       setGuides,

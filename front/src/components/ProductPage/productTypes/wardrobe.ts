@@ -125,7 +125,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       }
     }
     // }, [width, height, selectedMaxSections, imageColor, imageHeight])
-  }, [width, height, selectedMaxSections])
+  }, [width, height, selectedMaxSections, imageColor, imageHeight])
 
   const recolor = (items: ImageOptionProps[]) =>
     items.map(({ src, width, height }) => {
@@ -139,10 +139,12 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
 
   const recoloredActiveSections = useMemo(
     () => recolor(activeSections),
+    // eslint-disable-next-line
     [activeSections, imageColor, imageHeight]
   )
   const recoloredSelectedSections = useMemo(
     () => recolor(selectedSections),
+    // eslint-disable-next-line
     [selectedSections, imageColor, imageHeight]
   )
 
