@@ -19,23 +19,22 @@ const SECTION_VALUE: Record<number, number> = {
   6: 0,
 }
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
-  const [width, setWidth] = useState(160)
-  const [height, setHeight] = useState(210)
+  const [width, setWidth] = useState(200)
+  const [height, setHeight] = useState(260)
   const [depth, setDepth] = useState(50)
-  const [plintHeight, setPlintHeight] = useState(5)
-  const [selectedColor, setSelectedColor] = useState('#ded9d3')
+  const [plintHeight, setPlintHeight] = useState(2)
+  const [selectedColor, setSelectedColor] = useState('#fcfbf5')
   const [imageSide, setImageSide] = useState('right')
   const [imageWidth, setImageWidth] = useState(50)
   const [imageHeight, setImageHeight] = useState(2100)
   const [imageSections, setImageSections] = useState(1)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
-  const [imageColor, setImageColor] = useState('Biege')
+  const [imageColor, setImageColor] = useState('White')
   const [hinges, setHinges] = useState('standart')
   const [guides, setGuides] = useState('standart')
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
   const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
   const [selectedOpeningMethod, setSelectedOpeningMethod] = useState('maner')
-  // const [price, setPrice] = useState(40)
   const [activeSections, setActiveSections] = useState<ImageOptionProps[]>([])
   const [activeOpening, setActiveOpening] = useState<ImageOptionProps[]>([])
   const [maxSections, setMaxSections] = useState(5)
@@ -75,7 +74,6 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   }, [selectedColor])
 
   const sectionsPrice = useMemo(() => {
-    console.log('test')
     return selectedSections.reduce((sum, { src }) => {
       const m = src.match(/(\d+)(?=\.\w+$)/)
       return m ? sum + (SECTION_VALUE[Number(m[1])] ?? 0) : sum

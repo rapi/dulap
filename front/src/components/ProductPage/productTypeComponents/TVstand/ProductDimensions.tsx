@@ -32,8 +32,6 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   predefinedValue,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  // const [predefinedWidth, predefinedHeight, predefinedDepth, predefinedPlint] =
-  //   predefinedValue?.split('x') ?? []
   return (
     <>
       <h3 className={styles.dimensionsHeaderTitle}>
@@ -50,7 +48,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             <Slider
               min={configuration.widthRange[0]}
               max={configuration.widthRange[1]}
-              step={10}
+              step={1}
               value={configuration.width}
               onChange={configuration.setWidth}
             />
@@ -66,7 +64,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             <Slider
               min={configuration.heightRange[0]}
               max={configuration.heightRange[1]}
-              step={10}
+              step={1}
               value={configuration.height}
               onChange={configuration.setHeight}
             />
@@ -82,7 +80,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             <Slider
               min={configuration.depthRange[0]}
               max={configuration.depthRange[1]}
-              step={5}
+              step={1}
               value={configuration.depth}
               onChange={configuration.setDepth}
             />
@@ -108,7 +106,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
               min={configuration.plintHeightRange[0]}
               max={configuration.plintHeightRange[1]}
               step={1}
-              value={5}
+              value={configuration.plintHeight}
               onChange={configuration.setPlintHeight}
             />
           )}

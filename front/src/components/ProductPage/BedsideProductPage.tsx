@@ -2,60 +2,41 @@ import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import React, { FC } from 'react'
 import { useEffect } from 'react'
 import {
-  ProductImageSelect,
-  ProductImageSelectComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageSelect'
-import {
   ProductDimensions,
   ProductDimensionsComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductDimensions'
+} from '~/components/ProductPage/productTypeComponents/stand/ProductDimensions'
 import {
   ProductColors,
   ProductColorsComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductColors'
-import {
-  ProductSelect,
-  ProductSelectComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSelect'
+} from '~/components/ProductPage/productTypeComponents/stand/ProductColors'
 import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductFurniture'
-import {
-  ProductSectionPredefinedValue,
-  ProductSections,
-  ProductSectionsComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
+} from '~/components/ProductPage/productTypeComponents/stand/ProductFurniture'
 import {
   ProductPrice,
   ProductPriceComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductPrice'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductInfobox'
+} from '~/components/ProductPage/productTypeComponents/stand/ProductPrice'
+import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/stand/ProductInfobox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
+} from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 
 export type ProductComponent =
-  | ProductImageSelectComponent
   | ProductImageCarouselComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
-  | ProductSelectComponent
-  | ProductSectionsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
 export type PredefinedValue = {
-  sections?: ProductSectionPredefinedValue
-  imageSelect?: string
   imageCarousel?: string[]
   dimensions?: Dimension
   colors?: string
-  select?: string
   furniture?: ProductFurniturePredefinedValue
   price?: number
 }
@@ -73,13 +54,6 @@ export const ProductPage: FC<ProductPageProps> = ({
   const { addItem } = useCart()
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
-      case 'imageSelect':
-        return (
-          <ProductImageSelect
-            configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
-          />
-        )
       case 'dimensions':
         return (
           <ProductDimensions
@@ -90,20 +64,6 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'colors':
         return (
           <ProductColors
-            configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
-          />
-        )
-      case 'select':
-        return (
-          <ProductSelect
-            configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
-          />
-        )
-      case 'sections':
-        return (
-          <ProductSections
             configuration={component}
             predefinedValue={values?.[component.type] ?? undefined}
           />
@@ -160,7 +120,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {priceComponent && (
           <ProductPrice
             onAddItem={() => {
-              addItem('wardrobe', currentComponents, values ?? {})
+              addItem('stand', currentComponents, values ?? {})
             }}
             configuration={priceComponent}
             predefinedValue={values?.price ?? undefined}

@@ -80,11 +80,6 @@ export const ProductSections: FC<ProductSelectProps> = ({
       prev.map((item, i) => (i === index ? { ...item, src } : item))
     )
 
-  /* 3️⃣ debug: see every successful change */
-  useEffect(() => {
-    console.log('selectedSections:', selectedSections)
-  }, [selectedSections])
-
   useEffect(() => {
     setSelectedMaxSections(minNumber)
   }, [minNumber])
@@ -125,7 +120,7 @@ export const ProductSections: FC<ProductSelectProps> = ({
           {predefinedSections?.mirror ?? (
             <ButtonSelect
               options={mirroringOptions}
-              defaultSelected={'standard'}
+              defaultSelected={selectedMirrorOption}
               onChange={(value) => {
                 setSelectedMirrorOption(value)
               }}

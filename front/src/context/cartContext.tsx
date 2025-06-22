@@ -6,18 +6,18 @@ import React, {
   useCallback,
 } from 'react'
 import {
-  PredefinedValue,
-  ProductComponent,
-} from '~/components/ProductPage/WardrobeProductPage'
+  CartPredefinedValue,
+  CartProductComponent,
+} from '~/components/ProductPage/productTypeComponents/CartProductComponents'
 
-export type CartItem = { name: string; config: ProductComponent[] }
+export type CartItem = { name: string; config: CartProductComponent[] }
 
 type CartContextType = {
   items: CartItem[]
   addItem: (
     name: string,
-    config: ProductComponent[],
-    predefinedValues: PredefinedValue
+    config: CartProductComponent[],
+    predefinedValues: CartPredefinedValue
   ) => void
   removeItem: (index: number) => void
   clearCart: () => void
@@ -39,8 +39,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const addItem = useCallback(
     (
       name: string,
-      config: ProductComponent[],
-      predefinedValues: PredefinedValue
+      config: CartProductComponent[],
+      predefinedValues: CartPredefinedValue
     ) => {
       const newConfig = config.map((component) => {
         const predefinedValue = predefinedValues[component.type]

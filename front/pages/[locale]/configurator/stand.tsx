@@ -1,10 +1,14 @@
 import { FC } from 'react'
 import { ProductPageLayout } from '~/components/ProductPageLayout/ProductPageLayout'
-import { ProductStand } from '~/components/ProductStand/ProductStand'
+import { StandProductConfigurator } from '~/components/ProductPage/productTypes/stand'
+import { ProductPage } from '~/components/ProductPage/StandProductPage'
 const Product: FC = () => {
   return (
     <ProductPageLayout>
-      <ProductStand />
+      <ProductPage
+        components={StandProductConfigurator}
+        name="homepage.configurator.stand.title"
+      />
     </ProductPageLayout>
   )
 }

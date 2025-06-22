@@ -11,13 +11,8 @@ export const productTypes: ProductTypes[] = [
   },
   {
     name: 'homepage.products.stand',
-    link: '/configurator/wardrobe',
+    link: '/configurator/stand',
     image: '/products/comoda-alba.jpg',
-  },
-  {
-    name: 'homepage.products.openStand',
-    link: '/configurator/wardrobe',
-    image: '/products/dulap-deschis-2x2.jpg',
   },
   {
     name: 'homepage.products.TVstand',
@@ -26,7 +21,12 @@ export const productTypes: ProductTypes[] = [
   },
   {
     name: 'homepage.products.bedside',
-    link: '/configurator/wardrobe',
+    link: '/configurator/bedside',
     image: '/products/comoda-pat.jpg',
+  },
+  {
+    name: 'homepage.products.openStand',
+    link: '/configurator/wardrobe',
+    image: '/products/dulap-deschis-2x2.jpg',
   },
 ]

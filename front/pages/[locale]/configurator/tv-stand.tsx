@@ -1,10 +1,14 @@
 import { FC } from 'react'
 import { ProductPageLayout } from '~/components/ProductPageLayout/ProductPageLayout'
-import { ProductTVStand } from '~/components/ProductTVStand/ProductTVStand'
+import { TVStandProductConfigurator } from '~/components/ProductPage/productTypes/TVstand'
+import { ProductPage } from '~/components/ProductPage/TVStandProductPage'
 const Product: FC = () => {
   return (
     <ProductPageLayout>
-      <ProductTVStand />
+      <ProductPage
+        components={TVStandProductConfigurator}
+        name="homepage.configurator.stand.title"
+      />
     </ProductPageLayout>
   )
 }
