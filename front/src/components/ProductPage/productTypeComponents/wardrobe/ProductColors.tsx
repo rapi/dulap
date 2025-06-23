@@ -41,7 +41,7 @@ export const ProductColors: FC<ProductColorsProps> = ({
           onChange={(value) => {
             setSelectedColor(value)
           }}
-          defaultSelected={colors[0]}
+          defaultSelected={colors[1]}
           size="medium"
         />
       </label>
