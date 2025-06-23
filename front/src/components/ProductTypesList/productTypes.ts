@@ -16,7 +16,7 @@ export const productTypes: ProductTypes[] = [
   },
   {
     name: 'homepage.products.TVstand',
-    link: '/configurator/wardrobe',
+    link: '/configurator/tv-stand',
     image: '/products/tumba-picioruse-4-white-wood.jpg',
   },
   {

@@ -4,33 +4,33 @@ import { useEffect } from 'react'
 import {
   ProductDimensions,
   ProductDimensionsComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductDimensions'
+} from '~/components/ProductPage/productTypeComponents/TVstand/ProductDimensions'
 import {
   ProductColors,
   ProductColorsComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductColors'
+} from '~/components/ProductPage/productTypeComponents/TVstand/ProductColors'
 import {
   ProductSelect,
   ProductSelectComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductSelect'
+} from '~/components/ProductPage/productTypeComponents/TVstand/ProductSelect'
 import {
   ProductSections,
   ProductSectionsComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
+} from '~/components/ProductPage/productTypeComponents/TVstand/ProductSections'
 import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductFurniture'
+} from '~/components/ProductPage/productTypeComponents/TVstand/ProductFurniture'
 import {
   ProductPrice,
   ProductPriceComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductPrice'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/stand/ProductInfobox'
+} from '~/components/ProductPage/productTypeComponents/TVstand/ProductPrice'
+import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/TVstand/ProductInfobox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
+} from '~/components/ProductPage/productTypeComponents/TVstand/ProductImageCarousel'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
@@ -147,7 +147,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {priceComponent && (
           <ProductPrice
             onAddItem={() => {
-              addItem('stand', currentComponents, values ?? {})
+              addItem('tv-stand', currentComponents, values ?? {})
             }}
             configuration={priceComponent}
             predefinedValue={values?.price ?? undefined}

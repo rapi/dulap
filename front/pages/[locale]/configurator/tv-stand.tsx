@@ -7,7 +7,7 @@ const Product: FC = () => {
     <ProductPageLayout>
       <ProductPage
         components={TVStandProductConfigurator}
-        name="homepage.configurator.stand.title"
+        name="homepage.products.TVstand"
       />
     </ProductPageLayout>
   )

@@ -13,11 +13,27 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
   const intl = useIntl()
 
   const itemConfig = {
+    name: '',
     dimensions: { width: 0, height: 0, depth: 0, plintHeight: 0 },
     colors: '',
     furniture: { hinges: '', guides: '', openingType: '' },
     price: 0,
     imageCarousel: '',
+  }
+
+  switch(item.name) {
+    case 'wardrobe':
+      itemConfig.name = intl.formatMessage({ id: 'homepage.products.wardrobe' })
+      break
+    case 'stand':
+      itemConfig.name = intl.formatMessage({ id: 'homepage.products.stand' })
+      break
+    case 'tv-stand':
+      itemConfig.name = intl.formatMessage({ id: 'homepage.products.TVstand' })
+      break
+    case 'bedside':
+      itemConfig.name = intl.formatMessage({ id: 'homepage.products.bedside' })
+      break
   }
 
   for (const config of item.config) {
@@ -56,9 +72,7 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
     <div className={styles.cartRow} key={index}>
       <span className={styles.indexRow}>{index + 1}</span>
       <span className={styles.productName}>
-        {item.name === 'wardrobe'
-          ? intl.formatMessage({ id: 'homepage.products.wardrobe' })
-          : intl.formatMessage({ id: 'homepage.products.dulap' })}
+        {itemConfig.name}
       </span>
       <div className={styles.productImageContainer}>
         <img
@@ -98,13 +112,23 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
         <FormattedMessage id="homepage.configurator.fittings.title" />:
         <br />
         <FormattedMessage id="homepage.configurator.fittings.handleType" />:{' '}
-        <b>{intl.formatMessage({ id: itemConfig.furniture.openingType })}</b>
+        {itemConfig.furniture.openingType && (
+          <b>
+            {intl.formatMessage({
+              id: itemConfig.furniture.openingType
+            })}
+          </b>
+        )}
         <br />
         <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
-        <b>{intl.formatMessage({ id: itemConfig.furniture.hinges })}</b>
+        {itemConfig.furniture.hinges && (
+          <b>{intl.formatMessage({ id: itemConfig.furniture.hinges })}</b>
+        )}
         <br />
         <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
-        <b>{intl.formatMessage({ id: itemConfig.furniture.guides })}</b>
+        {itemConfig.furniture.guides && (
+          <b>{intl.formatMessage({ id: itemConfig.furniture.guides })}</b>
+        )}
       </span>
       <div className={styles.colorContainer}>
         <SelectColor

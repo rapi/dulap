@@ -120,7 +120,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {priceComponent && (
           <ProductPrice
             onAddItem={() => {
-              addItem('stand', currentComponents, values ?? {})
+              addItem('bedside', currentComponents, values ?? {})
             }}
             configuration={priceComponent}
             predefinedValue={values?.price ?? undefined}

@@ -7,6 +7,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
   const [depth, setDepth] = useState(40)
   const [plintHeight, setPlintHeight] = useState(2)
   const [selectedSections, setSelectedSections] = useState(2)
+  const [possibleSectionsList, setPossibleSectionsList] = useState(['1', '2', '3', '4'])
   const [selectedColor, setSelectedColor] = useState('#fcfbf5')
   const [guides, setGuides] = useState(
     'homepage.configurator.fittings.guides.options.1'
@@ -50,6 +51,19 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     } else if (width < 190) {
       setImageWidth(1600)
     } else setImageWidth(2000)
+  }, [width])
+
+  useEffect(() => {
+    let possibleSections = ['']
+    if (width < 120) {
+      possibleSections = ['1', '2']
+    } else if (width < 150) {
+      possibleSections = ['1', '2', '3']
+    } else if (width < 190) {
+      possibleSections = ['2']
+    } else possibleSections = ['2', '4']
+    setPossibleSectionsList(possibleSections)
+    console.log('possibleSections ', possibleSections)
   }, [width])
 
   useEffect(() => {
@@ -104,6 +118,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       type: 'sections',
       selectedSections,
       setSelectedSections,
+      possibleSectionsList,
     },
     {
       type: 'furniture',
