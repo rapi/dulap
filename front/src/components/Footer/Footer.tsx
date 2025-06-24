@@ -10,8 +10,9 @@ export const Footer: React.FC = () => {
         <nav className={styles.menu}>
           <ul>
             <li><Link href="/products"><FormattedMessage id="homepage.footer.products"/></Link></li>
-            <li><Link href="/office-table"><FormattedMessage id="homepage.footer.officeTable"/></Link></li>
-            <li><Link href="/greenwall"><FormattedMessage id="homepage.footer.greenwall"/></Link></li>
+            <li><Link href="/office-table"><FormattedMessage id="homepage.footer.stands"/></Link></li>
+            <li><Link href="/greenwall"><FormattedMessage id="homepage.footer.tvstands"/></Link></li>
+            <li><Link href="/greenwall"><FormattedMessage id="homepage.footer.bedsides"/></Link></li>
           </ul>
         </nav>
         <nav className={styles.menu}>

@@ -111,20 +111,26 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
         <br />
         <FormattedMessage id="homepage.configurator.fittings.title" />:
         <br />
-        <FormattedMessage id="homepage.configurator.fittings.handleType" />:{' '}
+        
         {itemConfig.furniture.openingType && (
-          <b>
-            {intl.formatMessage({
-              id: itemConfig.furniture.openingType
-            })}
-          </b>
+          <span><FormattedMessage id="homepage.configurator.fittings.handleType" />:{' '}
+            <b>
+              {intl.formatMessage({
+                id: itemConfig.furniture.openingType
+              })}
+            </b>
+          </span>
         )}
         <br />
-        <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
+        
         {itemConfig.furniture.hinges && (
-          <b>{intl.formatMessage({ id: itemConfig.furniture.hinges })}</b>
+          <span>
+            <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
+            <b>{intl.formatMessage({ id: itemConfig.furniture.hinges })}</b>
+            <br />
+          </span>
         )}
-        <br />
+        
         <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
         {itemConfig.furniture.guides && (
           <b>{intl.formatMessage({ id: itemConfig.furniture.guides })}</b>

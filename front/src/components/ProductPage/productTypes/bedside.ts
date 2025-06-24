@@ -20,8 +20,16 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
 
   const price = useMemo(() => {
-    return width * 29 + (height - 190) * 4.5
-  }, [width, height])
+    let selectedSections = 1
+    if (height > 35) {
+      selectedSections = 2
+    }  
+    let fittingsPrice = 0;
+    if (guides === 'homepage.configurator.fittings.guides.options.2') {
+      fittingsPrice = selectedSections * 350
+    }
+    return Math.round((600 + selectedSections*600 + width * 20 + (height - 190) * 4.5 + (depth - 30) * 8 + fittingsPrice)*1.3)
+  }, [width, height, depth, guides])
 
   useEffect(() => {
     if (plintHeight >= 2 && plintHeight < 5) {
@@ -32,7 +40,7 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   }, [plintHeight])
 
   useEffect(() => {
-    if (height < 40) {
+    if (height < 36) {
       setImageHeight(300)
     } else setImageHeight(400)
   }, [height])
@@ -104,8 +112,7 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
       type: 'imageCarousel',
       images: [
         `/bedside/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}.png`,
-        `/bedside/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}.png`,
-        `/bedside/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}.png`,
+        '/renders-landing/bedside.png'
       ],
     },
   ]

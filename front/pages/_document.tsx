@@ -25,7 +25,7 @@ export default function Document() {
           name="description"
           content="This is a Next.js app with custom header elements."
         />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/wardrobe-button.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
       </Head>
       <body>

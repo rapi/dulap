@@ -12,17 +12,17 @@ export const productTypes: ProductTypes[] = [
   {
     name: 'homepage.products.stand',
     link: '/configurator/stand',
-    image: '/products/comoda-alba.jpg',
+    image: '/renders-landing/stand.png',
   },
   {
     name: 'homepage.products.TVstand',
     link: '/configurator/tv-stand',
-    image: '/products/tumba-picioruse-4-white-wood.jpg',
+    image: '/renders-landing/tv-stand.png',
   },
   {
     name: 'homepage.products.bedside',
     link: '/configurator/bedside',
-    image: '/products/comoda-pat.jpg',
+    image: '/renders-landing/bedside.png',
   },
   {
     name: 'homepage.products.openStand',

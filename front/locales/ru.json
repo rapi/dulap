@@ -1,4 +1,6 @@
 {
+  "meta.title": "Твой шкаф",
+
   "homepage.banner.title.0": "Шкаф - ",
   "homepage.banner.title.1": "созданный по твоим желаниям",
   "homepage.banner.subtitle": "Мебель, созданная по твоим",
@@ -6,6 +8,13 @@
   "homepage.banner.subtitle.2": "цветам",
   "homepage.banner.subtitle.3": "предпочтениям",
   "homepage.banner.subtitle.4": " ",
+
+  "homepage.banner.preorder.0": "Шкаф - ",
+  "homepage.banner.preorder.1": "созданный по твоим желаниям",
+
+  "homepage.modal.promo.title": "Промокод -15% для тебя!",
+  "homepage.modal.promo.preorder15": "PREORDER15",
+  "homepage.modal.promo.buttonCopy": "Скопируй и закрой",
 
   "homepage.button.tryIt": "Попробуй",
   "homepage.button.yourWardrobe": "Твой шкаф",
@@ -19,12 +28,21 @@
   "homepage.button.openCart": "Посмотреть корзину",
   "homepage.button.backToPurchase": "Назад к покупкам",
   "homepage.button.ok": "ОК",
+  "homepage.button.preorder": "Сделать предзаказ",
+  "homepage.copyButton.copy": "Скопировать",
+  "homepage.copyButton.coppied": "Скопировано !",
 
   "homepage.menu.productsTitle": "Товары",
   "homepage.menu.aboutUsTitle": "О нас",
   "homepage.menu.contactsTitle": "Контакты",
   "homepage.menu.tryIt": "Попробуй здесь",
+  "ro": "RO",
+  "ru": "RU",
+
   "homepage.footer.products": "Шкафы",
+  "homepage.footer.stands": "Комоды",
+  "homepage.footer.bedsides": "Тумбочки",
+  "homepage.footer.tvstands": "Комоды ТВ",
   "homepage.footer.officeTable": "Офисный стол",
   "homepage.footer.greenwall": "Стеллажи",
   "homepage.footer.followUs": "Подпишись!",

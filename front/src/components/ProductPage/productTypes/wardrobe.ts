@@ -18,6 +18,16 @@ const SECTION_VALUE: Record<number, number> = {
   5: 2700,
   6: 0,
 }
+
+const GUIDES_NR: Record<number, number> = {
+  1: 0,
+  2: 2,
+  3: 4,
+  4: 0,
+  5: 4,
+  6: 0,
+}
+
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(200)
   const [height, setHeight] = useState(260)
@@ -79,6 +89,14 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       return m ? sum + (SECTION_VALUE[Number(m[1])] ?? 0) : sum
     }, 0)
   }, [selectedSections])
+  const guidesExtraPrice = useMemo(() => {
+    return selectedSections.reduce((sum, { src }) => {
+      const match = src.match(/(\d+)\.\w+$/); // fix: escaped dot and removed extra paren
+      const imageNr = match ? parseInt(match[1], 10) : 0;
+      const guideCount = GUIDES_NR[imageNr] || 0;
+      return sum + guideCount * 250; // fix: return the new sum
+    }, 0);
+  }, [selectedSections]);
   useEffect(() => {
     let newDoors: number
 
@@ -99,8 +117,13 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   }, [width, selectedMaxSections])
 
   const price = useMemo(() => {
-    return width * 29 + (height - 190) * 4.5 * doorsNr + sectionsPrice
-  }, [width, height, doorsNr, sectionsPrice])
+    const hingesNr = height >= 230 ? doorsNr * 6 : doorsNr * 5;
+    let hingesExtraPrice = 0;
+    if (hinges === 'homepage.configurator.fittings.hinges.options.2') {
+      hingesExtraPrice = hingesNr * 50;
+    }
+    return Math.round((width * 29 + (height - 190) * 4.5 * doorsNr + sectionsPrice + hingesExtraPrice + guidesExtraPrice)*1.35)
+  }, [width, height, doorsNr, sectionsPrice, hinges, guidesExtraPrice])
 
   useEffect(() => {
     if (selectedMirrorOption === 'standard') {

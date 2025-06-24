@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import styles from './Contacts.module.css'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
+import { Modal } from '~/components/Modal/Modal'
 import { FormattedMessage } from 'react-intl'
 import { useIntl } from 'react-intl'
 import axios from 'axios'
@@ -9,16 +11,23 @@ export { Contacts }
 
 const Contacts: React.FC = () => {
   const intl = useIntl()
+  const router = useRouter()
   const [name, setName] = useState('')
   const [message, setMessage] = useState('')
+  const [messageSent, setMessageSent] = useState(false)
   const onClick = async () => {
     await axios.post('/api/contact-form', {
       text: `<b>New Contact Request</b>
-<b>Name: </b>${name}
-<b>Email:</b> 
-<b>Message:</b>
-${message}`,
+            <b>Name: </b>${name}
+            <b>Email:</b> 
+            <b>Message:</b>
+            ${message}`,
     })
+    setMessageSent(true)
+  }
+  const handleCloseModal = () => {
+    setMessageSent(false)
+    router.push('/')
   }
   return (
     <div>
@@ -103,8 +112,7 @@ ${message}`,
                 </div>
                 <div className={styles.buttonContainer}>
                   <CustomButton onClick={() => onClick()}>
-                    11 <FormattedMessage id="homepage.button.sendMessage" />
-                    11
+                    <FormattedMessage id="homepage.button.sendMessage" />
                   </CustomButton>
                 </div>
               </form>
@@ -182,6 +190,25 @@ ${message}`,
           </div>
         </div>
       </main>
+      <Modal isOpen={messageSent} onClose={handleCloseModal}>
+        <h3>
+          <FormattedMessage
+            id="checkout.modal.title"
+            defaultMessage="Comanda plasată"
+          />
+        </h3>
+        <p>
+          <FormattedMessage
+            id="checkout.modal.message"
+            defaultMessage="Comanda ta a fost plasată, în scurt timp revenim cu un apel!"
+          />
+        </p>
+        <div className={styles.buttonRow}>
+          <CustomButton onClick={handleCloseModal}>
+            <FormattedMessage id="homepage.button.ok" defaultMessage="OK" />
+          </CustomButton>
+        </div>
+      </Modal>
     </div>
   )
 }

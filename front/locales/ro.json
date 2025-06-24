@@ -1,4 +1,6 @@
 {
+  "meta.title": "Dulapul tău",
+  
   "homepage.banner.title.0": "Dulapul tău -",
   "homepage.banner.title.1": " exact cum îl vrei",
   "homepage.banner.subtitle": "Mobilier creat după",
@@ -6,6 +8,13 @@
   "homepage.banner.subtitle.2": "culorile",
   "homepage.banner.subtitle.3": "preferințele",
   "homepage.banner.subtitle.4": "tale",
+
+  "homepage.banner.preorder.0": "Dulapul tău",
+  "homepage.banner.preorder.1": "personalizat",
+
+  "homepage.modal.promo.title": "Promocod de -15% pentru tine!",
+  "homepage.modal.promo.preorder15": "PREORDER15",
+  "homepage.modal.promo.buttonCopy": "Copiază și închide",
 
   "homepage.button.tryIt": "Încearcă aici",
   "homepage.button.yourWardrobe": "Dulapul tău",
@@ -19,12 +28,22 @@
   "homepage.button.openCart": "Vezi coșul",
   "homepage.button.backToPurchase": "Înapoi la cumpărături",
   "homepage.button.ok": "OK",
+  "homepage.button.preorder": "Precomandă",
+  "homepage.copyButton.copy": "Copiază",
+  "homepage.copyButton.coppied": "Copiat !",
+
 
   "homepage.menu.productsTitle": "Produse",
   "homepage.menu.aboutUsTitle": "Despre noi",
   "homepage.menu.contactsTitle": "Contacte",
   "homepage.menu.tryIt": "Încearcă aici",
+  "ro": "RO",
+  "ru": "RU",
+
   "homepage.footer.products": "Dulapuri",
+  "homepage.footer.stands": "Comode",
+  "homepage.footer.bedsides": "Noptiere",
+  "homepage.footer.tvstands": "Comode TV",
   "homepage.footer.officeTable": "Masă de birou",
   "homepage.footer.greenwall": "Rafturi pentru plante",
   "homepage.footer.followUs": "Abonează-te!",
