@@ -1,4 +1,4 @@
-import { ProductComponent } from '~/components/ProductPage/StandProductPage'
+import { ProductComponent } from '~/components/ProductPage/TVStandProductPage'
 import { useState, useEffect, useMemo } from 'react'
 
 export const TVStandProductConfigurator: () => ProductComponent[] = () => {
@@ -7,7 +7,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
   const [depth, setDepth] = useState(40)
   const [plintHeight, setPlintHeight] = useState(2)
   const [selectedSections, setSelectedSections] = useState(2)
-  const [possibleSectionsList, setPossibleSectionsList] = useState(['1', '2', '3', '4'])
+  const [activeSections, setActiveSections] = useState(['1', '2', '3', '4'])
   const [selectedColor, setSelectedColor] = useState('#fcfbf5')
   const [guides, setGuides] = useState(
     'homepage.configurator.fittings.guides.options.1'
@@ -62,7 +62,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     } else if (width < 190) {
       possibleSections = ['2']
     } else possibleSections = ['2', '4']
-    setPossibleSectionsList(possibleSections)
+    setActiveSections(possibleSections)
     console.log('possibleSections ', possibleSections)
   }, [width])
 
@@ -118,7 +118,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       type: 'sections',
       selectedSections,
       setSelectedSections,
-      possibleSectionsList,
+      activeSections,
     },
     {
       type: 'furniture',

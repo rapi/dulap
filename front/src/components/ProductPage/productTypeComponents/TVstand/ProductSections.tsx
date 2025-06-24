@@ -8,7 +8,7 @@ export type ProductSectionsComponent = {
   type: 'sections'
   selectedSections: number
   setSelectedSections: (value: number) => void
-  possibleSectionsList: string[]
+  activeSections: string[]
 }
 interface ProductSectionsProps {
   configuration: ProductSectionsComponent
@@ -25,12 +25,12 @@ export const ProductSections: FC<ProductSectionsProps> = ({
   const possibleSections: ButtonOptionsType[] = sections.map((section) => ({
       label: section.label,
       value: section.value,
-      disabled: !configuration.possibleSectionsList.includes(section.value),
+      disabled: !configuration.activeSections.includes(section.value),
     }))
     useEffect(() => {
     const current = String(configuration.selectedSections)
-    if (!configuration.possibleSectionsList.includes(current) && configuration.possibleSectionsList.length) {
-      const allowedNums = configuration.possibleSectionsList.map((s) => parseInt(s, 10))
+    if (!configuration.activeSections.includes(current) && configuration.activeSections.length) {
+      const allowedNums = configuration.activeSections.map((s) => parseInt(s, 10))
       const closest = allowedNums.reduce((prev, curr) => {
         return Math.abs(curr - configuration.selectedSections) < Math.abs(prev - configuration.selectedSections)
           ? curr
@@ -39,7 +39,7 @@ export const ProductSections: FC<ProductSectionsProps> = ({
 
       configuration.setSelectedSections(closest)
     }
-  }, [configuration.possibleSectionsList, configuration.selectedSections, configuration.setSelectedSections])
+  }, [configuration.activeSections, configuration.selectedSections, configuration.setSelectedSections])
   return (
     <div>
       <p className={styles.sectionsTitle}>Opțiuni</p>
