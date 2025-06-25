@@ -7,7 +7,7 @@ export const productTypes: ProductTypes[] = [
   {
     name: 'homepage.products.wardrobe',
     link: '/configurator/wardrobe',
-    image: '/products/product-type-wardrobe.jpg',
+    image: '/renders-landing/wardrobe.png',
   },
   {
     name: 'homepage.products.stand',
@@ -16,13 +16,13 @@ export const productTypes: ProductTypes[] = [
   },
   {
     name: 'homepage.products.TVstand',
-    link: '/configurator/tv-stand',
+    link: '/configurator/wardrobe',
     image: '/renders-landing/tv-stand.png',
   },
   {
     name: 'homepage.products.bedside',
     link: '/configurator/bedside',
-    image: '/renders-landing/bedside.png',
+    image: '/renders-landing/bedside.png'
   },
   {
     name: 'homepage.products.openStand',

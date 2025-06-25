@@ -26,7 +26,7 @@ const GUIDES_NR: Record<number, number> = {
   4: 0,
   5: 4,
   6: 0,
-}
+} 
 
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(200)
