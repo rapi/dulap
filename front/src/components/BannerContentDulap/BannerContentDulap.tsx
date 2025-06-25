@@ -30,6 +30,12 @@ export const BannerContent = () => {
           <FormattedMessage id="homepage.button.preorder" />
         </CustomButton>
       </div>
+
+      <div>
+        <p className={classes.heroComment}>
+          <FormattedMessage id="homepage.banner.comment" />
+        </p>
+      </div>
     </div>
   )
 }

@@ -58,6 +58,11 @@
   white-space: nowrap;
 }
 
+.heroComment {
+  font-size: 18px;
+  color: #333;
+}
+
 @media (max-width: 1024px) {
   .heroContent {
     left: 10vw;

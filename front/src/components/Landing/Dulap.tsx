@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl'
 import { ProductTypesList } from '~/components/ProductTypesList/ProductTypesList'
 import { ProductCatalog } from '~/components/ProductCatalog/ProductCatalog'
 import { AboutUs } from '~/components/AboutUs/AboutUs'
+import ContactBox from '~/components/ContactBox/ContactBox'
 
 export const Dulap: React.FC = () => {
   return (
@@ -21,6 +22,11 @@ export const Dulap: React.FC = () => {
         </p>
         <ProductTypesList></ProductTypesList>
       </section>
+      <ContactBox
+        title={<FormattedMessage id="contactBox.title" />}
+        subtitle={<FormattedMessage id="contactBox.subtitle" />}
+        showEmail={true}
+      ></ContactBox>
 
       <section className={classes.readyProducts}>
         <p className={classes.readyProductsTitle}>

@@ -12,6 +12,8 @@
   "homepage.banner.preorder.0": "Redefinim piața de",
   "homepage.banner.preorder.1": "mobilă modulară în Moldova.",
 
+  "homepage.banner.comment": "Lansarea: 10 iulie 2025",
+
   "homepage.modal.promo.title": "Promocod de -15% pentru tine!",
   "homepage.modal.promo.preorder15": "PREORDER15",
   "homepage.modal.promo.buttonCopy": "Copiază și închide",
@@ -58,7 +60,12 @@
   "homepage.dulapLanding.aboutUs.body.3": "Lucrăm cu materiale de calitate, meșteri pricepuți și furnizori în care avem încredere. Nu vindem promisiuni, ci produse durabile, făcute cu grijă și atenție la detalii.",
   "homepage.dulapLanding.aboutUs.body.4": "Suntem la început, dar punem suflet în fiecare proiect. Pentru noi, fiecare client contează.",
   "homepage.dulapLanding.aboutUs.body.5": "dulap.md – fiecare spațiu merită un dulap bun.",
-  
+
+  "contactBox.title": "Ai idee de un produs?",
+  "contactBox.subtitle": "Scrie-ne un mesaj și îl vom pune în lișta de așteptare. \n\nP.S. Lasă email-ul tău să te putem contacta când îl vom lansa.",
+
+  "contactForm.modal.thankYouMessage": "Mulțumim! Feedback-ul tău contează.",
+
   "homepage.productListPage.title.1": "Alege tipul de mobilier, ca să începi personalizarea",
   "homepage.productListPage.title.2": "SAU",
   "homepage.productListPage.title.3": "Alege produse gata din lista noastră",

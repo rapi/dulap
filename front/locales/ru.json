@@ -12,6 +12,8 @@
   "homepage.banner.preorder.0": "Трансформируем рынок",
   "homepage.banner.preorder.1": "корпусной мебели в Молдове.",
 
+  "homepage.banner.comment": "Запуск: 10 июля 2025",
+
   "homepage.modal.promo.title": "Промокод -15% для тебя!",
   "homepage.modal.promo.preorder15": "PREORDER15",
   "homepage.modal.promo.buttonCopy": "Скопируй и закрой",
@@ -57,7 +59,12 @@
   "homepage.dulapLanding.aboutUs.body.3": "Мы работаем с качественными материалами, опытными мастерами и надёжными поставщиками. Мы не продаём обещания, а долговечные продукты, сделанные с заботой и вниманием к деталям.",
   "homepage.dulapLanding.aboutUs.body.4": "Мы только начинаем, но вкладываем душу в каждый проект. Для нас каждый клиент важен.",
   "homepage.dulapLanding.aboutUs.body.5": "dulap.md – каждое пространство заслуживает хороший шкаф.",
-  
+
+  "contactBox.title": "Есть идеи новых продуктов?",
+  "contactBox.subtitle": "Расскажи нам о своих идеях, и мы сделаем всё возможное, чтобы воплотить их в жизнь. П.С. Не забудь оставить свой имейл, если хочешь чтобы мы с тобой связались, когда запустим твой продукт.",
+
+  "contactForm.modal.thankYouMessage": "Спасибо! Твоё мнение очень важно для нас.",
+
   "homepage.productListPage.title.1": "Выбери тип мебели, чтобы начать персонализацию",
   "homepage.productListPage.title.2": "ИЛИ",
   "homepage.productListPage.title.3": "Выбери готовые товары из нашего списка",

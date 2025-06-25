@@ -1,0 +1,74 @@
+.boxContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #fff;
+  border: 1px solid #c2c2c2;
+  border-radius: 10px;
+  padding: 30px 25px;
+  width: 100%; /* let it grow to its container */
+  max-width: 400px;
+  gap: 8px;
+  margin: 20px auto;
+  color: #555;
+}
+
+.boxTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.boxContainer p,
+.boxTitle p {
+  margin: 4px 0;
+}
+
+.subtitle {
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.contactForm input,
+.contactForm textarea {
+  width: 100%;
+  max-width: 100%;
+  padding: 8px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: 'Onest', sans-serif;
+  color: #333333;
+  box-sizing: border-box;
+}
+
+.contactForm input:focus,
+.contactForm textarea:focus {
+  outline: none;
+  border-color: #c0392b;
+}
+
+@media (max-width: 480px) {
+  .boxContainer {
+    width: 70%;
+    padding: 20px 25px;
+    gap: 6px;
+  }
+  .subtitle {
+    font-size: 13px;
+  }
+}
