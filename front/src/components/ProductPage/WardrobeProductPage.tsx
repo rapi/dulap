@@ -1,6 +1,7 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import React, { FC } from 'react'
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 import {
   ProductImageSelect,
   ProductImageSelectComponent,
@@ -32,6 +33,7 @@ import {
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductPrice'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductInfobox'
+import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductConfiguratorInfo'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
@@ -128,6 +130,11 @@ export const ProductPage: FC<ProductPageProps> = ({
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const router = useRouter();
+  const route = router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ""
+  const configuratorRoute = '/configurator' + route
+
   return (
     <>
       {/* Left Side: Image */}
@@ -165,6 +172,9 @@ export const ProductPage: FC<ProductPageProps> = ({
             configuration={priceComponent}
             predefinedValue={values?.price ?? undefined}
           />
+        )}
+        {values != null && (
+          <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
         )}
         <ProductInfobox />
       </div>

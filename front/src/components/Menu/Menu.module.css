@@ -10,7 +10,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 1500px;
+  width: 1300px;
   padding: 12px 12vw;
   & img:first-child {
     display: flex;
