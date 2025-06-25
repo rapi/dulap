@@ -122,7 +122,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     if (hinges === 'homepage.configurator.fittings.hinges.options.2') {
       hingesExtraPrice = hingesNr * 50;
     }
-    return Math.round((width * 29 + (height - 190) * 4.5 * doorsNr + sectionsPrice + hingesExtraPrice + guidesExtraPrice)*1.35)
+    return Math.round((width * 29 + (height - 190) * 4.5 * doorsNr + sectionsPrice + hingesExtraPrice + guidesExtraPrice + 350 * doorsNr + 350)*1.35)
   }, [width, height, doorsNr, sectionsPrice, hinges, guidesExtraPrice])
 
   useEffect(() => {

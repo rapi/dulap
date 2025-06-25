@@ -4,6 +4,7 @@ import {
   ButtonSelect,
 } from '~/components/ButtonSelect/ButtonSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
+import { FormattedMessage } from 'react-intl'
 export type ProductSectionsComponent = {
   type: 'sections'
   selectedSections: number
@@ -42,10 +43,10 @@ export const ProductSections: FC<ProductSectionsProps> = ({
   }, [configuration.activeSections, configuration.selectedSections, configuration.setSelectedSections])
   return (
     <div>
-      <p className={styles.sectionsTitle}>Opțiuni</p>
+      <p className={styles.sectionsTitle}><FormattedMessage id="homepage.configurator.options.title" defaultMessage="Opțiuni" /></p>
 
       <label className={styles.furnitureLabel}>
-        <p>Secțiuni</p>
+        <p><FormattedMessage id="homepage.configurator.sections.title" defaultMessage="Secțiuni" /></p>
         <ButtonSelect
           options={possibleSections}
           defaultSelected={configuration.selectedSections.toString()}

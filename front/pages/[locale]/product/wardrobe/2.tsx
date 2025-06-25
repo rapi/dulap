@@ -9,7 +9,7 @@ export const preview = {
   src: '/wardrobe/White/maner/Base 20/H2100/right/500-1.png',
   dimensions: '50x210x50',
   color: '#fcfbf5',
-  price: 3900,
+  price: 3220,
 }
 
 const Product: FC = () => {
@@ -27,7 +27,7 @@ const Product: FC = () => {
             width: 50,
             height: 210,
             depth: 50,
-            plintHeight: 5
+            plintHeight: 2
           },
           furniture: {
             openingType: 'maner',

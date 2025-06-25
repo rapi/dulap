@@ -53,13 +53,13 @@ export const products: Product[] = [
       plintHeight: 5,
     },
     color: '#ded9d3',
-    price: 5950,
+    price: 8530,
 
     imageCarousel: ['/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png'],
     furniture: {
       openingType: 'maner',
-      hinges: 'homepage.configurator.fittings.hinges.options.2',
-      guides: 'homepage.configurator.fittings.guides.options.2',
+      hinges: 'homepage.configurator.fittings.hinges.options.1',
+      guides: 'homepage.configurator.fittings.guides.options.1',
     },
     sections: {
       number: 2,
@@ -87,13 +87,13 @@ export const products: Product[] = [
       plintHeight: 2,
     },
     color: '#fcfbf5',
-    price: 3900,
+    price: 3220,
 
     imageCarousel: ['/wardrobe/White/maner/Base 20/H2100/right/500-1.png'],
     furniture: {
       openingType: 'maner',
-      hinges: 'homepage.configurator.fittings.hinges.options.2',
-      guides: 'homepage.configurator.fittings.guides.options.2',
+      hinges: 'homepage.configurator.fittings.hinges.options.1',
+      guides: 'homepage.configurator.fittings.guides.options.1',
     },
     sections: {
       number: 1,
@@ -126,13 +126,13 @@ export const products: Product[] = [
       plintHeight: 6,
     },
     color: '#9c9c9c',
-    price: 11700,
+    price: 11810,
 
     imageCarousel: ['/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png'],
     furniture: {
       openingType: 'maner',
-      hinges: 'homepage.configurator.fittings.hinges.options.2',
-      guides: 'homepage.configurator.fittings.guides.options.2',
+      hinges: 'homepage.configurator.fittings.hinges.options.1',
+      guides: 'homepage.configurator.fittings.guides.options.1',
     },
     sections: {
       number: 2,
@@ -175,13 +175,13 @@ export const products: Product[] = [
       plintHeight: 2,
     },
     color: '#d6d6d6',
-    price: 13600,
+    price: 16990,
 
     imageCarousel: ['/wardrobe/Light Grey/push/Base 20/H2400/right/2500-5.png'],
     furniture: {
       openingType: 'push',
-      hinges: 'homepage.configurator.fittings.hinges.options.2',
-      guides: 'homepage.configurator.fittings.guides.options.2',
+      hinges: 'homepage.configurator.fittings.hinges.options.1',
+      guides: 'homepage.configurator.fittings.guides.options.1',
     },
     sections: {
       number: 3,
@@ -193,12 +193,12 @@ export const products: Product[] = [
           height: 224,
         },
         {
-          src: '/wardrobe/filling/Light Grey/2100/1.png',
+          src: '/wardrobe/filling/Light Grey/2100/2.png',
           width: 96,
           height: 224,
         },
         {
-          src: '/wardrobe/filling/Light Grey/2100/1.png',
+          src: '/wardrobe/filling/Light Grey/2100/4.png',
           width: 48,
           height: 224,
         },

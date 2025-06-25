@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { ButtonOptionsType, ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
+import { FormattedMessage } from 'react-intl'
 export type ProductOptionsComponent = {
   type: 'options',
   selectedFixationMethod: string,
@@ -27,7 +28,7 @@ export const ProductOptions: FC<ProductOptionsProps> = (
 ) => {
   return (
     <div>
-      <p className={styles.furnitureTitle}>Opțiuni</p>
+      <p className={styles.furnitureTitle}><FormattedMessage id="homepage.configurator.options.title" defaultMessage="Opțiuni" /></p>
       
       <label className={styles.furnitureLabel}>
         <p>Tip fixare</p>

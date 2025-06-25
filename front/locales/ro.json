@@ -82,6 +82,15 @@
   "products.wardrobe.2.name": "Dulap pentru haine 50cm",
   "products.wardrobe.3.name": "Dulap pentru haine 200cm",
   "products.wardrobe.4.name": "Dulap pentru haine 240cm",
+
+  "products.stand.1.name": "Comodă 90cm",
+  "products.stand.2.name": "Comodă 90cm",
+
+  "products.tvStand.1.name": "Comodă TV 90cm",
+  "products.tvStand.2.name": "Comodă TV 90cm",
+
+  "products.bedside.1.name": "Noptieră 90cm",
+  "products.bedside.2.name": "Noptieră 90cm",
  
   "homepage.configurator.breadcrumb.1": "Pagina principală",
   "homepage.configurator.breadcrumb.2": "Produse",
@@ -111,6 +120,9 @@
   "homepage.configurator.sections.nr.4": "4",
   "homepage.configurator.sections.nr.5": "5",
   "homepage.configurator.sections.nr.6": "6",
+
+  "homepage.configurator.sections.title": "Secțiuni",
+  "homepage.configurator.options.title": "Opțiuni",
 
   "homepage.configurator.wardrobeArrangement.title": "Aranjare dulap",
   "homepage.configurator.wardrobeArrangement.sectionsNr": "Numărul de secții",

@@ -9,7 +9,7 @@ export const preview = {
   src: '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
   dimensions: '150x210x50',
   color: '#ded9d3',
-  price: 5950,
+  price: 8530,
 }
 
 const Product: FC = () => {
@@ -31,8 +31,8 @@ const Product: FC = () => {
           },
           furniture: {
             openingType: 'maner',
-            hinges: 'homepage.configurator.fittings.hinges.options.2',
-            guides: 'homepage.configurator.fittings.guides.options.2',
+            hinges: 'homepage.configurator.fittings.hinges.options.1',
+            guides: 'homepage.configurator.fittings.guides.options.1',
           },
           sections: {
             number: 2,
@@ -51,13 +51,8 @@ const Product: FC = () => {
             ],
             opening: [
               {
-                src: '/wardrobe/opening-left.png',
-                width: 50,
-                height: 224,
-              },
-              {
-                src: '/wardrobe/opening-right.png',
-                width: 50,
+                src: '/wardrobe/opening-double.png',
+                width: 100,
                 height: 224,
               },
               {

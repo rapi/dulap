@@ -9,7 +9,7 @@ export const preview = {
   src: '/wardrobe/Light Grey/push/Base 20/H2400/right/2500-5.png',
   dimensions: '240x260x50',
   color: '#d6d6d6',
-  price: 13600,
+  price: 16990,
 }
 
 const Product: FC = () => {
@@ -27,12 +27,12 @@ const Product: FC = () => {
             width: 240,
             height: 260,
             depth: 50,
-            plintHeight: 5
+            plintHeight: 2
           },
           furniture: {
             openingType: 'push',
-            hinges: 'homepage.configurator.fittings.hinges.options.2',
-            guides: 'homepage.configurator.fittings.guides.options.2',
+            hinges: 'homepage.configurator.fittings.hinges.options.1',
+            guides: 'homepage.configurator.fittings.guides.options.1',
           },
           sections: {
             number: 3,
@@ -44,12 +44,12 @@ const Product: FC = () => {
                 height: 224,
               },
               {
-                src: '/wardrobe/filling/Light Grey/2100/1.png',
+                src: '/wardrobe/filling/Light Grey/2100/2.png',
                 width: 96,
                 height: 224,
               },
               {
-                src: '/wardrobe/filling/Light Grey/2100/1.png',
+                src: '/wardrobe/filling/Light Grey/2100/4.png',
                 width: 48,
                 height: 224,
               },

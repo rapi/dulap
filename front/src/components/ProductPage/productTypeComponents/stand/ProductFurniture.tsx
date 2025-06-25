@@ -57,7 +57,9 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
         </div>
 
         <div className={styles.openingTypeContent}>
-          {predefinedValue?.openingType ?? (
+          {predefinedValue?.openingType ? (
+            intl.formatMessage({ id: predefinedValue.openingType })
+          ) : (
             <ButtonSelect
               options={openingOptions}
               defaultSelected={configuration.openingOption}

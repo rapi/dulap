@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { FormattedMessage } from 'react-intl'
 import {
   ButtonOptionsType,
   ButtonSelect,
@@ -19,20 +20,23 @@ export const sectionsOptions: ButtonOptionsType[] = [
 ]
 export const ProductSections: FC<ProductSectionsProps> = ({
   configuration,
+  predefinedValue
 }) => {
   return (
     <div>
-      <p className={styles.sectionsTitle}>Opțiuni</p>
+      <p className={styles.sectionsTitle}><FormattedMessage id="homepage.configurator.options.title" defaultMessage="Opțiuni" /></p>
 
       <label className={styles.furnitureLabel}>
-        <p>Secțiuni</p>
-        <ButtonSelect
-          options={sectionsOptions}
-          defaultSelected={configuration.selectedSections.toString()}
-          onChange={(value) => {
-            configuration.setSelectedSections(parseInt(value))
-          }}
-        />
+        <p><FormattedMessage id="homepage.configurator.sections.title" defaultMessage="Secțiuni" /></p>
+        {predefinedValue ?? (
+          <ButtonSelect
+            options={sectionsOptions}
+            defaultSelected={configuration.selectedSections.toString()}
+            onChange={(value) => {
+              configuration.setSelectedSections(parseInt(value))
+            }}
+          />
+        )}
       </label>
     </div>
   )

@@ -82,6 +82,15 @@
   "products.wardrobe.3.name": "Шкаф для вещей 200см",
   "products.wardrobe.4.name": "Шкаф для вещей 240см",
 
+  "products.stand.1.name": "Комод 90см",
+  "products.stand.2.name": "Комод 90см",
+
+  "products.tvStand.1.name": "Тумба ТВ 90см",
+  "products.tvStand.2.name": "Тумба ТВ 90см",
+
+  "products.bedside.1.name": "Тумбочка 90см",
+  "products.bedside.2.name": "Тумбочка 90см",
+
   "homepage.configurator.breadcrumb.1": "Главная страница",
   "homepage.configurator.breadcrumb.2": "Товары",
   "homepage.configurator.breadcrumb.3": "Шкаф для одежды",
@@ -110,6 +119,9 @@
   "homepage.configurator.sections.nr.4": "4",
   "homepage.configurator.sections.nr.5": "5",
   "homepage.configurator.sections.nr.6": "6",
+
+  "homepage.configurator.sections.title": "Секции",
+  "homepage.configurator.options.title": "Опции",
   
   "homepage.configurator.wardrobeArrangement.title": "Расположение шкафа",
   "homepage.configurator.wardrobeArrangement.sectionsNr": "Количество секций",
