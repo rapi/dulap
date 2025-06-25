@@ -147,7 +147,6 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
         break
       }
     }
-    // }, [width, height, selectedMaxSections, imageColor, imageHeight])
   }, [width, height, selectedMaxSections, imageColor, imageHeight])
 
   const recolor = (items: ImageOptionProps[]) =>
