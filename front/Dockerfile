@@ -39,4 +39,4 @@ COPY --from=builder /app/package.json ./package.json
 EXPOSE 8080
 
 # Start the Next.js application on port 8080
-CMD ["yarn", "start"]
+CMD ["yarn", "start", "--hostname", "0.0.0.0"]
