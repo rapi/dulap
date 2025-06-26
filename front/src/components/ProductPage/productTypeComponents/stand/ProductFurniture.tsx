@@ -31,7 +31,7 @@ interface ProductSelectProps {
 export type ProductFurniturePredefinedValue = {
   openingType: 'maner' | 'push'
 
-  hinges:
+  hinges?:
     | 'homepage.configurator.fittings.hinges.options.1'
     | 'homepage.configurator.fittings.hinges.options.2'
   guides:

@@ -11,9 +11,16 @@ export type Section = {
   height: number
 }
 
+export type SectionWardrobe = {
+  number: number
+  mirror: string
+  arrangement: Section[]
+  opening: Section[]
+}
+
 export type FurnitureConfig = {
   openingType: 'maner' | 'push'
-  hinges:
+  hinges?:
     | 'homepage.configurator.fittings.hinges.options.1'
     | 'homepage.configurator.fittings.hinges.options.2'
   guides:
@@ -29,15 +36,9 @@ export type Product = {
   dimensions: Dimension
   color: string
   price: number
-
   imageCarousel: string[]
   furniture: FurnitureConfig
-  sections: {
-    number: number
-    mirror: string
-    arrangement: Section[]
-    opening: Section[]
-  }
+  sections?: number | SectionWardrobe
 }
 
 export const products: Product[] = [
@@ -220,6 +221,146 @@ export const products: Product[] = [
           height: 254,
         },
       ],
+    },
+  },
+  // STANDS
+  {
+    id: '1',
+    name: 'products.stand.1.name',
+    link: '/product/stand/1',
+    src: '/stand/Biege/push/Base 20/H700/S4/800.png',
+    dimensions: {
+      width: 90,
+      height: 70,
+      depth: 40,
+      plintHeight: 2,
+    },
+    color: '#d6d6d6',
+    price: 5640,
+
+    imageCarousel: [
+      '/stand/Biege/push/Base 20/H700/S4/800.png',
+    ],
+    furniture: {
+      openingType: 'push',
+      hinges: 'homepage.configurator.fittings.hinges.options.1',
+      guides: 'homepage.configurator.fittings.guides.options.1',
+    },
+    sections: 4,
+  },
+  {
+    id: '2',
+    name: 'products.stand.2.name',
+    link: '/product/stand/2',
+    src: '/stand/White/maner/Base 20/H900/S3/600.png',
+    dimensions: {
+      width: 50,
+      height: 110,
+      depth: 40,
+      plintHeight: 2
+    },
+    color: '#fcfbf5',
+    price: 4050,
+
+    imageCarousel: [
+      '/stand/Biege/push/Base 20/H700/S4/800.png',
+    ],
+    furniture: {
+      openingType: 'maner',
+      guides: 'homepage.configurator.fittings.guides.options.1',
+    },
+    sections: 3,
+  },
+    // TV STANDS
+  {
+    id: '1',
+    name: 'products.tvstand.1.name',
+    link: '/product/tv-stand/1',
+    src: '/tv-stand/Grey/push/Base 20/H300/2000-4.png',
+    dimensions: {
+      width: 200,
+      height: 35,
+      depth: 40,
+      plintHeight: 2
+    },
+    color: '#9c9c9c',
+    price: 7900,
+
+    imageCarousel: [
+      '/tv-stand/Grey/push/Base 20/H300/2000-4.png',
+    ],
+    furniture: {
+      openingType: 'push',
+      guides: 'homepage.configurator.fittings.guides.options.1',
+    },
+    sections: 4,
+  },
+  {
+    id: '2',
+    name: 'products.tvstand.2.name',
+    link: '/product/tv-stand/2',
+    src: '/tv-stand/Light Grey/maner/Base 60/H400/1600-2.png',
+    dimensions: {
+      width: 150,
+      height: 45,
+      depth: 40,
+      plintHeight: 6
+    },
+    color: '#fcfbf5',
+    price: 5100,
+
+    imageCarousel: [
+      '/tv-stand/Light Grey/maner/Base 60/H400/1600-2.png',
+    ],
+    furniture: {
+      openingType: 'maner',
+      guides: 'homepage.configurator.fittings.guides.options.1',
+    },
+    sections: 2,
+  },
+    // BEDSIDES
+  {
+    id: '1',
+    name: 'products.bedside.1.name',
+    link: '/product/bedside/1',
+    src: '/bedside/Biege/push/Base 20/H300/800.png',
+    dimensions: {
+      width: 80,
+      height: 30,
+      depth: 40,
+      plintHeight: 2
+    },
+    color: '#d6d6d6',
+    price: 2800,
+
+    imageCarousel: [
+      '/bedside/Biege/push/Base 20/H300/800.png',
+    ],
+    furniture: {
+      openingType: 'push',
+      guides: 'homepage.configurator.fittings.guides.options.1',
+    },
+  },
+  {
+    id: '2',
+    name: 'products.bedside.2.name',
+    link: '/product/bedside/2',
+    src: '/bedside/White/maner/Base 20/H400/600.png',
+    dimensions: {
+      width: 60,
+      height: 50,
+      depth: 40,
+      plintHeight: 2
+    },
+    color: '#d6d6d6',
+    price: 3180,
+
+    imageCarousel: [
+      '/bedside/White/maner/Base 20/H400/600.png',
+    ],
+    furniture: {
+      openingType: 'maner',
+      guides: 'homepage.configurator.fittings.guides.options.1',
     },
   },
 ]

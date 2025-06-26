@@ -55,13 +55,42 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [doorsNr, setDoorsNr] = useState(3)
 
   useEffect(() => {
-    setSelectedSections(activeSections)
+    setSelectedSections(prev => {
+      const newLen = activeSections.length
+      if (newLen > prev.length) return [...prev, ...activeSections.slice(prev.length)]
+      if (newLen < prev.length) return prev.slice(0, newLen)
+      return prev
+    })
   }, [activeSections])
+
+  useEffect(() => {
+    setSelectedSections(prev =>
+      prev.map((item, i) => ({
+        ...item,
+        width: activeSections[i]?.width ?? item.width,
+        height: activeSections[i]?.height ?? item.height,
+      }))
+    )
+  }, [activeSections])
+
+  useEffect(() => {
+    for (const map of imageWidthMap) {
+      if (width <= map.maxWidth) {
+        const [{ imageWidth: w, imageSections: s }] =
+          map.imageParams(selectedMaxSections)
+        setImageWidth(w)
+        setImageSections(s)
+        break
+      }
+    }
+  }, [width, selectedMaxSections])
+
   useEffect(() => {
     if (height <= 210) {
       setImageHeight(2100)
     } else setImageHeight(2400)
   }, [height])
+
   useEffect(() => {
     setDepth(depth)
   }, [depth])
@@ -83,20 +112,33 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     } else setImageColor('Dark Grey')
   }, [selectedColor])
 
-  const sectionsPrice = useMemo(() => {
-    return selectedSections.reduce((sum, { src }) => {
-      const m = src.match(/(\d+)(?=\.\w+$)/)
-      return m ? sum + (SECTION_VALUE[Number(m[1])] ?? 0) : sum
-    }, 0)
-  }, [selectedSections])
-  const guidesExtraPrice = useMemo(() => {
-    return selectedSections.reduce((sum, { src }) => {
-      const match = src.match(/(\d+)\.\w+$/); // fix: escaped dot and removed extra paren
-      const imageNr = match ? parseInt(match[1], 10) : 0;
-      const guideCount = GUIDES_NR[imageNr] || 0;
-      return sum + guideCount * 250; // fix: return the new sum
-    }, 0);
-  }, [selectedSections]);
+  useEffect(() => {
+    for (const map of widthMap) {
+      if (width <= map.maxWidth) {
+        setMinSections(map.minSections)
+        setMaxSections(map.maxSections)
+        const newActiveSections = map
+          .activeSections(width, height, selectedMaxSections)
+          .map((section) => ({
+            src: `/wardrobe/filling/${imageColor}/${imageHeight}/${section.src}`,
+            width: section.width,
+            height: section.height,
+          }))
+        setActiveSections(newActiveSections)
+        break
+      }
+    }
+  }, [width, height, selectedMaxSections, imageColor, imageHeight])
+
+  useEffect(() => {
+    for (const map of openingMap) {
+      if (width <= map.maxWidth) {
+        setActiveOpening(map.activeOpening(width, height, selectedMaxSections))
+        break
+      }
+    }
+  }, [width, height, selectedMaxSections])
+
   useEffect(() => {
     let newDoors: number
 
@@ -116,6 +158,22 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     setDoorsNr(newDoors)
   }, [width, selectedMaxSections])
 
+  const sectionsPrice = useMemo(() => {
+    return selectedSections.reduce((sum, { src }) => {
+      const m = src.match(/(\d+)(?=\.\w+$)/)
+      return m ? sum + (SECTION_VALUE[Number(m[1])] ?? 0) : sum
+    }, 0)
+  }, [selectedSections])
+
+  const guidesExtraPrice = useMemo(() => {
+    return selectedSections.reduce((sum, { src }) => {
+      const match = src.match(/(\d+)\.\w+$/); // fix: escaped dot and removed extra paren
+      const imageNr = match ? parseInt(match[1], 10) : 0;
+      const guideCount = GUIDES_NR[imageNr] || 0;
+      return sum + guideCount * 250; // fix: return the new sum
+    }, 0);
+  }, [selectedSections]);
+
   const price = useMemo(() => {
     const hingesNr = height >= 230 ? doorsNr * 6 : doorsNr * 5;
     let hingesExtraPrice = 0;
@@ -131,24 +189,6 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     } else setImageSide('left')
   }, [selectedMirrorOption])
 
-  useEffect(() => {
-    for (const map of widthMap) {
-      if (width <= map.maxWidth) {
-        setMinSections(map.minSections)
-        setMaxSections(map.maxSections)
-        const newActiveSections = map
-          .activeSections(width, height, selectedMaxSections)
-          .map((section) => ({
-            src: `/wardrobe/filling/${imageColor}/${imageHeight}/${section.src}`,
-            width: section.width,
-            height: section.height,
-          }))
-        setActiveSections(newActiveSections)
-        break
-      }
-    }
-  }, [width, height, selectedMaxSections, imageColor, imageHeight])
-
   const recolor = (items: ImageOptionProps[]) =>
     items.map(({ src, width, height }) => {
       const suffix = src.substring(src.lastIndexOf('/') + 1)
@@ -159,35 +199,12 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       }
     })
 
-  const recoloredActiveSections = useMemo(
-    () => recolor(activeSections),
-    // eslint-disable-next-line
-    [activeSections, imageColor, imageHeight]
-  )
   const recoloredSelectedSections = useMemo(
     () => recolor(selectedSections),
     // eslint-disable-next-line
     [selectedSections, imageColor, imageHeight]
   )
 
-  useEffect(() => {
-    for (const map of imageWidthMap) {
-      if (width <= map.maxWidth) {
-        const params = map.imageParams(selectedMaxSections)
-        setImageSections(params[0].imageSections)
-        setImageWidth(params[0].imageWidth)
-        break
-      }
-    }
-  }, [width, selectedMaxSections])
-  useEffect(() => {
-    for (const map of openingMap) {
-      if (width <= map.maxWidth) {
-        setActiveOpening(map.activeOpening(width, height, selectedMaxSections))
-        break
-      }
-    }
-  }, [width, height, selectedMaxSections])
   useEffect(() => {
     if (plintHeight >= 2 && plintHeight < 5) {
       setImagePlintHeight(20)
@@ -227,7 +244,6 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       type: 'sections',
       maxNumber: maxSections,
       minNumber: minSections,
-      activeSections: recoloredActiveSections,
       activeOpening: activeOpening,
       possibleSections: [
         { src: `/wardrobe/filling/${imageColor}/${imageHeight}/1.png` },

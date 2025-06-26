@@ -4,12 +4,12 @@ import { ProductPage } from '~/components/ProductPage/StandProductPage'
 import { StandProductConfigurator } from '~/components/ProductPage/productTypes/stand'
 
 export const preview = {
-  name: 'products.stand.1.name',
-  link: '/product/stand/1',
-  src: '/stand/Biege/push/Base 20/H700/S4/800.png',
-  dimensions: '90x70x40',
-  color: '#ded9d3',
-  price: 5640,
+  name: 'products.stand.2.name',
+  link: '/product/stand/2',
+  src: '/stand/White/maner/Base 20/H900/S3/600.png',
+  dimensions: '50x110x40',
+  color: '#fcfbf5',
+  price: 4050,
 }
 
 const Product: FC = () => {
@@ -20,21 +20,21 @@ const Product: FC = () => {
         name={preview.name}
         values={{
           imageCarousel: [
-            '/stand/Biege/push/Base 20/H700/S4/800.png',
+            '/stand/White/maner/Base 20/H900/S3/600.png',
           ],
           colors: preview.color,
           dimensions: {
-            width: 90,
-            height: 70,
+            width: 50,
+            height: 110,
             depth: 40,
             plintHeight: 2
           },
           furniture: {
-            openingType: 'push',
+            openingType: 'maner',
             hinges: 'homepage.configurator.fittings.hinges.options.1',
             guides: 'homepage.configurator.fittings.guides.options.1',
           },
-          sections: 4,
+          sections: 3,
           price: preview.price,
         }}
       />

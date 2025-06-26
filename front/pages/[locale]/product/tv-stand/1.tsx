@@ -1,22 +1,22 @@
 import { FC } from 'react'
 import { ProductPageLayout } from '~/components/ProductPageLayout/ProductPageLayout'
-import { ProductPage } from '~/components/ProductPage/StandProductPage'
-import { StandProductConfigurator } from '~/components/ProductPage/productTypes/stand'
+import { ProductPage } from '~/components/ProductPage/TVStandProductPage'
+import { TVStandProductConfigurator } from '~/components/ProductPage/productTypes/TVstand'
 
 export const preview = {
   name: 'products.stand.1.name',
   link: '/product/stand/1',
-  src: '/stand/Biege/push/Base 20/H700/S4/800.png',
-  dimensions: '90x70x40',
-  color: '#ded9d3',
-  price: 5640,
+  src: '/tv-stand/Grey/push/Base 20/H300/2000-4.png',
+  dimensions: '200x35x40',
+  color: '#9c9c9c',
+  price: 7900,
 }
 
 const Product: FC = () => {
   return (
     <ProductPageLayout>
       <ProductPage
-        components={StandProductConfigurator}
+        components={TVStandProductConfigurator}
         name={preview.name}
         values={{
           imageCarousel: [
@@ -24,8 +24,8 @@ const Product: FC = () => {
           ],
           colors: preview.color,
           dimensions: {
-            width: 90,
-            height: 70,
+            width: 200,
+            height: 35,
             depth: 40,
             plintHeight: 2
           },
