@@ -1,6 +1,6 @@
-import classes from './Menu.module.css'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import classes from './Menu.module.css'
 import Image from 'next/image'
 import Button from '@mui/material/Button'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
@@ -14,30 +14,53 @@ import { FormattedMessage } from 'react-intl'
 import Select from '~/components/Select/Select'
 import { useCart } from '~/context/cartContext'
 import { Badge } from '@mui/material'
-export const Menu = () => {
+
+export const Menu: React.FC = () => {
   const router = useRouter()
+  const { asPath, query } = router
+  const { itemCount } = useCart()
+
+  // Menu open state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+
+  // Header visibility on scroll (mobile)
+  const [showHeader, setShowHeader] = useState(true)
+
+  useEffect(() => {
+    let lastScrollY = window.pageYOffset
+    const handleScroll = () => {
+      const currentScrollY = window.pageYOffset
+      if (window.innerWidth <= 900) {
+        setShowHeader(currentScrollY <= lastScrollY)
+      }
+      lastScrollY = currentScrollY
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(e.currentTarget)
   }
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleClose = () => setAnchorEl(null)
+
+  const handleLocaleChange = (newLocale: string) => {
+    const pathWithoutLocale = asPath.replace(/^\/(ro|ru)/, '')
+    router.push(`/${newLocale}${pathWithoutLocale}`)
   }
-  const { itemCount } = useCart()
+
+  const headerClass = `${classes.header} ${!showHeader ? classes.hidden : ''}`
+
   return (
-    <header className={classes.header}>
+    <header className={headerClass}>
       <div className={classes.headerContainer}>
         <div className="logo">
           <Link href="/">
-            <Image
-              width={115}
-              height={25}
-              src="/logo.svg"
-              alt="Dulap.md Logo"
-            />
+            <Image width={115} height={25} src="/logo.svg" alt="Dulap.md Logo" />
           </Link>
         </div>
+
         <Button
           id="basic-button"
           aria-controls={open ? 'basic-menu' : undefined}
@@ -46,59 +69,33 @@ export const Menu = () => {
           className={classes.menuButton}
           onClick={handleClick}
         >
-          <MenuIcon sx={{ color: grey[800] }} fontSize="large"></MenuIcon>
+          <MenuIcon sx={{ color: grey[800] }} fontSize="large" />
         </Button>
+
         <MenuMui
           id="basic-menu"
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          sx={{
-            width: '200px',
-            fontSize: '12px',
-            fontFamily: 'Onest, sans-serif',
-          }}
+          sx={{ width: '200px', fontSize: '12px', fontFamily: 'Onest, sans-serif' }}
         >
           <MenuItem onClick={handleClose}>
             <Select
               options={['ro', 'ru']}
-              defaultValue={(router.query.locale as string) ?? 'ro'}
-              onChange={(e) => router.push(`/${e}/`)}
-              size='small'
+              defaultValue={(query.locale as string) ?? 'ro'}
+              onChange={handleLocaleChange}
+              size="small"
             />
           </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleClose()
-              router.push('/products')
-            }}
-            className={classes.menuItem}
-          >
+          <MenuItem onClick={() => { handleClose(); router.push('/products') }} className={classes.menuItem}>
             <FormattedMessage id="homepage.menu.productsTitle" />
           </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleClose()
-              router.push('/about-us')
-            }}
-            className={classes.menuItem}
-          >
+          <MenuItem onClick={() => { handleClose(); router.push('/about-us') }} className={classes.menuItem}>
             <FormattedMessage id="homepage.menu.aboutUsTitle" />
           </MenuItem>
-          <MenuItem
-            onClick={() => {
-              handleClose()
-              router.push('/contacts')
-            }}
-            className={classes.menuItem}
-          >
+          <MenuItem onClick={() => { handleClose(); router.push('/contacts') }} className={classes.menuItem}>
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </MenuItem>
-          {/* <MenuItem onClick={handleClose}>
-            <CustomButton size="medium" href="/office-table" variant="danger">
-              Office Table
-            </CustomButton>
-          </MenuItem> */}
           <MenuItem onClick={handleClose}>
             <Link href="/cart">
               <Badge badgeContent={itemCount} color="primary">
@@ -107,11 +104,7 @@ export const Menu = () => {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <CustomButton
-              icon={<WardrobeIconMedium />}
-              size="medium"
-              href="/products"
-            >
+            <CustomButton icon={<WardrobeIconMedium />} size="medium" href="/products">
               <FormattedMessage id="homepage.button.yourWardrobe" />
             </CustomButton>
           </MenuItem>
@@ -128,23 +121,17 @@ export const Menu = () => {
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </Link>
 
-          {/* <CustomButton size="medium" href="/office-table" variant="danger">
-            Office Table
-          </CustomButton> */}
-
-          <CustomButton
-            icon={<WardrobeIconMedium />}
-            size="medium"
-            href="/products"
-          >
+          <CustomButton icon={<WardrobeIconMedium />} size="medium" href="/products">
             <FormattedMessage id="homepage.button.yourWardrobe" />
           </CustomButton>
+
           <Select
             options={['ro', 'ru']}
-            defaultValue={(router.query.locale as string) ?? 'ro'}
-            onChange={(e) => router.push(`/${e}/`)}
-            size='small'
+            defaultValue={(query.locale as string) ?? 'ro'}
+            onChange={handleLocaleChange}
+            size="small"
           />
+
           <div className="icons">
             <Link href="/cart">
               <Badge badgeContent={itemCount} color="primary">

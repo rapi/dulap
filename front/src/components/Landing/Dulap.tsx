@@ -2,12 +2,12 @@ import React from 'react'
 import './Dulap.css'
 import classes from './Dulap.module.css'
 import { Banner } from '~/components/Banner/Banner'
-import { CustomButton } from '~/components/CustomButton/CustomButton'
 import { FormattedMessage } from 'react-intl'
 import { ProductTypesList } from '~/components/ProductTypesList/ProductTypesList'
 import { ProductCatalog } from '~/components/ProductCatalog/ProductCatalog'
 import { AboutUs } from '~/components/AboutUs/AboutUs'
 import ContactBox from '~/components/ContactBox/ContactBox'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 export const Dulap: React.FC = () => {
   return (
@@ -26,6 +26,8 @@ export const Dulap: React.FC = () => {
         title={<FormattedMessage id="contactBox.title" />}
         subtitle={<FormattedMessage id="contactBox.subtitle" />}
         showEmail={true}
+        showTextarea={true}
+        modalThankYouMessage='contactForm.modal.thankYouMessage'
       ></ContactBox>
 
       <section className={classes.readyProducts}>
@@ -37,12 +39,19 @@ export const Dulap: React.FC = () => {
 
       <section className={classes.aboutUs}>
         <AboutUs></AboutUs>
-        <div className={classes.ctaButtonContainer}>
-          <CustomButton icon="" size="large" variant="primary">
-            <FormattedMessage id="homepage.button.tryIt" />
-          </CustomButton>
-        </div>
       </section>
+      <ContactBox
+        title={
+          <span className={classes.contactBoxContainer}>
+            <FormattedMessage id="contactBox.subscribe.title" />
+            <FavoriteBorderIcon sx={{ fontSize: 22 }} />
+          </span>
+        }
+        subtitle={<FormattedMessage id="contactBox.subscribe.subtitle" />}
+        showEmail={true}
+        modalThankYouMessage='contactForm.modal.subscribe.thankYouMessage'
+      ></ContactBox>
     </div>
+    
   )
 }

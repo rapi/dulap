@@ -192,22 +192,8 @@ const Contacts: React.FC = () => {
       </main>
       <Modal isOpen={messageSent} onClose={handleCloseModal}>
         <h3>
-          <FormattedMessage
-            id="checkout.modal.title"
-            defaultMessage="Comanda plasată"
-          />
+          <FormattedMessage id="contacts.modal.thankYouMessage" />
         </h3>
-        <p>
-          <FormattedMessage
-            id="checkout.modal.message"
-            defaultMessage="Comanda ta a fost plasată, în scurt timp revenim cu un apel!"
-          />
-        </p>
-        <div className={styles.buttonRow}>
-          <CustomButton onClick={handleCloseModal}>
-            <FormattedMessage id="homepage.button.ok" defaultMessage="OK" />
-          </CustomButton>
-        </div>
       </Modal>
     </div>
   )

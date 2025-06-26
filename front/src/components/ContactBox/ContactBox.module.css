@@ -5,10 +5,9 @@
   background-color: #fff;
   border: 1px solid #c2c2c2;
   border-radius: 10px;
-  padding: 30px 25px;
+  padding: 30px 30px;
   width: 100%; /* let it grow to its container */
   max-width: 400px;
-  gap: 8px;
   margin: 20px auto;
   color: #555;
 }
@@ -19,16 +18,20 @@
   align-items: center;
   gap: 10px;
   font-weight: 500;
+  margin: 10px auto;
 }
 
 .boxContainer p,
 .boxTitle p {
-  margin: 4px 0;
+  margin: 10px 0;
 }
 
 .subtitle {
-  font-weight: 300;
+  display: flex;
+  text-align: center;
+  font-weight: 250;
   font-size: 14px;
+  margin-bottom: 20px!important;
 }
 
 .form {
@@ -59,14 +62,13 @@
 .contactForm input:focus,
 .contactForm textarea:focus {
   outline: none;
-  border-color: #c0392b;
+  border-color: #969696;
 }
 
 @media (max-width: 480px) {
   .boxContainer {
     width: 70%;
     padding: 20px 25px;
-    gap: 6px;
   }
   .subtitle {
     font-size: 13px;

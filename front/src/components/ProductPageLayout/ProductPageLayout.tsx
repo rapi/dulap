@@ -22,7 +22,7 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
             { label: 'homepage.configurator.breadcrumb.1', link: '/' },
             { label: 'homepage.configurator.breadcrumb.2', link: '/products' },
             ...(productType
-              ? [{ label: productType.name, link: 'strippedPath' }]
+              ? [{ label: productType.name, link: strippedPath }]
               : []),
           ]}
         />

@@ -60,8 +60,8 @@ function PromoListener() {
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
       <h2><FormattedMessage id="homepage.modal.promo.title" /></h2>
-      <p className='promocode'><FormattedMessage id="homepage.modal.promo.preorder15" /></p>
-      <CopyButton textToCopy={intl.formatMessage({id: 'homepage.modal.promo.preorder15'})} />
+      <p className='promocode'><FormattedMessage id="homepage.modal.promo.preorder10" /></p>
+      <CopyButton textToCopy={intl.formatMessage({id: 'homepage.modal.promo.preorder10'})} />
     </Modal>
   );
 }

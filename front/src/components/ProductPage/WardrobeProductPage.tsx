@@ -32,7 +32,7 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductPrice'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductInfobox'
+import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductConfiguratorInfo'
 import {
   ProductImageCarousel,

@@ -14,8 +14,8 @@
 
   "homepage.banner.comment": "Lansarea: 10 iulie 2025",
 
-  "homepage.modal.promo.title": "Promocod de -15% pentru tine!",
-  "homepage.modal.promo.preorder15": "PREORDER15",
+  "homepage.modal.promo.title": "Promocod de -10% pentru tine!",
+  "homepage.modal.promo.preorder10": "PREORDER10",
   "homepage.modal.promo.buttonCopy": "Copiază și închide",
 
   "homepage.button.tryIt": "Încearcă aici",
@@ -64,7 +64,15 @@
   "contactBox.title": "Ai idee de un produs?",
   "contactBox.subtitle": "Scrie-ne un mesaj și îl vom pune în lișta de așteptare. \n\nP.S. Lasă email-ul tău să te putem contacta când îl vom lansa.",
 
+  "contactBox.subscribe.title": "Susținerea ta contează",
+  "contactBox.subscribe.subtitle": "Vrei să ne susții? Poți să te abonezi la newsletter-ul nostru! Promitem să nu te plictisim și să îți oferim lunar mici cadouri.",
+  "contactBox.placeholder.name": "Numele",
+  "contactBox.placeholder.email": "Email",
+  "contactBox.placeholder.message": "Lasă mesajul tău aici",
+
+  "contacts.modal.thankYouMessage": "Mulțumim! Am primit mesajul tău și în scurt timp te vom contacta.",
   "contactForm.modal.thankYouMessage": "Mulțumim! Feedback-ul tău contează.",
+  "contactForm.modal.subscribe.thankYouMessage": "Mulțumim! Acum ești abonat la newsletter-ul dulap.md.",
 
   "homepage.productListPage.title.1": "Alege tipul de mobilier, ca să începi personalizarea",
   "homepage.productListPage.title.2": "SAU",
@@ -140,7 +148,7 @@
   "homepage.configurator.wardrobeArrangement.shelvesArrangement.modal.title": "Alege aranjarea rafturilor pentru Secțiune",
   "homepage.configurator.wardrobeArrangement.doorsArrangement": "Aranjare uși",
 
-  "homepage.configurator.fittings.title": "Furnitura",
+  "homepage.configurator.fittings.title": "Feronerie",
   "homepage.configurator.fittings.handleType": "Tip deschidere",
   "homepage.configurator.fittings.hinges": "Balamale",
   "homepage.configurator.fittings.guides": "Glisiere",
@@ -172,10 +180,12 @@
   "homepage.configurator.priceFlexible.title": "Preț flexibil",
   "homepage.configurator.price.currencyLei": "lei",
 
-  "configurator.infobox.assembly.title": "Asamblarea",
+  "configurator.infobox.quality.title": "Calitate",
+  "configurator.infobox.quality.1": "În producție, folosim materiale de top Egger (PAL) și feronerie de calitate înaltă, ganatntând o durată de viață de peste 10 ani.",
+  "configurator.infobox.assembly.title": "Asamblare",
   "configurator.infobox.assembly.1": "Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare.",
   "configurator.infobox.assembly.2": "Asamblarea poate fi procurată ca serviciu aparte în coș, prețul fiind de 350 lei.",
-  "configurator.infobox.delivery.title": "Livrarea",
+  "configurator.infobox.delivery.title": "Livrare",
   "configurator.infobox.delivery.1": "Livrarea se efectuează gratuit, în raza mun. Chișinău.",
   "configurator.infobox.delivery.2": "Termenul de livrare este de 10-15 zile lucrătare de la plasarea comenzii.",
 
@@ -223,6 +233,8 @@
   "checkout.promo.invalid": "Eroare: cod invalid",
   "checkout.error.required": "Acest câmp este obligatoriu",
   "checkout.error.onSubmit": "Completați toate câmpurile pentru a finaliza comanda.",
+
+  "checkout.message.attentionOrderDetails": "Atenție! Comenzile vor fi puse în lucru începând cu data de 10 iulie, după lansarea oficială dulap.md. Termenul de execuție - 10 zile lucrătoare.",
 
   "checkout.modal.title": "Yay! Comanda a fost plasată",
   "checkout.modal.message": "În scurt timp revenim cu un apel pentru confirmarea detaliilor comenzii!",

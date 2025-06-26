@@ -26,7 +26,7 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/TVstand/ProductPrice'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/TVstand/ProductInfobox'
+import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,

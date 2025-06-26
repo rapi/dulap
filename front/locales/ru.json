@@ -14,8 +14,8 @@
 
   "homepage.banner.comment": "Запуск: 10 июля 2025",
 
-  "homepage.modal.promo.title": "Промокод -15% для тебя!",
-  "homepage.modal.promo.preorder15": "PREORDER15",
+  "homepage.modal.promo.title": "Промокод -10% для тебя!",
+  "homepage.modal.promo.preorder10": "PREORDER10",
   "homepage.modal.promo.buttonCopy": "Скопируй и закрой",
 
   "homepage.button.tryIt": "Попробуй",
@@ -61,9 +61,17 @@
   "homepage.dulapLanding.aboutUs.body.5": "dulap.md – каждое пространство заслуживает хороший шкаф.",
 
   "contactBox.title": "Есть идеи новых продуктов?",
-  "contactBox.subtitle": "Расскажи нам о своих идеях, и мы сделаем всё возможное, чтобы воплотить их в жизнь. П.С. Не забудь оставить свой имейл, если хочешь чтобы мы с тобой связались, когда запустим твой продукт.",
+  "contactBox.subtitle": "Расскажи нам о своих идеях, и мы сделаем всё возможное, чтобы воплотить их в жизнь. П.С. Можешь оставить свой имейл, если хочешь чтобы мы с тобой связались, когда его запустим.",
 
+  "contactBox.subscribe.title": "Твоя поддержка очень важна",
+  "contactBox.subscribe.subtitle": "Хочешь нам помочь и получать приятные сюрпризы? Подпишись на нашу рассылку (обещаем не спамить).",
+  "contactBox.placeholder.name": "Имя",
+  "contactBox.placeholder.email": "Email",
+  "contactBox.placeholder.message": "Оставь сообщение нам",
+
+  "contacts.modal.thankYouMessage": "Спасибо! Мы получили твоё сообщение и скоро свяжемся с тобой.",
   "contactForm.modal.thankYouMessage": "Спасибо! Твоё мнение очень важно для нас.",
+  "contactForm.modal.subscribe.thankYouMessage": "Спасибо! Теперь ты подписан на новостную рассылку dulap.md.",
 
   "homepage.productListPage.title.1": "Выбери тип мебели, чтобы начать персонализацию",
   "homepage.productListPage.title.2": "ИЛИ",
@@ -171,6 +179,8 @@
   "homepage.configurator.priceFlexible.title": "Гибкая цена",
   "homepage.configurator.price.currencyLei": "лей",
 
+  "configurator.infobox.quality.title": "Качество",
+  "configurator.infobox.quality.1": "В производстве, мы используем материалы премиум-класса Egger (ЛДСП) и высококачественную фурнитуру, гарантируя срок службы более 10 лет.",
   "configurator.infobox.assembly.title": "Монтаж",
   "configurator.infobox.assembly.1": "Этот шкаф не требует профессионального монтажа, но для удобства мы предлагаем инструкцию по монтажу.",
   "configurator.infobox.assembly.2": "Монтаж можно заказать как отдельную услугу в корзине, стоимость — 350 лей.",
@@ -222,6 +232,8 @@
   "checkout.promo.invalid": "Ошибка: код недействителен",
   "checkout.error.required": "Это поле обязательно",
   "checkout.error.onSubmit": "Заполните все поля, чтобы завершить заказ.",
+
+  "checkout.message.attentionOrderDetails": "Обращаем ваше внимание: заказы начнут обрабатываться с 10 июля, после запуска dulap.md, а производство займет 10 рабочих дней.",
 
   "checkout.modal.title": "Ура! Ваш заказ оформлен",
   "checkout.modal.message": "Вскоре мы перезвоним, чтобы подтвердить детали!",

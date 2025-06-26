@@ -10,8 +10,8 @@ import { Modal } from '~/components/Modal/Modal'
 import Select from '~/components//Select/Select'
 import axios from 'axios'
 const PROMO_CODES = [
-  { code: 'PROMO15', discount: 15 },
   { code: 'PROMO10', discount: 10 },
+  { code: 'PREORDER10', discount: 10 },
 ]
 
 export const Checkout: FC = () => {
@@ -316,7 +316,7 @@ export const Checkout: FC = () => {
                   onChange={() => setPaymentMethod('cash')}
                 />
               </label>
-              <label className={styles.paymentOption}>
+              {/* <label className={styles.paymentOption}>
                 <img
                   src="/checkout/mia.png"
                   alt="MIA"
@@ -332,7 +332,7 @@ export const Checkout: FC = () => {
                   checked={paymentMethod === 'mia'}
                   onChange={() => setPaymentMethod('mia')}
                 />
-              </label>
+              </label> */}
             </div>
           </div>
 
@@ -555,6 +555,7 @@ export const Checkout: FC = () => {
                 <CustomButton size="medium" onClick={handlePlaceOrder}>
                   <FormattedMessage id="homepage.button.placeOrder" />
                 </CustomButton>
+                <p className={styles.attentionMessage}><FormattedMessage id="checkout.message.attentionOrderDetails" /></p>
                 <div>
                   {commonError && <p className={styles.error}>{commonError}</p>}
                 </div>

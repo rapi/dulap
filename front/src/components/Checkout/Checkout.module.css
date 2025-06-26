@@ -192,6 +192,11 @@
   justify-content: center;
 }
 
+.attentionMessage {
+  color: #d32f2f;
+  font-size: 13px;
+}
+
 /* Promocode */
 .promoFirstRow {
   display: flex;

@@ -2,9 +2,18 @@ import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { FormattedMessage } from 'react-intl'
 import HandymanIcon from '@mui/icons-material/Handyman';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 export const ProductInfobox = () => {
   return (
     <div className={styles.infoboxContainer}>
+      <div className={styles.infoboxTitle}>
+        <AutoGraphIcon color='action'/>
+        <p><FormattedMessage id="configurator.infobox.quality.title" defaultMessage="Цена и Качество"/></p>
+      </div>
+      <p className={styles.assemblyNote}>
+        <FormattedMessage id="configurator.infobox.quality.1" defaultMessage="Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare." />
+      </p>
+      <br></br>
       <div className={styles.infoboxTitle}>
         <HandymanIcon color='action'/>
         <p><FormattedMessage id="configurator.infobox.assembly.title" defaultMessage="Asamblarea"/></p>

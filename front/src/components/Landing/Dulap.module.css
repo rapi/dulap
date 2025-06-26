@@ -3,7 +3,6 @@
 .readyProducts,
 .aboutUs {
   padding: 4vw 12vw;
-  background-color: white;
 }
 
 .productTypesTitle,
@@ -90,6 +89,12 @@
   display: flex;
   justify-content: center;
   padding: 30px 0;
+}
+
+.contactBoxContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Responsive styles */
