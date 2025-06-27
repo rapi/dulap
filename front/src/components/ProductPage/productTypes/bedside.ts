@@ -120,8 +120,8 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
       type: 'imageCarousel',
       images: [
         `/bedside/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}.png`,
-        `/bedside-2/renders/${imageColor} 1.png`,
-        `/bedside-2/renders/${imageColor} 2.png`,
+        `/bedside/render/${imageColor} 1.png`,
+        `/bedside/render/${imageColor} 2.png`,
       ],
     },
   ]
