@@ -13,6 +13,7 @@ body {
   color: #333;
   background-color: #f9f9f9;
   width: 100%;
+  overscroll-behavior-y: contain;
   /* overflow-x: hidden; */
 }
 

@@ -20,11 +20,19 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
 
   const price = useMemo(() => {
-    let fittingsPrice = 0;
+    let fittingsPrice = 0
     if (guides === 'homepage.configurator.fittings.guides.options.2') {
       fittingsPrice = selectedSections * 350
     }
-    return Math.round((300 + selectedSections*600 + width * 20 + (height - 190) * 4.5 + (depth - 30) * 8 + fittingsPrice)*1.3)
+    return Math.round(
+      (300 +
+        selectedSections * 600 +
+        width * 20 +
+        (height - 190) * 4.5 +
+        (depth - 30) * 8 +
+        fittingsPrice) *
+        1.3
+    )
   }, [width, height, depth, selectedSections, guides])
 
   useEffect(() => {
@@ -45,7 +53,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     setSelectedSections(selectedSections)
   }, [selectedSections])
 
-  useEffect(() => { 
+  useEffect(() => {
     if (width < 100) {
       setImageWidth(800)
     } else if (width < 120) {
@@ -141,7 +149,8 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       type: 'imageCarousel',
       images: [
         `/tv-stand/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}-${selectedSections}.png`,
-        // '/renders-landing/tv-stand.png'
+        `/tv-stand/renders/${imageColor}-1.png`,
+        `/tv-stand/renders/${imageColor}-2.png`,
       ],
     },
   ]

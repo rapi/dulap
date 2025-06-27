@@ -19,13 +19,21 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
 
   const price = useMemo(() => {
-    let fittingsPrice = 0;
+    let fittingsPrice = 0
     if (guides === 'homepage.configurator.fittings.guides.options.2') {
       fittingsPrice = selectedSections * 350
     }
-    return Math.round((600 + selectedSections*600 + width * 20 + (height - 190) * 4.5 + (depth - 30) * 8 + fittingsPrice)*1.3)
+    return Math.round(
+      (600 +
+        selectedSections * 600 +
+        width * 20 +
+        (height - 190) * 4.5 +
+        (depth - 30) * 8 +
+        fittingsPrice) *
+        1.3
+    )
   }, [width, height, depth, selectedSections, guides])
-  
+
   useEffect(() => {
     if (plintHeight >= 2 && plintHeight < 5) {
       setImagePlintHeight(20)
@@ -116,7 +124,8 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       type: 'imageCarousel',
       images: [
         `/stand/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/S${selectedSections}/${imageWidth}.png`,
-        // '/renders-landing/stand.png'
+        `/stand/renders/${imageColor}-1.png`,
+        `/stand/renders/${imageColor}-2.png`,
       ],
     },
   ]

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/router'
 import classes from './Menu.module.css'
 import Image from 'next/image'
@@ -25,20 +25,38 @@ export const Menu: React.FC = () => {
   const open = Boolean(anchorEl)
 
   // Header visibility on scroll (mobile)
+  const lastScrollY = useRef(0)
   const [showHeader, setShowHeader] = useState(true)
 
   useEffect(() => {
-    let lastScrollY = window.pageYOffset
+    // only wire up on mobile
+    if (window.innerWidth > 900) return
+
+    // initialize
+    lastScrollY.current = window.pageYOffset
+
     const handleScroll = () => {
       const currentScrollY = window.pageYOffset
-      if (window.innerWidth <= 900) {
-        setShowHeader(currentScrollY <= lastScrollY)
+
+      if (currentScrollY <= 0) {
+        // at very top → always show
+        setShowHeader(true)
+      } else if (currentScrollY > lastScrollY.current) {
+        // scrolling down → hide
+        setShowHeader(false)
+      } else {
+        // scrolling up → show
+        setShowHeader(true)
       }
-      lastScrollY = currentScrollY
+
+      lastScrollY.current = currentScrollY
     }
-    window.addEventListener('scroll', handleScroll)
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const headerClass = `${classes.header} ${!showHeader ? classes.hidden : ''}`
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget)
@@ -50,14 +68,17 @@ export const Menu: React.FC = () => {
     router.push(`/${newLocale}${pathWithoutLocale}`)
   }
 
-  const headerClass = `${classes.header} ${!showHeader ? classes.hidden : ''}`
-
   return (
     <header className={headerClass}>
       <div className={classes.headerContainer}>
         <div className="logo">
           <Link href="/">
-            <Image width={115} height={25} src="/logo.svg" alt="Dulap.md Logo" />
+            <Image
+              width={115}
+              height={25}
+              src="/logo.svg"
+              alt="Dulap.md Logo"
+            />
           </Link>
         </div>
 
@@ -77,7 +98,11 @@ export const Menu: React.FC = () => {
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          sx={{ width: '200px', fontSize: '12px', fontFamily: 'Onest, sans-serif' }}
+          sx={{
+            width: '200px',
+            fontSize: '12px',
+            fontFamily: 'Onest, sans-serif',
+          }}
         >
           <MenuItem onClick={handleClose}>
             <Select
@@ -87,13 +112,31 @@ export const Menu: React.FC = () => {
               size="small"
             />
           </MenuItem>
-          <MenuItem onClick={() => { handleClose(); router.push('/products') }} className={classes.menuItem}>
+          <MenuItem
+            onClick={() => {
+              handleClose()
+              router.push('/products')
+            }}
+            className={classes.menuItem}
+          >
             <FormattedMessage id="homepage.menu.productsTitle" />
           </MenuItem>
-          <MenuItem onClick={() => { handleClose(); router.push('/about-us') }} className={classes.menuItem}>
+          <MenuItem
+            onClick={() => {
+              handleClose()
+              router.push('/about-us')
+            }}
+            className={classes.menuItem}
+          >
             <FormattedMessage id="homepage.menu.aboutUsTitle" />
           </MenuItem>
-          <MenuItem onClick={() => { handleClose(); router.push('/contacts') }} className={classes.menuItem}>
+          <MenuItem
+            onClick={() => {
+              handleClose()
+              router.push('/contacts')
+            }}
+            className={classes.menuItem}
+          >
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </MenuItem>
           <MenuItem onClick={handleClose}>
@@ -104,7 +147,11 @@ export const Menu: React.FC = () => {
             </Link>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <CustomButton icon={<WardrobeIconMedium />} size="medium" href="/products">
+            <CustomButton
+              icon={<WardrobeIconMedium />}
+              size="medium"
+              href="/products"
+            >
               <FormattedMessage id="homepage.button.yourWardrobe" />
             </CustomButton>
           </MenuItem>
@@ -121,7 +168,11 @@ export const Menu: React.FC = () => {
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </Link>
 
-          <CustomButton icon={<WardrobeIconMedium />} size="medium" href="/products">
+          <CustomButton
+            icon={<WardrobeIconMedium />}
+            size="medium"
+            href="/products"
+          >
             <FormattedMessage id="homepage.button.yourWardrobe" />
           </CustomButton>
 

@@ -23,12 +23,20 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
     let selectedSections = 1
     if (height > 35) {
       selectedSections = 2
-    }  
-    let fittingsPrice = 0;
+    }
+    let fittingsPrice = 0
     if (guides === 'homepage.configurator.fittings.guides.options.2') {
       fittingsPrice = selectedSections * 350
     }
-    return Math.round((600 + selectedSections*600 + width * 20 + (height - 190) * 4.5 + (depth - 30) * 8 + fittingsPrice)*1.3)
+    return Math.round(
+      (600 +
+        selectedSections * 600 +
+        width * 20 +
+        (height - 190) * 4.5 +
+        (depth - 30) * 8 +
+        fittingsPrice) *
+        1.3
+    )
   }, [width, height, depth, guides])
 
   useEffect(() => {
@@ -112,7 +120,8 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
       type: 'imageCarousel',
       images: [
         `/bedside/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}.png`,
-        // '/renders-landing/bedside.png'
+        `/bedside/renders/${imageColor}-1.png`,
+        `/bedside/renders/${imageColor}-2.png`,
       ],
     },
   ]

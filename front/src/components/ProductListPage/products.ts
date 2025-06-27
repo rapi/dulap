@@ -238,9 +238,7 @@ export const products: Product[] = [
     color: '#d6d6d6',
     price: 5640,
 
-    imageCarousel: [
-      '/stand/Biege/push/Base 20/H700/S4/800.png',
-    ],
+    imageCarousel: ['/stand/Biege/push/Base 20/H700/S4/800.png'],
     furniture: {
       openingType: 'push',
       hinges: 'homepage.configurator.fittings.hinges.options.1',
@@ -257,21 +255,19 @@ export const products: Product[] = [
       width: 50,
       height: 110,
       depth: 40,
-      plintHeight: 2
+      plintHeight: 2,
     },
     color: '#fcfbf5',
     price: 4050,
 
-    imageCarousel: [
-      '/stand/Biege/push/Base 20/H700/S4/800.png',
-    ],
+    imageCarousel: ['/stand/White/maner/Base 20/H900/S3/600.png'],
     furniture: {
       openingType: 'maner',
       guides: 'homepage.configurator.fittings.guides.options.1',
     },
     sections: 3,
   },
-    // TV STANDS
+  // TV STANDS
   {
     id: '1',
     name: 'products.tvstand.1.name',
@@ -281,14 +277,12 @@ export const products: Product[] = [
       width: 200,
       height: 35,
       depth: 40,
-      plintHeight: 2
+      plintHeight: 2,
     },
     color: '#9c9c9c',
     price: 7900,
 
-    imageCarousel: [
-      '/tv-stand/Grey/push/Base 20/H300/2000-4.png',
-    ],
+    imageCarousel: ['/tv-stand/Grey/push/Base 20/H300/2000-4.png'],
     furniture: {
       openingType: 'push',
       guides: 'homepage.configurator.fittings.guides.options.1',
@@ -304,21 +298,19 @@ export const products: Product[] = [
       width: 150,
       height: 45,
       depth: 40,
-      plintHeight: 6
+      plintHeight: 6,
     },
     color: '#fcfbf5',
     price: 5100,
 
-    imageCarousel: [
-      '/tv-stand/Light Grey/maner/Base 60/H400/1600-2.png',
-    ],
+    imageCarousel: ['/tv-stand/Light Grey/maner/Base 60/H400/1600-2.png'],
     furniture: {
       openingType: 'maner',
       guides: 'homepage.configurator.fittings.guides.options.1',
     },
     sections: 2,
   },
-    // BEDSIDES
+  // BEDSIDES
   {
     id: '1',
     name: 'products.bedside.1.name',
@@ -328,14 +320,12 @@ export const products: Product[] = [
       width: 80,
       height: 30,
       depth: 40,
-      plintHeight: 2
+      plintHeight: 2,
     },
     color: '#d6d6d6',
     price: 2800,
 
-    imageCarousel: [
-      '/bedside/Biege/push/Base 20/H300/800.png',
-    ],
+    imageCarousel: ['/bedside/Biege/push/Base 20/H300/800.png'],
     furniture: {
       openingType: 'push',
       guides: 'homepage.configurator.fittings.guides.options.1',
@@ -350,14 +340,12 @@ export const products: Product[] = [
       width: 60,
       height: 50,
       depth: 40,
-      plintHeight: 2
+      plintHeight: 2,
     },
     color: '#d6d6d6',
     price: 3180,
 
-    imageCarousel: [
-      '/bedside/White/maner/Base 20/H400/600.png',
-    ],
+    imageCarousel: ['/bedside/White/maner/Base 20/H400/600.png'],
     furniture: {
       openingType: 'maner',
       guides: 'homepage.configurator.fittings.guides.options.1',

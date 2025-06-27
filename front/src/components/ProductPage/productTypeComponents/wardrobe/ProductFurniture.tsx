@@ -140,7 +140,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
         </h4>
         <div className={styles.modalChildren}>
           <img
-            src="/wardrobe/hinges-tooltip-onhover.png"
+            src="/wardrobe/hinges-tooltip-onhover.jpg"
             alt="base tooltip"
             className={styles.modalImg}
           ></img>
