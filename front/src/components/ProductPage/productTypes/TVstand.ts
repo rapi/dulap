@@ -149,8 +149,8 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       type: 'imageCarousel',
       images: [
         `/tv-stand/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}-${selectedSections}.png`,
-        `/tv-stand/renders/${imageColor}-1.png`,
-        `/tv-stand/renders/${imageColor}-2.png`,
+        `/tv-stand/renders/${imageColor} 1.png`,
+        `/tv-stand/renders/${imageColor} 2.png`,
       ],
     },
   ]
