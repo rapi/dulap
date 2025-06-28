@@ -12,6 +12,7 @@ import axios from 'axios'
 const PROMO_CODES = [
   { code: 'PROMO10', discount: 10 },
   { code: 'PREORDER10', discount: 10 },
+  { code: 'FAN15', discount: 15 },
 ]
 
 export const Checkout: FC = () => {
@@ -555,7 +556,9 @@ export const Checkout: FC = () => {
                 <CustomButton size="medium" onClick={handlePlaceOrder}>
                   <FormattedMessage id="homepage.button.placeOrder" />
                 </CustomButton>
-                <p className={styles.attentionMessage}><FormattedMessage id="checkout.message.attentionOrderDetails" /></p>
+                <p className={styles.attentionMessage}>
+                  <FormattedMessage id="checkout.message.attentionOrderDetails" />
+                </p>
                 <div>
                   {commonError && <p className={styles.error}>{commonError}</p>}
                 </div>
