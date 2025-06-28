@@ -10,6 +10,7 @@ interface CustomButtonProps {
   size?: 'small' | 'medium' | 'large'
   variant?: 'primary' | 'danger' | 'grey'
   onClick?: () => void
+  disabled?: boolean
 }
 export const CustomButton: FC<CustomButtonProps> = ({
   children,
@@ -19,6 +20,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
   href,
   variant = 'primary',
   onClick,
+  disabled = false,
 }) => {
   if (!children && icon) {
     return (
@@ -47,6 +49,7 @@ export const CustomButton: FC<CustomButtonProps> = ({
           classes[`${variant}Variant`],
         ])}
         size={size}
+        disabled={disabled}
         {...additionalProps}
       >
         <p className={classes.ctaButtonTitle}>{children}</p>

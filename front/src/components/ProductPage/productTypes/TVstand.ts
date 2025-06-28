@@ -16,7 +16,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
   const [openingOption, setOpeningOption] = useState('push')
   const [imageColor, setImageColor] = useState('White')
   const [imageWidth, setImageWidth] = useState(1000)
-  const [imageHeight, setImageHeight] = useState(900)
+  const [imageHeight, setImageHeight] = useState(400)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
 
   const price = useMemo(() => {
