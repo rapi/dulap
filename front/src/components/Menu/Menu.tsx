@@ -17,8 +17,7 @@ import { Badge } from '@mui/material'
 
 export const Menu: React.FC = () => {
   const router = useRouter()
-  // const { asPath, query } = router
-    const { locale, pathname, asPath } = router
+  const { asPath, query } = router
 
   const { itemCount } = useCart()
 
@@ -65,14 +64,14 @@ export const Menu: React.FC = () => {
   }
   const handleClose = () => setAnchorEl(null)
 
-  // const handleLocaleChange = (newLocale: string) => {
-  //   const pathWithoutLocale = asPath.replace(/^\/(ro|ru)/, '')
-  //   router.push(`/${newLocale}${pathWithoutLocale}`)
-  // }
   const handleLocaleChange = (newLocale: string) => {
-    // Next.js will automatically swap out the locale segment
-    router.push(pathname, asPath, { locale: newLocale })
+    const pathWithoutLocale = asPath.replace(/^\/(ro|ru)/, '')
+    router.push(`/${newLocale}${pathWithoutLocale}`)
   }
+  // const handleLocaleChange = (newLocale: string) => {
+  //   // Next.js will automatically swap out the locale segment
+  //   router.push(pathname, asPath, { locale: newLocale })
+  // }
 
   return (
     <header className={headerClass}>
@@ -110,7 +109,7 @@ export const Menu: React.FC = () => {
             fontFamily: 'Onest, sans-serif',
           }}
         >
-          {/* <MenuItem onClick={handleClose}>
+          <MenuItem onClick={handleClose}>
             <Select
               options={['ro', 'ru']}
               defaultValue={(query.locale as string) ?? 'ro'}
@@ -118,18 +117,8 @@ export const Menu: React.FC = () => {
               size="small"
             />
             
-          </MenuItem> */}
-          <MenuItem>
-            <Select
-              options={['ro','ru']}
-              value={locale ?? 'ro'}
-              onChange={(newLocale) => {
-                handleLocaleChange(newLocale)
-                handleClose()    // ← close once a locale is picked
-              }}
-              size="small"
-            />
           </MenuItem>
+        
           <MenuItem
             onClick={() => {
               handleClose()
@@ -194,15 +183,9 @@ export const Menu: React.FC = () => {
             <FormattedMessage id="homepage.button.yourWardrobe" />
           </CustomButton>
 
-          {/* <Select
-            options={['ro', 'ru']}
-            defaultValue={(query.locale as string) ?? 'ro'}
-            onChange={handleLocaleChange}
-            size="small"
-          /> */}
           <Select
             options={['ro', 'ru']}
-            value={locale ?? 'ro'}
+            defaultValue={(query.locale as string) ?? 'ro'}
             onChange={handleLocaleChange}
             size="small"
           />
