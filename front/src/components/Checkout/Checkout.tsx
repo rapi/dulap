@@ -13,6 +13,7 @@ const PROMO_CODES = [
   { code: 'PROMO10', discount: 10 },
   { code: 'PREORDER10', discount: 10 },
   { code: 'FAN15', discount: 15 },
+  { code: 'BIRTHDAY20', discount: 20 },
 ]
 
 export const Checkout: FC = () => {
@@ -172,9 +173,13 @@ export const Checkout: FC = () => {
       items: JSON.stringify(items),
       name,
       phone,
+      email,
       city,
       fullAddress,
       comment,
+      assemblyCost,
+      discountPercent,
+      totalToPay
     })
     setOrderPlaced(true)
     clearCart()
