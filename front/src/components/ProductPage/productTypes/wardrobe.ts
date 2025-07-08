@@ -216,7 +216,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     {
       type: 'dimensions',
       widthRange: [40, 250],
-      heightRange: [190, 240],
+      heightRange: [190, 270],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
       width,
