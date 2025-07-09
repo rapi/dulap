@@ -6,7 +6,7 @@ import { StandProductConfigurator } from '~/components/ProductPage/productTypes/
 export const preview = {
   name: 'products.stand.1.name',
   link: '/product/stand/1',
-  src: '/stand/Biege/push/Base 20/H700/S4/800.png',
+  src: '/ready-products/stand/800 stand_2.png',
   dimensions: '90x70x40',
   color: '#ded9d3',
   price: 5640,
@@ -19,15 +19,13 @@ const Product: FC = () => {
         components={StandProductConfigurator}
         name={preview.name}
         values={{
-          imageCarousel: [
-            '/stand/Biege/push/Base 20/H700/S4/800.png',
-          ],
+          imageCarousel: ['/ready-products/stand/800 stand_2.png'],
           colors: preview.color,
           dimensions: {
             width: 90,
             height: 70,
             depth: 40,
-            plintHeight: 2
+            plintHeight: 2,
           },
           furniture: {
             openingType: 'push',

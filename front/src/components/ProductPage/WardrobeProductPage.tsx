@@ -33,7 +33,7 @@ import {
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductPrice'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
-import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductConfiguratorInfo'
+import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
@@ -131,8 +131,9 @@ export const ProductPage: FC<ProductPageProps> = ({
     window.scrollTo(0, 0)
   }, [])
 
-  const router = useRouter();
-  const route = router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ""
+  const router = useRouter()
+  const route =
+    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
   return (

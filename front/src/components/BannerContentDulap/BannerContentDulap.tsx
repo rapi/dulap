@@ -31,11 +31,11 @@ export const BannerContent = () => {
         </CustomButton>
       </div>
 
-      <div>
-        <p className={classes.heroComment}>
-          <FormattedMessage id="homepage.banner.comment" />
-        </p>
-      </div>
+      {/*<div>*/}
+      {/*  <p className={classes.heroComment}>*/}
+      {/*    <FormattedMessage id="homepage.banner.comment" />*/}
+      {/*  </p>*/}
+      {/*</div>*/}
     </div>
   )
 }
