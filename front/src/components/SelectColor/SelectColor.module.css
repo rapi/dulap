@@ -33,3 +33,13 @@
   border: 1px solid #444;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 2px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
+
+/* special add-button styling */
+.addCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  font-size: 1.2em;
+  /* maybe a dashed border, etc */
+}
