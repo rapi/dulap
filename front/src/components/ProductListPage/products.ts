@@ -46,7 +46,7 @@ export const products: Product[] = [
     id: '1',
     name: 'products.wardrobe.1.name',
     link: '/product/wardrobe/1',
-    src: '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+    src: '/ready-products/wardrobe/1600-3_2.png',
     dimensions: {
       width: 150,
       height: 210,
@@ -80,7 +80,7 @@ export const products: Product[] = [
     id: '2',
     name: 'products.wardrobe.2.name',
     link: '/product/wardrobe/2',
-    src: '/wardrobe/White/maner/Base 20/H2100/right/500-1.png',
+    src: '/ready-products/wardrobe/500-1_2.png',
     dimensions: {
       width: 50,
       height: 210,
@@ -119,7 +119,7 @@ export const products: Product[] = [
     id: '3',
     name: 'products.wardrobe.3.name',
     link: '/product/wardrobe/3',
-    src: '/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png',
+    src: '/ready-products/wardrobe/2000-4_2.png',
     dimensions: {
       width: 200,
       height: 240,
@@ -168,7 +168,7 @@ export const products: Product[] = [
     id: '4',
     name: 'products.wardrobe.4.name',
     link: '/product/wardrobe/4',
-    src: '/wardrobe/Light Grey/push/Base 20/H2400/right/2500-5.png',
+    src: '/ready-products/wardrobe/2500-5_2.png',
     dimensions: {
       width: 240,
       height: 260,
@@ -228,7 +228,7 @@ export const products: Product[] = [
     id: '1',
     name: 'products.stand.1.name',
     link: '/product/stand/1',
-    src: '/stand/Biege/push/Base 20/H700/S4/800.png',
+    src: '/ready-products/stand/800 stand_2.png',
     dimensions: {
       width: 90,
       height: 70,
@@ -250,7 +250,7 @@ export const products: Product[] = [
     id: '2',
     name: 'products.stand.2.name',
     link: '/product/stand/2',
-    src: '/stand/White/maner/Base 20/H900/S3/600.png',
+    src: '/ready-products/stand/600 stand_2.png',
     dimensions: {
       width: 50,
       height: 110,
@@ -272,7 +272,7 @@ export const products: Product[] = [
     id: '1',
     name: 'products.tvstand.1.name',
     link: '/product/tv-stand/1',
-    src: '/tv-stand/Grey/push/Base 20/H300/2000-4.png',
+    src: '/ready-products/tv-stand/2000-4 tv-stand_2.png',
     dimensions: {
       width: 200,
       height: 35,
@@ -293,7 +293,7 @@ export const products: Product[] = [
     id: '2',
     name: 'products.tvstand.2.name',
     link: '/product/tv-stand/2',
-    src: '/tv-stand/Light Grey/maner/Base 60/H400/1600-2.png',
+    src: '/ready-products/tv-stand/1600-2_2.png',
     dimensions: {
       width: 150,
       height: 45,
@@ -315,7 +315,7 @@ export const products: Product[] = [
     id: '1',
     name: 'products.bedside.1.name',
     link: '/product/bedside/1',
-    src: '/bedside/Biege/push/Base 20/H300/800.png',
+    src: '/ready-products/bedside/800 bedside_2.png',
     dimensions: {
       width: 80,
       height: 30,
@@ -335,7 +335,7 @@ export const products: Product[] = [
     id: '2',
     name: 'products.bedside.2.name',
     link: '/product/bedside/2',
-    src: '/bedside/White/maner/Base 20/H400/600.png',
+    src: '/ready-products/bedside/600 bedside_2.png',
     dimensions: {
       width: 60,
       height: 50,

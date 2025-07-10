@@ -26,6 +26,7 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/TVstand/ProductPrice'
+import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import {
   ProductImageCarousel,
@@ -34,6 +35,7 @@ import {
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
+import { useRouter } from 'next/router'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -115,6 +117,12 @@ export const ProductPage: FC<ProductPageProps> = ({
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  const router = useRouter()
+  const route =
+    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
+  const configuratorRoute = '/configurator' + route
+
   return (
     <>
       {/* Left Side: Image */}
@@ -152,6 +160,9 @@ export const ProductPage: FC<ProductPageProps> = ({
             configuration={priceComponent}
             predefinedValue={values?.price ?? undefined}
           />
+        )}
+        {values != null && (
+          <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
         )}
         <ProductInfobox />
       </div>

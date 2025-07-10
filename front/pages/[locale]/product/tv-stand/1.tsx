@@ -6,7 +6,8 @@ import { TVStandProductConfigurator } from '~/components/ProductPage/productType
 export const preview = {
   name: 'products.stand.1.name',
   link: '/product/stand/1',
-  src: '/tv-stand/Grey/push/Base 20/H300/2000-4.png',
+  // src: '/tv-stand/Grey/push/Base 20/H300/2000-4.png',
+  src: '/ready-products/tv-stand/2000-4 tv-stand_2.png',
   dimensions: '200x35x40',
   color: '#9c9c9c',
   price: 7900,
@@ -19,15 +20,13 @@ const Product: FC = () => {
         components={TVStandProductConfigurator}
         name={preview.name}
         values={{
-          imageCarousel: [
-            '/stand/Biege/push/Base 20/H700/S4/800.png',
-          ],
+          imageCarousel: ['/ready-products/tv-stand/2000-4 tv-stand_2.png'],
           colors: preview.color,
           dimensions: {
             width: 200,
             height: 35,
             depth: 40,
-            plintHeight: 2
+            plintHeight: 2,
           },
           furniture: {
             openingType: 'push',

@@ -6,7 +6,8 @@ import { WardrobeProductConfiguration } from '~/components/ProductPage/productTy
 export const preview = {
   name: 'products.wardrobe.3.name',
   link: '/product/wardrobe/4',
-  src: '/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png',
+  // src: '/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png',
+  src: '/ready-products/wardrobe/2000-4_2.png',
   dimensions: '200x240x50',
   color: '#9c9c9c',
   price: 11810,
@@ -19,15 +20,13 @@ const Product: FC = () => {
         components={WardrobeProductConfiguration}
         name={preview.name}
         values={{
-          imageCarousel: [
-            '/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png',
-          ],
+          imageCarousel: ['/ready-products/wardrobe/2000-4_2.png'],
           colors: preview.color,
           dimensions: {
             width: 200,
             height: 240,
             depth: 50,
-            plintHeight: 6
+            plintHeight: 6,
           },
           furniture: {
             openingType: 'maner',

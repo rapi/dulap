@@ -6,7 +6,7 @@ import { StandProductConfigurator } from '~/components/ProductPage/productTypes/
 export const preview = {
   name: 'products.stand.2.name',
   link: '/product/stand/2',
-  src: '/stand/White/maner/Base 20/H900/S3/600.png',
+  src: '/ready-products/stand/600 stand_2.png',
   dimensions: '50x110x40',
   color: '#fcfbf5',
   price: 4050,
@@ -19,15 +19,13 @@ const Product: FC = () => {
         components={StandProductConfigurator}
         name={preview.name}
         values={{
-          imageCarousel: [
-            '/stand/White/maner/Base 20/H900/S3/600.png',
-          ],
+          imageCarousel: ['/ready-products/stand/600 stand_2.png'],
           colors: preview.color,
           dimensions: {
             width: 50,
             height: 110,
             depth: 40,
-            plintHeight: 2
+            plintHeight: 2,
           },
           furniture: {
             openingType: 'maner',

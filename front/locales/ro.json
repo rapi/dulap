@@ -15,7 +15,7 @@
   "homepage.banner.comment": "Lansarea: 10 iulie 2025",
 
   "homepage.modal.promo.title": "Promocod de -10% pentru tine!",
-  "homepage.modal.promo.preorder10": "PREORDER10",
+  "homepage.modal.promo.preorder10": "LAUNCH10",
   "homepage.modal.promo.buttonCopy": "Copiază și închide",
 
   "homepage.button.tryIt": "Încearcă aici",
@@ -30,7 +30,7 @@
   "homepage.button.openCart": "Vezi coșul",
   "homepage.button.backToPurchase": "Înapoi la cumpărături",
   "homepage.button.ok": "OK",
-  "homepage.button.preorder": "Precomandă",
+  "homepage.button.preorder": "Comandă",
   "homepage.copyButton.copy": "Copiază",
   "homepage.copyButton.coppied": "Copiat !",
 
@@ -236,7 +236,7 @@
   "checkout.error.required": "Acest câmp este obligatoriu",
   "checkout.error.onSubmit": "Completați toate câmpurile pentru a finaliza comanda.",
 
-  "checkout.message.attentionOrderDetails": "Atenție! Comenzile vor fi puse în lucru începând cu data de 10 iulie, după lansarea oficială dulap.md. Termenul de execuție - 10 zile lucrătoare.",
+  "checkout.message.attentionOrderDetails": "După plasarea comenzii, te vom contacta să confirmăm toate detaliile. Termenul de execuție - 10 zile lucrătoare.",
 
   "checkout.modal.title": "Yay! Comanda a fost plasată",
   "checkout.modal.message": "În scurt timp revenim cu un apel pentru confirmarea detaliilor comenzii!",

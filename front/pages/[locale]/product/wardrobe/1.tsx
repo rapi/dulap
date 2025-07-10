@@ -6,7 +6,8 @@ import { WardrobeProductConfiguration } from '~/components/ProductPage/productTy
 export const preview = {
   name: 'products.wardrobe.1.name',
   link: '/product/wardrobe/2',
-  src: '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+  // src: '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+  src: '/ready-products/wardrobe/1600-3_2.png',
   dimensions: '150x210x50',
   color: '#ded9d3',
   price: 8530,
@@ -20,14 +21,15 @@ const Product: FC = () => {
         name={preview.name}
         values={{
           imageCarousel: [
-            '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+            // '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
+            '/ready-products/wardrobe/1600-3_2.png',
           ],
           colors: preview.color,
           dimensions: {
             width: 150,
             height: 210,
             depth: 50,
-            plintHeight: 5
+            plintHeight: 5,
           },
           furniture: {
             openingType: 'maner',
