@@ -77,7 +77,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       setImageColor('Light Grey')
     } else if (selectedColor === '#9c9c9c') {
       setImageColor('Grey')
-    } else setImageColor('Dark Grey')
+    } else setImageColor('White')
   }, [selectedColor])
 
   return [

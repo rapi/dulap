@@ -43,6 +43,7 @@ export const ProductColors: FC<ProductColorsProps> = ({
           }}
           defaultSelected={configuration.selectedColor}
           size="medium"
+          showAdd
         />
       </label>
     </>

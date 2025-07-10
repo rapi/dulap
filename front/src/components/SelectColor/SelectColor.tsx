@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react'
 import styles from './SelectColor.module.css'
 import classNames from 'classnames'
 import { Modal } from '~/components/Modal/Modal'
+import AddIcon from '@mui/icons-material/Add';
+import { grey } from '@mui/material/colors';
+import { FormattedMessage } from 'react-intl'
 
 interface SelectColorProps {
   colors: string[]
@@ -10,7 +13,7 @@ interface SelectColorProps {
   size?: 'small' | 'medium' | 'large'
   addIcon?: React.ReactNode
   onAddClick?: () => void
-  hideAdd?: boolean
+  showAdd?: boolean
 }
 
 interface SelectColorItemProps {
@@ -18,11 +21,11 @@ interface SelectColorItemProps {
   isAdd?: boolean
   icon?: React.ReactNode
   selected: boolean
-  onClick?: (color?: string) => void
+  onClick?: (color?: string, e?: React.MouseEvent) => void
   size?: 'small' | 'medium' | 'large'
 }
 
-const PALETTE = ['#333', '#666', '#999']
+const PALETTE = ['#d7cabc', '#e6d7c2', '#90916f', '#c9d2c1', '#685950', '#847a6e', '#a29587']
 
 export const SelectColorItem: React.FC<SelectColorItemProps> = ({
   color,
@@ -33,9 +36,8 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
   onClick,
 }) => {
   const handleClick = (e: React.MouseEvent) => {
-    // prevent the click from reaching the backdrop!
-    e.stopPropagation();
-    onClick?.(color);
+    e.stopPropagation()
+    onClick?.(color, e)
   };
   
   return (
@@ -59,8 +61,8 @@ const SelectColor: React.FC<SelectColorProps> = ({
   defaultSelected,
   onChange,
   size = 'medium',
-  hideAdd = false,
-  addIcon = '+',
+  showAdd = false,
+  addIcon = <AddIcon fontSize='small' sx={{ color: grey[600]}}/>,
   onAddClick,
 }) => {
   const [colors, setColors] = useState(initialColors)
@@ -76,14 +78,17 @@ const SelectColor: React.FC<SelectColorProps> = ({
     onChange(c)
   }
 
-  const handleAdd = () => {
-    if (onAddClick) return onAddClick()
-    setModalOpen(true)
-  }
+  const handleAdd = (_c?: string, e?: React.MouseEvent) => {
+    if (onAddClick) {
+      return onAddClick()
+    }
+    e?.stopPropagation()
+    setTimeout(() => setModalOpen(true), 0)
+   }
 
   const handleModalPick = (newColor: string) => {
     setModalOpen(false)
-    setColors((prev) => [...prev, newColor])
+    setColors([...initialColors, newColor])
     handleSelect(newColor)
   }
 
@@ -99,7 +104,7 @@ const SelectColor: React.FC<SelectColorProps> = ({
         />
       ))}
 
-      {!hideAdd && (
+      {showAdd  && (
         <SelectColorItem
           isAdd
           icon={addIcon}
@@ -108,15 +113,17 @@ const SelectColor: React.FC<SelectColorProps> = ({
           onClick={handleAdd}
         />
       )}
-
       
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-        <SelectColor
-          colors={PALETTE}
-          onChange={handleModalPick}
-          size={size}
-          hideAdd
-        />
+        <h3><FormattedMessage id="selectColor.modal.title"/></h3>
+        <div className={styles.modalColorsContainer}>
+          <SelectColor
+            colors={PALETTE}
+            onChange={handleModalPick}
+            size='large'
+          />
+        </div>
+        
       </Modal>
     </div>
   )
