@@ -4,25 +4,25 @@ import { useEffect } from 'react'
 import {
   ProductDimensions,
   ProductDimensionsComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductDimensions'
+} from '~/components/ProductPage/productTypeComponents/bedside/ProductDimensions'
 import {
   ProductColors,
   ProductColorsComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductColors'
+} from '~/components/ProductPage/productTypeComponents/ProductColors'
 import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductFurniture'
+} from '~/components/ProductPage/productTypeComponents/bedside/ProductFurniture'
 import {
   ProductPrice,
   ProductPriceComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductPrice'
+} from '~/components/ProductPage/productTypeComponents/bedside/ProductPrice'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
+} from '~/components/ProductPage/productTypeComponents/bedside/ProductImageCarousel'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
@@ -137,7 +137,6 @@ export const ProductPage: FC<ProductPageProps> = ({
         {values != null && (
           <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
         )}
-        <ProductInfobox />
         <ProductInfobox />
       </div>
     </>

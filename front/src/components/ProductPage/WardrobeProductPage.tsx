@@ -13,7 +13,7 @@ import {
 import {
   ProductColors,
   ProductColorsComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductColors'
+} from '~/components/ProductPage/productTypeComponents/ProductColors'
 import {
   ProductSelect,
   ProductSelectComponent,

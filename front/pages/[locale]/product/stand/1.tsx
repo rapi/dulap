@@ -8,7 +8,7 @@ export const preview = {
   link: '/product/stand/1',
   src: '/ready-products/stand/800 stand_2.png',
   dimensions: '90x70x40',
-  color: '#ded9d3',
+  color: 'Biege',
   price: 5640,
 }
 

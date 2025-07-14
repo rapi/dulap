@@ -9,7 +9,7 @@ export const preview = {
   // src: '/wardrobe/Grey/maner/Base 60/H2400/right/2000-4.png',
   src: '/ready-products/wardrobe/2000-4_2.png',
   dimensions: '200x240x50',
-  color: '#9c9c9c',
+  color: 'Grey',
   price: 11810,
 }
 

@@ -8,7 +8,7 @@ export const preview = {
   link: '/product/stand/2',
   src: '/ready-products/tv-stand/1600-2_2.png',
   dimensions: '150x45x40',
-  color: '#d6d6d6',
+  color: 'Light Grey',
   price: 5100,
 }
 

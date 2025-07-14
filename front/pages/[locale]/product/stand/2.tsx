@@ -8,7 +8,7 @@ export const preview = {
   link: '/product/stand/2',
   src: '/ready-products/stand/600 stand_2.png',
   dimensions: '50x110x40',
-  color: '#fcfbf5',
+  color: 'White',
   price: 4050,
 }
 

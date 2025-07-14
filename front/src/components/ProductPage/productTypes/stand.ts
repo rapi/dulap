@@ -68,14 +68,26 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     setGuides(guides)
   }, [guides])
 
+  // useEffect(() => {
+  //   if (selectedColor === '#ded9d3') {
+  //     setImageColor('Biege')
+  //   } else if (selectedColor === '#fcfbf5') {
+  //     setImageColor('White')
+  //   } else if (selectedColor === '#d6d6d6') {
+  //     setImageColor('Light Grey')
+  //   } else if (selectedColor === '#9c9c9c') {
+  //     setImageColor('Grey')
+  //   } else setImageColor('White')
+  // }, [selectedColor])
+
   useEffect(() => {
-    if (selectedColor === '#ded9d3') {
+    if (selectedColor === 'Biege') {
       setImageColor('Biege')
-    } else if (selectedColor === '#fcfbf5') {
+    } else if (selectedColor === 'White') {
       setImageColor('White')
-    } else if (selectedColor === '#d6d6d6') {
+    } else if (selectedColor === 'Light Grey') {
       setImageColor('Light Grey')
-    } else if (selectedColor === '#9c9c9c') {
+    } else if (selectedColor === 'Grey') {
       setImageColor('Grey')
     } else setImageColor('White')
   }, [selectedColor])
@@ -98,7 +110,20 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     },
     {
       type: 'colors',
-      colors: ['#ded9d3', '#fcfbf5', '#d6d6d6', '#9c9c9c'],
+      // colors: [
+      //   '#ded9d3',
+      //   '#fcfbf5',
+      //   '#d6d6d6',
+      //   '#9c9c9c',
+      //   // '#7a7a7a'
+      // ],
+      colors: [
+        'Biege',
+        'White',
+        'Light Grey',
+        'Grey',
+        // '#7a7a7a'
+      ],
       selectedColor,
       setSelectedColor,
     },

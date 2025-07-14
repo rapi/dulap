@@ -9,7 +9,7 @@ export const preview = {
   // src: '/wardrobe/Biege/maner/Base 60/H2100/right/1600-3.png',
   src: '/ready-products/wardrobe/1600-3_2.png',
   dimensions: '150x210x50',
-  color: '#ded9d3',
+  color: 'Biege',
   price: 8530,
 }
 

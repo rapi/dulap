@@ -1,4 +1,3 @@
-/* SelectColor.module.css */
 .container {
   display: flex;
   gap: 4px;
@@ -6,6 +5,7 @@
 }
 
 .colorCircle {
+  position: relative;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -17,13 +17,11 @@
 .smallSize {
   width: 30px;
   height: 30px;
-  border: 1px solid #b4b4b4;
 }
 
 .largeSize {
   width: 50px;
   height: 50px;
-  border: 1px solid #b4b4b4;
 }
 
 .colorCircle:hover {
@@ -32,10 +30,42 @@
 
 .selected {
   border: 1px solid #222;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 2px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  box-shadow:
+    rgba(0, 0, 0, 0.12) 0px 1px 2px,
+    rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
 
-/* special add-button styling */
+/* 1) Initial (hidden) tooltip state */
+.colorCircle[data-tooltip-name]::after {
+  /* content: ''; */
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  opacity: 0;
+  white-space: pre;         /* allow newline */
+  background-color: #555;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  text-align: center;       /* center lines */
+  pointer-events: none;
+  transition:
+    opacity 0.9s ease;
+    /* transform 0.3s ease; */
+}
+
+/* 2) On hover, inject content & animate in */
+.colorCircle[data-tooltip-name]:hover::after {
+  content:
+    attr(data-tooltip-name) "\A"
+    attr(data-tooltip-code);
+  opacity: 1;
+  transform: translateX(-50%) translateY(-6px);
+}
+
+/* special add‑button styling */
 .addCircle {
   display: flex;
   align-items: center;

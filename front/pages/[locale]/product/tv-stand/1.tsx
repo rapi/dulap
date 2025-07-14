@@ -9,7 +9,7 @@ export const preview = {
   // src: '/tv-stand/Grey/push/Base 20/H300/2000-4.png',
   src: '/ready-products/tv-stand/2000-4 tv-stand_2.png',
   dimensions: '200x35x40',
-  color: '#9c9c9c',
+  color: 'Grey',
   price: 7900,
 }
 

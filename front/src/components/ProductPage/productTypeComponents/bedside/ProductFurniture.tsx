@@ -34,9 +34,6 @@ export type ProductFurniturePredefinedValue = {
   guides:
     | 'homepage.configurator.fittings.guides.options.1'
     | 'homepage.configurator.fittings.guides.options.2'
-  hinges:
-    | 'homepage.configurator.fittings.hinges.options.1'
-    | 'homepage.configurator.fittings.hinges.options.2'
 }
 export const ProductFurniture: FC<ProductSelectProps> = ({
   configuration,

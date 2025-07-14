@@ -4,11 +4,11 @@ import { ProductPage } from '~/components/ProductPage/BedsideProductPage'
 import { BedsideProductConfigurator } from '~/components/ProductPage/productTypes/bedside'
 
 export const preview = {
-  name: 'products.stand.1.name',
-  link: '/product/stand/1',
+  name: 'products.bedside.1.name',
+  link: '/product/bedside/1',
   src: '/ready-products/bedside/600 bedside_2.png',
   dimensions: '60x50x40',
-  color: '#d6d6d6',
+  color: 'White',
   price: 3180,
 }
 

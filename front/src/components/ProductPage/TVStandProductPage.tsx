@@ -8,7 +8,7 @@ import {
 import {
   ProductColors,
   ProductColorsComponent,
-} from '~/components/ProductPage/productTypeComponents/TVstand/ProductColors'
+} from '~/components/ProductPage/productTypeComponents/ProductColors'
 import {
   ProductSelect,
   ProductSelectComponent,

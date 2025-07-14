@@ -98,13 +98,13 @@
   "products.wardrobe.4.name": "Шкаф для вещей 240см",
 
   "products.stand.1.name": "Комод 90см",
-  "products.stand.2.name": "Комод 90см",
+  "products.stand.2.name": "Комод 50см",
 
-  "products.tvStand.1.name": "Тумба ТВ 90см",
-  "products.tvStand.2.name": "Тумба ТВ 90см",
+  "products.tvstand.1.name": "Тумба ТВ 200см",
+  "products.tvstand.2.name": "Тумба ТВ 150см",
 
-  "products.bedside.1.name": "Тумбочка 90см",
-  "products.bedside.2.name": "Тумбочка 90см",
+  "products.bedside.1.name": "Тумбочка 80см",
+  "products.bedside.2.name": "Тумбочка 60см",
 
   "homepage.configurator.breadcrumb.1": "Главная страница",
   "homepage.configurator.breadcrumb.2": "Товары",

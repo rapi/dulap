@@ -1,45 +1,51 @@
-import React, { useState, useEffect } from 'react'
-import styles from './SelectColor.module.css'
+import React, { useState } from 'react'
 import classNames from 'classnames'
+import styles from './SelectColor.module.css'
+import { getColorItemByName, ColorItem } from '~/utils/colorDictionary'
 import { Modal } from '~/components/Modal/Modal'
-import AddIcon from '@mui/icons-material/Add';
-import { grey } from '@mui/material/colors';
+import AddIcon from '@mui/icons-material/Add'
+import { grey } from '@mui/material/colors'
 import { FormattedMessage } from 'react-intl'
 
 interface SelectColorProps {
   colors: string[]
   defaultSelected?: string
-  onChange: (color: string) => void
+  onChange: (colorName: string) => void
   size?: 'small' | 'medium' | 'large'
+  showAdd?: boolean
   addIcon?: React.ReactNode
   onAddClick?: () => void
-  showAdd?: boolean
 }
 
 interface SelectColorItemProps {
-  color?: string
+  hexCode?: string
+  name?: string
+  materialCode?: string
   isAdd?: boolean
   icon?: React.ReactNode
   selected: boolean
-  onClick?: (color?: string, e?: React.MouseEvent) => void
   size?: 'small' | 'medium' | 'large'
+  onClick?: (name?: string, e?: React.MouseEvent<HTMLDivElement>) => void
 }
 
-const PALETTE = ['#d7cabc', '#e6d7c2', '#90916f', '#c9d2c1', '#685950', '#847a6e', '#a29587']
+const PALETTE = [
+  'Dark Grey',
+  'Grey Cubanit', 
+  'Grey Stone', 
+  'Green Salvia',
+  'Green Eucalypt',
+  'Green Fjord',
+  'Biege Almond',
+  'Rose Antique'
+]
 
 export const SelectColorItem: React.FC<SelectColorItemProps> = ({
-  color,
-  isAdd,
-  icon,
-  selected,
-  size,
-  onClick,
+  hexCode, name, materialCode, isAdd, icon, selected, size, onClick
 }) => {
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    onClick?.(color, e)
-  };
-  
+    onClick?.(name, e)
+  }
   return (
     <div
       className={classNames(
@@ -48,8 +54,14 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
         selected && styles.selected,
         isAdd && styles.addCircle
       )}
-      style={!isAdd ? { backgroundColor: color } : undefined}
+      style={!isAdd && hexCode ? { backgroundColor: hexCode } : undefined}
       onClick={handleClick}
+      {...(!isAdd && name
+       ? {
+           'data-tooltip-name': name,
+           'data-tooltip-code': materialCode,
+         }
+       : {})}
     >
       {isAdd && icon}
     </div>
@@ -57,54 +69,67 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
 }
 
 const SelectColor: React.FC<SelectColorProps> = ({
-  colors: initialColors,
+  colors: colorNames,
   defaultSelected,
   onChange,
   size = 'medium',
   showAdd = false,
-  addIcon = <AddIcon fontSize='small' sx={{ color: grey[600]}}/>,
+  addIcon = <AddIcon fontSize="small" sx={{ color: grey[600] }}/>,
   onAddClick,
 }) => {
-  const [colors, setColors] = useState(initialColors)
-  const [selected, setSelected] = useState(defaultSelected || initialColors[0])
+  const initialItems: ColorItem[] = colorNames
+    .map(n => getColorItemByName(n))
+    .filter((i): i is ColorItem => !!i)
+
+  const [items, setItems] = useState<ColorItem[]>(initialItems)
+
+  const [selected, setSelected] = useState<string>(
+    defaultSelected && getColorItemByName(defaultSelected)
+      ? defaultSelected
+      : initialItems[0]?.name || ''
+  )
+
   const [isModalOpen, setModalOpen] = useState(false)
 
-  useEffect(() => {
-    console.log('modal open state changed:', isModalOpen)
-  }, [isModalOpen])
-
-  const handleSelect = (c: string) => {
-    setSelected(c)
-    onChange(c)
+  const handleSelect = (name?: string, e?: React.MouseEvent<HTMLDivElement>) => {
+    e?.stopPropagation()
+    if (!name) return
+    setSelected(name)
+    onChange(name)  
   }
 
-  const handleAdd = (_c?: string, e?: React.MouseEvent) => {
-    if (onAddClick) {
-      return onAddClick()
-    }
+  const handleAdd = (_?: string, e?: React.MouseEvent<HTMLDivElement>) => {
+    
+    if (onAddClick) return onAddClick()
     e?.stopPropagation()
     setTimeout(() => setModalOpen(true), 0)
-   }
+  }
 
-  const handleModalPick = (newColor: string) => {
+  const handleModalPick = (newName: string) => {
     setModalOpen(false)
-    setColors([...initialColors, newColor])
-    handleSelect(newColor)
+    const newItem = getColorItemByName(newName)
+    if (!newItem) return
+    if (!items.find(i => i.name === newItem.name)) {
+      setItems(prev => [...prev, newItem])
+    }
+    handleSelect(newName)
   }
 
   return (
     <div className={styles.container}>
-      {colors.map((c) => (
+      {items.map(c => (
         <SelectColorItem
-          key={c}
-          color={c}
+          key={c.materialCode}
+          hexCode={c.hexCode}
+          name={c.name}
+          materialCode={c.materialCode}
           size={size}
-          selected={selected === c}
-          onClick={() => handleSelect(c)}
+          selected={c.name === selected}
+          onClick={handleSelect}
         />
       ))}
 
-      {showAdd  && (
+      {showAdd && (
         <SelectColorItem
           isAdd
           icon={addIcon}
@@ -113,17 +138,17 @@ const SelectColor: React.FC<SelectColorProps> = ({
           onClick={handleAdd}
         />
       )}
-      
+
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
         <h3><FormattedMessage id="selectColor.modal.title"/></h3>
         <div className={styles.modalColorsContainer}>
           <SelectColor
             colors={PALETTE}
             onChange={handleModalPick}
-            size='large'
+            size="large"
+            showAdd={false}
           />
         </div>
-        
       </Modal>
     </div>
   )

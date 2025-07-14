@@ -8,7 +8,7 @@ export const preview = {
   link: '/product/stand/1',
   src: '/ready-products/bedside/800 bedside_2.png',
   dimensions: '80x30x40',
-  color: '#d6d6d6',
+  color: 'White',
   price: 2800,
 }
 
