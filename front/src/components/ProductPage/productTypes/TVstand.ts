@@ -22,7 +22,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
   const price = useMemo(() => {
     let fittingsPrice = 0
     if (guides === 'homepage.configurator.fittings.guides.options.2') {
-      fittingsPrice = selectedSections * 350
+      fittingsPrice = selectedSections * 390
     }
     return Math.round(
       (300 +
