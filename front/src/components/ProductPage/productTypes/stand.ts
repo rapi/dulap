@@ -1,5 +1,6 @@
 import { ProductComponent } from '~/components/ProductPage/StandProductPage'
 import { useState, useEffect, useMemo } from 'react'
+import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 
 export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(80)
@@ -17,6 +18,27 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [imageWidth, setImageWidth] = useState(1000)
   const [imageHeight, setImageHeight] = useState(900)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
+
+  const sectionOptions: ButtonOptionsType[] = useMemo(() => {
+   const disable34 = height >= 110
+   const disable5  = height < 110
+   return [
+     { value: '3', label: 3, disabled: disable34 },
+     { value: '4', label: 4, disabled: disable34 },
+     { value: '5', label: 5, disabled: disable5  },
+   ]
+ }, [height])
+
+ // if the current selection just got disabled, pick the first allowed one
+
+ useEffect(() => {
+   const nowDisabled = sectionOptions.find(o => o.value === String(selectedSections))?.disabled
+   if (nowDisabled) {
+     const firstAllowed = sectionOptions.find(o => !o.disabled)
+     if (firstAllowed) setSelectedSections(Number(firstAllowed.value))
+   }
+  console.log('sectionOptions', sectionOptions)
+ }, [sectionOptions, selectedSections])
 
   const price = useMemo(() => {
     let fittingsPrice = 0
@@ -45,7 +67,9 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   useEffect(() => {
     if (height < 90) {
       setImageHeight(700)
-    } else setImageHeight(900)
+    } else if (height < 110) {
+      setImageHeight(900)
+    } else setImageHeight(1200)
   }, [height])
 
   useEffect(() => {
@@ -96,7 +120,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'dimensions',
       widthRange: [50, 120],
-      heightRange: [70, 110],
+      heightRange: [70, 130],
       depthRange: [30, 50],
       plintHeightRange: [2, 10],
       width,
@@ -131,6 +155,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       type: 'sections',
       selectedSections,
       setSelectedSections,
+      options: sectionOptions,
     },
     {
       type: 'furniture',

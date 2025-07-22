@@ -38,7 +38,7 @@
   cursor: auto;
 }
 
-.disabled {
+.button.disabled {
   color: #ebebeb;
   pointer-events: none;
 }

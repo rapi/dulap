@@ -32,8 +32,6 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   predefinedValue,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  // const [predefinedWidth, predefinedHeight, predefinedDepth, predefinedPlint] =
-  //   predefinedValue?.split('x') ?? []
   return (
     <>
       <h3 className={styles.dimensionsHeaderTitle}>

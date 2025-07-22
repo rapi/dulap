@@ -17,7 +17,7 @@ import {
 import {
   ProductSelect,
   ProductSelectComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSelect'
+} from '~/components/ProductPage/productTypeComponents/ProductSelect'
 import {
   ProductFurniture,
   ProductFurnitureComponent,
@@ -31,7 +31,7 @@ import {
 import {
   ProductPrice,
   ProductPriceComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductPrice'
+} from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import {

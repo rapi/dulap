@@ -17,7 +17,7 @@ import {
 import {
   ProductPrice,
   ProductPriceComponent,
-} from '~/components/ProductPage/productTypeComponents/bedside/ProductPrice'
+} from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import {
   ProductImageCarousel,

@@ -12,11 +12,12 @@ import {
 import {
   ProductSelect,
   ProductSelectComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductSelect'
+} from '~/components/ProductPage/productTypeComponents/ProductSelect'
 import {
   ProductSections,
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
+import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import {
   ProductFurniture,
   ProductFurnitureComponent,
@@ -25,7 +26,7 @@ import {
 import {
   ProductPrice,
   ProductPriceComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductPrice'
+} from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import {
@@ -84,10 +85,14 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'sections':
+        const compWithOpts = component as ProductSectionsComponent & {
+        options?: ButtonOptionsType[]
+        }
         return (
           <ProductSections
-            configuration={component}
+            configuration={compWithOpts}
             predefinedValue={values?.[component.type] ?? undefined}
+            options={compWithOpts.options}
           />
         )
       case 'select':

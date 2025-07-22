@@ -12,7 +12,7 @@ import {
 import {
   ProductSelect,
   ProductSelectComponent,
-} from '~/components/ProductPage/productTypeComponents/TVstand/ProductSelect'
+} from '~/components/ProductPage/productTypeComponents/ProductSelect'
 import {
   ProductSections,
   ProductSectionsComponent,
@@ -25,7 +25,7 @@ import {
 import {
   ProductPrice,
   ProductPriceComponent,
-} from '~/components/ProductPage/productTypeComponents/TVstand/ProductPrice'
+} from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import {
