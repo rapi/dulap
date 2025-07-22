@@ -121,7 +121,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       type: 'dimensions',
       widthRange: [50, 120],
       heightRange: [70, 130],
-      depthRange: [30, 50],
+      depthRange: [35, 50],
       plintHeightRange: [2, 10],
       width,
       setWidth,

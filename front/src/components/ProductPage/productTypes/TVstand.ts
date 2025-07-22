@@ -121,7 +121,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       type: 'dimensions',
       widthRange: [80, 240],
       heightRange: [30, 60],
-      depthRange: [30, 50],
+      depthRange: [35, 50],
       plintHeightRange: [2, 10],
       width,
       setWidth,

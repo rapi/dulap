@@ -29,6 +29,7 @@ import {
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
+import { ProductHelpBox } from '~/components/ProductPage/productTypeComponents/ProductHelpBox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
@@ -169,6 +170,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {values != null && (
           <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
         )}
+        <ProductHelpBox />
         <ProductInfobox />
       </div>
     </>
