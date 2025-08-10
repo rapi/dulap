@@ -1,7 +1,6 @@
 import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import Script from 'next/script'
 import { useIntl } from 'react-intl'
 
 import { Menu } from '~/components/Menu/Menu'
