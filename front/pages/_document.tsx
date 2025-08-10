@@ -27,6 +27,15 @@ export default function Document() {
         />
         <link rel="icon" href="/wardrobe-button.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-K9E49M4GJ5"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-K9E49M4GJ5');
+        </script>
       </Head>
       <body>
         <Main />

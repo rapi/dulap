@@ -30,23 +30,6 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <>
-      {/* 1. Load GA library */}
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=495928571`}
-        strategy="afterInteractive"
-      />
-      {/* 2. Initialize gtag */}
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '495928571', {
-            page_path: window.location.pathname,
-          });
-        `}
-      </Script>
-
       <Head>
         <title>{title}</title>
         <meta
