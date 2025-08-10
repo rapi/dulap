@@ -32,7 +32,7 @@ export default function Layout({ children }: LayoutProps) {
     <>
       {/* 1. Load GA library */}
       <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_MEASUREMENT_ID}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=495928571`}
         strategy="afterInteractive"
       />
       {/* 2. Initialize gtag */}
@@ -41,7 +41,7 @@ export default function Layout({ children }: LayoutProps) {
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-          gtag('config', '${gtag.GA_MEASUREMENT_ID}', {
+          gtag('config', '495928571', {
             page_path: window.location.pathname,
           });
         `}
