@@ -13,8 +13,10 @@ export const Dulap: React.FC = () => {
   return (
     <div>
       <Banner
-        href={'/banner-wardrobe-2.png'}
-        mobileHref={'/banner-wardrobe-mobile.jpg'}
+        // href={'/banner-wardrobe-2.png'}
+        // mobileHref={'/banner-wardrobe-mobile.jpg'}
+        href={'/bedside/render/Biege 1.png'}
+        mobileHref={'/bedside/render/Biege 1.png'}
       />
       <section className={classes.productTypes}>
         <p className={classes.productTypesTitle}>

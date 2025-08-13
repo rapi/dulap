@@ -7,15 +7,19 @@ export const BannerContent = () => {
   return (
     <div className={classes.heroContent}>
       <div>
+        <p className={classes.heroHeader}>
+          <FormattedMessage
+            id="homepage.banner.header.0"
+          />
+        </p>
+      </div>
+      <div>
         <p className={classes.heroTitle}>
           <FormattedMessage
             id="homepage.banner.preorder.0"
-            // id="homepage.banner.title.0"
-            // defaultMessage="Dulapul tău -"
           />
         </p>
         <p className={classes.heroTitle}>
-          {/* <FormattedMessage id="homepage.banner.title.1" /> */}
           <FormattedMessage id="homepage.banner.preorder.1" />
         </p>
       </div>
