@@ -20,25 +20,27 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
 
   const sectionOptions: ButtonOptionsType[] = useMemo(() => {
-   const disable34 = height >= 110
-   const disable5  = height < 110
-   return [
-     { value: '3', label: 3, disabled: disable34 },
-     { value: '4', label: 4, disabled: disable34 },
-     { value: '5', label: 5, disabled: disable5  },
-   ]
- }, [height])
+    const disable34 = height >= 110
+    const disable5 = height < 110
+    return [
+      { value: '3', label: 3, disabled: disable34 },
+      { value: '4', label: 4, disabled: disable34 },
+      { value: '5', label: 5, disabled: disable5 },
+    ]
+  }, [height])
 
- // if the current selection just got disabled, pick the first allowed one
+  // if the current selection just got disabled, pick the first allowed one
 
- useEffect(() => {
-   const nowDisabled = sectionOptions.find(o => o.value === String(selectedSections))?.disabled
-   if (nowDisabled) {
-     const firstAllowed = sectionOptions.find(o => !o.disabled)
-     if (firstAllowed) setSelectedSections(Number(firstAllowed.value))
-   }
-  console.log('sectionOptions', sectionOptions)
- }, [sectionOptions, selectedSections])
+  useEffect(() => {
+    const nowDisabled = sectionOptions.find(
+      (o) => o.value === String(selectedSections)
+    )?.disabled
+    if (nowDisabled) {
+      const firstAllowed = sectionOptions.find((o) => !o.disabled)
+      if (firstAllowed) setSelectedSections(Number(firstAllowed.value))
+    }
+    console.log('sectionOptions', sectionOptions)
+  }, [sectionOptions, selectedSections])
 
   const price = useMemo(() => {
     let fittingsPrice = 0
@@ -173,9 +175,9 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'imageCarousel',
       images: [
-        `/stand/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/S${selectedSections}/${imageWidth}.png`,
-        `/stand/render/${imageColor} 1.png`,
-        `/stand/render/${imageColor} 2.png`,
+        `/stand2/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/S${selectedSections}/${imageWidth}.png`,
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
       ],
     },
   ]
