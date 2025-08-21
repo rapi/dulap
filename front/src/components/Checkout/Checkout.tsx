@@ -11,10 +11,10 @@ import Select from '~/components//Select/Select'
 import axios from 'axios'
 const PROMO_CODES = [
   { code: 'PROMO10', discount: 10 },
-  { code: 'PREORDER10', discount: 10 },
   { code: 'LAUNCH10', discount: 10 },
   { code: 'FAN15', discount: 15 },
   { code: 'BIRTHDAY20', discount: 20 },
+  { code: 'UP20', discount: 20 },
 ]
 
 export const Checkout: FC = () => {
