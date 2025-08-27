@@ -1,152 +1,86 @@
 import { ProductComponent } from '~/components/ProductPage/BedsideProductPage'
 import { useState, useEffect, useMemo } from 'react'
+import { 
+  useBaseProductConfigurator, 
+  createDimensionsComponent, 
+  createColorsComponent, 
+  createPriceComponent 
+} from '../shared/BaseProductConfigurator'
+import { BEDSIDE_CONSTRAINTS, BEDSIDE_PRICING } from '../shared/ProductConfigs'
 
 export const BedsideProductConfigurator: () => ProductComponent[] = () => {
-  const [width, setWidth] = useState(60)
-  const [height, setHeight] = useState(40)
-  const [depth, setDepth] = useState(40)
-  const [plintHeight, setPlintHeight] = useState(2)
-  const [selectedColor, setSelectedColor] = useState('#fcfbf5')
-  const [guides, setGuides] = useState(
-    'homepage.configurator.fittings.guides.options.1'
-  )
-
-  const [openingOption, setOpeningOption] = useState('push')
-  const [imageColor, setImageColor] = useState('White')
+  // Use shared base configurator
+  const base = useBaseProductConfigurator(BEDSIDE_CONSTRAINTS, BEDSIDE_PRICING)
+  
+  // Bedside-specific state
   const [hinges] = useState('standart')
 
-  const [imageWidth, setImageWidth] = useState(600)
-  const [imageHeight, setImageHeight] = useState(300)
-  const [imagePlintHeight, setImagePlintHeight] = useState(20)
+  // Bedside-specific image dimension logic
+  useEffect(() => {
+    if (base.height < 36) {
+      base.setImageHeight(300)
+    } else {
+      base.setImageHeight(400)
+    }
+  }, [base.height, base.setImageHeight])
 
-  const price = useMemo(() => {
+  useEffect(() => {
+    if (base.width < 50) {
+      base.setImageWidth(500)
+    } else if (base.width < 70) {
+      base.setImageWidth(600)
+    } else {
+      base.setImageWidth(800)
+    }
+  }, [base.width, base.setImageWidth])
+
+  // Bedside-specific price calculation
+  const bedsidePrice = useMemo(() => {
     let selectedSections = 1
-    if (height > 35) {
+    if (base.height > 35) {
       selectedSections = 2
     }
     let fittingsPrice = 0
-    if (guides === 'homepage.configurator.fittings.guides.options.2') {
-      fittingsPrice = selectedSections * 390
+    if (base.guides === 'homepage.configurator.fittings.guides.options.2') {
+      fittingsPrice = selectedSections * BEDSIDE_PRICING.fittingsCost
     }
     return Math.round(
-      (600 +
-        selectedSections * 600 +
-        width * 20 +
-        (height - 190) * 4.5 +
-        (depth - 30) * 8 +
+      (BEDSIDE_PRICING.baseCost +
+        selectedSections * BEDSIDE_PRICING.sectionCost +
+        base.width * BEDSIDE_PRICING.widthMultiplier +
+        (base.height - 190) * BEDSIDE_PRICING.heightMultiplier +
+        (base.depth - 30) * BEDSIDE_PRICING.depthMultiplier +
         fittingsPrice) *
-        1.3
+        BEDSIDE_PRICING.markup
     )
-  }, [width, height, depth, guides])
-
-  useEffect(() => {
-    if (plintHeight >= 2 && plintHeight < 5) {
-      setImagePlintHeight(20)
-    } else {
-      setImagePlintHeight(60)
-    }
-  }, [plintHeight])
-
-  useEffect(() => {
-    if (height < 36) {
-      setImageHeight(300)
-    } else setImageHeight(400)
-  }, [height])
-
-  useEffect(() => {
-    if (width < 50) {
-      setImageWidth(500)
-    } else if (width < 70) {
-      setImageWidth(600)
-    } else setImageWidth(800)
-  }, [width])
-
-  useEffect(() => {
-    setDepth(depth)
-  }, [depth])
-
-  useEffect(() => {
-    setGuides(guides)
-  }, [guides])
-
-  // useEffect(() => {
-  //   if (selectedColor === '#ded9d3') {
-  //     setImageColor('Biege')
-  //   } else if (selectedColor === '#fcfbf5') {
-  //     setImageColor('White')
-  //   } else if (selectedColor === '#d6d6d6') {
-  //     setImageColor('Light Grey')
-  //   } else if (selectedColor === '#9c9c9c') {
-  //     setImageColor('Grey')
-  //   } else setImageColor('White')
-  // }, [selectedColor])
-
-  useEffect(() => {
-    if (selectedColor === 'Biege') {
-      setImageColor('Biege')
-    } else if (selectedColor === 'White') {
-      setImageColor('White')
-    } else if (selectedColor === 'Light Grey') {
-      setImageColor('Light Grey')
-    } else if (selectedColor === 'Grey') {
-      setImageColor('Grey')
-    } else setImageColor('White')
-  }, [selectedColor])
+  }, [base.width, base.height, base.depth, base.guides])
 
   return [
-    {
-      type: 'dimensions',
-      widthRange: [40, 80],
-      heightRange: [30, 60],
-      depthRange: [35, 50],
-      plintHeightRange: [2, 10],
-      width,
-      setWidth,
-      height,
-      setHeight,
-      depth,
-      setDepth,
-      plintHeight,
-      setPlintHeight,
-    },
-    {
-      type: 'colors',
-      // colors: [
-      //   '#ded9d3',
-      //   '#fcfbf5',
-      //   '#d6d6d6',
-      //   '#9c9c9c',
-      //   // '#7a7a7a'
-      // ],
-      colors: [
-        'Biege',
-        'White',
-        'Light Grey',
-        'Grey',
-        // '#7a7a7a'
-      ],
-      selectedColor,
-      setSelectedColor,
-    },
+    // Use shared components
+    createDimensionsComponent(base),
+    createColorsComponent(base),
+    
+    // Bedside-specific furniture component
     {
       type: 'furniture',
-      openingOption,
+      openingOption: base.openingOption,
+      selectedOpeningMethod: base.openingOption,
       hinges,
-      setOpeningOption,
-      selectedOpeningMethod: openingOption,
-      guides,
-      setGuides,
+      setOpeningOption: base.setOpeningOption,
+      guides: base.guides,
+      setGuides: base.setGuides,
     },
-    {
-      type: 'price',
-      price,
-    },
+    
+    // Use calculated price
+    createPriceComponent(bedsidePrice),
+    
+    // Bedside-specific image carousel
     {
       type: 'imageCarousel',
       images: [
-        `/bedside/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}.png`,
-        `/bedside/render/${imageColor} 1.png`,
-        `/bedside/render/${imageColor} 2.png`,
+        `/bedside/${base.imageColor}/${base.openingOption}/Base ${base.imagePlintHeight}/H${base.imageHeight}/${base.imageWidth}.png`,
+        `/bedside/render/${base.imageColor} 1.png`,
+        `/bedside/render/${base.imageColor} 2.png`,
       ],
     },
   ]

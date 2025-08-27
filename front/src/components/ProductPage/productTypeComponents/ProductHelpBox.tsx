@@ -14,8 +14,8 @@ export const ProductHelpBox = () => {
       <p className={styles.assemblyNote}>
         <FormattedMessage id="configurator.infobox.quality.111" defaultMessage="Nu ai găsit culoarea potrivită?" />
         <FormattedMessage id="configurator.infobox.quality.1111" defaultMessage="Vrei alte dimensiuni?" />
-        <FormattedMessage id="configurator.infobox.quality.1111" defaultMessage="Vrei mai personalizat?" />
-        <FormattedMessage id="configurator.infobox.quality.1111" defaultMessage="Lasă-ne un mesaj și revenim cu un apel în scurt timp." />
+        <FormattedMessage id="configurator.infobox.quality.1112" defaultMessage="Vrei mai personalizat?" />
+        <FormattedMessage id="configurator.infobox.quality.1113" defaultMessage="Lasă-ne un mesaj și revenim cu un apel în scurt timp." />
       </p>
       <CustomButton onClick={() => setIsModalOpen(true)}>
         <FormattedMessage id="homepage.button.sendMessage" />

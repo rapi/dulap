@@ -42,10 +42,15 @@
   "homepage.copyButton.copy": "Copiază",
   "homepage.copyButton.coppied": "Copiat !",
 
+  "threeDModel.title": "Vizualizator 3D",
+  "threeDModel.description": "Explorează produsele noastre într-un mediu 3D interactiv. Rotește, mărește și personalizează pentru a vedea exact cum va arăta mobilierul în spațiul tău.",
+  "threeDModel.placeholder": "Vizualizatorul 3D va fi disponibil în curând...",
+
 
   "homepage.menu.productsTitle": "Produse",
   "homepage.menu.aboutUsTitle": "Despre noi",
   "homepage.menu.contactsTitle": "Contacte",
+  "homepage.menu.threeDModelTitle": "Model 3D",
   "homepage.menu.tryIt": "Încearcă aici",
   "ro": "RO",
   "ru": "RU",
@@ -259,6 +264,12 @@
   "checkout.assembly.comment1": "*Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare.",
   "checkout.assembly.comment2": "**Costul asamblării pentru fiecare produs este de 350 lei.",
   "checkout.assembly": "Asamblare",
+
+  "configurator.infobox.quality.title11": "Vrei altceva?",
+  "configurator.infobox.quality.111": "Nu ai găsit culoarea potrivită?",
+  "configurator.infobox.quality.1111": "Vrei alte dimensiuni?",
+  "configurator.infobox.quality.1112": "Vrei mai personalizat?",
+  "configurator.infobox.quality.1113": "Lasă-ne un mesaj și revenim cu un apel în scurt timp.",
 
   "contacts.title": "Contactează-ne",
   "contacts.subtitle": "Suntem aici să te ajutăm cu orice întrebări despre mobilierul personalizat.",

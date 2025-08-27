@@ -146,6 +146,15 @@ export const Menu: React.FC = () => {
           >
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleClose()
+              router.push('/3d-model')
+            }}
+            className={classes.menuItem}
+          >
+            <FormattedMessage id="homepage.menu.threeDModelTitle" />
+          </MenuItem>
           <MenuItem onClick={handleClose}>
             <Link href="/cart">
               <Badge badgeContent={itemCount} color="primary">
@@ -173,6 +182,9 @@ export const Menu: React.FC = () => {
           </Link>
           <Link href="/contacts">
             <FormattedMessage id="homepage.menu.contactsTitle" />
+          </Link>
+          <Link href="/3d-model">
+            <FormattedMessage id="homepage.menu.threeDModelTitle" />
           </Link>
 
           <CustomButton
