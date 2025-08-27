@@ -34,6 +34,8 @@ import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
+import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
+import { useStand3D } from '~/hooks/useStand3D'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
@@ -129,21 +131,40 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
+  const isStand3D = useStand3D()
+
+  // Extract current selected color (default White if not found)
+  const colorsComponent = currentComponents.find(
+    (c): c is ProductColorsComponent => c.type === 'colors'
+  )
+  const selectedColor = colorsComponent?.selectedColor ?? 'White'
+
+  // Extract current width & height for 3D scaling
+  const dimensionsComponent = currentComponents.find(
+    (c): c is ProductDimensionsComponent => c.type === 'dimensions'
+  )
+  const currentWidth = dimensionsComponent?.width ?? 80
+  const currentHeight = dimensionsComponent?.height ?? 70
+
   return (
     <>
-      {/* Left Side: Image */}
+      {/* Left Side: Viewer or Image Carousel */}
       <div className={styles.leftContainer}>
-        {imageCarouselComponent && (
-          <ProductImageCarousel
-            configuration={
-              values?.imageCarousel
-                ? {
-                    type: 'imageCarousel',
-                    images: values.imageCarousel,
-                  }
-                : imageCarouselComponent
-            }
-          />
+        {isStand3D ? (
+          <FurnitureViewer selectedColor={selectedColor} width={currentWidth} height={currentHeight} />
+        ) : (
+          imageCarouselComponent && (
+            <ProductImageCarousel
+              configuration={
+                values?.imageCarousel
+                  ? {
+                      type: 'imageCarousel',
+                      images: values.imageCarousel,
+                    }
+                  : imageCarouselComponent
+              }
+            />
+          )
         )}
       </div>
       {/* Right Side: Product Details */}

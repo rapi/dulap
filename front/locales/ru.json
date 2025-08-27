@@ -34,9 +34,14 @@
   "homepage.copyButton.copy": "Скопировать",
   "homepage.copyButton.coppied": "Скопировано !",
 
+  "threeDModel.title": "3D Визуализатор",
+  "threeDModel.description": "Исследуй наши продукты в интерактивной 3D среде. Поворачивай, увеличивай и настраивай, чтобы увидеть, как мебель будет выглядеть в твоем пространстве.",
+  "threeDModel.placeholder": "3D визуализатор скоро будет доступен...",
+
   "homepage.menu.productsTitle": "Товары",
   "homepage.menu.aboutUsTitle": "О нас",
   "homepage.menu.contactsTitle": "Контакты",
+  "homepage.menu.threeDModelTitle": "3D Модель",
   "homepage.menu.tryIt": "Попробуй здесь",
   "ro": "RO",
   "ru": "RU",
@@ -250,6 +255,12 @@
   "checkout.assembly.comment1": "*Этот шкаф не требует профессионального монтажа, а для вашего удобства мы предлагаем инструкцию по монтажу.",
   "checkout.assembly.comment2": "**Стоимость монтажа каждого изделия составляет 350 леев.",
   "checkout.assembly": "Монтаж",
+
+  "configurator.infobox.quality.title11": "Хочешь что-то другое?",
+  "configurator.infobox.quality.111": "Не нашел подходящий цвет?",
+  "configurator.infobox.quality.1111": "Хочешь другие размеры?",
+  "configurator.infobox.quality.1112": "Хочешь более персонализированное?",
+  "configurator.infobox.quality.1113": "Оставь нам сообщение и мы перезвоним в ближайшее время.",
 
   "contacts.title": "Свяжитесь с нами",
   "contacts.subtitle": "Мы здесь, чтобы помочь вам с любыми вопросами о персональной мебели.",

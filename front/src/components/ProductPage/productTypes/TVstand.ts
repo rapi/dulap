@@ -1,181 +1,110 @@
 import { ProductComponent } from '~/components/ProductPage/TVStandProductPage'
 import { useState, useEffect, useMemo } from 'react'
+import { 
+  useBaseProductConfigurator, 
+  createDimensionsComponent, 
+  createColorsComponent, 
+  createPriceComponent 
+} from '../shared/BaseProductConfigurator'
+import { TV_STAND_CONSTRAINTS, TV_STAND_PRICING } from '../shared/ProductConfigs'
 
 export const TVStandProductConfigurator: () => ProductComponent[] = () => {
-  const [width, setWidth] = useState(160)
-  const [height, setHeight] = useState(45)
-  const [depth, setDepth] = useState(40)
-  const [plintHeight, setPlintHeight] = useState(2)
+  // Use shared base configurator
+  const base = useBaseProductConfigurator(TV_STAND_CONSTRAINTS, TV_STAND_PRICING)
+  
+  // TV Stand-specific state
   const [selectedSections, setSelectedSections] = useState(2)
   const [activeSections, setActiveSections] = useState(['1', '2', '3', '4'])
-  const [selectedColor, setSelectedColor] = useState('#fcfbf5')
-  const [guides, setGuides] = useState(
-    'homepage.configurator.fittings.guides.options.1'
-  )
 
-  const [openingOption, setOpeningOption] = useState('push')
-  const [imageColor, setImageColor] = useState('White')
-  const [imageWidth, setImageWidth] = useState(1000)
-  const [imageHeight, setImageHeight] = useState(400)
-  const [imagePlintHeight, setImagePlintHeight] = useState(20)
-
-  const price = useMemo(() => {
-    let fittingsPrice = 0
-    if (guides === 'homepage.configurator.fittings.guides.options.2') {
-      fittingsPrice = selectedSections * 390
-    }
-    return Math.round(
-      (300 +
-        selectedSections * 600 +
-        width * 20 +
-        (height - 190) * 4.5 +
-        (depth - 30) * 8 +
-        fittingsPrice) *
-        1.3
-    )
-  }, [width, height, depth, selectedSections, guides])
-
+  // TV Stand-specific image dimension logic
   useEffect(() => {
-    if (plintHeight >= 2 && plintHeight < 5) {
-      setImagePlintHeight(20)
+    if (base.height < 45) {
+      base.setImageHeight(300)
     } else {
-      setImagePlintHeight(60)
+      base.setImageHeight(400)
     }
-  }, [plintHeight])
+  }, [base.height, base.setImageHeight])
 
   useEffect(() => {
-    if (height < 45) {
-      setImageHeight(300)
-    } else setImageHeight(400)
-  }, [height])
+    if (base.width < 100) {
+      base.setImageWidth(800)
+    } else if (base.width < 120) {
+      base.setImageWidth(1000)
+    } else if (base.width < 150) {
+      base.setImageWidth(1200)
+    } else if (base.width < 190) {
+      base.setImageWidth(1600)
+    } else {
+      base.setImageWidth(2000)
+    }
+  }, [base.width, base.setImageWidth])
 
-  useEffect(() => {
-    setSelectedSections(selectedSections)
-  }, [selectedSections])
-
-  useEffect(() => {
-    if (width < 100) {
-      setImageWidth(800)
-    } else if (width < 120) {
-      setImageWidth(1000)
-    } else if (width < 150) {
-      setImageWidth(1200)
-    } else if (width < 190) {
-      setImageWidth(1600)
-    } else setImageWidth(2000)
-  }, [width])
-
+  // TV Stand-specific section logic
   useEffect(() => {
     let possibleSections = ['']
-    if (width < 120) {
+    if (base.width < 120) {
       possibleSections = ['1', '2']
-    } else if (width < 150) {
+    } else if (base.width < 150) {
       possibleSections = ['1', '2', '3']
-    } else if (width < 190) {
+    } else if (base.width < 190) {
       possibleSections = ['2']
-    } else possibleSections = ['2', '4']
+    } else {
+      possibleSections = ['2', '4']
+    }
     setActiveSections(possibleSections)
-    console.log('possibleSections ', possibleSections)
-  }, [width])
+  }, [base.width])
 
-  useEffect(() => {
-    setHeight(height)
-  }, [height])
-  useEffect(() => {
-    setWidth(width)
-  }, [width])
-  useEffect(() => {
-    setDepth(depth)
-  }, [depth])
-
-  useEffect(() => {
-    setGuides(guides)
-  }, [guides])
-
-  // useEffect(() => {
-  //   if (selectedColor === '#ded9d3') {
-  //     setImageColor('Biege')
-  //   } else if (selectedColor === '#fcfbf5') {
-  //     setImageColor('White')
-  //   } else if (selectedColor === '#d6d6d6') {
-  //     setImageColor('Light Grey')
-  //   } else if (selectedColor === '#9c9c9c') {
-  //     setImageColor('Grey')
-  //   } else setImageColor('White')
-  // }, [selectedColor])
-
-  useEffect(() => {
-    if (selectedColor === 'Biege') {
-      setImageColor('Biege')
-    } else if (selectedColor === 'White') {
-      setImageColor('White')
-    } else if (selectedColor === 'Light Grey') {
-      setImageColor('Light Grey')
-    } else if (selectedColor === 'Grey') {
-      setImageColor('Grey')
-    } else setImageColor('White')
-  }, [selectedColor])
+  // TV Stand-specific price calculation
+  const tvStandPrice = useMemo(() => {
+    let fittingsPrice = 0
+    if (base.guides === 'homepage.configurator.fittings.guides.options.2') {
+      fittingsPrice = selectedSections * TV_STAND_PRICING.fittingsCost
+    }
+    return Math.round(
+      (TV_STAND_PRICING.baseCost +
+        selectedSections * TV_STAND_PRICING.sectionCost +
+        base.width * TV_STAND_PRICING.widthMultiplier +
+        (base.height - 190) * TV_STAND_PRICING.heightMultiplier +
+        (base.depth - 30) * TV_STAND_PRICING.depthMultiplier +
+        fittingsPrice) *
+        TV_STAND_PRICING.markup
+    )
+  }, [base.width, base.height, base.depth, selectedSections, base.guides])
 
   return [
-    {
-      type: 'dimensions',
-      widthRange: [80, 240],
-      heightRange: [30, 60],
-      depthRange: [35, 50],
-      plintHeightRange: [2, 10],
-      width,
-      setWidth,
-      height,
-      setHeight,
-      depth,
-      setDepth,
-      plintHeight,
-      setPlintHeight,
-    },
-    {
-      type: 'colors',
-      // colors: [
-      //   '#ded9d3',
-      //   '#fcfbf5',
-      //   '#d6d6d6',
-      //   '#9c9c9c',
-      //   // '#7a7a7a'
-      // ],
-      colors: [
-        'Biege',
-        'White',
-        'Light Grey',
-        'Grey',
-        // '#7a7a7a'
-      ],
-      selectedColor,
-      setSelectedColor,
-    },
+    // Use shared components
+    createDimensionsComponent(base),
+    createColorsComponent(base),
+    
+    // TV Stand-specific sections component
     {
       type: 'sections',
       selectedSections,
       setSelectedSections,
       activeSections,
     },
+    
+    // TV Stand-specific furniture component
     {
       type: 'furniture',
-      openingOption,
-      selectedOpeningMethod: openingOption,
+      openingOption: base.openingOption,
+      selectedOpeningMethod: base.openingOption,
       hinges: '',
-      setOpeningOption,
-      guides,
-      setGuides,
+      setOpeningOption: base.setOpeningOption,
+      guides: base.guides,
+      setGuides: base.setGuides,
     },
-    {
-      type: 'price',
-      price,
-    },
+    
+    // Use calculated price
+    createPriceComponent(tvStandPrice),
+    
+    // TV Stand-specific image carousel
     {
       type: 'imageCarousel',
       images: [
-        `/tv-stand/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}-${selectedSections}.png`,
-        `/tv-stand/render/${imageColor} 1.png`,
-        `/tv-stand/render/${imageColor} 2.png`,
+        `/tv-stand/${base.imageColor}/${base.openingOption}/Base ${base.imagePlintHeight}/H${base.imageHeight}/S${selectedSections}/${base.imageWidth}.png`,
+        `/tv-stand/render/${base.imageColor} 1.png`,
+        `/tv-stand/render/${base.imageColor} 2.png`,
       ],
     },
   ]
