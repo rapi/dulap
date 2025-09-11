@@ -23,7 +23,7 @@ export default function Document() {
         />
         <meta
           name="description"
-          content="This is a Next.js app with custom header elements."
+          content="Dulap.md – Dulapuri și mobilier la comandă în Chișinău și Moldova. Configurator online. Livrare rapidă."
         />
         <link rel="icon" href="/wardrobe-button.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
