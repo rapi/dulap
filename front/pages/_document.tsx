@@ -21,10 +21,6 @@ export default function Document() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <meta
-          name="description"
-          content="Dulap.md – Dulapuri și mobilier la comandă în Chișinău și Moldova. Configurator online. Livrare rapidă."
-        />
         <link rel="icon" href="/wardrobe-button.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
       </Head>
