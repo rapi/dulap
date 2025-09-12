@@ -1,14 +1,13 @@
-// pages/sitemap.xml.tsx
+// scripts/generateSitemap.mjs
 import fs from 'fs'
 import path from 'path'
-import type { GetServerSideProps, NextPage } from 'next'
 
 const BASE_URL = 'https://dulap.md'
 
 /**
  * Recursively get all .tsx page files from the pages directory
  */
-function getAllPagePaths(dir: string, root = dir): string[] {
+function getAllPagePaths(dir, root = dir) {
   return fs.readdirSync(dir).flatMap((file) => {
     const fullPath = path.join(dir, file)
     const stat = fs.statSync(fullPath)
@@ -21,7 +20,7 @@ function getAllPagePaths(dir: string, root = dir): string[] {
     if (
       file.endsWith('.tsx') &&
       !file.startsWith('_') &&
-      !fullPath.includes('/api/')
+      !fullPath.includes(`${path.sep}api${path.sep}`)
     ) {
       const relativePath = path.relative(root, fullPath)
       const urlPath =
@@ -33,7 +32,7 @@ function getAllPagePaths(dir: string, root = dir): string[] {
   })
 }
 
-function generateSiteMap(urls: string[]): string {
+function generateSitemap(urls) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${urls
@@ -51,19 +50,11 @@ function generateSiteMap(urls: string[]): string {
 </urlset>`
 }
 
-const SiteMap: NextPage = () => null
+const pagesDir = path.join(process.cwd(), 'pages')
+const publicDir = path.join(process.cwd(), 'public')
+const urls = getAllPagePaths(pagesDir)
 
-export const getServerSideProps: GetServerSideProps = async ({ res }) => {
-  const pagesDir = path.join(process.cwd(), 'pages')
-  const urls = getAllPagePaths(pagesDir)
+const sitemap = generateSitemap(urls)
+fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap)
 
-  const sitemap = generateSiteMap(urls)
-
-  res.setHeader('Content-Type', 'application/xml; charset=utf-8')
-  res.write(sitemap)
-  res.end()
-
-  return { props: {} }
-}
-
-export default SiteMap
+console.log('✅ sitemap.xml generated successfully')
