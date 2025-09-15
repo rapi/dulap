@@ -21,7 +21,9 @@ export default function Layout({ children }: LayoutProps) {
   if (router.query['locale'])
     for (const current of cannonicalUrls) {
       if (router.pathname.includes(current)) {
-        canonicalUrl = `https://www.dulap.md${router.pathname}`
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        canonicalUrl = `https://www.dulap.md${router.pathname.replace('[locale]', router.query['locale'])}`
         break
       }
     }
