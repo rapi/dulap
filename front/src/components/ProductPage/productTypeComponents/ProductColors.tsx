@@ -1,5 +1,7 @@
 import React, { FC } from 'react'
-import SelectColor, { SelectColorItem } from '~/components/SelectColor/SelectColor'
+import SelectColor, {
+  SelectColorItem,
+} from '~/components/SelectColor/SelectColor'
 import { getColorItemByName } from '~/utils/colorDictionary'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { FormattedMessage } from 'react-intl'
@@ -20,7 +22,6 @@ export const ProductColors: FC<ProductColorsProps> = ({
 }) => {
   if (predefinedValue) {
     const ci = getColorItemByName(predefinedValue)
-    console.log('ci ', ci)
 
     return (
       <label className={styles.colorsLabel}>
@@ -37,7 +38,7 @@ export const ProductColors: FC<ProductColorsProps> = ({
       </label>
     )
   }
-    return (
+  return (
     <label className={styles.colorsLabel}>
       <p>
         <FormattedMessage id="homepage.configurator.colors.title" />
