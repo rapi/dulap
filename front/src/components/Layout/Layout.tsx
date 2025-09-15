@@ -21,7 +21,7 @@ export default function Layout({ children }: LayoutProps) {
   if (router.query['locale'])
     for (const current of cannonicalUrls) {
       if (router.pathname.includes(current)) {
-        canonicalUrl = router.pathname
+        canonicalUrl = `https://www.dulap.md${router.pathname}`
         break
       }
     }
