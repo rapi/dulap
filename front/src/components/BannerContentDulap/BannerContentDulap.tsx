@@ -7,21 +7,21 @@ export const BannerContent = () => {
   return (
     <div className={classes.heroContent}>
       <div>
-        <p className={classes.heroHeader}>
+        <h1 className={classes.heroHeader}>
           <FormattedMessage
             id="homepage.banner.header.0"
           />
-        </p>
+        </h1>
       </div>
       <div>
-        <p className={classes.heroTitle}>
+        <h1 className={classes.heroTitle}>
           <FormattedMessage
             id="homepage.banner.preorder.0"
           />
-        </p>
-        <p className={classes.heroTitle}>
+        </h1>
+        <h1 className={classes.heroTitle}>
           <FormattedMessage id="homepage.banner.preorder.1" />
-        </p>
+        </h1>
       </div>
 
       <div className={classes.heroButtonContainer}>

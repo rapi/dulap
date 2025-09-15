@@ -118,7 +118,7 @@ export const ProductStorage = () => {
 
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
-        <h1 className={styles.title}>Comodă</h1>
+        <h3 className={styles.title}>Comodă</h3>
         <ButtonSelect
           options={standOptions}
           defaultSelected={'3 sertare'}

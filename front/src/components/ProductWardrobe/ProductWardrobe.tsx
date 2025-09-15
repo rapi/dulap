@@ -68,7 +68,7 @@ export const ProductWardrobe = () => {
 
       {/* Right Side: Product Details */}
       <div className={styles.rightContainer}>
-        <h1 className={styles.title}>Dulap pentru haine</h1>
+        <h3 className={styles.title}>Dulap pentru haine</h3>
 
         {/* Dimensions Sliders */}
         <div className={styles.dimensions}>

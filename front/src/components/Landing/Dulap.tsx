@@ -19,9 +19,9 @@ export const Dulap: React.FC = () => {
         mobileHref={'/bedside/render/Biege 1.png'}
       />
       <section className={classes.productTypes}>
-        <p className={classes.productTypesTitle}>
+        <h2 className={classes.productTypesTitle}>
           <FormattedMessage id="homepage.dulapLanding.title1" />
-        </p>
+        </h2>
         <ProductTypesList></ProductTypesList>
       </section>
       <ContactBox
@@ -33,9 +33,9 @@ export const Dulap: React.FC = () => {
       ></ContactBox>
 
       <section className={classes.readyProducts}>
-        <p className={classes.readyProductsTitle}>
+        <h2 className={classes.readyProductsTitle}>
           <FormattedMessage id="homepage.dulapLanding.title2" />
-        </p>
+        </h2>
         <ProductCatalog></ProductCatalog>
       </section>
 
