@@ -12,7 +12,7 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
     height: 70,
     depth: 40,
     plintHeight: 2,
-    selectedColor: '#fcfbf5',
+    selectedColor: '#ded9d3',
     guides: 'homepage.configurator.fittings.guides.options.1',
     openingOption: 'push'
   }
@@ -40,7 +40,7 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
     height: 45,
     depth: 40,
     plintHeight: 2,
-    selectedColor: '#fcfbf5',
+    selectedColor: '#ded9d3',
     guides: 'homepage.configurator.fittings.guides.options.1',
     openingOption: 'push'
   }
@@ -68,7 +68,7 @@ export const BEDSIDE_CONSTRAINTS: ProductConstraints = {
     height: 40,
     depth: 40,
     plintHeight: 2,
-    selectedColor: '#fcfbf5',
+    selectedColor: '#ded9d3',
     guides: 'homepage.configurator.fittings.guides.options.1',
     openingOption: 'push'
   }
@@ -96,7 +96,7 @@ export const WARDROBE_CONSTRAINTS: ProductConstraints = {
     height: 260,
     depth: 50,
     plintHeight: 2,
-    selectedColor: '#fcfbf5',
+    selectedColor: '#ded9d3',
     guides: 'standard',
     openingOption: 'maner'
   }

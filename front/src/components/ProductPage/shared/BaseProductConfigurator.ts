@@ -53,7 +53,7 @@ export function useBaseProductConfigurator(
   const [height, setHeight] = useState(constraints.defaultValues.height ?? 70)
   const [depth, setDepth] = useState(constraints.defaultValues.depth ?? 40)
   const [plintHeight, setPlintHeight] = useState(constraints.defaultValues.plintHeight ?? 2)
-  const [selectedColor, setSelectedColor] = useState(constraints.defaultValues.selectedColor ?? '#fcfbf5')
+  const [selectedColor, setSelectedColor] = useState(constraints.defaultValues.selectedColor ?? '#ded9d3')
   const [guides, setGuides] = useState(constraints.defaultValues.guides ?? 'homepage.configurator.fittings.guides.options.1')
   const [openingOption, setOpeningOption] = useState(constraints.defaultValues.openingOption ?? 'push')
   

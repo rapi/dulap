@@ -24,6 +24,7 @@ import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeCom
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import { ProductHelpBox } from '~/components/ProductPage/productTypeComponents/ProductHelpBox'
 import { useCart } from '~/context/cartContext'
+import { getColorItemByName } from '~/utils/colorDictionary'
 
 export const ThreeDModel: React.FC = () => {
   const { addItem } = useCart()
@@ -33,19 +34,30 @@ export const ThreeDModel: React.FC = () => {
   
   // Find components by type
   const dimensionsComponent = components.find(c => c.type === 'dimensions')
-  const colorsComponent = components.find(c => c.type === 'colors')
+  const colorsComponent = components.find(
+    (c): c is { type: 'colors'; selectedColor: string } => c.type === 'colors'
+  )
   const sectionsComponent = components.find(c => c.type === 'sections')
   const furnitureComponent = components.find(c => c.type === 'furniture')
   const priceComponent = components.find(c => c.type === 'price')
   
   // Current width from configurator
   const currentWidth = (dimensionsComponent as ProductDimensionsComponent | undefined)?.width ?? 80
+  
+  // Current height from configurator
+  const currentHeight = (dimensionsComponent as ProductDimensionsComponent | undefined)?.height ?? 70
+  
+  // Current selected color mapped to HEX
+  const selectedColorNameOrHex = colorsComponent?.selectedColor
+  const selectedColorHex = selectedColorNameOrHex
+    ? (getColorItemByName(selectedColorNameOrHex)?.hexCode ?? selectedColorNameOrHex)
+    : '#ded9d3'
 
   return (
     <>
       {/* Left Side: 3D Model Viewer */}
       <div className={styles.leftContainer}>
-        <FurnitureViewer width={currentWidth} />
+        <FurnitureViewer key={selectedColorHex} width={currentWidth} selectedColor={selectedColorHex} height={currentHeight} />
       </div>
 
       {/* Right Side: Product Details - Same as Stand Configurator */}

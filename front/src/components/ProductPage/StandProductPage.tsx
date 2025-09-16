@@ -40,6 +40,7 @@ import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
+import { getColorItemByName } from '~/utils/colorDictionary'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -133,11 +134,12 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   const isStand3D = useStand3D()
 
-  // Extract current selected color (default White if not found)
+  // Extract current selected color (map names to HEX for 3D)
   const colorsComponent = currentComponents.find(
     (c): c is ProductColorsComponent => c.type === 'colors'
   )
-  const selectedColor = colorsComponent?.selectedColor ?? 'White'
+  const selectedColorNameOrHex = colorsComponent?.selectedColor ?? '#ded9d3'
+  const selectedColorHex = getColorItemByName(selectedColorNameOrHex)?.hexCode ?? selectedColorNameOrHex
 
   // Extract current width & height for 3D scaling
   const dimensionsComponent = currentComponents.find(
@@ -145,13 +147,14 @@ export const ProductPage: FC<ProductPageProps> = ({
   )
   const currentWidth = dimensionsComponent?.width ?? 80
   const currentHeight = dimensionsComponent?.height ?? 70
+  const currentDepth = dimensionsComponent?.depth ?? 10
 
   return (
     <>
       {/* Left Side: Viewer or Image Carousel */}
       <div className={styles.leftContainer}>
         {isStand3D ? (
-          <FurnitureViewer selectedColor={selectedColor} width={currentWidth} height={currentHeight} />
+          <FurnitureViewer selectedColor={selectedColorHex} width={currentWidth} height={currentHeight} depth={currentDepth} />
         ) : (
           imageCarouselComponent && (
             <ProductImageCarousel
@@ -178,7 +181,8 @@ export const ProductPage: FC<ProductPageProps> = ({
           )
         })}
       </div>
-      <div>
+      {!isStand3D && 
+     <div>
         {priceComponent && (
           <ProductPrice
             onAddItem={() => {
@@ -193,7 +197,8 @@ export const ProductPage: FC<ProductPageProps> = ({
         )}
         <ProductHelpBox />
         <ProductInfobox />
-      </div>
+      </div> 
+}
     </>
   )
 }
