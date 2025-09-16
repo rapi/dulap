@@ -41,6 +41,7 @@ import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
 import { getColorItemByName } from '~/utils/colorDictionary'
+import { STAND_CONSTRAINTS } from './shared/ProductConfigs'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -138,23 +139,24 @@ export const ProductPage: FC<ProductPageProps> = ({
   const colorsComponent = currentComponents.find(
     (c): c is ProductColorsComponent => c.type === 'colors'
   )
-  const selectedColorNameOrHex = colorsComponent?.selectedColor ?? '#ded9d3'
+  const selectedColorNameOrHex = colorsComponent?.selectedColor ?? STAND_CONSTRAINTS.defaultValues.selectedColor
   const selectedColorHex = getColorItemByName(selectedColorNameOrHex)?.hexCode ?? selectedColorNameOrHex
 
   // Extract current width & height for 3D scaling
   const dimensionsComponent = currentComponents.find(
     (c): c is ProductDimensionsComponent => c.type === 'dimensions'
   )
-  const currentWidth = dimensionsComponent?.width ?? 80
-  const currentHeight = dimensionsComponent?.height ?? 70
-  const currentDepth = dimensionsComponent?.depth ?? 10
+  const currentWidth = dimensionsComponent?.width ?? STAND_CONSTRAINTS.defaultValues.width
+  const currentHeight = dimensionsComponent?.height ?? STAND_CONSTRAINTS.defaultValues.height
+  const currentDepth = dimensionsComponent?.depth ?? STAND_CONSTRAINTS.defaultValues.depth
+  const currentPlintHeight = dimensionsComponent?.plintHeight ?? STAND_CONSTRAINTS.defaultValues.plintHeight
 
   return (
     <>
       {/* Left Side: Viewer or Image Carousel */}
       <div className={styles.leftContainer}>
         {isStand3D ? (
-          <FurnitureViewer selectedColor={selectedColorHex} width={currentWidth} height={currentHeight} depth={currentDepth} />
+          <FurnitureViewer selectedColor={selectedColorHex} width={currentWidth} height={currentHeight} depth={currentDepth} currentPlintHeight={currentPlintHeight} />
         ) : (
           imageCarouselComponent && (
             <ProductImageCarousel

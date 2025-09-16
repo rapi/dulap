@@ -7,9 +7,9 @@ export interface BaseProductState {
   depth: number
   plintHeight: number
   selectedColor: string
-  imageColor: string
-  guides: string
-  openingOption: string
+  imageColor?: string
+  guides?: string
+  openingOption?: string
 }
 
 export interface ProductConstraints {
@@ -18,7 +18,7 @@ export interface ProductConstraints {
   depthRange: [number, number]
   plintHeightRange: [number, number]
   colors: string[]
-  defaultValues: Partial<BaseProductState>
+  defaultValues: BaseProductState
 }
 
 export interface PricingConfig {

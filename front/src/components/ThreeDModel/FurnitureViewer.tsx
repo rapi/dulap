@@ -172,7 +172,7 @@ function GLBModel({
 }
 
 // Scene component
-function Scene({ width, height, depth, selectedColor }: { width?: number, height: number, depth: number, selectedColor: string }) {
+function Scene({ width, height, depth, currentPlintHeight, selectedColor }: { width: number, height: number, depth: number, currentPlintHeight: number, selectedColor: string }) {
   return (
     <>
       {/* Realistic Interior Lighting Setup */}
@@ -224,15 +224,15 @@ function Scene({ width, height, depth, selectedColor }: { width?: number, height
         <GLBModel 
           url="/assets/3d-models/bg.glb" 
           position={[0, 0, 0]} 
-          scale={45} 
+          scale={[100,45,45]} 
           receiveShadow={true}
           color='#ffffff'
           useLambertWhite={true}
         />
         <GLBModel
           url="/assets/3d-models/shadow_man.glb"
-          position={[-50, 0, 2]}
-          scale={0.5}
+          position={[-100, 0, 2]}
+          scale={1}
           color="#ffffff"
           receiveShadow={false}
           forceFlatColor="#ffffff"
@@ -241,7 +241,7 @@ function Scene({ width, height, depth, selectedColor }: { width?: number, height
       
       {/* Stand Model built from individual components */}
       <Suspense fallback={<LoadingFallback />}>
-        <StandBuilder selectedColor={selectedColor} desiredWidth={width} desiredHeight={height} desiredDepth={depth}/>
+        <StandBuilder selectedColor={selectedColor} desiredWidth={width} desiredHeight={height} desiredDepth={depth} desiredPlintHeight={currentPlintHeight}/>
       </Suspense>
     </>
   )
@@ -250,19 +250,20 @@ function Scene({ width, height, depth, selectedColor }: { width?: number, height
 // Main furniture viewer component
 interface FurnitureViewerProps {
   selectedColor: string
-  width?: number
-  height?: number
-  depth?: number
+  width: number
+  height: number
+  depth: number
+  currentPlintHeight: number
 }
 
-export const FurnitureViewer: React.FC<FurnitureViewerProps> = ({ width, selectedColor, height, depth}) => {
+export const FurnitureViewer: React.FC<FurnitureViewerProps> = ({ width, selectedColor, height, depth, currentPlintHeight}) => {
   return (
     <div style={{ width: '100%', height: '100%', minHeight: '500px' }}>
       <Canvas
         camera={{ 
-          position: [-70, 70, 70], 
-          fov: 50,
-          near: 0.3,
+          position: [-150, 150, 150], 
+          fov: 60,
+          near: 0.5,
           far: 1000
         }}
         shadows
@@ -276,22 +277,25 @@ export const FurnitureViewer: React.FC<FurnitureViewerProps> = ({ width, selecte
           gl.shadowMap.autoUpdate = true
           
           // Add fog to create atmospheric depth and fade background
-          scene.fog = new THREE.Fog('#f9f9f9', 100, 300)
+          scene.fog = new THREE.Fog('#f9f9f9', 150, 400)
         }}
       >
         {/* Orbit controls for rotation and zoom */}
         <OrbitControls
           enablePan={false}
-          enableZoom={false}
+          enableZoom={true}
           enableRotate={true}
           minDistance={2}
           maxDistance={250}
-          maxPolarAngle={Math.PI / 2}
-          target={[0, 30, 0]} // Move scene center down by 30 units
+          minAzimuthAngle={-Math.PI/2 + 0.5}
+          maxAzimuthAngle={Math.PI/2 - 0.5}
+          minPolarAngle={0.3}
+          maxPolarAngle={Math.PI/2+0.2}
+          target={[0, 50, 0]} // Move scene center down by 50 units
         />
         
         {/* 3D Scene */}
-        <Scene depth={depth ?? 10} height={height ?? 70} width={width} selectedColor={selectedColor} />
+        <Scene depth={depth} height={height} width={width} selectedColor={selectedColor} currentPlintHeight={currentPlintHeight}/>
       </Canvas>
     </div>
   )

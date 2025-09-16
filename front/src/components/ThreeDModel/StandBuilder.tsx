@@ -2,13 +2,15 @@ import React, { useEffect, useRef, Suspense } from 'react'
 import { useLoader, useFrame, ThreeEvent } from '@react-three/fiber'
 import { FBXLoader } from 'three-stdlib'
 import * as THREE from 'three'
+import assert from 'assert'
 
 interface StandBuilderProps {
-  selectedColor?: string
-  desiredWidth?: number
-  desiredHeight?: number
+  selectedColor: string
+  desiredWidth: number
+  desiredHeight: number
   drawerOffsetZ?: number
-  desiredDepth?: number
+  desiredDepth: number
+  desiredPlintHeight: number
   lerpSpeed?: number
 }
 
@@ -20,27 +22,25 @@ type DrawerState = {
 
 export const StandBuilder: React.FC<StandBuilderProps> = ({
   selectedColor = '#ded9d3',
-  desiredWidth = 80,
-  desiredHeight = 70,
-  desiredDepth = 10,  
+  desiredWidth,
+  desiredHeight,
+  desiredDepth,  
   drawerOffsetZ = 10,
+  desiredPlintHeight,
   lerpSpeed = 0.1,
 }) => {
   const fbx = useLoader(FBXLoader, '/assets/stand.fbx')
 
   const drawersRef = useRef<Map<string, DrawerState>>(new Map())
-  const baselineSizeRef = useRef<{ width: number; height: number; depth: number } | null>(
+  const baselineSizeRef = useRef<{ width: number; height: number; depth: number, plintHeight: number, plintWidth: number } | null>(
     null
   )
 
-  // 1) Initial setup: scale, find drawers, and CLONE materials so later color changes
-  //    won't affect other instances that share cached materials.
   useEffect(() => {
     if (!fbx) return
 
     // Establish a neutral initial scale for consistent baseline measurement
     fbx.scale.set(1, 1, 1)
-
     drawersRef.current.clear()
 
     fbx.traverse((obj) => {
@@ -60,7 +60,8 @@ export const StandBuilder: React.FC<StandBuilderProps> = ({
           }
         }
 
-        const name = (mesh.name || '').toLowerCase()
+        const name = (mesh.name || '').toLowerCase();
+      
         if (name.startsWith('yashik')) {
           drawersRef.current.set(mesh.uuid, {
             mesh,
@@ -69,37 +70,54 @@ export const StandBuilder: React.FC<StandBuilderProps> = ({
           })
           mesh.userData.isDrawer = true
         }
+
+        if (name.startsWith('bottom')) {
+          mesh.userData.isPlint = true
+        }
       }
     })
   }, [fbx])
 
-  // 1b) Compute and cache baseline bounding-box size once the model is present
+  // Compute and cache baseline bounding-box size once the model is present
   useEffect(() => {
     if (!fbx) return
-    // Compute the bounding box at the current (neutral) scale
     const box = new THREE.Box3().setFromObject(fbx)
     const size = new THREE.Vector3()
     box.getSize(size)
+
+    assert(!!getPlintMesh(fbx), 'NO plint detected')
+    const boxPlint = new THREE.Box3().setFromObject(getPlintMesh(fbx)!)
+    const boxSize = new THREE.Vector3()
+    boxPlint.getSize(boxSize)
+
     baselineSizeRef.current = {
       width: Math.max(size.x, 0.0001),
       height: Math.max(size.y, 0.0001),
       depth: Math.max(size.z, 0.0001),
+      plintHeight:  Math.max(boxSize.y, 0.0001),
+      plintWidth:  Math.max(boxSize.x, 0.0001),
     }
   }, [fbx])
 
-  // 1c) Apply scaling whenever desiredWidth/desiredHeight change
+  // Apply scaling whenever desiredWidth/desiredHeight change
   useEffect(() => {
     if (!fbx || !baselineSizeRef.current) return
     const baseline = baselineSizeRef.current
-    // Convert desired cm directly to world units, assuming baseline dimensions are in same unit scale
-    const sx = desiredWidth / baseline.width/1.75
-    const sy = desiredHeight / baseline.height/1.9
-    // Keep depth unchanged relative to baseline (can be modified when depth control exists)
-    const sz = desiredDepth/baseline.depth/2
-    fbx.scale.set(sx, sy, sz)
-  }, [fbx, desiredWidth, desiredHeight, desiredDepth])
 
-  // 2) Recolor everything whenever selectedColor changes
+    // TODO: Fix me
+    // const plint = getPlintMesh(fbx)
+    // // 3.5 - width of the left and right wall
+    // const plintSX = (desiredWidth-3.5) / baseline.plintWidth
+    // plint?.scale.setX(plintSX)
+    // console.log({plintSX});
+
+    const sx = desiredWidth / baseline.width
+    const sy = desiredHeight / baseline.height
+    const sz = desiredDepth/baseline.depth
+    fbx.scale.set(sx, sy, sz)
+  }, [fbx, desiredWidth, desiredHeight, desiredDepth, desiredPlintHeight])
+
+  // Recolor everything whenever selectedColor changes
   useEffect(() => {
     if (!fbx) return
 
@@ -173,6 +191,10 @@ export const StandBuilder: React.FC<StandBuilderProps> = ({
       mesh.position.z = THREE.MathUtils.lerp(mesh.position.z, targetZ, lerpSpeed)
     })
   })
+
+  const getPlintMesh = (fbx: THREE.Group) => {
+    return fbx.children.find((c)=>c.userData.isPlint)
+  } 
 
   const isDrawerMesh = (obj: THREE.Object3D | null | undefined): obj is THREE.Mesh =>
     !!obj && (obj as THREE.Mesh).isMesh && !!(obj as THREE.Mesh).userData?.isDrawer

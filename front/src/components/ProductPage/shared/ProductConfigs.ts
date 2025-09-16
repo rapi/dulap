@@ -9,9 +9,9 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
   colors: ['Biege', 'White', 'Light Grey', 'Grey'],
   defaultValues: {
     width: 80,
-    height: 70,
-    depth: 40,
-    plintHeight: 2,
+    height: 120,
+    depth: 50,
+    plintHeight: 6,
     selectedColor: '#ded9d3',
     guides: 'homepage.configurator.fittings.guides.options.1',
     openingOption: 'push'
