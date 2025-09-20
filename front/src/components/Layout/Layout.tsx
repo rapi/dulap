@@ -11,23 +11,11 @@ import './Layout.css'
 type LayoutProps = {
   children: ReactNode
 }
-const cannonicalUrls = ['/product/', '/configurator/']
 export default function Layout({ children }: LayoutProps) {
   const intl = useIntl()
   const title = intl.formatMessage({ id: 'meta.title' })
-  let canonicalUrl = ''
 
   const router = useRouter()
-  if (router.query['locale'])
-    for (const current of cannonicalUrls) {
-      if (router.pathname.includes(current)) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        canonicalUrl = `https://www.dulap.md${router.pathname.replace('[locale]', router.query['locale'])}`
-        break
-      }
-    }
-
   useEffect(() => {
     const handleRouteChange = (url: string) => {
       gtag.pageview(url)
@@ -42,7 +30,6 @@ export default function Layout({ children }: LayoutProps) {
     <>
       <Head>
         <title>{title}</title>
-        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
         <meta
           name="keywords"
           content="dulap.md, dulap personalizat Chișinău, mobilier la comandă Moldova, dulap la comandă, mobilă la comandă Chișinău, мебель на заказ Кишинев, тумбочка кишинев, тумба, комод кишинев, тумба молдова, комод Молдова, мебель на заказ Молдова"

@@ -12,6 +12,7 @@ import { Modal } from '~/components/Modal/Modal'
 import { CopyButton } from '~/components/CopyButton/CopyButton'
 import { FormattedMessage, useIntl } from 'react-intl'
 import Script from 'next/script'
+import Head from 'next/head'
 
 const localeMap: Record<string, Record<string, string>> = { ro, ru }
 function pageview(url: string) {
@@ -19,14 +20,21 @@ function pageview(url: string) {
   // @ts-expect-error
   window.gtag?.('event', 'page_view', { page_location: url })
 }
+const cannonicalUrls = ['/product/', '/configurator/']
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const { locale: queryLocale } = router.query
-  const currentLocale = 'ro'
+  const currentLocale = (queryLocale as string) ?? 'ro'
   const messages = localeMap[queryLocale as string] ?? ro
   Router.events.on('routeChangeComplete', pageview)
-
+  let canonicalUrl = ''
+  for (const current of cannonicalUrls) {
+    if (router.pathname.includes(current)) {
+      canonicalUrl = `https://www.dulap.md${router.pathname.replace('[locale]', currentLocale)}`
+      break
+    }
+  }
   useEffect(() => {
     const delayMs = 30000
     const already = localStorage.getItem('promoShown')
@@ -54,6 +62,9 @@ function MyApp({ Component, pageProps }: AppProps) {
               gtag('config', 'G-K9E49M4GJ5', { send_page_view: false });
             `}
       </Script>
+      <Head>
+        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+      </Head>
       <CartProvider>
         <IntlProvider locale={currentLocale} messages={messages}>
           <Layout>
