@@ -20,7 +20,6 @@ function pageview(url: string) {
   // @ts-expect-error
   window.gtag?.('event', 'page_view', { page_location: url })
 }
-const cannonicalUrls = ['/product/', '/configurator/']
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
@@ -28,13 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const currentLocale = (queryLocale as string) ?? 'ro'
   const messages = localeMap[queryLocale as string] ?? ro
   Router.events.on('routeChangeComplete', pageview)
-  let canonicalUrl = ''
-  for (const current of cannonicalUrls) {
-    if (router.pathname.includes(current)) {
-      canonicalUrl = `https://www.dulap.md${router.pathname.replace('[locale]', currentLocale)}`
-      break
-    }
-  }
+
   useEffect(() => {
     const delayMs = 30000
     const already = localStorage.getItem('promoShown')
@@ -63,7 +56,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             `}
       </Script>
       <Head>
-        {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+        <link rel="canonical" href={'https://dulap.md/ro/'} />
       </Head>
       <CartProvider>
         <IntlProvider locale={currentLocale} messages={messages}>
