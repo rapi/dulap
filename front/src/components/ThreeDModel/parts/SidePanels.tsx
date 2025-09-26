@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { SkeletonUtils } from 'three-stdlib'
-import { useGLTF } from '@react-three/drei'
 import { FURNITURE_CONFIG } from '../furnitureConfig'
-import { anchorGeometryToBottom, anchorGeometryToWall, applyColorToObject } from '../furnitureUtils'
+import { anchorGeometryToBottom, anchorGeometryToWall, applyColorToObject, disposeObject } from '../furnitureUtils'
 
 interface SidePanelsProps {
-  horizontalUrl: string
+  horizontalScene: THREE.Object3D
   desiredWidth: number
   desiredHeight: number
   desiredDepth: number
@@ -14,16 +13,15 @@ interface SidePanelsProps {
 }
 
 export const SidePanels: React.FC<SidePanelsProps> = ({
-  horizontalUrl,
+  horizontalScene,
   desiredWidth,
   desiredHeight,
   desiredDepth,
   selectedColor,
 }) => {
-  const { scene: horizontalSample } = useGLTF(horizontalUrl)
 
   const { leftSide, rightSide } = useMemo(() => {
-    if (!horizontalSample) return { leftSide: null, rightSide: null }
+    if (!horizontalScene) return { leftSide: null, rightSide: null }
 
     const prepareComponent = (component: THREE.Object3D): THREE.Object3D => {
       component.traverse((o) => {
@@ -48,10 +46,10 @@ export const SidePanels: React.FC<SidePanelsProps> = ({
       return component
     }
 
-    const left = prepareComponent(SkeletonUtils.clone(horizontalSample))
-    const right = prepareComponent(SkeletonUtils.clone(horizontalSample))
+    const left = prepareComponent(SkeletonUtils.clone(horizontalScene))
+    const right = prepareComponent(SkeletonUtils.clone(horizontalScene))
     return { leftSide: left, rightSide: right }
-  }, [horizontalSample])
+  }, [horizontalScene])
 
   useEffect(() => {
     if (!leftSide || !rightSide) return
@@ -78,6 +76,14 @@ export const SidePanels: React.FC<SidePanelsProps> = ({
     applyColorToObject(leftSide, selectedColor)
     applyColorToObject(rightSide, selectedColor)
   }, [leftSide, rightSide, selectedColor])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (leftSide) disposeObject(leftSide)
+      if (rightSide) disposeObject(rightSide)
+    }
+  }, [leftSide, rightSide])
 
   if (!leftSide || !rightSide) return null
 

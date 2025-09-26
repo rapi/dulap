@@ -1,4 +1,5 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useMemo } from 'react'
+import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { TopAndPlinth } from './parts/TopAndPlinth'
 import { Drawers } from './parts/Drawers'
@@ -9,7 +10,16 @@ interface StandBuilderProps {
   desiredHeight: number
   desiredDepth: number
   desiredPlintHeight: number
+  drawerOffsetZ?: number
+  lerpSpeed?: number
 }
+
+// Preload assets for better performance
+const VERTICAL_URL = '/assets/3d-models/vertical_sample.glb'
+const HORIZONTAL_URL = '/assets/3d-models/horizontal_sample.glb'
+
+useGLTF.preload(VERTICAL_URL)
+useGLTF.preload(HORIZONTAL_URL)
 
 export const StandBuilder: React.FC<StandBuilderProps> = ({
   selectedColor,
@@ -17,15 +27,33 @@ export const StandBuilder: React.FC<StandBuilderProps> = ({
   desiredHeight,
   desiredDepth,
   desiredPlintHeight,
+  drawerOffsetZ = 10,
+  lerpSpeed = 0.1,
 }) => {
-  const verticalUrl = '/assets/3d-models/vertical_sample.glb'
-  const horizontalUrl = '/assets/3d-models/horizontal_sample.glb'
+
+  // Load models once in parent
+  const { scene: verticalScene } = useGLTF(VERTICAL_URL)
+  const { scene: horizontalScene } = useGLTF(HORIZONTAL_URL)
+
+  // Memoize scenes to prevent unnecessary re-renders
+  const scenes = useMemo(
+    () => ({
+      vertical: verticalScene,
+      horizontal: horizontalScene,
+    }),
+    [verticalScene, horizontalScene]
+  )
+
+  // Don't render until models are loaded
+  if (!scenes.vertical || !scenes.horizontal) {
+    return null
+  }
 
   return (
     <Suspense fallback={null}>
       <group>
         <SidePanels
-          horizontalUrl={horizontalUrl}
+          horizontalScene={scenes.horizontal}
           desiredWidth={desiredWidth}
           desiredHeight={desiredHeight}
           desiredDepth={desiredDepth}
@@ -33,8 +61,8 @@ export const StandBuilder: React.FC<StandBuilderProps> = ({
         />
 
         <TopAndPlinth
-          verticalUrl={verticalUrl}
-          horizontalUrl={horizontalUrl}
+          verticalScene={scenes.vertical}
+          horizontalScene={scenes.horizontal}
           desiredWidth={desiredWidth}
           desiredHeight={desiredHeight}
           desiredDepth={desiredDepth}
@@ -43,12 +71,14 @@ export const StandBuilder: React.FC<StandBuilderProps> = ({
         />
 
         <Drawers
-          horizontalUrl={horizontalUrl}
+          horizontalScene={scenes.horizontal}
           desiredWidth={desiredWidth}
           desiredHeight={desiredHeight}
           desiredDepth={desiredDepth}
           desiredPlintHeight={desiredPlintHeight}
           selectedColor={selectedColor}
+          drawerOffsetZ={drawerOffsetZ}
+          lerpSpeed={lerpSpeed}
         />
       </group>
     </Suspense>

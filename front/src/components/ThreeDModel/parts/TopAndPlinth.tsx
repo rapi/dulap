@@ -1,13 +1,12 @@
 import React, { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { SkeletonUtils } from 'three-stdlib'
-import { useGLTF } from '@react-three/drei'
 import { FURNITURE_CONFIG } from '../furnitureConfig'
-import { anchorGeometryToBottom, anchorGeometryToWall, applyColorToObject } from '../furnitureUtils'
+import { anchorGeometryToBottom, anchorGeometryToWall, applyColorToObject, disposeObject } from '../furnitureUtils'
 
 interface TopAndPlinthProps {
-  verticalUrl: string
-  horizontalUrl: string
+  verticalScene: THREE.Object3D
+  horizontalScene: THREE.Object3D
   desiredWidth: number
   desiredHeight: number
   desiredDepth: number
@@ -16,19 +15,17 @@ interface TopAndPlinthProps {
 }
 
 export const TopAndPlinth: React.FC<TopAndPlinthProps> = ({
-  verticalUrl,
-  horizontalUrl,
+  verticalScene,
+  horizontalScene,
   desiredWidth,
   desiredHeight,
   desiredDepth,
   desiredPlintHeight,
   selectedColor,
 }) => {
-  const { scene: verticalSample } = useGLTF(verticalUrl)
-  const { scene: horizontalSample } = useGLTF(horizontalUrl)
 
   const { top, plinth } = useMemo(() => {
-    if (!verticalSample || !horizontalSample) return { top: null, plinth: null }
+    if (!verticalScene || !horizontalScene) return { top: null, plinth: null }
 
     const prepareComponent = (component: THREE.Object3D): THREE.Object3D => {
       component.traverse((o) => {
@@ -53,10 +50,10 @@ export const TopAndPlinth: React.FC<TopAndPlinthProps> = ({
       return component
     }
 
-    const topPanel = prepareComponent(SkeletonUtils.clone(verticalSample))
-    const plinthPanel = prepareComponent(SkeletonUtils.clone(horizontalSample))
+    const topPanel = prepareComponent(SkeletonUtils.clone(verticalScene))
+    const plinthPanel = prepareComponent(SkeletonUtils.clone(horizontalScene))
     return { top: topPanel, plinth: plinthPanel }
-  }, [verticalSample, horizontalSample])
+  }, [verticalScene, horizontalScene])
 
   useEffect(() => {
     if (!top || !plinth) return
@@ -88,6 +85,14 @@ export const TopAndPlinth: React.FC<TopAndPlinthProps> = ({
     applyColorToObject(top, selectedColor)
     applyColorToObject(plinth, selectedColor)
   }, [top, plinth, selectedColor])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (top) disposeObject(top)
+      if (plinth) disposeObject(plinth)
+    }
+  }, [top, plinth])
 
   if (!top || !plinth) return null
 

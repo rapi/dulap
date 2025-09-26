@@ -20,11 +20,47 @@ export const applyColorToObject = (obj: THREE.Object3D, color: string): void => 
       const mesh = o as THREE.Mesh
       const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
       materials.forEach((mat) => {
-        if (mat && 'color' in mat && (mat as any).color instanceof THREE.Color) {
-          ;(mat as any).color.set(color)
-          ;(mat as any).needsUpdate = true
+        if (mat && 'color' in mat && mat.color instanceof THREE.Color) {
+          mat.color.set(color)
+          mat.needsUpdate = true
         }
       })
     }
   })
+}
+
+// Dispose of geometries and materials to free GPU memory
+export const disposeObject = (obj: THREE.Object3D): void => {
+  obj.traverse((child) => {
+    if ((child as THREE.Mesh).isMesh) {
+      const mesh = child as THREE.Mesh
+      
+      if (mesh.geometry) {
+        mesh.geometry.dispose()
+      }
+      
+      if (mesh.material) {
+        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+        materials.forEach((mat) => {
+          if (mat && mat instanceof THREE.Material) {
+            // Dispose textures if any
+            const texturedMat = mat as THREE.MeshStandardMaterial | THREE.MeshBasicMaterial | THREE.MeshPhysicalMaterial
+            if (texturedMat.map) texturedMat.map.dispose()
+            if ('normalMap' in texturedMat && texturedMat.normalMap) texturedMat.normalMap.dispose()
+            if ('roughnessMap' in texturedMat && texturedMat.roughnessMap) texturedMat.roughnessMap.dispose()
+            if ('metalnessMap' in texturedMat && texturedMat.metalnessMap) texturedMat.metalnessMap.dispose()
+            if ('aoMap' in texturedMat && texturedMat.aoMap) texturedMat.aoMap.dispose()
+            
+            // Dispose material
+            mat.dispose()
+          }
+        })
+      }
+    }
+  })
+  
+  // Clear from parent if it has one
+  if (obj.parent) {
+    obj.parent.remove(obj)
+  }
 }
