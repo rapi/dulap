@@ -3,7 +3,7 @@ import { ProductConstraints, PricingConfig } from './BaseProductConfigurator'
 // Stand Configuration
 export const STAND_CONSTRAINTS: ProductConstraints = {
   widthRange: [50, 120],
-  heightRange: [70, 130],
+  heightRange: [30, 130],
   depthRange: [35, 50],
   plintHeightRange: [2, 10],
   colors: ['Biege', 'White', 'Light Grey', 'Grey'],

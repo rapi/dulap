@@ -51,6 +51,7 @@ export type ProductComponent =
   | ProductSectionsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
+
 export type PredefinedValue = {
   sections?: number
   imageSelect?: string
