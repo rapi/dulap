@@ -1,4 +1,26 @@
 import * as THREE from 'three'
+import { SkeletonUtils } from 'three-stdlib'
+
+export function createPivotAnchored(
+  object: THREE.Object3D,
+  { anchorY = 'min', anchorZ = 'min' }: { anchorY?: 'min'|'center'|'max', anchorZ?: 'min'|'center'|'max' } = {}
+) {
+  const pivot = new THREE.Group();
+  pivot.add(object);
+
+  const box = new THREE.Box3().setFromObject(object);
+  const getAnchor = (min: number, max: number, kind: 'min'|'center'|'max') =>
+    kind === 'min' ? min : kind === 'max' ? max : (min + max) * 0.5;
+
+  const ay = getAnchor(box.min.y, box.max.y, anchorY);
+  const az = getAnchor(box.min.z, box.max.z, anchorZ);
+
+  object.position.y -= ay;
+  object.position.z -= az;
+
+  pivot.updateMatrixWorld(true);
+  return pivot;
+}
 
 export const anchorGeometryToBottom = (mesh: THREE.Mesh): void => {
   mesh.geometry = mesh.geometry.clone()
@@ -27,6 +49,28 @@ export const applyColorToObject = (obj: THREE.Object3D, color: string): void => 
       })
     }
   })
+}
+
+// Clone an Object3D tree, deeply cloning materials to avoid shared state across parts
+export const cloneWithIndependentMaterials = (
+  sourceObject: THREE.Object3D,
+  { castShadow = true, receiveShadow = true }: { castShadow?: boolean; receiveShadow?: boolean } = {}
+): THREE.Object3D => {
+  const clonedRoot = SkeletonUtils.clone(sourceObject) as THREE.Object3D
+  clonedRoot.traverse((node) => {
+    const meshNode = node as THREE.Mesh
+    if (meshNode.isMesh) {
+      const originalMaterial = meshNode.material
+      if (originalMaterial) {
+        meshNode.material = Array.isArray(originalMaterial)
+          ? originalMaterial.map((materialInstance) => materialInstance.clone())
+          : originalMaterial.clone()
+      }
+      meshNode.castShadow = castShadow
+      meshNode.receiveShadow = receiveShadow
+    }
+  })
+  return clonedRoot
 }
 
 // Dispose of geometries and materials to free GPU memory

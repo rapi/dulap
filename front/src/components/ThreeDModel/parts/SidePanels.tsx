@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { memo, useEffect, useMemo } from 'react'
 import * as THREE from 'three'
-import { SkeletonUtils } from 'three-stdlib'
 import { FURNITURE_CONFIG } from '../furnitureConfig'
-import { anchorGeometryToBottom, anchorGeometryToWall, applyColorToObject, disposeObject } from '../furnitureUtils'
+import { applyColorToObject, createPivotAnchored, disposeObject, cloneWithIndependentMaterials } from '../furnitureUtils'
 
 interface SidePanelsProps {
   horizontalScene: THREE.Object3D
@@ -12,85 +11,70 @@ interface SidePanelsProps {
   selectedColor: string
 }
 
-export const SidePanels: React.FC<SidePanelsProps> = ({
-  horizontalScene,
-  desiredWidth,
-  desiredHeight,
-  desiredDepth,
+const SidePanelsComponent: React.FC<SidePanelsProps> = ({
+  horizontalScene: sidePanelSource,
+  desiredWidth: cabinetWidth,
+  desiredHeight: cabinetHeight,
+  desiredDepth: cabinetDepth,
   selectedColor,
 }) => {
-
-  const { leftSide, rightSide } = useMemo(() => {
-    if (!horizontalScene) return { leftSide: null, rightSide: null }
-
-    const prepareComponent = (component: THREE.Object3D): THREE.Object3D => {
-      component.traverse((o) => {
-        if ((o as THREE.Mesh).isMesh) {
-          const mesh = o as THREE.Mesh
-          if (mesh.material) {
-            mesh.material = Array.isArray(mesh.material)
-              ? mesh.material.map((m) => m.clone())
-              : mesh.material.clone()
-          }
-          anchorGeometryToBottom(mesh)
-          anchorGeometryToWall(mesh)
-          mesh.uuid = THREE.MathUtils.generateUUID()
-          mesh.castShadow = true
-          mesh.receiveShadow = true
-          mesh.matrixAutoUpdate = true
-          mesh.updateMatrix()
-        }
-      })
-      component.uuid = THREE.MathUtils.generateUUID()
-      component.updateMatrixWorld(true)
-      return component
+  const { leftSidePanelPivot, rightSidePanelPivot } = useMemo(() => {
+    if (!sidePanelSource) {
+      return {
+        leftSidePanelPivot: null as THREE.Object3D | null,
+        rightSidePanelPivot: null as THREE.Object3D | null,
+      }
     }
 
-    const left = prepareComponent(SkeletonUtils.clone(horizontalScene))
-    const right = prepareComponent(SkeletonUtils.clone(horizontalScene))
-    return { leftSide: left, rightSide: right }
-  }, [horizontalScene])
+    const leftPanelModel = cloneWithIndependentMaterials(sidePanelSource)
+    const rightPanelModel = cloneWithIndependentMaterials(sidePanelSource)
+
+    const leftSidePanelPivot = createPivotAnchored(leftPanelModel, { anchorY: 'min', anchorZ: 'min' })
+    const rightSidePanelPivot = createPivotAnchored(rightPanelModel, { anchorY: 'min', anchorZ: 'min' })
+
+    return { leftSidePanelPivot, rightSidePanelPivot }
+  }, [sidePanelSource])
 
   useEffect(() => {
-    if (!leftSide || !rightSide) return
+    if (!leftSidePanelPivot || !rightSidePanelPivot) return
 
     const { panelThickness, defaultScale } = FURNITURE_CONFIG
-    const sidePanelScale = [
-      panelThickness * defaultScale,
-      (desiredHeight - panelThickness) * defaultScale,
-      (desiredDepth - panelThickness) * defaultScale,
-    ] as [number, number, number]
 
-    leftSide.scale.set(...sidePanelScale)
-    rightSide.scale.set(...sidePanelScale)
+    const sideThickness = panelThickness * defaultScale
+    const sideHeight = (cabinetHeight - panelThickness) * defaultScale
+    const sideDepth = (cabinetDepth - panelThickness) * defaultScale
 
-    leftSide.position.set(-desiredWidth / 2 + panelThickness / 2, 0, 0)
-    rightSide.position.set(desiredWidth / 2 - panelThickness / 2, 0, 0)
+    leftSidePanelPivot.scale.set(sideThickness, sideHeight, sideDepth)
+    rightSidePanelPivot.scale.set(sideThickness, sideHeight, sideDepth)
 
-    leftSide.updateMatrixWorld(true)
-    rightSide.updateMatrixWorld(true)
-  }, [leftSide, rightSide, desiredWidth, desiredHeight, desiredDepth])
+    leftSidePanelPivot.position.set(-cabinetWidth / 2 + panelThickness / 2, 0, 0)
+    rightSidePanelPivot.position.set(+cabinetWidth / 2 - panelThickness / 2, 0, 0)
+
+    leftSidePanelPivot.updateMatrixWorld(true)
+    rightSidePanelPivot.updateMatrixWorld(true)
+  }, [leftSidePanelPivot, rightSidePanelPivot, cabinetWidth, cabinetHeight, cabinetDepth])
 
   useEffect(() => {
-    if (!leftSide || !rightSide) return
-    applyColorToObject(leftSide, selectedColor)
-    applyColorToObject(rightSide, selectedColor)
-  }, [leftSide, rightSide, selectedColor])
+    if (!leftSidePanelPivot || !rightSidePanelPivot) return
+    applyColorToObject(leftSidePanelPivot, selectedColor)
+    applyColorToObject(rightSidePanelPivot, selectedColor)
+  }, [leftSidePanelPivot, rightSidePanelPivot, selectedColor])
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (leftSide) disposeObject(leftSide)
-      if (rightSide) disposeObject(rightSide)
+      if (leftSidePanelPivot) disposeObject(leftSidePanelPivot)
+      if (rightSidePanelPivot) disposeObject(rightSidePanelPivot)
     }
-  }, [leftSide, rightSide])
+  }, [leftSidePanelPivot, rightSidePanelPivot])
 
-  if (!leftSide || !rightSide) return null
+  if (!leftSidePanelPivot || !rightSidePanelPivot) return null
 
   return (
     <group>
-      <primitive object={leftSide} />
-      <primitive object={rightSide} />
+      <primitive object={leftSidePanelPivot} />
+      <primitive object={rightSidePanelPivot} />
     </group>
   )
 }
+
+export const SidePanels = memo(SidePanelsComponent)

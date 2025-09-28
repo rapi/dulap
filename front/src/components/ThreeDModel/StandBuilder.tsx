@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo } from 'react'
+import React, { Suspense, memo, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { TopAndPlinth } from './parts/TopAndPlinth'
@@ -21,7 +21,7 @@ const HORIZONTAL_URL = '/assets/3d-models/horizontal_sample.glb'
 useGLTF.preload(VERTICAL_URL)
 useGLTF.preload(HORIZONTAL_URL)
 
-export const StandBuilder: React.FC<StandBuilderProps> = ({
+const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   selectedColor,
   desiredWidth,
   desiredHeight,
@@ -31,11 +31,9 @@ export const StandBuilder: React.FC<StandBuilderProps> = ({
   lerpSpeed = 0.1,
 }) => {
 
-  // Load models once in parent
   const { scene: verticalScene } = useGLTF(VERTICAL_URL)
   const { scene: horizontalScene } = useGLTF(HORIZONTAL_URL)
 
-  // Memoize scenes to prevent unnecessary re-renders
   const scenes = useMemo(
     () => ({
       vertical: verticalScene,
@@ -84,3 +82,5 @@ export const StandBuilder: React.FC<StandBuilderProps> = ({
     </Suspense>
   )
 }
+
+export const StandBuilder = memo(StandBuilderComponent)

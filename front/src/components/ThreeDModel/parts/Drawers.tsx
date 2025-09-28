@@ -1,14 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
-import { SkeletonUtils } from 'three-stdlib'
-import { FURNITURE_CONFIG } from '../furnitureConfig'
-import {
-  anchorGeometryToBottom,
-  anchorGeometryToWall,
-  applyColorToObject,
-  disposeObject,
-} from '../furnitureUtils'
 import { useFrame, ThreeEvent } from '@react-three/fiber'
+import { FURNITURE_CONFIG } from '../furnitureConfig'
+import { applyColorToObject, createPivotAnchored, disposeObject, cloneWithIndependentMaterials } from '../furnitureUtils'
 
 interface DrawersProps {
   horizontalScene: THREE.Object3D
@@ -21,220 +15,178 @@ interface DrawersProps {
   lerpSpeed?: number
 }
 
-export const Drawers: React.FC<DrawersProps> = ({
+const DrawersComponent: React.FC<DrawersProps> = ({
   horizontalScene,
   desiredWidth,
   desiredHeight,
   desiredDepth,
   desiredPlintHeight,
   selectedColor,
-  drawerOffsetZ = 15, // Increased for more visible pull-out effect
-  lerpSpeed = 0.15, // Slightly faster for more responsive feel
+  drawerOffsetZ = 15,
+  lerpSpeed = 0.15,
 }) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [hoveredDrawerIndex, setHoveredDrawerIndex] = useState<number | null>(null)
   const drawerPositionsRef = useRef<Map<number, number>>(new Map())
 
-  const drawers = useMemo(() => {
+  const drawerGroups = useMemo(() => {
     if (!horizontalScene) return [] as THREE.Object3D[]
 
-    const prepareComponent = (
-      component: THREE.Object3D,
-      userData?: Record<string, unknown>
-    ): THREE.Object3D => {
-      component.traverse((o) => {
-        if ((o as THREE.Mesh).isMesh) {
-          const mesh = o as THREE.Mesh
-          if (mesh.material) {
-            mesh.material = Array.isArray(mesh.material)
-              ? mesh.material.map((m) => m.clone())
-              : mesh.material.clone()
-          }
-          anchorGeometryToBottom(mesh)
-          anchorGeometryToWall(mesh)
-          mesh.uuid = THREE.MathUtils.generateUUID()
-          mesh.castShadow = true
-          mesh.receiveShadow = true
-          mesh.matrixAutoUpdate = true
-          mesh.updateMatrix()
-        }
-      })
-      component.uuid = THREE.MathUtils.generateUUID()
-      if (userData) {
-        component.userData = userData
-      }
-      component.updateMatrixWorld(true)
-      return component
+    const createPanelPivotWithFlag = (panelFlagKey: string) => {
+      const panelModel = cloneWithIndependentMaterials(horizontalScene)
+      const panelPivot = createPivotAnchored(panelModel, { anchorY: 'min', anchorZ: 'min' })
+      panelPivot.userData[panelFlagKey] = true
+      return panelPivot
     }
 
-    const list: THREE.Object3D[] = []
+    const drawerGroupList: THREE.Object3D[] = []
+    for (let drawerIndex = 0; drawerIndex < FURNITURE_CONFIG.maxDrawers; drawerIndex++) {
+      const frontPanelPivot = createPanelPivotWithFlag('isDrawerFront')
+      const bottomPanelPivot = createPanelPivotWithFlag('isDrawerBottom')
+      const leftPanelPivot = createPanelPivotWithFlag('isDrawerLeft')
+      const rightPanelPivot = createPanelPivotWithFlag('isDrawerRight')
 
-    for (let i = 0; i < FURNITURE_CONFIG.maxDrawers; i++) {
-      const frontDrawerPart = prepareComponent(
-        SkeletonUtils.clone(horizontalScene),
-        { isDrawer: true }
-      )
-      const bottomDrawerPart = prepareComponent(
-        SkeletonUtils.clone(horizontalScene),
-        { bottomDrawer: true }
-      )
-      const leftDrawerPart = prepareComponent(
-        SkeletonUtils.clone(horizontalScene),
-        { leftDrawer: true }
-      )
-      const rightDrawerPart = prepareComponent(
-        SkeletonUtils.clone(horizontalScene),
-        { rightDrawer: true }
-      )
+      const drawerGroup = new THREE.Group()
+      drawerGroup.add(frontPanelPivot, bottomPanelPivot, leftPanelPivot, rightPanelPivot)
+      drawerGroup.userData.isDrawerGroup = true
+      drawerGroup.userData.drawerIndex = drawerIndex
 
-      const combinedDrawer = new THREE.Group()
-      combinedDrawer.add(frontDrawerPart)
-      combinedDrawer.add(bottomDrawerPart)
-      combinedDrawer.add(leftDrawerPart)
-      combinedDrawer.add(rightDrawerPart)
-
-      combinedDrawer.userData.isDrawerGroup = true
-      combinedDrawer.uuid = THREE.MathUtils.generateUUID()
-
-      list.push(combinedDrawer)
+      drawerGroupList.push(drawerGroup)
     }
-    return list
+    return drawerGroupList
   }, [horizontalScene])
 
   useEffect(() => {
-    if (!drawers || drawers.length === 0) return
+    if (drawerGroups.length === 0) return
 
-    const { panelThickness, defaultScale, drawerSpacing, defaultDrawerCount } =
-      FURNITURE_CONFIG
-    const drawersFullHeight =
-      desiredHeight - panelThickness - desiredPlintHeight
-    const nrOfDrawers = Math.min(
+    const {
+      panelThickness,
+      defaultScale,
+      drawerSpacing,
       defaultDrawerCount,
-      Math.floor(drawersFullHeight / FURNITURE_CONFIG.minDrawerHeight)
+      minDrawerHeight,
+    } = FURNITURE_CONFIG
+
+    const drawersUsableHeight = desiredHeight - panelThickness - desiredPlintHeight
+    const drawerCount = Math.min(
+      defaultDrawerCount,
+      Math.max(1, Math.floor(drawersUsableHeight / minDrawerHeight))
     )
-    const drawerHeight = drawersFullHeight / nrOfDrawers
-    const drawerBox = {
-      height: drawerHeight - 5,
-      width: desiredWidth - panelThickness * 2 - drawerSpacing * 2,
-      depth: desiredDepth - panelThickness * 2 - drawerSpacing * 2,
-    }
+    const singleDrawerTotalHeight = drawersUsableHeight / drawerCount
 
-    drawers.forEach((drawer, index) => {
-      if (index < nrOfDrawers) {
-        drawer.visible = true
+    const innerHeight = singleDrawerTotalHeight - drawerSpacing * 4
+    const innerWidth = desiredWidth - panelThickness * 2 - drawerSpacing * 2
+    const innerDepth = desiredDepth - panelThickness * 2 - drawerSpacing * 2
+    const halfInnerWidth = innerWidth / 2
 
-        // Set the drawer group's position and metadata
-        const baseY = desiredPlintHeight + drawerSpacing + drawerHeight * index
+    drawerGroups.forEach((drawerGroup, groupIndex) => {
+      if (groupIndex < drawerCount) {
+        drawerGroup.visible = true
+
+        const baseY = desiredPlintHeight + drawerSpacing + singleDrawerTotalHeight * groupIndex
         const baseZ = 0
-        drawer.position.set(0, baseY, baseZ)
-        drawer.userData.baseZ = baseZ
-        drawer.userData.drawerIndex = index
-        drawerPositionsRef.current.set(index, baseZ)
 
-        // Position children relative to the group
-        drawer.children.forEach((child) => {
-          if (child.userData.isDrawer) {
-            child.scale.set(
+        drawerGroup.position.set(0, baseY, baseZ)
+        drawerGroup.userData.baseZ = baseZ
+        drawerGroup.userData.drawerIndex = groupIndex
+        drawerPositionsRef.current.set(groupIndex, baseZ)
+
+        drawerGroup.children.forEach((panelPivot) => {
+          if (panelPivot.userData.isDrawerFront) {
+            panelPivot.scale.set(
               desiredWidth * defaultScale,
-              (drawerHeight - drawerSpacing * 2) * defaultScale,
+              innerHeight * defaultScale,
               panelThickness * defaultScale
             )
-            child.position.set(0, 0, desiredDepth - panelThickness)
-          } else if (child.userData.leftDrawer) {
-            child.scale.set(
+            panelPivot.position.set(0, 0, desiredDepth - panelThickness)
+          } else if (panelPivot.userData.isDrawerLeft) {
+            panelPivot.scale.set(
               panelThickness * defaultScale,
-              drawerBox.height * defaultScale,
-              drawerBox.depth * defaultScale
+              (innerHeight-5) * defaultScale,
+              innerDepth * defaultScale
             )
-            child.position.set(
-              -drawerBox.width / 2 + panelThickness / 2,
-              0,
-              panelThickness
-            )
-          } else if (child.userData.rightDrawer) {
-            child.scale.set(
+            panelPivot.position.set(-halfInnerWidth + panelThickness / 2, 0, panelThickness)
+          } else if (panelPivot.userData.isDrawerRight) {
+            panelPivot.scale.set(
               panelThickness * defaultScale,
-              drawerBox.height * defaultScale,
-              drawerBox.depth * defaultScale
+              (innerHeight-5) * defaultScale,
+              innerDepth * defaultScale
             )
-            child.position.set(
-              desiredWidth / 2 - panelThickness / 2,
-              0,
-              panelThickness
-            )
-          } else if (child.userData.bottomDrawer) {
-            child.scale.set(
-              drawerBox.width * defaultScale,
+            panelPivot.position.set(+halfInnerWidth - panelThickness / 2, 0, panelThickness)
+          } else if (panelPivot.userData.isDrawerBottom) {
+            panelPivot.scale.set(
+              innerWidth * defaultScale,
               panelThickness * defaultScale,
-              drawerBox.depth * defaultScale
+              innerDepth * defaultScale
             )
-            child.position.set(0, 0, panelThickness)
+            panelPivot.position.set(0, 0, panelThickness)
           }
         })
       } else {
-        drawer.visible = false
+        drawerGroup.visible = false
       }
     })
-  }, [drawers, desiredWidth, desiredHeight, desiredDepth, desiredPlintHeight])
+  }, [drawerGroups, desiredWidth, desiredHeight, desiredDepth, desiredPlintHeight])
 
   useEffect(() => {
-    if (!drawers || drawers.length === 0) return
-    drawers.forEach((drawer) => applyColorToObject(drawer, selectedColor))
-  }, [drawers, selectedColor])
+    if (drawerGroups.length === 0) return
+    drawerGroups.forEach((drawerGroup) => applyColorToObject(drawerGroup, selectedColor))
+  }, [drawerGroups, selectedColor])
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      drawers.forEach((drawer) => {
-        if (drawer) disposeObject(drawer)
-      })
+      drawerGroups.forEach((drawerGroup) => drawerGroup && disposeObject(drawerGroup))
       document.body.style.cursor = 'auto'
     }
-  }, [drawers])
+  }, [drawerGroups])
 
   useFrame(() => {
-    if (!drawers || drawers.length === 0) return
+    if (drawerGroups.length === 0) return
 
-    drawers.forEach((drawer) => {
-      if (!drawer.visible || typeof drawer.userData.drawerIndex !== 'number')
-        return
+    drawerGroups.forEach((drawerGroup) => {
+      if (!drawerGroup.visible || typeof drawerGroup.userData.drawerIndex !== 'number') return
 
-      const index = drawer.userData.drawerIndex
-      const baseZ = drawer.userData.baseZ || 0
-      const targetZ = hoveredIndex === index ? baseZ + drawerOffsetZ : baseZ
-      const currentZ = drawerPositionsRef.current.get(index) || baseZ
-      const newZ = THREE.MathUtils.lerp(currentZ, targetZ, lerpSpeed)
+      const groupIndex = drawerGroup.userData.drawerIndex
+      const baseZ = drawerGroup.userData.baseZ || 0
+      const targetZ = hoveredDrawerIndex === groupIndex ? baseZ + drawerOffsetZ : baseZ
+      const currentZ = drawerPositionsRef.current.get(groupIndex) ?? baseZ
+      const interpolatedZ = THREE.MathUtils.lerp(currentZ, targetZ, lerpSpeed)
 
-      drawer.position.z = newZ
-      drawerPositionsRef.current.set(index, newZ)
+      drawerGroup.position.z = interpolatedZ
+      drawerPositionsRef.current.set(groupIndex, interpolatedZ)
     })
   })
 
-  const handlePointerOver = (e: ThreeEvent<PointerEvent>) => {
-    e.stopPropagation()
-    let obj = e.object as THREE.Object3D | undefined
+  const handlePointerOver = useCallback((event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    let currentNode: THREE.Object3D | undefined = event.object
 
-    while (obj && typeof obj.userData.drawerIndex !== 'number') {
-      obj = obj.parent as THREE.Object3D
+    while (currentNode && currentNode.parent && !currentNode.userData.isDrawerGroup) {
+      currentNode = currentNode.parent
     }
 
-    if (obj && typeof obj.userData.drawerIndex === 'number') {
-      setHoveredIndex(obj.userData.drawerIndex)
+    if (
+      currentNode &&
+      currentNode.userData.isDrawerGroup &&
+      typeof currentNode.userData.drawerIndex === 'number'
+    ) {
+      setHoveredDrawerIndex(currentNode.userData.drawerIndex)
       document.body.style.cursor = 'pointer'
     }
-  }
-  const handlePointerOut = () => {
-    setHoveredIndex(null)
-    document.body.style.cursor = 'auto'
-  }
+  }, [])
 
-  if (!drawers || drawers.length === 0) return null
+  const handlePointerOut = useCallback(() => {
+    setHoveredDrawerIndex(null)
+    document.body.style.cursor = 'auto'
+  }, [])
+
+  if (drawerGroups.length === 0) return null
 
   return (
     <group>
-      {drawers.map((drawer, index) => (
+      {drawerGroups.map((drawerGroup, index) => (
         <primitive
           key={`drawer-${index}`}
-          object={drawer}
+          object={drawerGroup}
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
         />
@@ -242,3 +194,5 @@ export const Drawers: React.FC<DrawersProps> = ({
     </group>
   )
 }
+
+export const Drawers = memo(DrawersComponent)
