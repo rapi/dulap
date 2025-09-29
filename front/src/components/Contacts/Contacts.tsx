@@ -81,9 +81,9 @@ export const Contacts: React.FC = () => {
       {/* Hero Section */}
       <section className={styles.pageHero}>
         <div className={styles.container}>
-          <h1>
+          <h3 className={styles.title}>
             <FormattedMessage id="contacts.title" />
-          </h1>
+          </h3>
           <p>
             <FormattedMessage id="contacts.subtitle" />
           </p>

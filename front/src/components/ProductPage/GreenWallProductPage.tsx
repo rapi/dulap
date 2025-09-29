@@ -62,7 +62,7 @@ export const ProductPage: FC<ProductPageProps> = ({ components, name }) => {
       </div>
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
-        <h1 className={styles.title}>{name}</h1>
+        <h3 className={styles.title}>{name}</h3>
         {currentComponents.map((component, index) => {
           return (
             <div key={index + component.type}>{getComponent(component)}</div>

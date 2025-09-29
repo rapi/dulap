@@ -63,7 +63,7 @@ export const ProductTypesList: React.FC = () => {
               <div className={styles.productTypeTitle}>
                 {isAvailable ? (
                   <Link href={link} className={styles.nameLink}>
-                    <FormattedMessage id={name} />
+                    <h3 className={styles.name}><FormattedMessage id={name} /></h3>
                   </Link>
                 ) : (
                   <span className={styles.disabledName}>

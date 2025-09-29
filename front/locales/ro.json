@@ -1,5 +1,11 @@
 {
-  "meta.title": "Dulapul tău",
+  "meta.title": "Dulapuri la comanda în Chisinau, Moldova | dulap.md",
+  "meta.description": "dulap.md - Dulapuri și mobilier la comandă în Chișinău și Moldova. Configurator online. Livrare rapidă.",
+
+  "meta.aboutUs.title": "Despre noi - echipa dulap.md",
+  "meta.contactUs.title": "Contacteaza-ne",
+  "meta.cart.title": "Coșul meu",
+  "meta.checkout.title": "Comanda mea",
 
   "homepage.banner.title.0": "Dulapul tău -",
   "homepage.banner.title.1": " exact cum îl vrei",
@@ -9,8 +15,10 @@
   "homepage.banner.subtitle.3": "preferințele",
   "homepage.banner.subtitle.4": "tale",
 
-  "homepage.banner.preorder.0": "Redefinim piața de",
-  "homepage.banner.preorder.1": "mobilă modulară în Moldova.",
+  "homepage.banner.header.0": "DESCOPERĂ VIITORUL MOBILEI LA COMANDĂ",
+  "homepage.banner.preorder.0": "Mobila personalizată",
+  "homepage.banner.preorder.1": "în care poți avea încredere",
+  "homepage.banner.header.hidden": "Dulapuri, comode, noptiere la comanda in Chisinau, Moldova",
 
   "homepage.banner.comment": "Lansarea: 10 iulie 2025",
 

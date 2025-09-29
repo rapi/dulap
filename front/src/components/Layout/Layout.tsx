@@ -1,7 +1,6 @@
 import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import Script from 'next/script'
 import { useIntl } from 'react-intl'
 
 import { Menu } from '~/components/Menu/Menu'
@@ -12,7 +11,6 @@ import './Layout.css'
 type LayoutProps = {
   children: ReactNode
 }
-
 export default function Layout({ children }: LayoutProps) {
   const intl = useIntl()
   const title = intl.formatMessage({ id: 'meta.title' })
@@ -30,23 +28,6 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <>
-      {/* 1. Load GA library */}
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
-      />
-      {/* 2. Initialize gtag */}
-      <Script id="gtag-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${gtag.GA_MEASUREMENT_ID}', {
-            page_path: window.location.pathname,
-          });
-        `}
-      </Script>
-
       <Head>
         <title>{title}</title>
         <meta

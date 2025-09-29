@@ -105,9 +105,9 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'imageCarousel',
       images: [
-        `/stand/${base.imageColor}/${base.openingOption}/Base ${base.imagePlintHeight}/H${base.imageHeight}/S${selectedSections}/${base.imageWidth}.png`,
-        `/stand/render/${base.imageColor} 1.png`,
-        `/stand/render/${base.imageColor} 2.png`,
+        `/stand2/${base.imageColor}/${base.openingOption}/Base ${base.imagePlintHeight}/H${base.imageHeight}/S${selectedSections}/${base.imageWidth}.png`,
+        `/stand2/render/${base.imageColor} 1.png`,
+        `/stand2/render/${base.imageColor} 2.png`,
       ],
     },
   ]

@@ -10,7 +10,7 @@ const AboutUs: React.FC = () => {
     <div className={styles.about}>
         <section className={styles.aboutSection}>
             <div className={styles.container}>
-                <h1 className={styles.title}><FormattedMessage id="aboutUs.title"/></h1>
+                <h2 className={styles.title}><FormattedMessage id="aboutUs.title"/></h2>
                 <p className={styles.intro}>
                 <FormattedMessage id="aboutUs.subtitle"/>
                 </p>

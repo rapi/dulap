@@ -7,17 +7,26 @@ export const BannerContent = () => {
   return (
     <div className={classes.heroContent}>
       <div>
-        <p className={classes.heroTitle}>
+        <h1 className={classes.visuallyHiddenHeader}>
+          <FormattedMessage
+            id="homepage.banner.header.hidden"
+          />
+        </h1>
+        <h2 className={classes.heroHeader}>
+          <FormattedMessage
+            id="homepage.banner.header.0"
+          />
+        </h2>
+      </div>
+      <div>
+        <h2 className={classes.heroTitle}>
           <FormattedMessage
             id="homepage.banner.preorder.0"
-            // id="homepage.banner.title.0"
-            // defaultMessage="Dulapul tău -"
           />
-        </p>
-        <p className={classes.heroTitle}>
-          {/* <FormattedMessage id="homepage.banner.title.1" /> */}
+        </h2>
+        <h2 className={classes.heroTitle}>
           <FormattedMessage id="homepage.banner.preorder.1" />
-        </p>
+        </h2>
       </div>
 
       <div className={classes.heroButtonContainer}>

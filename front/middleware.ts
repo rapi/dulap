@@ -14,7 +14,11 @@ function getLocaleFromRequest(request: NextRequest): string {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  if (pathname.startsWith('/api')) {
+  if (
+    pathname.startsWith('/api') ||
+    pathname.endsWith('sitemap.xml') ||
+    pathname.endsWith('robots.txt')
+  ) {
     return
   }
 
