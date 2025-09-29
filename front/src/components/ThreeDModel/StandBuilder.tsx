@@ -1,78 +1,86 @@
-import React, { useEffect, Suspense } from 'react'
-import { useLoader, ThreeEvent } from '@react-three/fiber'
-import { FBXLoader } from 'three-stdlib'
-import * as THREE from 'three'
-import { StandComponents } from './StandComponents.enum'
+import React, { Suspense, memo, useMemo } from 'react'
+import { useGLTF } from '@react-three/drei'
+import { SidePanels } from './parts/SidePanels'
+import { TopAndPlinth } from './parts/TopAndPlinth'
+import { Drawers } from './parts/Drawers'
 
 interface StandBuilderProps {
-  desiredWidth?: number // Target width for the stand in the scene units (default = 80)
+  selectedColor: string
+  desiredWidth: number
+  desiredHeight: number
+  desiredDepth: number
+  desiredPlintHeight: number
+  drawerOffsetZ?: number
+  lerpSpeed?: number
 }
 
-/**
- * StandBuilder is responsible for building the stand from its individual FBX
- * components. For now, it only places the Bottom component in the scene and
- * scales it so that its total width matches `desiredWidth` (80 units by default).
- */
-export const StandBuilder: React.FC<StandBuilderProps> = ({ desiredWidth = 80 }) => {
-  // Load the original FBX file just once
-  const fbx = useLoader(FBXLoader, '/assets/stand.fbx')
+// Preload assets for better performance
+const VERTICAL_URL = '/assets/3d-models/vertical_sample.glb'
+const HORIZONTAL_URL = '/assets/3d-models/horizontal_sample.glb'
 
-  // Keep bottom mesh in state so component re-renders once it's ready
-  const [bottomObject, setBottomObject] = React.useState<THREE.Object3D | null>(null)
+useGLTF.preload(VERTICAL_URL)
+useGLTF.preload(HORIZONTAL_URL)
 
-  // Extract the components we need out of the FBX once it's available
-  useEffect(() => {
-    if (!fbx) return
+const StandBuilderComponent: React.FC<StandBuilderProps> = ({
+  selectedColor,
+  desiredWidth,
+  desiredHeight,
+  desiredDepth,
+  desiredPlintHeight,
+  drawerOffsetZ = 10,
+  lerpSpeed = 0.1,
+}) => {
 
-    // We only want to keep ONE copy of the meshes – clone them so we can safely
-    // manipulate (scale / position) without touching the original scene graph
-    let bottomFound: THREE.Object3D | undefined
+  const { scene: verticalScene } = useGLTF(VERTICAL_URL)
+  const { scene: horizontalScene } = useGLTF(HORIZONTAL_URL)
 
-    fbx.traverse((child) => {
-      if (!(child instanceof THREE.Mesh)) return
+  const scenes = useMemo(
+    () => ({
+      vertical: verticalScene,
+      horizontal: horizontalScene,
+    }),
+    [verticalScene, horizontalScene]
+  )
 
-      const lowerName = child.name.toLowerCase()
-      if (lowerName.includes(StandComponents.Bottom)) {
-        bottomFound = child.clone()
-      }
-    })
-
-    if (bottomFound && bottomFound instanceof THREE.Mesh) {
-      const originalBox = new THREE.Box3().setFromObject(bottomFound)
-      const originalWidth = originalBox.max.x - originalBox.min.x
-
-      if (originalWidth === 0) {
-        console.warn('[StandBuilder] Bottom component width is 0 – cannot scale.')
-      } else {
-        const scaleFactor = desiredWidth / originalWidth
-        bottomFound.scale.set(scaleFactor, 1, 1)
-      }
-
-      const scaledBox = new THREE.Box3().setFromObject(bottomFound)
-
-      bottomFound.position.z -= scaledBox.min.z
-      bottomFound.position.y -= scaledBox.min.y
-
-      const centerX = (scaledBox.max.x + scaledBox.min.x) / 2
-      bottomFound.position.x -= centerX
-
-      console.log('[StandBuilder] Bottom component aligned to', bottomFound.position)
-
-      setBottomObject(bottomFound)
-    } else {
-      console.warn('[StandBuilder] Could not find bottom component in stand.fbx')
-    }
-  }, [fbx, desiredWidth])
-
-  const handlePointerOver = (event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation()
+  // Don't render until models are loaded
+  if (!scenes.vertical || !scenes.horizontal) {
+    return null
   }
-  
-  if (!bottomObject) return null
 
   return (
     <Suspense fallback={null}>
-      <primitive object={bottomObject} onPointerOver={handlePointerOver} />
+      <group>
+        <SidePanels
+          horizontalScene={scenes.horizontal}
+          desiredWidth={desiredWidth}
+          desiredHeight={desiredHeight}
+          desiredDepth={desiredDepth}
+          selectedColor={selectedColor}
+        />
+
+        <TopAndPlinth
+          verticalScene={scenes.vertical}
+          horizontalScene={scenes.horizontal}
+          desiredWidth={desiredWidth}
+          desiredHeight={desiredHeight}
+          desiredDepth={desiredDepth}
+          desiredPlintHeight={desiredPlintHeight}
+          selectedColor={selectedColor}
+        />
+
+        <Drawers
+          horizontalScene={scenes.horizontal}
+          desiredWidth={desiredWidth}
+          desiredHeight={desiredHeight}
+          desiredDepth={desiredDepth}
+          desiredPlintHeight={desiredPlintHeight}
+          selectedColor={selectedColor}
+          drawerOffsetZ={drawerOffsetZ}
+          lerpSpeed={lerpSpeed}
+        />
+      </group>
     </Suspense>
   )
-} 
+}
+
+export const StandBuilder = memo(StandBuilderComponent)

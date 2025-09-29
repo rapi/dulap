@@ -23,13 +23,13 @@ export function middleware(request: NextRequest) {
   }
 
   // Skip asset files
-  if (/\.(png|jpe?g|gif|svg|webp|avif|mp4|fbx)$/.test(pathname)) {
+  if (/\.(png|jpe?g|gif|svg|webp|avif|mp4|fbx|glb)$/.test(pathname)) {
     // Special handling for FBX files and texture files in local development
     const isLocalhost = request.nextUrl.hostname === 'localhost' || request.nextUrl.hostname === '127.0.0.1'
     const isFBX = /\.fbx$/.test(pathname)
-    const isTexture = pathname.includes('/assets/textures/')
+    const isGLB = /\.glb$/.test(pathname)
     
-    if ((isFBX || isTexture) && isLocalhost) {
+    if ((isFBX || isGLB) && isLocalhost) {
       return NextResponse.next()
     }
     // For all other assets (including images), use the original rewrite logic

@@ -40,6 +40,8 @@ import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
+import { getColorItemByName } from '~/utils/colorDictionary'
+import { STAND_CONSTRAINTS } from './shared/ProductConfigs'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -49,6 +51,7 @@ export type ProductComponent =
   | ProductSectionsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
+
 export type PredefinedValue = {
   sections?: number
   imageSelect?: string
@@ -133,25 +136,28 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   const isStand3D = useStand3D()
 
-  // Extract current selected color (default White if not found)
+  // Extract current selected color (map names to HEX for 3D)
   const colorsComponent = currentComponents.find(
     (c): c is ProductColorsComponent => c.type === 'colors'
   )
-  const selectedColor = colorsComponent?.selectedColor ?? 'White'
+  const selectedColorNameOrHex = colorsComponent?.selectedColor ?? STAND_CONSTRAINTS.defaultValues.selectedColor
+  const selectedColorHex = getColorItemByName(selectedColorNameOrHex)?.hexCode ?? selectedColorNameOrHex
 
   // Extract current width & height for 3D scaling
   const dimensionsComponent = currentComponents.find(
     (c): c is ProductDimensionsComponent => c.type === 'dimensions'
   )
-  const currentWidth = dimensionsComponent?.width ?? 80
-  const currentHeight = dimensionsComponent?.height ?? 70
+  const currentWidth = dimensionsComponent?.width ?? STAND_CONSTRAINTS.defaultValues.width
+  const currentHeight = dimensionsComponent?.height ?? STAND_CONSTRAINTS.defaultValues.height
+  const currentDepth = dimensionsComponent?.depth ?? STAND_CONSTRAINTS.defaultValues.depth
+  const currentPlintHeight = dimensionsComponent?.plintHeight ?? STAND_CONSTRAINTS.defaultValues.plintHeight
 
   return (
     <>
       {/* Left Side: Viewer or Image Carousel */}
       <div className={styles.leftContainer}>
         {isStand3D ? (
-          <FurnitureViewer selectedColor={selectedColor} width={currentWidth} height={currentHeight} />
+          <FurnitureViewer selectedColor={selectedColorHex} width={currentWidth} height={currentHeight} depth={currentDepth} currentPlintHeight={currentPlintHeight} />
         ) : (
           imageCarouselComponent && (
             <ProductImageCarousel
@@ -178,7 +184,8 @@ export const ProductPage: FC<ProductPageProps> = ({
           )
         })}
       </div>
-      <div>
+      {!isStand3D && 
+     <div>
         {priceComponent && (
           <ProductPrice
             onAddItem={() => {
@@ -193,7 +200,8 @@ export const ProductPage: FC<ProductPageProps> = ({
         )}
         <ProductHelpBox />
         <ProductInfobox />
-      </div>
+      </div> 
+}
     </>
   )
 }

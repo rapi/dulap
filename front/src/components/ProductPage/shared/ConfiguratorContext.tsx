@@ -43,7 +43,7 @@ export interface ConfiguratorState {
 // Initial state
 const initialState: ConfiguratorState = {
   dimensions: { width: 80, height: 70, depth: 40, plintHeight: 2 },
-  appearance: { selectedColor: '#fcfbf5', imageColor: 'White' },
+  appearance: { selectedColor: '#ded9d3', imageColor: 'Biege' },
   sections: { count: 1, arrangement: [] },
   furniture: { 
     guides: 'homepage.configurator.fittings.guides.options.1',
