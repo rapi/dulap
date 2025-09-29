@@ -41,7 +41,15 @@ import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
 import { getColorItemByName } from '~/utils/colorDictionary'
-import { STAND_CONSTRAINTS } from './shared/ProductConfigs'
+
+// Local defaults to avoid coupling with refactor configs
+const DEFAULT_STAND = {
+  width: 80,
+  height: 70,
+  depth: 40,
+  plintHeight: 2,
+  selectedColor: '#ded9d3',
+}
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -140,17 +148,17 @@ export const ProductPage: FC<ProductPageProps> = ({
   const colorsComponent = currentComponents.find(
     (c): c is ProductColorsComponent => c.type === 'colors'
   )
-  const selectedColorNameOrHex = colorsComponent?.selectedColor ?? STAND_CONSTRAINTS.defaultValues.selectedColor
+  const selectedColorNameOrHex = colorsComponent?.selectedColor ?? DEFAULT_STAND.selectedColor
   const selectedColorHex = getColorItemByName(selectedColorNameOrHex)?.hexCode ?? selectedColorNameOrHex
 
   // Extract current width & height for 3D scaling
   const dimensionsComponent = currentComponents.find(
     (c): c is ProductDimensionsComponent => c.type === 'dimensions'
   )
-  const currentWidth = dimensionsComponent?.width ?? STAND_CONSTRAINTS.defaultValues.width
-  const currentHeight = dimensionsComponent?.height ?? STAND_CONSTRAINTS.defaultValues.height
-  const currentDepth = dimensionsComponent?.depth ?? STAND_CONSTRAINTS.defaultValues.depth
-  const currentPlintHeight = dimensionsComponent?.plintHeight ?? STAND_CONSTRAINTS.defaultValues.plintHeight
+  const currentWidth = dimensionsComponent?.width ?? DEFAULT_STAND.width
+  const currentHeight = dimensionsComponent?.height ?? DEFAULT_STAND.height
+  const currentDepth = dimensionsComponent?.depth ?? DEFAULT_STAND.depth
+  const currentPlintHeight = dimensionsComponent?.plintHeight ?? DEFAULT_STAND.plintHeight
 
   return (
     <>
