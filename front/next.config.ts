@@ -1,5 +1,13 @@
-import type { NextConfig } from 'next'
+// next.config.js
+module.exports = {
+  async rewrites() {
+    return [
+      // handle the root
+      // { source: '/', destination: '/ro' },
 
-const nextConfig: NextConfig = {}
-
-export default nextConfig
+      // match anything that does NOT start with ro or ru
+      // and capture it as :path
+      { source: '/:path((?!ro|ru).*)', destination: '/ro/:path' },
+    ]
+  },
+}

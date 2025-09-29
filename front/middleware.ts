@@ -53,13 +53,15 @@ export function middleware(request: NextRequest) {
   // Redirect to locale-prefixed URL using cookie or default
   const locale = getLocaleFromRequest(request)
   const newUrl = request.nextUrl.clone()
-  newUrl.pathname = `/${locale}${pathname}`
-  const response = NextResponse.redirect(newUrl)
-  response.cookies.set(LOCALE_COOKIE_NAME, locale, {
-    path: '/',
-    maxAge: 60 * 60 * 24 * 30,
-  })
-  return response
+  if (locale !== 'ro' && newUrl.pathname.split('/')[0] !== locale) {
+    newUrl.pathname = `/${locale}${pathname}`
+    const response = NextResponse.redirect(newUrl)
+    response.cookies.set(LOCALE_COOKIE_NAME, locale, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+    })
+    return response
+  }
 }
 
 export const config = {
