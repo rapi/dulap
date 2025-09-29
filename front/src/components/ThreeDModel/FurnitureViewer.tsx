@@ -1,40 +1,13 @@
-import React, { Suspense, useEffect } from 'react'
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Canvas, useLoader } from '@react-three/fiber'
-import { OrbitControls, Plane, useGLTF } from '@react-three/drei'
+import React, { Suspense, memo, useCallback } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { StandBuilder } from './StandBuilder'
-import { GLTFLoader } from 'three-stdlib'
 
-// Helper to force flat, unlit white material on every mesh in the provided scene
-function forceFlatWhite(scene: THREE.Object3D, hex = '#ffffff') {
-  scene.traverse((o) => {
-    if ((o as THREE.Mesh).isMesh) {
-      const mesh = o as THREE.Mesh
-      const newMat = new THREE.MeshBasicMaterial({
-        color: hex,
-        toneMapped: false,
-      })
-      // Dispose previous material(s) to free GPU memory
-      if (Array.isArray(mesh.material)) {
-        mesh.material.forEach((mat) => (mat as THREE.Material).dispose?.())
-      } else {
-        ;(mesh.material as THREE.Material)?.dispose?.()
-      }
-      mesh.material = newMat
-      mesh.castShadow = false // prevents any shadow tinting
-      mesh.receiveShadow = false
-    }
-  })
-}
+// Preload model
+useGLTF.preload('/assets/3d-models/bg.glb')
+useGLTF.preload('/assets/3d-models/shadow_man.glb')
 
-/*
- * Legacy StandModel implementation has been removed in favour of StandBuilder.
- * Keeping commented block for reference during transition. Once all stand
- * components are rebuilt, this block can be deleted entirely.
- */
-
-// Loading fallback component
 function LoadingFallback() {
   return (
     <mesh>
@@ -44,51 +17,7 @@ function LoadingFallback() {
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// Floor plane with high-quality Polyhaven wood laminate textures
-function Floor() {
-  const diffuseMap = useLoader(
-    THREE.TextureLoader,
-    'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/laminate_floor_02/laminate_floor_02_diff_1k.jpg'
-  )
-  const normalMap = useLoader(
-    THREE.TextureLoader,
-    'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/laminate_floor_02/laminate_floor_02_nor_gl_1k.jpg'
-  )
-  const roughnessMap = useLoader(
-    THREE.TextureLoader,
-    'https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/laminate_floor_02/laminate_floor_02_rough_1k.jpg'
-  )
-
-  // Configure texture properties for realistic wood appearance
-  useEffect(() => {
-    ;[diffuseMap, normalMap, roughnessMap].forEach((texture) => {
-      texture.wrapS = texture.wrapT = THREE.RepeatWrapping
-      texture.repeat.set(4, 4) // Repeat texture 4x4 times across the floor
-      texture.anisotropy = 16 // Better texture quality at angles
-    })
-  }, [diffuseMap, normalMap, roughnessMap])
-
-  return (
-    <Plane
-      args={[10, 10]}
-      rotation={[-Math.PI / 2, 0, 0]}
-      position={[0, -0.01, 0]}
-      receiveShadow
-    >
-      <meshStandardMaterial
-        map={diffuseMap}
-        normalMap={normalMap}
-        roughnessMap={roughnessMap}
-        roughness={0.8}
-        metalness={0.0}
-      />
-    </Plane>
-  )
-}
-
-// Generic component for loading and displaying external GLB/GLTF models
-function GLBModel({
+const GLBModel = memo(function GLBModel({
   url,
   position = [0, 0, 0],
   scale = 1,
@@ -109,66 +38,43 @@ function GLBModel({
   forceFlatColor?: string
   useLambertWhite?: boolean
 }) {
-  const { scene } = useLoader(GLTFLoader, url)
+  const { scene } = useGLTF(url)
 
-  // Apply provided color to all mesh materials
+  // Single traversal to apply material overrides, coloring and shadow flags
   React.useEffect(() => {
-    if (color && scene) {
-      scene.traverse((obj) => {
-        if ((obj as THREE.Mesh).isMesh) {
-          const mesh = obj as THREE.Mesh
-          const material = mesh.material as
-            | THREE.MeshStandardMaterial
-            | THREE.MeshPhysicalMaterial
-            | THREE.MeshPhongMaterial
-            | THREE.MeshLambertMaterial
-          if (material && material.color) {
-            material.color.set(color)
-          }
-        }
-      })
-    }
-  }, [color, scene])
-  // Replace materials with MeshLambertMaterial if requested
-  React.useEffect(() => {
-    if (scene && useLambertWhite) {
-      scene.traverse((obj) => {
-        if ((obj as THREE.Mesh).isMesh) {
-          const mesh = obj as THREE.Mesh
-          // Dispose the old material(s)
+    if (!scene) return
+
+    scene.traverse((obj) => {
+      if ((obj as THREE.Mesh).isMesh) {
+        const mesh = obj as THREE.Mesh
+
+        if (forceFlatColor) {
+          // Dispose previous material(s) before replacing
           if (Array.isArray(mesh.material)) {
             mesh.material.forEach((mat) => (mat as THREE.Material).dispose?.())
           } else {
-            ;(mesh.material as THREE.Material)?.dispose?.()
+            (mesh.material as THREE.Material)?.dispose?.()
+          }
+          mesh.material = new THREE.MeshBasicMaterial({ color: forceFlatColor, toneMapped: false })
+        } else if (useLambertWhite) {
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach((mat) => (mat as THREE.Material).dispose?.())
+          } else {
+            (mesh.material as THREE.Material)?.dispose?.()
           }
           mesh.material = new THREE.MeshLambertMaterial({ color: '#ffffff' })
+        } else if (color) {
+          const mat = mesh.material as THREE.Material & { color?: THREE.Color }
+          if (mat && 'color' in mat && mat.color instanceof THREE.Color) {
+            mat.color.set(color)
+          }
         }
-      })
-    }
-  }, [scene, useLambertWhite])
 
-  React.useEffect(() => {
-    if (scene) {
-      const box = new THREE.Box3().setFromObject(scene)
-      const size = new THREE.Vector3()
-      box.getSize(size)
-    }
-    // Apply flat white material specifically to shadow_man model
-    if (scene && forceFlatColor) {
-      forceFlatWhite(scene, forceFlatColor)
-    }
-  }, [scene, url])
-  React.useEffect(() => {
-    if (scene) {
-      scene.traverse((obj) => {
-        if ((obj as THREE.Mesh).isMesh) {
-          const mesh = obj as THREE.Mesh
-          mesh.castShadow = castShadow
-          mesh.receiveShadow = receiveShadow
-        }
-      })
-    }
-  }, [scene, castShadow, receiveShadow])
+        mesh.castShadow = castShadow
+        mesh.receiveShadow = receiveShadow
+      }
+    })
+  }, [scene, color, castShadow, receiveShadow, forceFlatColor, useLambertWhite])
 
   return (
     <primitive
@@ -184,10 +90,9 @@ function GLBModel({
       receiveShadow={receiveShadow}
     />
   )
-}
+})
 
-// Scene component
-function Scene({
+const Scene = memo(function Scene({
   width,
   height,
   depth,
@@ -244,7 +149,6 @@ function Scene({
         intensity={0.3}
         color="#fff8f0"
       />
-      {/* const fbx = useLoader(FBXLoader, '/assets/stand.fbx') */}
 
       {/* Load background & shadow man GLB models */}
       <Suspense fallback={null}>
@@ -278,7 +182,7 @@ function Scene({
       </Suspense>
     </>
   )
-}
+})
 
 // Main furniture viewer component
 interface FurnitureViewerProps {
@@ -289,13 +193,23 @@ interface FurnitureViewerProps {
   currentPlintHeight: number
 }
 
-export const FurnitureViewer: React.FC<FurnitureViewerProps> = ({
+const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
   width,
   selectedColor,
   height,
   depth,
   currentPlintHeight,
 }) => {
+  const handleCreated = useCallback(({ gl, scene }: { gl: THREE.WebGLRenderer; scene: THREE.Scene }) => {
+    gl.outputColorSpace = THREE.SRGBColorSpace
+    gl.toneMapping = THREE.ACESFilmicToneMapping
+    gl.toneMappingExposure = 1.0
+    gl.shadowMap.enabled = true
+    gl.shadowMap.type = THREE.PCFSoftShadowMap
+    gl.shadowMap.autoUpdate = true
+    scene.fog = new THREE.Fog('#f9f9f9', 150, 400)
+  }, [])
+
   return (
     <div style={{ width: '100%', height: '100%', minHeight: '500px' }}>
       <Canvas
@@ -306,20 +220,12 @@ export const FurnitureViewer: React.FC<FurnitureViewerProps> = ({
           far: 1000,
         }}
         shadows
+        dpr={[1, 1.75]}
+        gl={{ powerPreference: 'high-performance' }}
         style={{
           background: 'linear-gradient(135deg, #f9f9f9 0%,#f9f9f9 100%)',
         }}
-        onCreated={({ gl, scene }) => {
-          gl.outputColorSpace = THREE.SRGBColorSpace
-          gl.toneMapping = THREE.ACESFilmicToneMapping
-          gl.toneMappingExposure = 1.0 // slightly brighter for whiter wall while keeping shadows
-          gl.shadowMap.enabled = true
-          gl.shadowMap.type = THREE.PCFSoftShadowMap
-          gl.shadowMap.autoUpdate = true
-
-          // Add fog to create atmospheric depth and fade background
-          scene.fog = new THREE.Fog('#f9f9f9', 150, 400)
-        }}
+        onCreated={handleCreated}
       >
         {/* Orbit controls for rotation and zoom */}
         <OrbitControls
@@ -332,7 +238,7 @@ export const FurnitureViewer: React.FC<FurnitureViewerProps> = ({
           maxAzimuthAngle={Math.PI / 2 - 0.5}
           minPolarAngle={0.3}
           maxPolarAngle={Math.PI / 2 + 0.2}
-          target={[0, 50, 0]} // Move scene center down by 50 units
+          target={[0, 50, 0]} // Move scene center down by 50 units to look in the center of the stand
         />
 
         {/* 3D Scene */}
@@ -347,3 +253,5 @@ export const FurnitureViewer: React.FC<FurnitureViewerProps> = ({
     </div>
   )
 }
+
+export const FurnitureViewer = memo(FurnitureViewerComponent)
