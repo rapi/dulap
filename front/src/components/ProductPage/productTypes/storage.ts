@@ -1,7 +1,30 @@
 import { ProductComponent } from '~/components/ProductPage/WardrobeProductPage'
+import { useMemo } from 'react'
+import { 
+  useBaseProductConfigurator, 
+  createDimensionsComponent, 
+  createColorsComponent, 
+  createPriceComponent 
+} from '../shared/BaseProductConfigurator'
+import { STORAGE_CONSTRAINTS, STORAGE_PRICING } from '../shared/ProductConfigs'
 
 export const StorageProductConfiguration: () => ProductComponent[] = () => {
+  // Use shared base configurator
+  const base = useBaseProductConfigurator(STORAGE_CONSTRAINTS, STORAGE_PRICING)
+
+  // Storage-specific price calculation
+  const storagePrice = useMemo(() => {
+    return Math.round(
+      (STORAGE_PRICING.baseCost +
+        base.width * STORAGE_PRICING.widthMultiplier +
+        base.height * STORAGE_PRICING.heightMultiplier +
+        base.depth * STORAGE_PRICING.depthMultiplier) *
+        STORAGE_PRICING.markup
+    )
+  }, [base.width, base.height, base.depth])
+
   return [
+    // Storage-specific image select
     {
       type: 'imageSelect',
       options: [
@@ -16,45 +39,31 @@ export const StorageProductConfiguration: () => ProductComponent[] = () => {
         { value: '3x3', imageURL: '/storage/3x3.svg' },
       ],
     },
-    {
-      type: 'dimensions',
-      widthRange: [60, 120],
-      heightRange: [60, 120],
-      depthRange: [30, 60],
-      plintHeightRange: [60, 120],
-      width: 0,
-      setWidth: () => {},
-      height: 0,
-      setHeight: () => {},
-      depth: 0,
-      setDepth: () => {},
-      plintHeight: 0,
-      setPlintHeight: () => {},
-    },
-    {
-      type: 'colors',
-      colors: ['#eeeeee', '#b5b5b5', '#d7d0c5'],
-      selectedColor: '0',
-      setSelectedColor: () => {},
-    },
+    
+    // Use shared components
+    createDimensionsComponent(base),
+    createColorsComponent(base),
+    
+    // Storage-specific select component
     {
       type: 'select',
       options: ['Standard (cu bile)', 'Premium', 'Deluxe'],
       title: 'Furnitura',
       subTitle: 'Glisiere pentru sertare:',
     },
+    
+    // Storage-specific furniture component
     {
       type: 'furniture',
-      selectedOpeningMethod: 'maner',
-      setSelectedOpeningMethod: () => {},
+      selectedOpeningMethod: base.openingOption,
+      setSelectedOpeningMethod: base.setOpeningOption,
       hinges: '',
       setHinges: () => {},
-      guides: '',
-      setGuides: () => {},
+      guides: base.guides,
+      setGuides: base.setGuides,
     },
-    {
-      type: 'price',
-      price: 0,
-    },
+    
+    // Use calculated price
+    createPriceComponent(storagePrice),
   ]
 }

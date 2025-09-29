@@ -6,10 +6,19 @@ import {
   widthMap,
   imageWidthMap,
 } from '~/components/ProductPage/productTypes/wardrobeMap'
+import { 
+  useBaseProductConfigurator, 
+  createDimensionsComponent, 
+  createColorsComponent, 
+  createPriceComponent 
+} from '../shared/BaseProductConfigurator'
+import { WARDROBE_CONSTRAINTS, WARDROBE_PRICING } from '../shared/ProductConfigs'
+
 export type MainImageParams = {
   imageWidth: number
   imageSections: number
 }
+
 const SECTION_VALUE: Record<number, number> = {
   1: 150,
   2: 1350,
@@ -29,19 +38,13 @@ const GUIDES_NR: Record<number, number> = {
 } 
 
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
-  const [width, setWidth] = useState(200)
-  const [height, setHeight] = useState(260)
-  const [depth, setDepth] = useState(50)
-  const [plintHeight, setPlintHeight] = useState(2)
-  const [selectedColor, setSelectedColor] = useState('#fcfbf5')
+  // Use shared base configurator
+  const base = useBaseProductConfigurator(WARDROBE_CONSTRAINTS, WARDROBE_PRICING)
+  
+  // Wardrobe-specific state
   const [imageSide, setImageSide] = useState('right')
-  const [imageWidth, setImageWidth] = useState(50)
-  const [imageHeight, setImageHeight] = useState(2100)
   const [imageSections, setImageSections] = useState(1)
-  const [imagePlintHeight, setImagePlintHeight] = useState(20)
-  const [imageColor, setImageColor] = useState('White')
   const [hinges, setHinges] = useState('standart')
-  const [guides, setGuides] = useState('standart')
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
   const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
   const [selectedOpeningMethod, setSelectedOpeningMethod] = useState('maner')
@@ -49,11 +52,10 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [activeOpening, setActiveOpening] = useState<ImageOptionProps[]>([])
   const [maxSections, setMaxSections] = useState(5)
   const [minSections, setMinSections] = useState(1)
-  const [selectedSections, setSelectedSections] = useState<ImageOptionProps[]>(
-    []
-  )
+  const [selectedSections, setSelectedSections] = useState<ImageOptionProps[]>([])
   const [doorsNr, setDoorsNr] = useState(3)
 
+  // Wardrobe-specific effects for sections
   useEffect(() => {
     setSelectedSections(prev => {
       const newLen = activeSections.length
@@ -73,66 +75,38 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     )
   }, [activeSections])
 
+  // Wardrobe-specific image width mapping
   useEffect(() => {
     for (const map of imageWidthMap) {
-      if (width <= map.maxWidth) {
+      if (base.width <= map.maxWidth) {
         const [{ imageWidth: w, imageSections: s }] =
           map.imageParams(selectedMaxSections)
-        setImageWidth(w)
+        base.setImageWidth(w)
         setImageSections(s)
         break
       }
     }
-  }, [width, selectedMaxSections])
+  }, [base.width, selectedMaxSections, base.setImageWidth])
 
+  // Wardrobe-specific image height logic
   useEffect(() => {
-    if (height <= 210) {
-      setImageHeight(2100)
-    } else setImageHeight(2400)
-  }, [height])
+    if (base.height <= 210) {
+      base.setImageHeight(2100)
+    } else {
+      base.setImageHeight(2400)
+    }
+  }, [base.height, base.setImageHeight])
 
-  useEffect(() => {
-    setDepth(depth)
-  }, [depth])
-  useEffect(() => {
-    setHinges(hinges)
-  }, [hinges])
-  useEffect(() => {
-    setGuides(guides)
-  }, [guides])
-  // useEffect(() => {
-  //   if (selectedColor === '#ded9d3') {
-  //     setImageColor('Biege')
-  //   } else if (selectedColor === '#fcfbf5') {
-  //     setImageColor('White')
-  //   } else if (selectedColor === '#d6d6d6') {
-  //     setImageColor('Light Grey')
-  //   } else if (selectedColor === '#9c9c9c') {
-  //     setImageColor('Grey')
-  //   } else setImageColor('White')
-  // }, [selectedColor])
-
-  useEffect(() => {
-    if (selectedColor === 'Biege') {
-      setImageColor('Biege')
-    } else if (selectedColor === 'White') {
-      setImageColor('White')
-    } else if (selectedColor === 'Light Grey') {
-      setImageColor('Light Grey')
-    } else if (selectedColor === 'Grey') {
-      setImageColor('Grey')
-    } else setImageColor('White')
-  }, [selectedColor])
-
+  // Wardrobe-specific width mapping logic
   useEffect(() => {
     for (const map of widthMap) {
-      if (width <= map.maxWidth) {
+      if (base.width <= map.maxWidth) {
         setMinSections(map.minSections)
         setMaxSections(map.maxSections)
         const newActiveSections = map
-          .activeSections(width, height, selectedMaxSections)
+          .activeSections(base.width, base.height, selectedMaxSections)
           .map((section) => ({
-            src: `/wardrobe/filling/${imageColor}/${imageHeight}/${section.src}`,
+            src: `/wardrobe/filling/${base.imageColor}/${base.imageHeight}/${section.src}`,
             width: section.width,
             height: section.height,
           }))
@@ -140,36 +114,39 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
         break
       }
     }
-  }, [width, height, selectedMaxSections, imageColor, imageHeight])
+  }, [base.width, base.height, selectedMaxSections, base.imageColor, base.imageHeight])
 
+  // Wardrobe-specific opening mapping
   useEffect(() => {
     for (const map of openingMap) {
-      if (width <= map.maxWidth) {
-        setActiveOpening(map.activeOpening(width, height, selectedMaxSections))
+      if (base.width <= map.maxWidth) {
+        setActiveOpening(map.activeOpening(base.width, base.height, selectedMaxSections))
         break
       }
     }
-  }, [width, height, selectedMaxSections])
+  }, [base.width, base.height, selectedMaxSections])
 
+  // Wardrobe-specific doors calculation
   useEffect(() => {
     let newDoors: number
 
-    if (width <= 60) {
+    if (base.width <= 60) {
       newDoors = 1
-    } else if (width <= 100) {
+    } else if (base.width <= 100) {
       newDoors = 2
-    } else if (width <= 150) {
-      newDoors = width < 120 ? 2 : 3
-    } else if (width < 200) {
+    } else if (base.width <= 150) {
+      newDoors = base.width < 120 ? 2 : 3
+    } else if (base.width < 200) {
       newDoors = selectedMaxSections === 2 ? 4 : 3
-    } else if (width === 200) {
+    } else if (base.width === 200) {
       newDoors = selectedMaxSections === 2 ? 4 : 5
     } else {
       newDoors = selectedMaxSections === 3 ? 5 : 4
     }
     setDoorsNr(newDoors)
-  }, [width, selectedMaxSections])
+  }, [base.width, selectedMaxSections])
 
+  // Wardrobe-specific pricing calculations
   const sectionsPrice = useMemo(() => {
     return selectedSections.reduce((sum, { src }) => {
       const m = src.match(/(\d+)(?=\.\w+$)/)
@@ -179,33 +156,45 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
 
   const guidesExtraPrice = useMemo(() => {
     return selectedSections.reduce((sum, { src }) => {
-      const match = src.match(/(\d+)\.\w+$/); // fix: escaped dot and removed extra paren
-      const imageNr = match ? parseInt(match[1], 10) : 0;
-      const guideCount = GUIDES_NR[imageNr] || 0;
-      return sum + guideCount * 250; // fix: return the new sum
-    }, 0);
-  }, [selectedSections]);
+      const match = src.match(/(\d+)\.\w+$/)
+      const imageNr = match ? parseInt(match[1], 10) : 0
+      const guideCount = GUIDES_NR[imageNr] || 0
+      return sum + guideCount * 250
+    }, 0)
+  }, [selectedSections])
 
-  const price = useMemo(() => {
-    const hingesNr = height >= 230 ? doorsNr * 6 : doorsNr * 5;
-    let hingesExtraPrice = 0;
+  const wardrobePrice = useMemo(() => {
+    const hingesNr = base.height >= 230 ? doorsNr * 6 : doorsNr * 5
+    let hingesExtraPrice = 0
     if (hinges === 'homepage.configurator.fittings.hinges.options.2') {
-      hingesExtraPrice = hingesNr * 50;
+      hingesExtraPrice = hingesNr * 50
     }
-    return Math.round((width * 29 + (height - 190) * 4.5 * doorsNr + sectionsPrice + hingesExtraPrice + guidesExtraPrice + 350 * doorsNr + 350)*1.35)
-  }, [width, height, doorsNr, sectionsPrice, hinges, guidesExtraPrice])
+    return Math.round(
+      (base.width * WARDROBE_PRICING.widthMultiplier + 
+       (base.height - 190) * WARDROBE_PRICING.heightMultiplier * doorsNr + 
+       sectionsPrice + 
+       hingesExtraPrice + 
+       guidesExtraPrice + 
+       WARDROBE_PRICING.baseCost * doorsNr + 
+       WARDROBE_PRICING.baseCost) * WARDROBE_PRICING.markup
+    )
+  }, [base.width, base.height, doorsNr, sectionsPrice, hinges, guidesExtraPrice])
 
+  // Mirror option effect
   useEffect(() => {
     if (selectedMirrorOption === 'standard') {
       setImageSide('right')
-    } else setImageSide('left')
+    } else {
+      setImageSide('left')
+    }
   }, [selectedMirrorOption])
 
+  // Recolor function for sections
   const recolor = (items: ImageOptionProps[]) =>
     items.map(({ src, width, height }) => {
       const suffix = src.substring(src.lastIndexOf('/') + 1)
       return {
-        src: `/wardrobe/filling/${imageColor}/${imageHeight}/${suffix}`,
+        src: `/wardrobe/filling/${base.imageColor}/${base.imageHeight}/${suffix}`,
         width,
         height,
       }
@@ -213,64 +202,27 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
 
   const recoloredSelectedSections = useMemo(
     () => recolor(selectedSections),
-    // eslint-disable-next-line
-    [selectedSections, imageColor, imageHeight]
+    [selectedSections, base.imageColor, base.imageHeight]
   )
 
-  useEffect(() => {
-    if (plintHeight >= 2 && plintHeight < 5) {
-      setImagePlintHeight(20)
-    } else {
-      setImagePlintHeight(60)
-    }
-  }, [plintHeight])
   return [
-    {
-      type: 'dimensions',
-      widthRange: [40, 250],
-      heightRange: [190, 270],
-      depthRange: [35, 60],
-      plintHeightRange: [2, 8],
-      width,
-      setWidth,
-      height,
-      setHeight,
-      plintHeight,
-      setPlintHeight,
-      depth,
-      setDepth,
-    },
-    {
-      type: 'colors',
-      // colors: [
-      //   '#ded9d3',
-      //   '#fcfbf5',
-      //   '#d6d6d6',
-      //   '#9c9c9c',
-      //   // '#7a7a7a'
-      // ],
-      colors: [
-        'Biege',
-        'White',
-        'Light Grey',
-        'Grey',
-        // '#7a7a7a'
-      ],
-      selectedColor,
-      setSelectedColor,
-    },
+    // Use shared components
+    createDimensionsComponent(base),
+    createColorsComponent(base),
+    
+    // Wardrobe-specific sections component
     {
       type: 'sections',
       maxNumber: maxSections,
       minNumber: minSections,
       activeOpening: activeOpening,
       possibleSections: [
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/1.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/2.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/3.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/4.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/5.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/6.png` },
+        { src: `/wardrobe/filling/${base.imageColor}/${base.imageHeight}/1.png` },
+        { src: `/wardrobe/filling/${base.imageColor}/${base.imageHeight}/2.png` },
+        { src: `/wardrobe/filling/${base.imageColor}/${base.imageHeight}/3.png` },
+        { src: `/wardrobe/filling/${base.imageColor}/${base.imageHeight}/4.png` },
+        { src: `/wardrobe/filling/${base.imageColor}/${base.imageHeight}/5.png` },
+        { src: `/wardrobe/filling/${base.imageColor}/${base.imageHeight}/6.png` },
       ],
       selectedSections: recoloredSelectedSections,
       setSelectedSections,
@@ -279,25 +231,28 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       selectedMirrorOption,
       setSelectedMirrorOption,
     },
+    
+    // Wardrobe-specific furniture component
     {
       type: 'furniture',
       selectedOpeningMethod,
       setSelectedOpeningMethod,
       hinges,
       setHinges,
-      guides,
-      setGuides,
+      guides: base.guides,
+      setGuides: base.setGuides,
     },
-    {
-      type: 'price',
-      price,
-    },
+    
+    // Use calculated price
+    createPriceComponent(wardrobePrice),
+    
+    // Wardrobe-specific image carousel
     {
       type: 'imageCarousel',
       images: [
-        `/wardrobe/${imageColor}/${selectedOpeningMethod}/Base ${imagePlintHeight}/H${imageHeight}/${imageSide}/${imageWidth}-${imageSections}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
+        `/wardrobe/${base.imageColor}/${selectedOpeningMethod}/Base ${base.imagePlintHeight}/H${base.imageHeight}/${imageSide}/${base.imageWidth}-${imageSections}.png`,
+        `/wardrobe/renders/render-wardrobe-1-${base.imageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-2-${base.imageColor}.png`,
       ],
     },
   ]

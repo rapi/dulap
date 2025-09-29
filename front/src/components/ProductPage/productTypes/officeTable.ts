@@ -1,37 +1,53 @@
 import { ProductComponent } from '~/components/ProductPage/OfficeTableProductPage'
-import { useEffect, useState } from 'react'
+import { useState, useMemo } from 'react'
+import { 
+  useBaseProductConfigurator, 
+  createPriceComponent 
+} from '../shared/BaseProductConfigurator'
+import { OFFICE_TABLE_CONSTRAINTS, OFFICE_TABLE_PRICING } from '../shared/ProductConfigs'
+
 export type MainImageParams = {
   imageWidth: number
   imageSections: number
 }
+
 export const OfficeTableConfiguration: () => ProductComponent[] = () => {
-  const [selectedColor, setSelectedColor] = useState('#ded9d3')
+  // Use shared base configurator
+  const base = useBaseProductConfigurator(OFFICE_TABLE_CONSTRAINTS, OFFICE_TABLE_PRICING)
+  
+  // Office table-specific state
   const [dimension, setDimension] = useState('1400x700')
-  const [imageColor, setImageColor] = useState('White')
-  const [price, setPrice] = useState(1586)
   const [selectedPCstandOption, setSelectedPCstandOption] = useState('noPC')
-  const [selectedPartitionOption, setSelectedPartitionOption] =
-    useState('noPartition')
-  useEffect(() => {
-    // if (selectedColor === '#ded9d3') {
-    setImageColor('White')
-    // } else setImageColor('Dark Grey')
-  }, [selectedColor])
-  useEffect(() => {
-    setPrice(0)
+  const [selectedPartitionOption, setSelectedPartitionOption] = useState('noPartition')
+
+  // Office table-specific price calculation
+  const officeTablePrice = useMemo(() => {
+    const [width, depth] = dimension.split('x').map(Number)
+    return Math.round(
+      (OFFICE_TABLE_PRICING.baseCost +
+       width * OFFICE_TABLE_PRICING.widthMultiplier +
+       depth * OFFICE_TABLE_PRICING.depthMultiplier) *
+       OFFICE_TABLE_PRICING.markup
+    )
   }, [dimension])
+
   return [
+    // Office table-specific dimensions component
     {
       type: 'dimensions',
       dimension,
       setDimension,
     },
+    
+    // Office table colors (different from standard)
     {
       type: 'colors',
       colors: ['#ded9d3', '#fcfbf5', '#d6d6d6', '#9c9c9c'],
-      selectedColor,
-      setSelectedColor,
+      selectedColor: base.selectedColor,
+      setSelectedColor: base.setSelectedColor,
     },
+    
+    // Office table-specific options component
     {
       type: 'options',
       selectedPCstandOption,
@@ -39,16 +55,17 @@ export const OfficeTableConfiguration: () => ProductComponent[] = () => {
       selectedPartitionOption,
       setSelectedPartitionOption,
     },
-    {
-      type: 'price',
-      price,
-    },
+    
+    // Use calculated price
+    createPriceComponent(officeTablePrice),
+    
+    // Office table-specific image carousel
     {
       type: 'imageCarousel',
       images: [
-        `/office-table/${imageColor}/${selectedPCstandOption}/${selectedPartitionOption}/${dimension}.png`,
-        `/office-table/${imageColor}/${selectedPCstandOption}/${selectedPartitionOption}/${dimension}.png`,
-        `/office-table/${imageColor}/${selectedPCstandOption}/${selectedPartitionOption}/${dimension}.png`,
+        `/office-table/${base.imageColor}/${selectedPCstandOption}/${selectedPartitionOption}/${dimension}.png`,
+        `/office-table/${base.imageColor}/${selectedPCstandOption}/${selectedPartitionOption}/${dimension}.png`,
+        `/office-table/${base.imageColor}/${selectedPCstandOption}/${selectedPartitionOption}/${dimension}.png`,
       ],
     },
   ]
