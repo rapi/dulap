@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const currentLocale = (queryLocale as string) ?? 'ro'
   const messages = localeMap[queryLocale as string] ?? ro
   Router.events.on('routeChangeComplete', pageview)
-  const canonicalUrl = `https://dulap.md${router.pathname.replace('[locale]', 'ro')}`
+  const canonicalUrl = `https://dulap.md${router.pathname.replace('/[locale]', '/').replace('//', '/')}`
   useEffect(() => {
     const delayMs = 30000
     const already = localStorage.getItem('promoShown')
@@ -59,7 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link
           rel="alternate"
           hrefLang="ru"
-          href={canonicalUrl.replace('ro', 'ru')}
+          href={`https://dulap.md${router.pathname.replace('/[locale]', '/ru')}`}
         />
         <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
       </Head>
