@@ -11,6 +11,7 @@ interface DrawersProps {
   desiredDepth: number
   desiredPlintHeight: number
   selectedColor: string
+  sectionsCount: number
   drawerOffsetZ?: number
   lerpSpeed?: number
 }
@@ -22,6 +23,7 @@ const DrawersComponent: React.FC<DrawersProps> = ({
   desiredDepth,
   desiredPlintHeight,
   selectedColor,
+  sectionsCount,
   drawerOffsetZ = 15,
   lerpSpeed = 0.15,
 }) => {
@@ -33,7 +35,7 @@ const DrawersComponent: React.FC<DrawersProps> = ({
     if (!horizontalPanelObject) return [] as THREE.Object3D[]
 
     const drawerGroupList: THREE.Object3D[] = []
-    for (let drawerIndex = 0; drawerIndex < FURNITURE_CONFIG.maxDrawers; drawerIndex++) {
+    for (let drawerIndex = 0; drawerIndex < FURNITURE_CONFIG.maxRenderedDrawers; drawerIndex++) {
       const frontPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerFront')
       const bottomPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerBottom')
       const leftPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerLeft')
@@ -57,19 +59,12 @@ const DrawersComponent: React.FC<DrawersProps> = ({
       panelThickness,
       defaultScale,
       drawerSpacing,
-      defaultDrawerCount,
       minDrawerHeight,
     } = FURNITURE_CONFIG
 
     const drawersUsableHeight = desiredHeight - panelThickness - desiredPlintHeight
     
-    // TODO: Replace this with real selectedOptions 
-    // (drawer number will change dynamically based on the selected value in the configurator)
-    const drawerCount = Math.min(
-      defaultDrawerCount,
-      Math.max(1, Math.floor(drawersUsableHeight / minDrawerHeight))
-    )
-    const singleDrawerTotalHeight = drawersUsableHeight / drawerCount
+    const singleDrawerTotalHeight = drawersUsableHeight / sectionsCount
 
     // Dimenstions of the interior parts of the drawer (the box inside)
     const innerHeight = singleDrawerTotalHeight - drawerSpacing * 4
@@ -78,7 +73,7 @@ const DrawersComponent: React.FC<DrawersProps> = ({
     const halfInnerWidth = innerWidth / 2
 
     drawerGroups.forEach((drawerGroup, groupIndex) => {
-      if (groupIndex < drawerCount) {
+      if (groupIndex < sectionsCount) {
         drawerGroup.visible = true
 
         const baseY = desiredPlintHeight + drawerSpacing + singleDrawerTotalHeight * groupIndex
@@ -124,7 +119,7 @@ const DrawersComponent: React.FC<DrawersProps> = ({
         drawerGroup.visible = false
       }
     })
-  }, [drawerGroups, desiredWidth, desiredHeight, desiredDepth, desiredPlintHeight])
+  }, [drawerGroups, desiredWidth, desiredHeight, desiredDepth, desiredPlintHeight, sectionsCount])
 
   // Apply the selected color to all drawer panels
   useEffect(() => {

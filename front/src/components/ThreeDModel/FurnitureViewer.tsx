@@ -25,12 +25,14 @@ const FurnitureScene = memo(function FurnitureScene({
   depth,
   currentPlintHeight,
   selectedColor,
+  sections,
 }: {
   width: number
   height: number
   depth: number
   currentPlintHeight: number
   selectedColor: string
+  sections: number
 }) {
   return (
     <>
@@ -64,6 +66,7 @@ const FurnitureScene = memo(function FurnitureScene({
           desiredHeight={height}
           desiredDepth={depth}
           desiredPlintHeight={currentPlintHeight}
+          sectionsCount={sections}
         />
       </Suspense>
     </>
@@ -77,6 +80,7 @@ interface FurnitureViewerProps {
   height: number
   depth: number
   currentPlintHeight: number
+  sections: number
 }
 
 const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
@@ -85,6 +89,7 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
   height,
   depth,
   currentPlintHeight,
+  sections,
 }) => {
   const handleCanvasCreated = useCallback(({ gl: webGlRenderer, scene: threeScene }: { gl: THREE.WebGLRenderer; scene: THREE.Scene }) => {
     webGlRenderer.outputColorSpace = THREE.SRGBColorSpace
@@ -136,6 +141,7 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
           width={width}
           selectedColor={selectedColor}
           currentPlintHeight={currentPlintHeight}
+          sections={sections}
         />
       </Canvas>
     </div>

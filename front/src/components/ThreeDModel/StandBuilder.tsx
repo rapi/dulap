@@ -12,6 +12,7 @@ interface StandBuilderProps {
   desiredPlintHeight: number
   drawerOffsetZ?: number
   lerpSpeed?: number
+  sectionsCount?: number
 }
 
 // Preload assets for better performance
@@ -29,6 +30,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   desiredPlintHeight,
   drawerOffsetZ = 10,
   lerpSpeed = 0.1,
+  sectionsCount,
 }) => {
 
   const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
@@ -77,6 +79,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
           selectedColor={selectedColor}
           drawerOffsetZ={drawerOffsetZ}
           lerpSpeed={lerpSpeed}
+          sectionsCount={sectionsCount}
         />
       </group>
     </Suspense>
