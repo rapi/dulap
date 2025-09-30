@@ -21,7 +21,7 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
     imageCarousel: '',
   }
 
-  switch(item.name) {
+  switch (item.name) {
     case 'wardrobe':
       itemConfig.name = intl.formatMessage({ id: 'homepage.products.wardrobe' })
       break
@@ -71,9 +71,7 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
   return (
     <div className={styles.cartRow} key={index}>
       <span className={styles.indexRow}>{index + 1}</span>
-      <span className={styles.productName}>
-        {itemConfig.name}
-      </span>
+      <span className={styles.productName}>{itemConfig.name}</span>
       <div className={styles.productImageContainer}>
         <img
           className={styles.productImage}
@@ -111,18 +109,17 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
         <br />
         <FormattedMessage id="homepage.configurator.fittings.title" />:
         <br />
-        
         {itemConfig.furniture.openingType && (
-          <span><FormattedMessage id="homepage.configurator.fittings.handleType" />:{' '}
+          <span>
+            <FormattedMessage id="homepage.configurator.fittings.handleType" />:{' '}
             <b>
               {intl.formatMessage({
-                id: itemConfig.furniture.openingType
+                id: itemConfig.furniture.openingType,
               })}
             </b>
           </span>
         )}
         <br />
-        
         {itemConfig.furniture.hinges && (
           <span>
             <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
@@ -130,7 +127,6 @@ const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
             <br />
           </span>
         )}
-        
         <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
         {itemConfig.furniture.guides && (
           <b>{intl.formatMessage({ id: itemConfig.furniture.guides })}</b>
@@ -173,15 +169,15 @@ export const CartPage: FC = () => {
   return (
     <div className={styles.cartContainer}>
       <div className={styles.titleContainer}>
-        <p className={styles.title}>
+        <h1 className={styles.title}>
           <FormattedMessage id="cart.title" />
-        </p>
+        </h1>
       </div>
 
       {isEmpty ? (
-        <p className={styles.emptyCartMessage}>
+        <h2 className={styles.emptyCartMessage}>
           <FormattedMessage id="cart.emptyCart" />
-        </p>
+        </h2>
       ) : (
         <>
           <div className={styles.cartTable}>

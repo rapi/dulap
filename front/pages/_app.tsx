@@ -26,7 +26,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   const currentLocale = (queryLocale as string) ?? 'ro'
   const messages = localeMap[queryLocale as string] ?? ro
   Router.events.on('routeChangeComplete', pageview)
-  const canonicalUrl = `https://dulap.md${router.pathname.replace('/[locale]', '/').replace('//', '/')}`
+  const path = router.pathname.replace('/[locale]', '/').replace('//', '/')
+  const metaCode =
+    router.pathname
+      .replace('/[locale]/', '')
+      .replace('/[locale]', '')
+      .replace('/', '.') || 'default'
+  const metaDescription = messages[`meta_description.${metaCode}`]
+  const metaTitle = messages[`meta_title.${metaCode}`]
+  console.log(metaCode)
+  const canonicalUrl = `https://dulap.md${path}`
   useEffect(() => {
     const delayMs = 30000
     const already = localStorage.getItem('promoShown')
@@ -55,6 +64,12 @@ function MyApp({ Component, pageProps }: AppProps) {
             `}
       </Script>
       <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
         <link
           rel="alternate"

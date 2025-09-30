@@ -115,9 +115,12 @@ export const ProductPage: FC<ProductPageProps> = ({
       </div>
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
-        <h3 className={styles.title}>
+        <h1 className={styles.visuallyHiddenTitle}>
+          <FormattedMessage id="meta.header.configurator.beside" />
+        </h1>
+        <h2 className={styles.title}>
           <FormattedMessage id={name} />
-        </h3>
+        </h2>
         {currentComponents.map((component, index) => {
           return (
             <div key={index + component.type}>{getComponent(component)}</div>

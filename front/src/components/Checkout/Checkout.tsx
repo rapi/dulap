@@ -196,17 +196,17 @@ export const Checkout: FC = () => {
       <div className={styles.container}>
         <div className={styles.titleContainer}>
           <ShoppingBagIcon fontSize="large" sx={{ color: grey[800] }} />
-          <p className={styles.title}>
+          <h1 className={styles.title}>
             <FormattedMessage id="checkout.title" />
-          </p>
+          </h1>
         </div>
 
         <div className={styles.checkoutWrapper}>
           {/* Left Section: Order Details */}
           <div className={styles.detailsSection}>
-            <h4 className={styles.subtitle}>
+            <h2 className={styles.subtitle}>
               <FormattedMessage id="checkout.subtitle1.orderDetails" />
-            </h4>
+            </h2>
             <div className={styles.row}>
               <div className={styles.formGroup}>
                 <label>

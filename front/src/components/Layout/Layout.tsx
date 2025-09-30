@@ -29,14 +29,9 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Head>
-        <title>{title}</title>
         <meta
           name="keywords"
           content="dulap.md, dulap personalizat Chișinău, mobilier la comandă Moldova, dulap la comandă, mobilă la comandă Chișinău, мебель на заказ Кишинев, тумбочка кишинев, тумба, комод кишинев, тумба молдова, комод Молдова, мебель на заказ Молдова"
-        />
-        <meta
-          name="description"
-          content="Dulap.md – Dulapuri și mobilier la comandă în Chișinău și Moldova. Configurator online. Livrare rapidă."
         />
         <meta property="og:title" content={title} />
         <meta

@@ -8,18 +8,21 @@ export const ProductListPage: React.FC = () => {
   return (
     <>
       <div className={styles.productListContainer}>
-        <h3 className={styles.title}>
+        <h1 className={styles.visuallyHiddenTitle}>
+          <FormattedMessage id="meta.header.products" />
+        </h1>
+        <h2 className={styles.title}>
           <FormattedMessage id="homepage.productListPage.title.1" />
-        </h3>
+        </h2>
 
         <ProductTypesList></ProductTypesList>
 
-        <p className={styles.title}>
+        <h2 className={styles.title}>
           <FormattedMessage id="homepage.productListPage.title.2" />
           <br></br>
           <br></br>
           <FormattedMessage id="homepage.productListPage.title.3" />
-        </p>
+        </h2>
 
         <div className={styles.readyProducts}>
           <ProductCatalog></ProductCatalog>
