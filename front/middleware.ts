@@ -56,7 +56,7 @@ export function middleware(request: NextRequest) {
   const currentLanguage = newUrl.pathname.split('/')[0]
   if (currentLanguage === 'ro') {
     newUrl.pathname = newUrl.pathname.replace('/ro/', '/')
-    return NextResponse.redirect(newUrl)
+    return NextResponse.redirect(newUrl, { status: 301 })
   } else if (locale !== 'ro' && currentLanguage !== locale) {
     newUrl.pathname = `/${locale}${pathname}`
     const response = NextResponse.redirect(newUrl)
