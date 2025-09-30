@@ -9,8 +9,8 @@ import {
 } from '../furnitureUtils'
 
 interface TopAndPlinthProps {
-  verticalScene: THREE.Object3D
-  horizontalScene: THREE.Object3D
+  verticalPanelObject: THREE.Object3D
+  horizontalPanelObject: THREE.Object3D
   desiredWidth: number
   desiredHeight: number
   desiredDepth: number
@@ -19,19 +19,20 @@ interface TopAndPlinthProps {
 }
 
 const TopAndPlinthComponent: React.FC<TopAndPlinthProps> = ({
-  verticalScene: verticalPanelSource,
-  horizontalScene: horizontalPanelSource,
+  verticalPanelObject: verticalPanelSource,
+  horizontalPanelObject: horizontalPanelSource,
   desiredWidth: cabinetWidth,
   desiredHeight: cabinetHeight,
   desiredDepth: cabinetDepth,
   desiredPlintHeight: plinthHeight,
   selectedColor,
 }) => {
-  const { topPanelPivot, plinthPanelPivot } = useMemo(() => {
+  // Create object clones for the top panel and plinth panel
+  const { topPanel, plinthPanel } = useMemo(() => {
     if (!verticalPanelSource || !horizontalPanelSource) {
       return {
-        topPanelPivot: null as THREE.Object3D | null,
-        plinthPanelPivot: null as THREE.Object3D | null,
+        topPanel: null as THREE.Object3D | null,
+        plinthPanel: null as THREE.Object3D | null,
       }
     }
 
@@ -41,73 +42,75 @@ const TopAndPlinthComponent: React.FC<TopAndPlinthProps> = ({
     )
 
     // Anchor each part to bottom-front using a pivot wrapper
-    const topPanelPivotNode = createPivotAnchored(topPanelModel, {
+    const topPanelNode = createPivotAnchored(topPanelModel, {
       anchorY: 'min',
       anchorZ: 'min',
     })
-    const plinthPanelPivotNode = createPivotAnchored(plinthPanelModel, {
+    const plinthPanelNode = createPivotAnchored(plinthPanelModel, {
       anchorY: 'min',
       anchorZ: 'min',
     })
 
     return {
-      topPanelPivot: topPanelPivotNode,
-      plinthPanelPivot: plinthPanelPivotNode,
+      topPanel: topPanelNode,
+      plinthPanel: plinthPanelNode,
     }
   }, [verticalPanelSource, horizontalPanelSource])
 
+  // Scale and position the panels accordingly
   useEffect(() => {
-    if (!topPanelPivot || !plinthPanelPivot) return
+    if (!topPanel || !plinthPanel) return
 
     const {
       panelThickness: panelThicknessUnits,
       defaultScale: unitScaleFactor,
     } = FURNITURE_CONFIG
 
-    plinthPanelPivot.scale.set(
+    plinthPanel.scale.set(
       cabinetWidth * unitScaleFactor,
       plinthHeight * unitScaleFactor,
       panelThicknessUnits * unitScaleFactor
     )
-    plinthPanelPivot.position.set(0, 0, cabinetDepth - panelThicknessUnits)
+    plinthPanel.position.set(0, 0, cabinetDepth - panelThicknessUnits)
 
-    topPanelPivot.scale.set(
+    topPanel.scale.set(
       cabinetWidth * unitScaleFactor,
       panelThicknessUnits * unitScaleFactor,
       cabinetDepth * unitScaleFactor
     )
-    topPanelPivot.position.set(0, cabinetHeight - panelThicknessUnits, 0)
+    topPanel.position.set(0, cabinetHeight - panelThicknessUnits, 0)
 
-    topPanelPivot.updateMatrixWorld(true)
-    plinthPanelPivot.updateMatrixWorld(true)
+    topPanel.updateMatrixWorld(true)
+    plinthPanel.updateMatrixWorld(true)
   }, [
-    topPanelPivot,
-    plinthPanelPivot,
+    topPanel,
+    plinthPanel,
     cabinetWidth,
     cabinetHeight,
     cabinetDepth,
     plinthHeight,
   ])
 
+  // Apply the selected color to the panels
   useEffect(() => {
-    if (!topPanelPivot || !plinthPanelPivot) return
-    applyColorToObject(topPanelPivot, selectedColor)
-    applyColorToObject(plinthPanelPivot, selectedColor)
-  }, [topPanelPivot, plinthPanelPivot, selectedColor])
+    if (!topPanel || !plinthPanel) return
+    applyColorToObject(topPanel, selectedColor)
+    applyColorToObject(plinthPanel, selectedColor)
+  }, [topPanel, plinthPanel, selectedColor])
 
   useEffect(() => {
     return () => {
-      if (topPanelPivot) disposeObject(topPanelPivot)
-      if (plinthPanelPivot) disposeObject(plinthPanelPivot)
+      if (topPanel) disposeObject(topPanel)
+      if (plinthPanel) disposeObject(plinthPanel)
     }
-  }, [topPanelPivot, plinthPanelPivot])
+  }, [topPanel, plinthPanel])
 
-  if (!topPanelPivot || !plinthPanelPivot) return null
+  if (!topPanel || !plinthPanel) return null
 
   return (
     <group>
-      <primitive object={plinthPanelPivot} />
-      <primitive object={topPanelPivot} />
+      <primitive object={plinthPanel} />
+      <primitive object={topPanel} />
     </group>
   )
 }

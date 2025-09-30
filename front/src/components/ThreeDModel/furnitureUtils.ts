@@ -73,6 +73,17 @@ export const cloneWithIndependentMaterials = (
   return clonedRoot
 }
 
+export const createPanelPivotWithFlag = (
+  sourceObject: THREE.Object3D,
+  panelFlagKey: string,
+  anchor: { anchorY?: 'min'|'center'|'max'; anchorZ?: 'min'|'center'|'max' } = { anchorY: 'min', anchorZ: 'min' }
+): THREE.Object3D => {
+  const panelModel = cloneWithIndependentMaterials(sourceObject)
+  const panelPivot = createPivotAnchored(panelModel, anchor)
+  panelPivot.userData[panelFlagKey] = true
+  return panelPivot
+}
+
 // Dispose of geometries and materials to free GPU memory
 export const disposeObject = (obj: THREE.Object3D): void => {
   obj.traverse((child) => {

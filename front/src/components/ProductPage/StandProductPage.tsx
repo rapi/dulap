@@ -35,21 +35,13 @@ import {
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
 import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
-import { useStand3D } from '~/hooks/useStand3D'
+import { use3DVersion } from '~/hooks/use3DVersion'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
 import { getColorItemByName } from '~/utils/colorDictionary'
-
-// Local defaults to avoid coupling with refactor configs
-const DEFAULT_STAND = {
-  width: 80,
-  height: 70,
-  depth: 40,
-  plintHeight: 2,
-  selectedColor: '#ded9d3',
-}
+import { DEFAULT_STAND } from './productTypes/stand'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -100,7 +92,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         )
       case 'sections':
         const compWithOpts = component as ProductSectionsComponent & {
-        options?: ButtonOptionsType[]
+          options?: ButtonOptionsType[]
         }
         return (
           <ProductSections
@@ -142,14 +134,17 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
-  const isStand3D = useStand3D()
+  const isStand3D = use3DVersion()
 
   // Extract current selected color (map names to HEX for 3D)
   const colorsComponent = currentComponents.find(
     (c): c is ProductColorsComponent => c.type === 'colors'
   )
-  const selectedColorNameOrHex = colorsComponent?.selectedColor ?? DEFAULT_STAND.selectedColor
-  const selectedColorHex = getColorItemByName(selectedColorNameOrHex)?.hexCode ?? selectedColorNameOrHex
+  const selectedColorNameOrHex =
+    colorsComponent?.selectedColor ?? DEFAULT_STAND.selectedColor
+  const selectedColorHex =
+    getColorItemByName(selectedColorNameOrHex)?.hexCode ??
+    selectedColorNameOrHex
 
   // Extract current width & height for 3D scaling
   const dimensionsComponent = currentComponents.find(
@@ -158,14 +153,21 @@ export const ProductPage: FC<ProductPageProps> = ({
   const currentWidth = dimensionsComponent?.width ?? DEFAULT_STAND.width
   const currentHeight = dimensionsComponent?.height ?? DEFAULT_STAND.height
   const currentDepth = dimensionsComponent?.depth ?? DEFAULT_STAND.depth
-  const currentPlintHeight = dimensionsComponent?.plintHeight ?? DEFAULT_STAND.plintHeight
+  const currentPlintHeight =
+    dimensionsComponent?.plintHeight ?? DEFAULT_STAND.plintHeight
 
   return (
     <>
       {/* Left Side: Viewer or Image Carousel */}
       <div className={styles.leftContainer}>
         {isStand3D ? (
-          <FurnitureViewer selectedColor={selectedColorHex} width={currentWidth} height={currentHeight} depth={currentDepth} currentPlintHeight={currentPlintHeight} />
+          <FurnitureViewer
+            selectedColor={selectedColorHex}
+            width={currentWidth}
+            height={currentHeight}
+            depth={currentDepth}
+            currentPlintHeight={currentPlintHeight}
+          />
         ) : (
           imageCarouselComponent && (
             <ProductImageCarousel
@@ -192,8 +194,8 @@ export const ProductPage: FC<ProductPageProps> = ({
           )
         })}
       </div>
-      {!isStand3D && 
-     <div>
+
+      <div>
         {priceComponent && (
           <ProductPrice
             onAddItem={() => {
@@ -206,10 +208,11 @@ export const ProductPage: FC<ProductPageProps> = ({
         {values != null && (
           <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
         )}
-        <ProductHelpBox />
-        <ProductInfobox />
-      </div> 
-}
+        {/* Hiding it for now, have to fix the styles */}
+        {!isStand3D && 
+        <><ProductHelpBox /><ProductInfobox /></>
+        }
+      </div>
     </>
   )
 }

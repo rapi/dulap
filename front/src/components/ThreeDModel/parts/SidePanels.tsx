@@ -4,7 +4,7 @@ import { FURNITURE_CONFIG } from '../furnitureConfig'
 import { applyColorToObject, createPivotAnchored, disposeObject, cloneWithIndependentMaterials } from '../furnitureUtils'
 
 interface SidePanelsProps {
-  horizontalScene: THREE.Object3D
+  horizontalPanelObject: THREE.Object3D
   desiredWidth: number
   desiredHeight: number
   desiredDepth: number
@@ -12,31 +12,33 @@ interface SidePanelsProps {
 }
 
 const SidePanelsComponent: React.FC<SidePanelsProps> = ({
-  horizontalScene: sidePanelSource,
+  horizontalPanelObject: sidePanelSource,
   desiredWidth: cabinetWidth,
   desiredHeight: cabinetHeight,
   desiredDepth: cabinetDepth,
   selectedColor,
 }) => {
-  const { leftSidePanelPivot, rightSidePanelPivot } = useMemo(() => {
+  // Create object clones for the left panel and right panel
+  const { leftSidePanel, rightSidePanel } = useMemo(() => {
     if (!sidePanelSource) {
       return {
-        leftSidePanelPivot: null as THREE.Object3D | null,
-        rightSidePanelPivot: null as THREE.Object3D | null,
+        leftSidePanel: null as THREE.Object3D | null,
+        rightSidePanel: null as THREE.Object3D | null,
       }
     }
 
     const leftPanelModel = cloneWithIndependentMaterials(sidePanelSource)
     const rightPanelModel = cloneWithIndependentMaterials(sidePanelSource)
 
-    const leftSidePanelPivot = createPivotAnchored(leftPanelModel, { anchorY: 'min', anchorZ: 'min' })
-    const rightSidePanelPivot = createPivotAnchored(rightPanelModel, { anchorY: 'min', anchorZ: 'min' })
+    const leftSidePanel = createPivotAnchored(leftPanelModel, { anchorY: 'min', anchorZ: 'min' })
+    const rightSidePanel = createPivotAnchored(rightPanelModel, { anchorY: 'min', anchorZ: 'min' })
 
-    return { leftSidePanelPivot, rightSidePanelPivot }
+    return { leftSidePanel, rightSidePanel }
   }, [sidePanelSource])
 
+  // Scale and position the panels accordingly
   useEffect(() => {
-    if (!leftSidePanelPivot || !rightSidePanelPivot) return
+    if (!leftSidePanel || !rightSidePanel) return
 
     const { panelThickness, defaultScale } = FURNITURE_CONFIG
 
@@ -44,35 +46,36 @@ const SidePanelsComponent: React.FC<SidePanelsProps> = ({
     const sideHeight = (cabinetHeight - panelThickness) * defaultScale
     const sideDepth = (cabinetDepth - panelThickness) * defaultScale
 
-    leftSidePanelPivot.scale.set(sideThickness, sideHeight, sideDepth)
-    rightSidePanelPivot.scale.set(sideThickness, sideHeight, sideDepth)
+    leftSidePanel.scale.set(sideThickness, sideHeight, sideDepth)
+    rightSidePanel.scale.set(sideThickness, sideHeight, sideDepth)
 
-    leftSidePanelPivot.position.set(-cabinetWidth / 2 + panelThickness / 2, 0, 0)
-    rightSidePanelPivot.position.set(+cabinetWidth / 2 - panelThickness / 2, 0, 0)
+    leftSidePanel.position.set(-cabinetWidth / 2 + panelThickness / 2, 0, 0)
+    rightSidePanel.position.set(+cabinetWidth / 2 - panelThickness / 2, 0, 0)
 
-    leftSidePanelPivot.updateMatrixWorld(true)
-    rightSidePanelPivot.updateMatrixWorld(true)
-  }, [leftSidePanelPivot, rightSidePanelPivot, cabinetWidth, cabinetHeight, cabinetDepth])
+    leftSidePanel.updateMatrixWorld(true)
+    rightSidePanel.updateMatrixWorld(true)
+  }, [leftSidePanel, rightSidePanel, cabinetWidth, cabinetHeight, cabinetDepth])
 
+  // Apply the selected color to the panels
   useEffect(() => {
-    if (!leftSidePanelPivot || !rightSidePanelPivot) return
-    applyColorToObject(leftSidePanelPivot, selectedColor)
-    applyColorToObject(rightSidePanelPivot, selectedColor)
-  }, [leftSidePanelPivot, rightSidePanelPivot, selectedColor])
+    if (!leftSidePanel || !rightSidePanel) return
+    applyColorToObject(leftSidePanel, selectedColor)
+    applyColorToObject(rightSidePanel, selectedColor)
+  }, [leftSidePanel, rightSidePanel, selectedColor])
 
   useEffect(() => {
     return () => {
-      if (leftSidePanelPivot) disposeObject(leftSidePanelPivot)
-      if (rightSidePanelPivot) disposeObject(rightSidePanelPivot)
+      if (leftSidePanel) disposeObject(leftSidePanel)
+      if (rightSidePanel) disposeObject(rightSidePanel)
     }
-  }, [leftSidePanelPivot, rightSidePanelPivot])
+  }, [leftSidePanel, rightSidePanel])
 
-  if (!leftSidePanelPivot || !rightSidePanelPivot) return null
+  if (!leftSidePanel || !rightSidePanel) return null
 
   return (
     <group>
-      <primitive object={leftSidePanelPivot} />
-      <primitive object={rightSidePanelPivot} />
+      <primitive object={leftSidePanel} />
+      <primitive object={rightSidePanel} />
     </group>
   )
 }

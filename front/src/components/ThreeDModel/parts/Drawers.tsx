@@ -2,10 +2,10 @@ import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from '
 import * as THREE from 'three'
 import { useFrame, ThreeEvent } from '@react-three/fiber'
 import { FURNITURE_CONFIG } from '../furnitureConfig'
-import { applyColorToObject, createPivotAnchored, disposeObject, cloneWithIndependentMaterials } from '../furnitureUtils'
+import { applyColorToObject, disposeObject, createPanelPivotWithFlag } from '../furnitureUtils'
 
 interface DrawersProps {
-  horizontalScene: THREE.Object3D
+  horizontalPanelObject: THREE.Object3D
   desiredWidth: number
   desiredHeight: number
   desiredDepth: number
@@ -16,7 +16,7 @@ interface DrawersProps {
 }
 
 const DrawersComponent: React.FC<DrawersProps> = ({
-  horizontalScene,
+  horizontalPanelObject,
   desiredWidth,
   desiredHeight,
   desiredDepth,
@@ -28,22 +28,16 @@ const DrawersComponent: React.FC<DrawersProps> = ({
   const [hoveredDrawerIndex, setHoveredDrawerIndex] = useState<number | null>(null)
   const drawerPositionsRef = useRef<Map<number, number>>(new Map())
 
+  // Create object clones for all the needed parts of the drawer
   const drawerGroups = useMemo(() => {
-    if (!horizontalScene) return [] as THREE.Object3D[]
-
-    const createPanelPivotWithFlag = (panelFlagKey: string) => {
-      const panelModel = cloneWithIndependentMaterials(horizontalScene)
-      const panelPivot = createPivotAnchored(panelModel, { anchorY: 'min', anchorZ: 'min' })
-      panelPivot.userData[panelFlagKey] = true
-      return panelPivot
-    }
+    if (!horizontalPanelObject) return [] as THREE.Object3D[]
 
     const drawerGroupList: THREE.Object3D[] = []
     for (let drawerIndex = 0; drawerIndex < FURNITURE_CONFIG.maxDrawers; drawerIndex++) {
-      const frontPanelPivot = createPanelPivotWithFlag('isDrawerFront')
-      const bottomPanelPivot = createPanelPivotWithFlag('isDrawerBottom')
-      const leftPanelPivot = createPanelPivotWithFlag('isDrawerLeft')
-      const rightPanelPivot = createPanelPivotWithFlag('isDrawerRight')
+      const frontPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerFront')
+      const bottomPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerBottom')
+      const leftPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerLeft')
+      const rightPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerRight')
 
       const drawerGroup = new THREE.Group()
       drawerGroup.add(frontPanelPivot, bottomPanelPivot, leftPanelPivot, rightPanelPivot)
@@ -53,8 +47,9 @@ const DrawersComponent: React.FC<DrawersProps> = ({
       drawerGroupList.push(drawerGroup)
     }
     return drawerGroupList
-  }, [horizontalScene])
+  }, [horizontalPanelObject])
 
+  // Scale and position the drawer parts accordingly
   useEffect(() => {
     if (drawerGroups.length === 0) return
 
@@ -67,12 +62,16 @@ const DrawersComponent: React.FC<DrawersProps> = ({
     } = FURNITURE_CONFIG
 
     const drawersUsableHeight = desiredHeight - panelThickness - desiredPlintHeight
+    
+    // TODO: Replace this with real selectedOptions 
+    // (drawer number will change dynamically based on the selected value in the configurator)
     const drawerCount = Math.min(
       defaultDrawerCount,
       Math.max(1, Math.floor(drawersUsableHeight / minDrawerHeight))
     )
     const singleDrawerTotalHeight = drawersUsableHeight / drawerCount
 
+    // Dimenstions of the interior parts of the drawer (the box inside)
     const innerHeight = singleDrawerTotalHeight - drawerSpacing * 4
     const innerWidth = desiredWidth - panelThickness * 2 - drawerSpacing * 2
     const innerDepth = desiredDepth - panelThickness * 2 - drawerSpacing * 2
@@ -127,6 +126,7 @@ const DrawersComponent: React.FC<DrawersProps> = ({
     })
   }, [drawerGroups, desiredWidth, desiredHeight, desiredDepth, desiredPlintHeight])
 
+  // Apply the selected color to all drawer panels
   useEffect(() => {
     if (drawerGroups.length === 0) return
     drawerGroups.forEach((drawerGroup) => applyColorToObject(drawerGroup, selectedColor))
@@ -139,6 +139,7 @@ const DrawersComponent: React.FC<DrawersProps> = ({
     }
   }, [drawerGroups])
 
+  // The drawers opening animation
   useFrame(() => {
     if (drawerGroups.length === 0) return
 

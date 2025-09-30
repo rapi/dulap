@@ -31,15 +31,15 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   lerpSpeed = 0.1,
 }) => {
 
-  const { scene: verticalScene } = useGLTF(VERTICAL_URL)
-  const { scene: horizontalScene } = useGLTF(HORIZONTAL_URL)
+  const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
+  const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
 
   const scenes = useMemo(
     () => ({
-      vertical: verticalScene,
-      horizontal: horizontalScene,
+      vertical: verticalPanelObject,
+      horizontal: horizontalPanelObject,
     }),
-    [verticalScene, horizontalScene]
+    [verticalPanelObject, horizontalPanelObject]
   )
 
   // Don't render until models are loaded
@@ -51,7 +51,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
     <Suspense fallback={null}>
       <group>
         <SidePanels
-          horizontalScene={scenes.horizontal}
+          horizontalPanelObject={scenes.horizontal}
           desiredWidth={desiredWidth}
           desiredHeight={desiredHeight}
           desiredDepth={desiredDepth}
@@ -59,8 +59,8 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
         />
 
         <TopAndPlinth
-          verticalScene={scenes.vertical}
-          horizontalScene={scenes.horizontal}
+          verticalPanelObject={scenes.vertical}
+          horizontalPanelObject={scenes.horizontal}
           desiredWidth={desiredWidth}
           desiredHeight={desiredHeight}
           desiredDepth={desiredDepth}
@@ -69,7 +69,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
         />
 
         <Drawers
-          horizontalScene={scenes.horizontal}
+          horizontalPanelObject={scenes.horizontal}
           desiredWidth={desiredWidth}
           desiredHeight={desiredHeight}
           desiredDepth={desiredDepth}
