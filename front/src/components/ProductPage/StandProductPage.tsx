@@ -149,12 +149,20 @@ export const ProductPage: FC<ProductPageProps> = ({
   // Extract current width & height for 3D scaling
   const dimensionsComponent = currentComponents.find(
     (c): c is ProductDimensionsComponent => c.type === 'dimensions'
-  )
+  )     
   const currentWidth = dimensionsComponent?.width ?? DEFAULT_STAND.width
   const currentHeight = dimensionsComponent?.height ?? DEFAULT_STAND.height
   const currentDepth = dimensionsComponent?.depth ?? DEFAULT_STAND.depth
   const currentPlintHeight =
     dimensionsComponent?.plintHeight ?? DEFAULT_STAND.plintHeight
+
+  // Extract current selected sections for 3D drawers/sections count
+  const sectionsComponent = currentComponents.find(
+    (c): c is ProductSectionsComponent => c.type === 'sections'
+  )
+  const currentSections =
+    sectionsComponent?.selectedSections ??
+    (typeof values?.sections === 'number' ? values.sections : 4)
 
   return (
     <>
@@ -167,6 +175,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             height={currentHeight}
             depth={currentDepth}
             currentPlintHeight={currentPlintHeight}
+            sections={currentSections}
           />
         ) : (
           imageCarouselComponent && (
