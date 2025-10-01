@@ -1,6 +1,7 @@
 import { ProductComponent } from '~/components/ProductPage/StandProductPage'
 import { useState, useEffect, useMemo } from 'react'
 import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export const DEFAULT_STAND = {
   width: 80,
@@ -21,7 +22,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     'homepage.configurator.fittings.guides.options.1'
   )
 
-  const [openingOption, setOpeningOption] = useState('push')
+  const [openingOption, setOpeningOption] = useState<OpeningType>(OpeningType.Push)
   const [imageColor, setImageColor] = useState('White')
   const [imageWidth, setImageWidth] = useState(1000)
   const [imageHeight, setImageHeight] = useState(900)

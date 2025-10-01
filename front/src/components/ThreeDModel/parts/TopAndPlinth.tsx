@@ -109,8 +109,8 @@ const TopAndPlinthComponent: React.FC<TopAndPlinthProps> = ({
 
   return (
     <group>
-      <primitive object={plinthPanel} />
-      <primitive object={topPanel} />
+      <primitive key="plinth-panel" object={plinthPanel} />
+      <primitive key="top-panel" object={topPanel} />
     </group>
   )
 }

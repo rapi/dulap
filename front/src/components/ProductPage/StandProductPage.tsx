@@ -42,6 +42,7 @@ import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
 import { getColorItemByName } from '~/utils/colorDictionary'
 import { DEFAULT_STAND } from './productTypes/stand'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -164,6 +165,14 @@ export const ProductPage: FC<ProductPageProps> = ({
     sectionsComponent?.selectedSections ??
     (typeof values?.sections === 'number' ? values.sections : 4)
 
+  // Extract opening type for 3D (maner | push)
+  const furnitureComponent = currentComponents.find(
+    (c): c is ProductFurnitureComponent => c.type === 'furniture'
+  )
+  const currentOpeningType: OpeningType =
+    values?.furniture?.openingType ??
+    (furnitureComponent?.selectedOpeningMethod === OpeningType.Handle ? OpeningType.Handle : OpeningType.Push)
+
   return (
     <>
       {/* Left Side: Viewer or Image Carousel */}
@@ -176,6 +185,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             depth={currentDepth}
             currentPlintHeight={currentPlintHeight}
             sections={currentSections}
+            openingType={currentOpeningType}
           />
         ) : (
           imageCarouselComponent && (

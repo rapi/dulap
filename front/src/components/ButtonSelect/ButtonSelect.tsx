@@ -2,27 +2,27 @@ import React, { useEffect, useState } from 'react'
 import styles from './ButtonSelect.module.css'
 import { FormattedMessage } from 'react-intl'
 
-export type ButtonOptionsType = {
+export type ButtonOptionsType<T extends string = string> = {
   label: string | React.ReactNode
-  value: string
+  value: T
   disabled?: boolean
 }
-interface ButtonSelectProps {
-  options: ButtonOptionsType[]
-  defaultSelected?: string
-  onChange?: (value: string) => void
+interface ButtonSelectProps<T extends string = string> {
+  options: ButtonOptionsType<T>[]
+  defaultSelected?: T
+  onChange?: (value: T) => void
 }
 
-export const ButtonSelect: React.FC<ButtonSelectProps> = ({
+export const ButtonSelect = <T extends string = string>({
   options,
   defaultSelected,
   onChange,
-}) => {
-  const [selected, setSelected] = useState(defaultSelected || options[0].value)
+}: ButtonSelectProps<T>) => {
+  const [selected, setSelected] = useState<T>((defaultSelected ?? options[0].value) as T)
   useEffect(() => {
-    setSelected(defaultSelected || options[0].value)
+    setSelected((defaultSelected ?? options[0].value) as T)
   }, [defaultSelected, options])
-  const handleSelect = (option: string) => {
+  const handleSelect = (option: T) => {
     setSelected(option)
     if (onChange) {
       onChange(option)

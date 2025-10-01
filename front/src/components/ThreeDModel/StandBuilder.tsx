@@ -3,6 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { TopAndPlinth } from './parts/TopAndPlinth'
 import { Drawers } from './parts/Drawers'
+import { OpeningType } from './furnitureConfig'
 
 interface StandBuilderProps {
   selectedColor: string
@@ -12,15 +13,18 @@ interface StandBuilderProps {
   desiredPlintHeight: number
   drawerOffsetZ?: number
   lerpSpeed?: number
-  sectionsCount?: number
+  sectionsCount: number
+  openingType: OpeningType
 }
 
 // Preload assets for better performance
 const VERTICAL_URL = '/assets/3d-models/vertical_sample.glb'
 const HORIZONTAL_URL = '/assets/3d-models/horizontal_sample.glb'
+const HANDLE_URL = '/assets/3d-models/handle.glb'
 
 useGLTF.preload(VERTICAL_URL)
 useGLTF.preload(HORIZONTAL_URL)
+useGLTF.preload(HANDLE_URL)
 
 const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   selectedColor,
@@ -31,17 +35,20 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   drawerOffsetZ = 10,
   lerpSpeed = 0.1,
   sectionsCount,
+  openingType,
 }) => {
 
   const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
   const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
+  const { scene: handleObject } = useGLTF(HANDLE_URL)
 
   const scenes = useMemo(
     () => ({
       vertical: verticalPanelObject,
       horizontal: horizontalPanelObject,
+      handle: handleObject,
     }),
-    [verticalPanelObject, horizontalPanelObject]
+    [verticalPanelObject, horizontalPanelObject, handleObject]
   )
 
   // Don't render until models are loaded
@@ -71,6 +78,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
         />
 
         <Drawers
+          handleObject={scenes.handle}
           horizontalPanelObject={scenes.horizontal}
           desiredWidth={desiredWidth}
           desiredHeight={desiredHeight}
@@ -80,6 +88,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
           drawerOffsetZ={drawerOffsetZ}
           lerpSpeed={lerpSpeed}
           sectionsCount={sectionsCount}
+          openingType={openingType}
         />
       </group>
     </Suspense>

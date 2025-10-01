@@ -5,6 +5,7 @@ import { GLBModel } from './GLBModel'
 import { SceneLights } from './SceneLights'
 import * as THREE from 'three'
 import { StandBuilder } from './StandBuilder'
+import { OpeningType } from './furnitureConfig'
 
 // Preload models
 useGLTF.preload('/assets/3d-models/bg.glb')
@@ -26,6 +27,7 @@ const FurnitureScene = memo(function FurnitureScene({
   currentPlintHeight,
   selectedColor,
   sections,
+  openingType,
 }: {
   width: number
   height: number
@@ -33,6 +35,7 @@ const FurnitureScene = memo(function FurnitureScene({
   currentPlintHeight: number
   selectedColor: string
   sections: number
+  openingType: OpeningType
 }) {
   return (
     <>
@@ -67,6 +70,7 @@ const FurnitureScene = memo(function FurnitureScene({
           desiredDepth={depth}
           desiredPlintHeight={currentPlintHeight}
           sectionsCount={sections}
+          openingType={openingType}
         />
       </Suspense>
     </>
@@ -81,6 +85,7 @@ interface FurnitureViewerProps {
   depth: number
   currentPlintHeight: number
   sections: number
+  openingType: OpeningType
 }
 
 const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
@@ -90,6 +95,7 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
   depth,
   currentPlintHeight,
   sections,
+  openingType,
 }) => {
   const handleCanvasCreated = useCallback(({ gl: webGlRenderer, scene: threeScene }: { gl: THREE.WebGLRenderer; scene: THREE.Scene }) => {
     webGlRenderer.outputColorSpace = THREE.SRGBColorSpace
@@ -142,6 +148,7 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
           selectedColor={selectedColor}
           currentPlintHeight={currentPlintHeight}
           sections={sections}
+          openingType={openingType}
         />
       </Canvas>
     </div>

@@ -74,8 +74,8 @@ const SidePanelsComponent: React.FC<SidePanelsProps> = ({
 
   return (
     <group>
-      <primitive object={leftSidePanel} />
-      <primitive object={rightSidePanel} />
+      <primitive key="left-side-panel" object={leftSidePanel} />
+      <primitive key="right-side-panel" object={rightSidePanel} />
     </group>
   )
 }
