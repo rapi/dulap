@@ -1,11 +1,13 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame, ThreeEvent } from '@react-three/fiber'
-import { FURNITURE_CONFIG } from '../furnitureConfig'
+import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import { applyColorToObject, disposeObject, createPanelPivotWithFlag } from '../furnitureUtils'
 
 interface DrawersProps {
   horizontalPanelObject: THREE.Object3D
+  handleObject: THREE.Object3D
+  openingType: OpeningType
   desiredWidth: number
   desiredHeight: number
   desiredDepth: number
@@ -18,6 +20,7 @@ interface DrawersProps {
 
 const DrawersComponent: React.FC<DrawersProps> = ({
   horizontalPanelObject,
+  handleObject,
   desiredWidth,
   desiredHeight,
   desiredDepth,
@@ -26,6 +29,7 @@ const DrawersComponent: React.FC<DrawersProps> = ({
   sectionsCount,
   drawerOffsetZ = 15,
   lerpSpeed = 0.15,
+  openingType,
 }) => {
   const [hoveredDrawerIndex, setHoveredDrawerIndex] = useState<number | null>(null)
   const drawerPositionsRef = useRef<Map<number, number>>(new Map())
@@ -40,14 +44,22 @@ const DrawersComponent: React.FC<DrawersProps> = ({
       const bottomPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerBottom')
       const leftPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerLeft')
       const rightPanelPivot = createPanelPivotWithFlag(horizontalPanelObject, 'isDrawerRight')
+      const handlePivot = createPanelPivotWithFlag(handleObject, 'handle')
 
       const drawerGroup = new THREE.Group()
-      drawerGroup.add(frontPanelPivot, bottomPanelPivot, leftPanelPivot, rightPanelPivot)
+      drawerGroup.add(
+        frontPanelPivot,
+        bottomPanelPivot,
+        leftPanelPivot,
+        rightPanelPivot,
+        handlePivot
+      )
       drawerGroup.userData.isDrawerGroup = true
       drawerGroup.userData.drawerIndex = drawerIndex
 
       drawerGroupList.push(drawerGroup)
     }
+
     return drawerGroupList
   }, [horizontalPanelObject])
 
@@ -55,15 +67,11 @@ const DrawersComponent: React.FC<DrawersProps> = ({
   useEffect(() => {
     if (drawerGroups.length === 0) return
 
-    const {
-      panelThickness,
-      defaultScale,
-      drawerSpacing,
-      minDrawerHeight,
-    } = FURNITURE_CONFIG
+    const { panelThickness, defaultScale, drawerSpacing, handleOnTheDrawerTopOffset, drawerInsidePanelsOffset} =
+      FURNITURE_CONFIG
 
     const drawersUsableHeight = desiredHeight - panelThickness - desiredPlintHeight
-    
+
     const singleDrawerTotalHeight = drawersUsableHeight / sectionsCount
 
     // Dimenstions of the interior parts of the drawer (the box inside)
@@ -84,6 +92,7 @@ const DrawersComponent: React.FC<DrawersProps> = ({
         drawerGroup.userData.drawerIndex = groupIndex
         drawerPositionsRef.current.set(groupIndex, baseZ)
 
+        // Тут рисуются все ящики
         drawerGroup.children.forEach((panelPivot) => {
           if (panelPivot.userData.isDrawerFront) {
             panelPivot.scale.set(
@@ -92,17 +101,25 @@ const DrawersComponent: React.FC<DrawersProps> = ({
               panelThickness * defaultScale
             )
             panelPivot.position.set(0, 0, desiredDepth - panelThickness)
+          } else if (panelPivot.userData.handle) {
+            if (openingType === OpeningType.Handle) {
+              panelPivot.visible = true;
+              panelPivot.scale.set(defaultScale, defaultScale, defaultScale)
+              panelPivot.position.set(0, innerHeight - handleOnTheDrawerTopOffset, desiredDepth)
+            } else {
+              panelPivot.visible = false;
+            }     
           } else if (panelPivot.userData.isDrawerLeft) {
             panelPivot.scale.set(
               panelThickness * defaultScale,
-              (innerHeight-5) * defaultScale,
+              (innerHeight - drawerInsidePanelsOffset) * defaultScale,
               innerDepth * defaultScale
             )
             panelPivot.position.set(-halfInnerWidth + panelThickness / 2, 0, panelThickness)
           } else if (panelPivot.userData.isDrawerRight) {
             panelPivot.scale.set(
               panelThickness * defaultScale,
-              (innerHeight-5) * defaultScale,
+              (innerHeight - drawerInsidePanelsOffset) * defaultScale,
               innerDepth * defaultScale
             )
             panelPivot.position.set(+halfInnerWidth - panelThickness / 2, 0, panelThickness)
@@ -119,7 +136,16 @@ const DrawersComponent: React.FC<DrawersProps> = ({
         drawerGroup.visible = false
       }
     })
-  }, [drawerGroups, desiredWidth, desiredHeight, desiredDepth, desiredPlintHeight, sectionsCount])
+  }, [
+    drawerGroups,
+    desiredWidth,
+    desiredHeight,
+    desiredDepth,
+    desiredPlintHeight,
+    sectionsCount,
+    openingType,
+    selectedColor,
+  ])
 
   // Apply the selected color to all drawer panels
   useEffect(() => {
