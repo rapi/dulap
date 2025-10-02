@@ -240,11 +240,18 @@
   gap: 5px;
 }
 
-.price {
+.priceBox {
   display: flex;
 }
 
-.priceTitle h4 {
+.price {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  color: #f15e4d;
+}
+
+.priceTitleText {
   margin: 0;
   font-size: 14px;
   font-weight: 500;

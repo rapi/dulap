@@ -116,7 +116,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       {/* Right Side: Product Details */}
       <div className={styles.detailsContainer}>
         <h1 className={styles.visuallyHiddenTitle}>
-          <FormattedMessage id="meta.header.configurator.beside" />
+          <FormattedMessage id="meta.header.configurator.bedside" />
         </h1>
         <h2 className={styles.title}>
           <FormattedMessage id={name} />
