@@ -1,7 +1,6 @@
 import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
-import { useIntl } from 'react-intl'
 
 import { Menu } from '~/components/Menu/Menu'
 import { Footer } from '~/components/Footer/Footer'
@@ -12,9 +11,6 @@ type LayoutProps = {
   children: ReactNode
 }
 export default function Layout({ children }: LayoutProps) {
-  const intl = useIntl()
-  const title = intl.formatMessage({ id: 'meta.title' })
-
   const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url: string) => {
