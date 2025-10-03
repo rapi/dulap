@@ -2,13 +2,21 @@ import { ProductComponent } from '~/components/ProductPage/StandProductPage'
 import { useState, useEffect, useMemo } from 'react'
 import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 
+export const DEFAULT_STAND = {
+  width: 80,
+  height: 70,
+  depth: 40,
+  plintHeight: 2,
+  selectedColor: '#ded9d3', // Biege (the first from the list)
+}
+
 export const StandProductConfigurator: () => ProductComponent[] = () => {
-  const [width, setWidth] = useState(80)
-  const [height, setHeight] = useState(70)
-  const [depth, setDepth] = useState(40)
-  const [plintHeight, setPlintHeight] = useState(2)
+  const [width, setWidth] = useState(DEFAULT_STAND.width)
+  const [height, setHeight] = useState(DEFAULT_STAND.height)
+  const [depth, setDepth] = useState(DEFAULT_STAND.depth)
+  const [plintHeight, setPlintHeight] = useState(DEFAULT_STAND.plintHeight)
   const [selectedSections, setSelectedSections] = useState(4)
-  const [selectedColor, setSelectedColor] = useState('#fcfbf5')
+  const [selectedColor, setSelectedColor] = useState(DEFAULT_STAND.selectedColor)
   const [guides, setGuides] = useState(
     'homepage.configurator.fittings.guides.options.1'
   )

@@ -1,16 +1,17 @@
 import React from 'react'
 import styles from './ProductPageLayout.module.css'
 import { Breadcrumb } from '~/components/Breadcrumb/Breadcrumb'
+import { DevStand3DToggle } from '~/components/DevStand3DToggle'
 import { productTypes } from '~/components/ProductTypesList/productTypes'
 import { useRouter } from 'next/router'
 interface ProductPageLayoutProps {
   children: React.ReactNode
+  showBreadcrumbs?: boolean
 }
 export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
   children,
 }) => {
   const router = useRouter()
-  console.log(router.pathname)
 
   const strippedPath = router.pathname.replace('/[locale]', '')
   const productType = productTypes.find(({ link }) => link === strippedPath)
@@ -27,7 +28,9 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
           ]}
         />
       </div>
+
       <div className={styles.contentContainer}>{children}</div>
+      <DevStand3DToggle />
     </div>
   )
 }

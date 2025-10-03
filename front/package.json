@@ -16,6 +16,9 @@
     "@mui/icons-material": "^6.4.9",
     "@mui/material": "^6.4.9",
     "@mui/styled-engine-sc": "^6.4.3",
+    "@react-three/drei": "^10.6.0",
+    "@react-three/fiber": "^9.2.0",
+    "@types/three": "^0.178.1",
     "axios": "^1.10.0",
     "classnames": "^2.5.1",
     "next": "15.3.2",
@@ -24,7 +27,9 @@
     "react-dom": "^19.0.0",
     "react-intl": "^7.1.11",
     "styled-components": "^6.1.14",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "three": "^0.178.0",
+    "three-stdlib": "^2.36.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

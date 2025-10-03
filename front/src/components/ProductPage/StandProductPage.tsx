@@ -34,10 +34,14 @@ import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
+import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
+import { use3DVersion } from '~/hooks/use3DVersion'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
+import { getColorItemByName } from '~/utils/colorDictionary'
+import { DEFAULT_STAND } from './productTypes/stand'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -47,6 +51,7 @@ export type ProductComponent =
   | ProductSectionsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
+
 export type PredefinedValue = {
   sections?: number
   imageSelect?: string
@@ -129,21 +134,53 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
+  const isStand3D = use3DVersion()
+
+  // Extract current selected color (map names to HEX for 3D)
+  const colorsComponent = currentComponents.find(
+    (c): c is ProductColorsComponent => c.type === 'colors'
+  )
+  const selectedColorNameOrHex =
+    colorsComponent?.selectedColor ?? DEFAULT_STAND.selectedColor
+  const selectedColorHex =
+    getColorItemByName(selectedColorNameOrHex)?.hexCode ??
+    selectedColorNameOrHex
+
+  // Extract current width & height for 3D scaling
+  const dimensionsComponent = currentComponents.find(
+    (c): c is ProductDimensionsComponent => c.type === 'dimensions'
+  )
+  const currentWidth = dimensionsComponent?.width ?? DEFAULT_STAND.width
+  const currentHeight = dimensionsComponent?.height ?? DEFAULT_STAND.height
+  const currentDepth = dimensionsComponent?.depth ?? DEFAULT_STAND.depth
+  const currentPlintHeight =
+    dimensionsComponent?.plintHeight ?? DEFAULT_STAND.plintHeight
+
   return (
     <>
-      {/* Left Side: Image */}
+      {/* Left Side: Viewer or Image Carousel */}
       <div className={styles.leftContainer}>
-        {imageCarouselComponent && (
-          <ProductImageCarousel
-            configuration={
-              values?.imageCarousel
-                ? {
-                    type: 'imageCarousel',
-                    images: values.imageCarousel,
-                  }
-                : imageCarouselComponent
-            }
+        {isStand3D ? (
+          <FurnitureViewer
+            selectedColor={selectedColorHex}
+            width={currentWidth}
+            height={currentHeight}
+            depth={currentDepth}
+            currentPlintHeight={currentPlintHeight}
           />
+        ) : (
+          imageCarouselComponent && (
+            <ProductImageCarousel
+              configuration={
+                values?.imageCarousel
+                  ? {
+                      type: 'imageCarousel',
+                      images: values.imageCarousel,
+                    }
+                  : imageCarouselComponent
+              }
+            />
+          )
         )}
       </div>
       {/* Right Side: Product Details */}
@@ -160,6 +197,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           )
         })}
       </div>
+
       <div>
         {priceComponent && (
           <ProductPrice
@@ -173,8 +211,10 @@ export const ProductPage: FC<ProductPageProps> = ({
         {values != null && (
           <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
         )}
-        <ProductHelpBox />
-        <ProductInfobox />
+        {/* Hiding it for now, have to fix the styles */}
+        {!isStand3D && 
+        <><ProductHelpBox /><ProductInfobox /></>
+        }
       </div>
     </>
   )
