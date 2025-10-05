@@ -234,6 +234,14 @@
 
   "configurator.infobox.config.title": "Vrei mărimi personalizate?",
 
+  "infoBar.warranty.title": "Garanție",
+  "infoBar.warranty.subtitle": "Garanție 5 ani pentru toate componentele și materialele folosite",
+  "infoBar.delivery.title": "Livrare",
+  "infoBar.delivery.subtitle": "Livrare gratuită în raza municipiului Chișinău în 10-15 zile lucrătoare",
+  "infoBar.assembly.title": "Montare",
+  "infoBar.assembly.subtitle": "Montare ușoară, cu instrucțiuni pas cu pas sau serviciu de montare opțional",
+  "infoBar.readMore": "Detalii",
+
   "productPage.details.title": "Despre produs",
 
   "modal.addedToCart.title": "Produsul a fost adăgat în coș cu succes",

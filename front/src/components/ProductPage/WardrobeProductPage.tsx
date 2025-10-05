@@ -32,12 +32,11 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
+} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
 import {
   ProductGallery,
   ProductGalleryComponent,
@@ -45,6 +44,8 @@ import {
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
+import { InfoBar } from '~/components/InfoBar/InfoBar'
+import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
 
 export type ProductComponent =
   | ProductImageSelectComponent
@@ -191,12 +192,12 @@ export const ProductPage: FC<ProductPageProps> = ({
           {values != null && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
-          <ProductInfobox />
         </div>
       </div>
       <br />
       <br />
       <br />
+      <InfoBar items={productInfoBarContent} />
       <br />
       <br />
       <br />

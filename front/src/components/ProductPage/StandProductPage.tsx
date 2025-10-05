@@ -28,12 +28,11 @@ import {
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import { ProductHelpBox } from '~/components/ProductPage/productTypeComponents/ProductHelpBox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
+} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
 import {
   ProductGallery,
   ProductGalleryComponent,
@@ -42,6 +41,8 @@ import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
+import { InfoBar } from '~/components/InfoBar/InfoBar'
+import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -185,12 +186,13 @@ export const ProductPage: FC<ProductPageProps> = ({
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
           <ProductHelpBox />
-          <ProductInfobox />
         </div>
       </div>
       <br />
       <br />
       <br />
+      <InfoBar items={productInfoBarContent} />
+
       <br />
       <br />
       <br />

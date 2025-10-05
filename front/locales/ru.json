@@ -225,8 +225,15 @@
   "configurator.infobox.warranty.1": "Вся наша продукция поставляется с 5-летней гарантией на все компоненты и используемые материалы.",
   "configurator.infobox.warranty.2": "Мы ценим качество наших изделий и всегда готовы помочь вам при любой проблеме.",
 
-
   "configurator.infobox.config.title": "Хочешь под индивидуальные размеры?",
+
+  "infoBar.warranty.title": "Гарантия",
+  "infoBar.warranty.subtitle": "5-летняя гарантия на все компоненты и используемые материалы",
+  "infoBar.delivery.title": "Доставка",
+  "infoBar.delivery.subtitle": "Бесплатная доставка по городу Кишинёв в течение 10–15 рабочих дней",
+  "infoBar.assembly.title": "Сборка",
+  "infoBar.assembly.subtitle": "Лёгкая сборка по пошаговой инструкции или опциональная услуга сборки",
+  "infoBar.readMore": "Подробнее",
 
   "modal.addedToCart.title": "Шкаф был успешно добавлен в корзину",
 

@@ -119,8 +119,8 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
       //   // '#7a7a7a'
       // ],
       colors: [
-        'Biege',
         'White',
+        'Biege',
         'Light Grey',
         'Grey',
         // '#7a7a7a'
