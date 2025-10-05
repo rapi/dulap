@@ -180,5 +180,18 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
         `/stand2/render/${imageColor} 2.png`,
       ],
     },
+    {
+      type: 'gallery',
+      images: [
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
+      ],
+    },
   ]
 }

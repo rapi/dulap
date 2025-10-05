@@ -149,5 +149,18 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
         `/bedside/render/${imageColor} 2.png`,
       ],
     },
+    {
+      type: 'gallery',
+      images: [
+        `/bedside/render/${imageColor} 1.png`,
+        `/bedside/render/${imageColor} 2.png`,
+        `/bedside/render/${imageColor} 1.png`,
+        `/bedside/render/${imageColor} 2.png`,
+        `/bedside/render/${imageColor} 1.png`,
+        `/bedside/render/${imageColor} 2.png`,
+        `/bedside/render/${imageColor} 1.png`,
+        `/bedside/render/${imageColor} 2.png`,
+      ],
+    },
   ]
 }

@@ -38,6 +38,10 @@ import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
+import {
+  ProductGallery,
+  ProductGalleryComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductGallery'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
@@ -45,6 +49,7 @@ import { Dimension } from '../ProductListPage/products'
 export type ProductComponent =
   | ProductImageSelectComponent
   | ProductImageCarouselComponent
+  | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
@@ -55,6 +60,8 @@ export type PredefinedValue = {
   sections?: ProductSectionPredefinedValue
   imageSelect?: string
   imageCarousel?: string[]
+  gallery?: string[]
+
   dimensions?: Dimension
   colors?: string
   select?: string
@@ -127,6 +134,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   const imageCarouselComponent = currentComponents.find(
     (component) => component.type === 'imageCarousel'
   )
+  const galleryComponent = currentComponents.find(
+    (component) => component.type === 'gallery'
+  )
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -138,49 +148,71 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   return (
     <>
-      {/* Left Side: Image */}
-      <div className={styles.leftContainer}>
-        {imageCarouselComponent && (
-          <ProductImageCarousel
+      <div className={styles.contentContainer}>
+        {/* Left Side: Image */}
+        <div className={styles.leftContainer}>
+          {imageCarouselComponent && (
+            <ProductImageCarousel
+              configuration={
+                values?.imageCarousel
+                  ? {
+                      type: 'imageCarousel',
+                      images: values.imageCarousel,
+                    }
+                  : imageCarouselComponent
+              }
+            />
+          )}
+        </div>
+        {/* Right Side: Product Details */}
+        <div className={styles.detailsContainer}>
+          <h1 className={styles.visuallyHiddenTitle}>
+            <FormattedMessage id="meta.header.configurator.wardrobe" />
+          </h1>
+          <h2 className={styles.title}>
+            <FormattedMessage id={name} />
+          </h2>
+          {currentComponents.map((component, index) => {
+            return (
+              <div key={index + component.type}>{getComponent(component)}</div>
+            )
+          })}
+        </div>
+        <div>
+          {priceComponent && (
+            <ProductPrice
+              onAddItem={() => {
+                addItem('wardrobe', currentComponents, values ?? {})
+              }}
+              configuration={priceComponent}
+              predefinedValue={values?.price ?? undefined}
+            />
+          )}
+          {values != null && (
+            <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
+          )}
+          <ProductInfobox />
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <div>
+        {galleryComponent && (
+          <ProductGallery
             configuration={
-              values?.imageCarousel
+              values?.gallery
                 ? {
-                    type: 'imageCarousel',
-                    images: values.imageCarousel,
+                    type: 'gallery',
+                    images: values.gallery,
                   }
-                : imageCarouselComponent
+                : galleryComponent
             }
           />
         )}
-      </div>
-      {/* Right Side: Product Details */}
-      <div className={styles.detailsContainer}>
-        <h1 className={styles.visuallyHiddenTitle}>
-          <FormattedMessage id="meta.header.configurator.wardrobe" />
-        </h1>
-        <h2 className={styles.title}>
-          <FormattedMessage id={name} />
-        </h2>
-        {currentComponents.map((component, index) => {
-          return (
-            <div key={index + component.type}>{getComponent(component)}</div>
-          )
-        })}
-      </div>
-      <div>
-        {priceComponent && (
-          <ProductPrice
-            onAddItem={() => {
-              addItem('wardrobe', currentComponents, values ?? {})
-            }}
-            configuration={priceComponent}
-            predefinedValue={values?.price ?? undefined}
-          />
-        )}
-        {values != null && (
-          <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
-        )}
-        <ProductInfobox />
       </div>
     </>
   )

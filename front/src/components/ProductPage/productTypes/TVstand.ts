@@ -178,5 +178,18 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
         `/tv-stand/render/${imageColor} 2.png`,
       ],
     },
+    {
+      type: 'gallery',
+      images: [
+        `/tv-stand/render/${imageColor} 1.png`,
+        `/tv-stand/render/${imageColor} 2.png`,
+        `/tv-stand/render/${imageColor} 1.png`,
+        `/tv-stand/render/${imageColor} 2.png`,
+        `/tv-stand/render/${imageColor} 1.png`,
+        `/tv-stand/render/${imageColor} 2.png`,
+        `/tv-stand/render/${imageColor} 1.png`,
+        `/tv-stand/render/${imageColor} 2.png`,
+      ],
+    },
   ]
 }

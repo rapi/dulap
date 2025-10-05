@@ -3,6 +3,17 @@
   max-width: var(--containerHeight);
   margin: auto;
 }
+
+.productDescriptionContainer {
+  background-color: #ffffff;
+}
+
+.productDescriptionContent {
+  --containerHeight: 1300px;
+  max-width: var(--containerHeight);
+  margin: auto;
+}
+
 .contentContainer {
   display: flex;
   gap: 3.1em;

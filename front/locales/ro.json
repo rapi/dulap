@@ -89,6 +89,8 @@
 
   "homepage.dulapLanding.title1": "Alege ce tip de dulap ai nevoie și începe personalizarea!",
   "homepage.dulapLanding.title2": "Alege produse gata din lista noastră",
+  "homepage.dulapLanding.title3": "descoperă colecția noastră de dulapuri gata făcute...",
+
 
   "homepage.dulapLanding.aboutUs.title": "Despre noi",
   "homepage.dulapLanding.aboutUs.body.1": "La dulap.md facem mobilier personalizat, la prețuri corecte. Simplu.",
@@ -226,8 +228,13 @@
   "configurator.infobox.delivery.title": "Livrare",
   "configurator.infobox.delivery.1": "Livrarea se efectuează gratuit, în raza mun. Chișinău.",
   "configurator.infobox.delivery.2": "Termenul de livrare este de 10-15 zile lucrătare de la plasarea comenzii.",
+  "configurator.infobox.warranty.title": "Garanție",
+  "configurator.infobox.warranty.1": "Toate produsele noastre vin cu o garanție de 5 ani pentru toate componentele și materialele folosite.",
+  "configurator.infobox.warranty.2": "Tinem la calitatea produselor noastre și suntem aici să te ajutăm cu orice problemă.",
 
   "configurator.infobox.config.title": "Vrei mărimi personalizate?",
+
+  "productPage.details.title": "Despre produs",
 
   "modal.addedToCart.title": "Produsul a fost adăgat în coș cu succes",
 
