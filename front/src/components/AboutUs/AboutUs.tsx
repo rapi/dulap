@@ -9,12 +9,12 @@ const AboutUs: React.FC = () => {
     <div className={styles.about}>
       <section className={styles.aboutSection}>
         <div className={styles.container}>
-          <h1 className={styles.title}>
+          <h2 className={styles.title}>
             <FormattedMessage id="aboutUs.title" />
-          </h1>
-          <h2 className={styles.intro}>
-            <FormattedMessage id="aboutUs.subtitle" />
           </h2>
+          <h3 className={styles.intro}>
+            <FormattedMessage id="aboutUs.subtitle" />
+          </h3>
 
           <div className={styles.teamGrid}>
             {/* Founder 1 */}
