@@ -147,6 +147,7 @@
   "homepage.configurator.sections.nr.6": "6",
 
   "homepage.configurator.sections.title": "Secțiuni",
+  "homepage.configurator.columns.title": "Numărul de coloane",
   "homepage.configurator.options.title": "Opțiuni",
 
   "homepage.configurator.wardrobeArrangement.title": "Aranjare dulap",
@@ -200,6 +201,12 @@
   "configurator.infobox.delivery.2": "Termenul de livrare este de 10-15 zile lucrătare de la plasarea comenzii.",
 
   "configurator.infobox.config.title": "Vrei mărimi personalizate?",
+
+  "configurator.infobox.help.title": "Vrei altceva?",
+  "configurator.infobox.help.color": "Nu ai găsit culoarea potrivită?",
+  "configurator.infobox.help.dimensions": "Vrei alte dimensiuni?",
+  "configurator.infobox.help.personalized": "Vrei mai personalizat?",
+  "configurator.infobox.help.message": "Lasă-ne un mesaj și revenim cu un apel în scurt timp.",
 
   "modal.addedToCart.title": "Produsul a fost adăgat în coș cu succes",
 

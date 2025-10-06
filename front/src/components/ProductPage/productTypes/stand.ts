@@ -17,6 +17,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [depth, setDepth] = useState(DEFAULT_STAND.depth)
   const [plintHeight, setPlintHeight] = useState(DEFAULT_STAND.plintHeight)
   const [selectedSections, setSelectedSections] = useState(4)
+  const [selectedColumns, setSelectedColumns] = useState(1)
   const [selectedColor, setSelectedColor] = useState(DEFAULT_STAND.selectedColor)
   const [guides, setGuides] = useState(
     'homepage.configurator.fittings.guides.options.1'
@@ -48,7 +49,6 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       const firstAllowed = sectionOptions.find((o) => !o.disabled)
       if (firstAllowed) setSelectedSections(Number(firstAllowed.value))
     }
-    console.log('sectionOptions', sectionOptions)
   }, [sectionOptions, selectedSections])
 
   const price = useMemo(() => {
@@ -167,6 +167,11 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       selectedSections,
       setSelectedSections,
       options: sectionOptions,
+    },
+    {
+      type: 'columns',
+      selectedColumns,
+      setSelectedColumns,
     },
     {
       type: 'furniture',
