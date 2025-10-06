@@ -146,6 +146,7 @@
   "homepage.configurator.sections.nr.6": "6",
 
   "homepage.configurator.sections.title": "Секции",
+  "homepage.configurator.columns.title": "Количество колонн",
   "homepage.configurator.options.title": "Опции",
   
   "homepage.configurator.wardrobeArrangement.title": "Расположение шкафа",
@@ -199,6 +200,12 @@
   "configurator.infobox.delivery.2": "Срок доставки — 10–15 рабочих дней с момента оформления заказа.",
 
   "configurator.infobox.config.title": "Хочешь под индивидуальные размеры?",
+
+  "configurator.infobox.help.title": "Хочешь что-то другое?",
+  "configurator.infobox.help.color": "Не нашёл нужный цвет?",
+  "configurator.infobox.help.dimensions": "Хочешь другие размеры?",
+  "configurator.infobox.help.personalized": "Хочешь больше персонализации?",
+  "configurator.infobox.help.message": "Оставь нам сообщение, и мы скоро перезвоним.",
 
   "modal.addedToCart.title": "Шкаф был успешно добавлен в корзину",
 

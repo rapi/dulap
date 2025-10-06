@@ -28,6 +28,7 @@ const FurnitureScene = memo(function FurnitureScene({
   selectedColor,
   sections,
   openingType,
+  columns,
 }: {
   width: number
   height: number
@@ -36,10 +37,15 @@ const FurnitureScene = memo(function FurnitureScene({
   selectedColor: string
   sections: number
   openingType: OpeningType
+  columns: number
 }) {
   return (
     <>
-      <SceneLights enableShadows={true} ambientLightIntensity={0.25} shadowQuality="high" />
+      <SceneLights
+        enableShadows={true}
+        ambientLightIntensity={0.25}
+        shadowQuality="high"
+      />
 
       {/* Load background & shadow man GLB models */}
       <Suspense fallback={null}>
@@ -71,6 +77,7 @@ const FurnitureScene = memo(function FurnitureScene({
           desiredPlintHeight={currentPlintHeight}
           sectionsCount={sections}
           openingType={openingType}
+          columns={columns}
         />
       </Suspense>
     </>
@@ -86,6 +93,7 @@ interface FurnitureViewerProps {
   currentPlintHeight: number
   sections: number
   openingType: OpeningType
+  columns: number
 }
 
 const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
@@ -96,16 +104,26 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
   currentPlintHeight,
   sections,
   openingType,
+  columns,
 }) => {
-  const handleCanvasCreated = useCallback(({ gl: webGlRenderer, scene: threeScene }: { gl: THREE.WebGLRenderer; scene: THREE.Scene }) => {
-    webGlRenderer.outputColorSpace = THREE.SRGBColorSpace
-    webGlRenderer.toneMapping = THREE.ACESFilmicToneMapping
-    webGlRenderer.toneMappingExposure = 1.0
-    webGlRenderer.shadowMap.enabled = true
-    webGlRenderer.shadowMap.type = THREE.PCFSoftShadowMap
-    webGlRenderer.shadowMap.autoUpdate = true
-    threeScene.fog = new THREE.Fog('#f9f9f9', 150, 400)
-  }, [])
+  const handleCanvasCreated = useCallback(
+    ({
+      gl: webGlRenderer,
+      scene: threeScene,
+    }: {
+      gl: THREE.WebGLRenderer
+      scene: THREE.Scene
+    }) => {
+      webGlRenderer.outputColorSpace = THREE.SRGBColorSpace
+      webGlRenderer.toneMapping = THREE.ACESFilmicToneMapping
+      webGlRenderer.toneMappingExposure = 1.0
+      webGlRenderer.shadowMap.enabled = true
+      webGlRenderer.shadowMap.type = THREE.PCFSoftShadowMap
+      webGlRenderer.shadowMap.autoUpdate = true
+      threeScene.fog = new THREE.Fog('#f9f9f9', 150, 400)
+    },
+    []
+  )
 
   return (
     <div style={{ width: '100%', height: '100%', minHeight: '500px' }}>
@@ -149,6 +167,7 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
           currentPlintHeight={currentPlintHeight}
           sections={sections}
           openingType={openingType}
+          columns={columns}
         />
       </Canvas>
     </div>

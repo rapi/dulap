@@ -17,6 +17,10 @@ import {
   ProductSections,
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
+import {
+  ProductColumns,
+  ProductColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductColumns'
 import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import {
   ProductFurniture,
@@ -50,11 +54,13 @@ export type ProductComponent =
   | ProductColorsComponent
   | ProductSelectComponent
   | ProductSectionsComponent
+  | ProductColumnsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
 
 export type PredefinedValue = {
   sections?: number
+  columns?: number
   imageSelect?: string
   imageCarousel?: string[]
   dimensions?: Dimension
@@ -102,6 +108,13 @@ export const ProductPage: FC<ProductPageProps> = ({
             options={compWithOpts.options}
           />
         )
+      case 'columns':
+        return isStand3D ? (
+          <ProductColumns
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        ) : null
       case 'select':
         return (
           <ProductSelect
@@ -165,6 +178,14 @@ export const ProductPage: FC<ProductPageProps> = ({
     sectionsComponent?.selectedSections ??
     (typeof values?.sections === 'number' ? values.sections : 4)
 
+  // Extract current selected columns for 3D
+  const columnsComponent = currentComponents.find(
+    (c): c is ProductColumnsComponent => c.type === 'columns'
+  )
+  const currentColumns =
+    columnsComponent?.selectedColumns ??
+    (typeof values?.columns === 'number' ? values.columns : 1)
+
   // Extract opening type for 3D (maner | push)
   const furnitureComponent = currentComponents.find(
     (c): c is ProductFurnitureComponent => c.type === 'furniture'
@@ -179,14 +200,15 @@ export const ProductPage: FC<ProductPageProps> = ({
       <div className={styles.leftContainer}>
         {isStand3D ? (
           <FurnitureViewer
-            selectedColor={selectedColorHex}
-            width={currentWidth}
-            height={currentHeight}
-            depth={currentDepth}
-            currentPlintHeight={currentPlintHeight}
-            sections={currentSections}
-            openingType={currentOpeningType}
-          />
+          selectedColor={selectedColorHex}
+          width={currentWidth}
+          height={currentHeight}
+          depth={currentDepth}
+          currentPlintHeight={currentPlintHeight}
+          sections={currentSections}
+          openingType={currentOpeningType}
+          columns={currentColumns}
+        />
         ) : (
           imageCarouselComponent && (
             <ProductImageCarousel

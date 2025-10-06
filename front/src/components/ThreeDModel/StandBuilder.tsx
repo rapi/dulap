@@ -2,8 +2,8 @@ import React, { Suspense, memo, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { TopAndPlinth } from './parts/TopAndPlinth'
-import { Drawers } from './parts/Drawers'
-import { OpeningType } from './furnitureConfig'
+import { Column } from './parts/Column'
+import { FURNITURE_CONFIG, OpeningType } from './furnitureConfig'
 
 interface StandBuilderProps {
   selectedColor: string
@@ -15,6 +15,7 @@ interface StandBuilderProps {
   lerpSpeed?: number
   sectionsCount: number
   openingType: OpeningType
+  columns: number
 }
 
 // Preload assets for better performance
@@ -36,8 +37,8 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   lerpSpeed = 0.1,
   sectionsCount,
   openingType,
+  columns,
 }) => {
-
   const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
   const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
   const { scene: handleObject } = useGLTF(HANDLE_URL)
@@ -55,6 +56,33 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   if (!scenes.vertical || !scenes.horizontal) {
     return null
   }
+
+  // Calculate column configuration
+  const columnWidth = desiredWidth / columns
+
+  // Generate columns with explicit configuration
+  const columnComponents = Array.from({ length: columns }, (_, index) => {
+    const columnPositionX =
+      -desiredWidth / 2 + columnWidth * index + columnWidth / 2
+
+    return (
+      <Column
+        key={`column-${index}`}
+        horizontalPanelObject={scenes.horizontal}
+        handleObject={scenes.handle}
+        openingType={openingType}
+        columnWidth={columnWidth}
+        columnHeight={desiredHeight}
+        columnDepth={desiredDepth}
+        plintHeight={desiredPlintHeight}
+        sectionsCount={sectionsCount}
+        positionX={columnPositionX}
+        selectedColor={selectedColor}
+        drawerOffsetZ={drawerOffsetZ}
+        lerpSpeed={lerpSpeed}
+      />
+    )
+  })
 
   return (
     <Suspense fallback={null}>
@@ -77,19 +105,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
           selectedColor={selectedColor}
         />
 
-        <Drawers
-          handleObject={scenes.handle}
-          horizontalPanelObject={scenes.horizontal}
-          desiredWidth={desiredWidth}
-          desiredHeight={desiredHeight}
-          desiredDepth={desiredDepth}
-          desiredPlintHeight={desiredPlintHeight}
-          selectedColor={selectedColor}
-          drawerOffsetZ={drawerOffsetZ}
-          lerpSpeed={lerpSpeed}
-          sectionsCount={sectionsCount}
-          openingType={openingType}
-        />
+        {columnComponents}
       </group>
     </Suspense>
   )
