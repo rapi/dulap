@@ -9,6 +9,8 @@ import { Gallery } from '~/components/Gallery/Gallery'
 import { AboutUs } from '~/components/AboutUs/AboutUs'
 import ContactBox from '~/components/ContactBox/ContactBox'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import { InfoBar } from '~/components/InfoBar/InfoBar'
+import { landingInfoBarContent } from '~/components/InfoBar/LandingInfoBarContent'
 
 const galleryList = [
   { src: '/bedside/render/Biege 1.png', alt: 'Bedside render 1' },
@@ -39,6 +41,9 @@ export const Dulap: React.FC = () => {
         href={'/bedside/render/Biege 1.png'}
         mobileHref={'/bedside/render/Biege 1.png'}
       />
+      <section className={classes.infoBar}>
+        <InfoBar items={landingInfoBarContent} />
+      </section>
       <section className={classes.productTypes}>
         <h2 className={classes.productTypesTitle}>
           <FormattedMessage id="homepage.dulapLanding.title1" />

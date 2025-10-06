@@ -2,7 +2,8 @@
 .productTypes,
 .readyProducts,
 .aboutUs,
-.gallery {
+.gallery,
+.infoBar {
   padding: 4vw 12vw;
 }
 
