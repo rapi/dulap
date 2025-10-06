@@ -39,7 +39,6 @@ import {
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
 import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
-import { Furniture3DProvider } from '~/context/furniture3DContext'
 import { use3DVersion } from '~/hooks/use3DVersion'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
@@ -110,12 +109,12 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'columns':
-        return (
+        return isStand3D ? (
           <ProductColumns
             configuration={component}
             predefinedValue={values?.[component.type] ?? undefined}
           />
-        )
+        ) : null
       case 'select':
         return (
           <ProductSelect
