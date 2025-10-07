@@ -3,7 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { TopAndPlinth } from './parts/TopAndPlinth'
 import { Column } from './parts/Column'
-import { FURNITURE_CONFIG, OpeningType } from './furnitureConfig'
+import { OpeningType } from './furnitureConfig'
 
 interface StandBuilderProps {
   selectedColor: string
@@ -21,11 +21,13 @@ interface StandBuilderProps {
 // Preload assets for better performance
 const VERTICAL_URL = '/assets/3d-models/vertical_sample.glb'
 const HORIZONTAL_URL = '/assets/3d-models/horizontal_sample.glb'
-const HANDLE_URL = '/assets/3d-models/handle.glb'
+const ROUND_HANDLE_URL = '/assets/3d-models/round-handle.glb'
+const PROFILE_HANDLE_URL = '/assets/3d-models/profile-handle.glb'
 
 useGLTF.preload(VERTICAL_URL)
 useGLTF.preload(HORIZONTAL_URL)
-useGLTF.preload(HANDLE_URL)
+useGLTF.preload(ROUND_HANDLE_URL)
+useGLTF.preload(PROFILE_HANDLE_URL)
 
 const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   selectedColor,
@@ -41,15 +43,17 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
 }) => {
   const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
   const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
-  const { scene: handleObject } = useGLTF(HANDLE_URL)
+  const { scene: roundHandleObject } = useGLTF(ROUND_HANDLE_URL)
+  const { scene: profileHandleObject } = useGLTF(PROFILE_HANDLE_URL)
 
   const scenes = useMemo(
     () => ({
       vertical: verticalPanelObject,
       horizontal: horizontalPanelObject,
-      handle: handleObject,
+      roundHandle: roundHandleObject,
+      profileHandle: profileHandleObject,
     }),
-    [verticalPanelObject, horizontalPanelObject, handleObject]
+    [verticalPanelObject, horizontalPanelObject, roundHandleObject, profileHandleObject]
   )
 
   // Don't render until models are loaded
@@ -69,7 +73,8 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
       <Column
         key={`column-${index}`}
         horizontalPanelObject={scenes.horizontal}
-        handleObject={scenes.handle}
+        roundHandleObject={scenes.roundHandle}
+        profileHandleObject={scenes.profileHandle}
         openingType={openingType}
         columnWidth={columnWidth}
         columnHeight={desiredHeight}

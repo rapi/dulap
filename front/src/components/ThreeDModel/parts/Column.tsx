@@ -5,7 +5,8 @@ import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 
 interface ColumnProps {
   horizontalPanelObject: THREE.Object3D
-  handleObject: THREE.Object3D
+  roundHandleObject: THREE.Object3D
+  profileHandleObject: THREE.Object3D
   openingType: OpeningType
   columnWidth: number
   columnHeight: number
@@ -20,7 +21,8 @@ interface ColumnProps {
 
 const ColumnComponent: React.FC<ColumnProps> = ({
   horizontalPanelObject,
-  handleObject,
+  roundHandleObject,
+  profileHandleObject,
   openingType,
   columnWidth,
   columnHeight,
@@ -58,7 +60,8 @@ const ColumnComponent: React.FC<ColumnProps> = ({
         <Drawer
           key={drawer.key}
           horizontalPanelObject={horizontalPanelObject}
-          handleObject={handleObject}
+          roundHandleObject={roundHandleObject}
+          profileHandleObject={profileHandleObject}
           openingType={openingType}
           drawerWidth={drawerWidth}
           drawerHeight={drawerHeight}

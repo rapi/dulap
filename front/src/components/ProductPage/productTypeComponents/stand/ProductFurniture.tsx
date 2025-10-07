@@ -17,9 +17,11 @@ export type ProductFurnitureComponent = {
   setGuides: (value: string) => void
   predefinedValue?: ProductFurniturePredefinedValue
   hinges: string
+  is3DEnabled?: boolean
 }
 export const openingOptions: ButtonOptionsType<OpeningType>[] = [
-  { value: OpeningType.Handle, label: 'homepage.configurator.fittings.handle' },
+  { value: OpeningType.RoundHandle, label: 'homepage.configurator.fittings.roundHandle' },
+  { value: OpeningType.ProfileHandle, label: 'homepage.configurator.fittings.profileHandle' },
   { value: OpeningType.Push, label: 'homepage.configurator.fittings.pushToOpen' },
 ]
 interface ProductSelectProps {
@@ -42,6 +44,11 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
   const intl = useIntl()
   const [isModalOpen3, setIsModalOpen3] = useState(false)
 
+  // Filter opening options based on 3D availability
+  const availableOpeningOptions = configuration.is3DEnabled
+    ? openingOptions
+    : openingOptions.filter(option => option.value !== OpeningType.ProfileHandle)
+
   return (
     <div>
       <p className={styles.furnitureHeaderTitle}>
@@ -58,7 +65,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
             intl.formatMessage({ id: predefinedValue.openingType })
           ) : (
             <ButtonSelect
-              options={openingOptions}
+              options={availableOpeningOptions}
               defaultSelected={configuration.openingOption}
               onChange={(value) => {
                 configuration.setOpeningOption(value)
