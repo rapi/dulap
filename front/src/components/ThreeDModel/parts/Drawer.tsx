@@ -7,10 +7,12 @@ import {
   disposeObject,
   createPanelPivotWithFlag,
 } from '../furnitureUtils'
+import { ColorName, getColorItemByName } from '~/utils/colorDictionary'
 
 interface DrawerProps {
   horizontalPanelObject: THREE.Object3D
-  handleObject: THREE.Object3D
+  roundHandleObject: THREE.Object3D
+  profileHandleObject: THREE.Object3D
   openingType: OpeningType
   drawerWidth: number
   drawerHeight: number
@@ -25,7 +27,8 @@ interface DrawerProps {
 
 const DrawerComponent: React.FC<DrawerProps> = ({
   horizontalPanelObject,
-  handleObject,
+  roundHandleObject,
+  profileHandleObject,
   drawerWidth,
   drawerHeight,
   drawerDepth,
@@ -61,7 +64,8 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       horizontalPanelObject,
       'isDrawerRight'
     )
-    const handlePivot = createPanelPivotWithFlag(handleObject, 'handle')
+    const roundHandlePivot = createPanelPivotWithFlag(roundHandleObject, 'roundHandle')
+    const profileHandlePivot = createPanelPivotWithFlag(profileHandleObject, 'profileHandle', { anchorY: 'center', anchorZ: 'center' })
 
     const group = new THREE.Group()
     group.add(
@@ -69,13 +73,14 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       bottomPanelPivot,
       leftPanelPivot,
       rightPanelPivot,
-      handlePivot
+      roundHandlePivot,
+      profileHandlePivot
     )
     group.userData.isDrawerGroup = true
     group.userData.drawerIndex = drawerIndex
 
     return group
-  }, [horizontalPanelObject, handleObject, drawerIndex])
+  }, [horizontalPanelObject, roundHandleObject, profileHandleObject, drawerIndex])
 
   // Store ref for animation
   useEffect(() => {
@@ -114,14 +119,26 @@ const DrawerComponent: React.FC<DrawerProps> = ({
           panelThickness * defaultScale
         )
         panelPivot.position.set(0, 0, drawerDepth - panelThickness)
-      } else if (panelPivot.userData.handle) {
-        if (openingType === OpeningType.Handle) {
+      } else if (panelPivot.userData.roundHandle) {
+        if (openingType === OpeningType.RoundHandle) {
           panelPivot.visible = true
           panelPivot.scale.set(defaultScale, defaultScale, defaultScale)
           panelPivot.position.set(
             0,
             innerHeight - handleOnTheDrawerTopOffset,
             drawerDepth - 1
+          )
+        } else {
+          panelPivot.visible = false
+        }
+      } else if (panelPivot.userData.profileHandle) {
+        if (openingType === OpeningType.ProfileHandle) {
+          panelPivot.visible = true
+          panelPivot.scale.set(defaultScale, defaultScale, defaultScale)
+          panelPivot.position.set(
+            0,
+            innerHeight - 0.7,
+            drawerDepth - 0.2
           )
         } else {
           panelPivot.visible = false
@@ -170,7 +187,21 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   // Apply the selected color
   useEffect(() => {
     if (!drawerGroup) return
-    applyColorToObject(drawerGroup, selectedColor)
+
+    drawerGroup.children.forEach((child) => {
+      if (child.userData.roundHandle || child.userData.profileHandle) {
+        const applyWhiteHandleColor = selectedColor === getColorItemByName(ColorName.White)?.hexCode || selectedColor === getColorItemByName(ColorName.Biege)?.hexCode
+
+        if (applyWhiteHandleColor) {
+          applyColorToObject(child, "#ffffff")
+        } else {
+          applyColorToObject(child, "#9c9c9c")
+        }
+      } else {
+        // Apply the selected color to drawer panels
+        applyColorToObject(child, selectedColor)
+      }
+    })
   }, [drawerGroup, selectedColor])
 
   // Cleanup

@@ -22,7 +22,7 @@ export type ProductFurnitureComponent = {
   predefinedValue?: ProductFurniturePredefinedValue
 }
 export const openingOptions: ButtonOptionsType[] = [
-  { value: 'maner', label: 'homepage.configurator.fittings.handle' },
+  { value: 'maner', label: 'homepage.configurator.fittings.roundHandle' },
   { value: 'push', label: 'homepage.configurator.fittings.pushToOpen' },
 ]
 interface ProductSelectProps {
@@ -30,7 +30,7 @@ interface ProductSelectProps {
   predefinedValue?: ProductFurniturePredefinedValue
 }
 export type ProductFurniturePredefinedValue = {
-  openingType: 'maner' | 'push'
+  openingType: 'maner' | 'profile-handle' | 'push'
   hinges?:
     | 'homepage.configurator.fittings.hinges.options.1'
     | 'homepage.configurator.fittings.hinges.options.2'

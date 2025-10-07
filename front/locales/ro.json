@@ -163,9 +163,11 @@
   "homepage.configurator.fittings.handleType": "Tip deschidere",
   "homepage.configurator.fittings.hinges": "Balamale",
   "homepage.configurator.fittings.guides": "Glisiere",
-  "homepage.configurator.fittings.handle": "mâner",
+  "homepage.configurator.fittings.roundHandle": "mâner rotund",
+  "homepage.configurator.fittings.profileHandle": "mâner profil",
   "homepage.configurator.fittings.pushToOpen": "push-to-open",
-  "maner": "mâner",
+  "maner": "mâner rotund",
+  "profile-handle": "mâner profil",
   "push": "push-to-open",
 
   "homepage.configurator.fittings.hinges.tooltip.1": "Ce sunt balamalele?",

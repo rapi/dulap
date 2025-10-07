@@ -28,10 +28,12 @@ export function middleware(request: NextRequest) {
     const isLocalhost = request.nextUrl.hostname === 'localhost' || request.nextUrl.hostname === '127.0.0.1'
     const isFBX = /\.fbx$/.test(pathname)
     const isGLB = /\.glb$/.test(pathname)
+    const isJPEG = /\.jpeg$/.test(pathname)
 
-    if ((isFBX || isGLB) && isLocalhost) {
+    if ((isFBX || isGLB || isJPEG) && isLocalhost) {
       return NextResponse.next()
     }
+
     // For all other assets (including images), use the original rewrite logic
     const url = request.nextUrl.clone()
     url.protocol = 'https'
@@ -72,5 +74,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next).*)'],
+  matcher: ['/((?!_next|assets).*)'],
 }

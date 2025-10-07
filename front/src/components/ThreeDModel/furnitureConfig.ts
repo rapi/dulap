@@ -13,6 +13,7 @@ export const FURNITURE_CONFIG = {
 export type FurnitureConfig = typeof FURNITURE_CONFIG
 
 export enum OpeningType {
-  Handle = 'maner',
+  RoundHandle = 'maner',
+  ProfileHandle = 'profile-handle',
   Push = 'push',
 }

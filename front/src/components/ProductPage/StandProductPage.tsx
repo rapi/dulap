@@ -123,9 +123,14 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'furniture':
+        // Pass the is3DEnabled flag to furniture component
+        const furnitureConfig = {
+          ...component,
+          is3DEnabled: isStand3D
+        }
         return (
           <ProductFurniture
-            configuration={component}
+            configuration={furnitureConfig}
             predefinedValue={values?.[component.type] ?? undefined}
           />
         )
@@ -186,13 +191,14 @@ export const ProductPage: FC<ProductPageProps> = ({
     columnsComponent?.selectedColumns ??
     (typeof values?.columns === 'number' ? values.columns : 1)
 
-  // Extract opening type for 3D (maner | push)
+  // Extract opening type for 3D (maner | profile-handle | push)
   const furnitureComponent = currentComponents.find(
     (c): c is ProductFurnitureComponent => c.type === 'furniture'
   )
   const currentOpeningType: OpeningType =
     values?.furniture?.openingType ??
-    (furnitureComponent?.selectedOpeningMethod === OpeningType.Handle ? OpeningType.Handle : OpeningType.Push)
+    furnitureComponent?.selectedOpeningMethod ??
+    OpeningType.Push
 
   return (
     <>
