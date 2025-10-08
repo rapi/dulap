@@ -4,6 +4,7 @@ import { Breadcrumb } from '~/components/Breadcrumb/Breadcrumb'
 import ProductDescription from '~/components/ProductDescription/ProductDescription'
 import { productTypes } from '~/components/ProductTypesList/productTypes'
 import { useRouter } from 'next/router'
+import { ProductDescriptionDetails } from '~/components/ProductDescription/ProductDescriptionDetails'
 interface ProductPageLayoutProps {
   children: React.ReactNode
 }
@@ -41,7 +42,10 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
       <br />
       <div className={styles.productDescriptionContainer}>
         <div className={styles.productDescriptionContent}>
-          <ProductDescription productType={productType?.name || ''} />
+          <ProductDescription
+            sections={ProductDescriptionDetails}
+            heading={'productPage.details.title'}
+          />
         </div>
       </div>
     </>

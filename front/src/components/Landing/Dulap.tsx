@@ -10,6 +10,7 @@ import { AboutUs } from '~/components/AboutUs/AboutUs'
 import ContactBox from '~/components/ContactBox/ContactBox'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
+import { FAQ } from '~/components/FAQ/FAQ'
 import { landingInfoBarContent } from '~/components/InfoBar/LandingInfoBarContent'
 
 const galleryList = [
@@ -71,7 +72,9 @@ export const Dulap: React.FC = () => {
         </h2>
         <Gallery images={galleryList} />
       </section>
-
+      <section className={classes.faq}>
+        <FAQ></FAQ>
+      </section>
       <section className={classes.aboutUs}>
         <AboutUs></AboutUs>
       </section>

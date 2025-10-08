@@ -9,24 +9,59 @@ export const Footer: React.FC = () => {
       <div className={styles.container}>
         <nav className={styles.menu}>
           <ul>
-            <li><Link href="/products"><FormattedMessage id="homepage.footer.products"/></Link></li>
-            <li><Link href="/configurator/stand"><FormattedMessage id="homepage.footer.stands"/></Link></li>
-            <li><Link href="/configurator/tv-stand"><FormattedMessage id="homepage.footer.tvstands"/></Link></li>
-            <li><Link href="/configurator/bedside"><FormattedMessage id="homepage.footer.bedsides"/></Link></li>
+            <li>
+              <Link href="/products">
+                <FormattedMessage id="homepage.footer.products" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/configurator/stand">
+                <FormattedMessage id="homepage.footer.stands" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/configurator/tv-stand">
+                <FormattedMessage id="homepage.footer.tvstands" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/configurator/bedside">
+                <FormattedMessage id="homepage.footer.bedsides" />
+              </Link>
+            </li>
           </ul>
         </nav>
         <nav className={styles.menu}>
           <ul>
-            <li><Link href="/about-us"><FormattedMessage id="homepage.menu.aboutUsTitle"/></Link></li>
-            <li><Link href="/contacts"><FormattedMessage id="homepage.menu.contactsTitle"/></Link></li>
-            <li><Link href="/terms"><FormattedMessage id="homepage.footer.termsAndConditions"/></Link></li>
+            <li>
+              <Link href="/about-us">
+                <FormattedMessage id="homepage.menu.aboutUsTitle" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/faq">
+                <FormattedMessage id="homepage.menu.faqTitle" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/contacts">
+                <FormattedMessage id="homepage.menu.contactsTitle" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/terms">
+                <FormattedMessage id="homepage.footer.termsAndConditions" />
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className={styles.logoSection}>
           <Link href="/">
-            <img alt="logo" src="/logo.svg" width={130}/>
+            <img alt="logo" src="/logo.svg" width={130} />
           </Link>
-          <p><FormattedMessage id="homepage.footer.followUs"/></p>
+          <p>
+            <FormattedMessage id="homepage.footer.followUs" />
+          </p>
           <div className={styles.socialIcons}>
             <a
               href="https://www.instagram.com/dulap.md_?igsh=MTEzNWR4cXBpbXdwbQ=="
@@ -46,7 +81,6 @@ export const Footer: React.FC = () => {
           {/* <p className={styles.location}>Chișinău, Republica Moldova</p> */}
         </div>
       </div>
-      
     </footer>
   )
 }

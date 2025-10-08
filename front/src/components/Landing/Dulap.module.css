@@ -3,15 +3,16 @@
 .readyProducts,
 .aboutUs,
 .gallery,
+.faq,
 .infoBar {
-  padding: 4vw 12vw;
+  padding: 2vw 12vw;
 }
 
 .productTypesTitle,
 .readyProductsTitle,
 .aboutUsTitle {
   text-align: center;
-  margin: 50px 0;
+  margin-bottom: 50px;
   font-size: 22px;
   font-weight: 400;
 }
@@ -108,6 +109,10 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
+  .productTypes,
+  .gallery {
+    padding: 4vw 0 0 8vw;
+  }
   .aboutUsContent {
     flex-direction: column;
     align-items: center;
