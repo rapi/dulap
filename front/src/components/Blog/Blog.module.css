@@ -1,0 +1,174 @@
+.article {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+  line-height: 1.75;
+  color: #111;
+}
+
+.breadcrumbs {
+  font-size: 12px;
+  margin-bottom: 16px;
+  color: #666;
+}
+.breadcrumbs ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.breadcrumbLink {
+  text-decoration: none;
+  color: inherit;
+}
+.breadcrumbLink:hover {
+  text-decoration: underline;
+}
+.breadcrumbSep {
+  opacity: 0.5;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: clamp(28px, 6vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0 0 12px 0;
+}
+
+.description {
+  font-size: 18px;
+  color: #444;
+  margin: 0 0 16px 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.metaItem {
+  white-space: nowrap;
+}
+
+.cover {
+  margin: 0;
+}
+.coverImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  background: #f5f5f5;
+}
+.caption {
+  font-size: 12px;
+  color: #777;
+  margin-top: 8px;
+}
+
+.content {
+  display: block;
+}
+
+.subheading {
+  font-size: clamp(20px, 3.5vw, 28px);
+  line-height: 1.25;
+  margin: 28px 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.paragraph {
+  font-size: 16px;
+  margin: 14px 0;
+}
+
+.figure {
+  margin: 28px 0;
+}
+.figureFull .figureImg {
+  width: 100%;
+}
+.figureImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  background: #f5f5f5;
+}
+
+.quote {
+  margin: 28px 0;
+  padding: 8px 16px;
+  border-left: 3px solid #111;
+}
+.quoteText {
+  font-size: 18px;
+  margin: 0 0 6px 0;
+}
+.quoteCite {
+  font-size: 13px;
+  color: #666;
+}
+
+.listWrap {
+  margin: 20px 0;
+}
+.listTitle {
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+.list {
+  margin: 0;
+  padding-left: 20px;
+}
+.listItem {
+  margin: 6px 0;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 28px 0;
+}
+
+.spacer {
+  height: 12px;
+}
+.spacer_sm {
+  height: 8px;
+}
+.spacer_md {
+  height: 16px;
+}
+.spacer_lg {
+  height: 28px;
+}
+
+.footer {
+  margin-top: 28px;
+}
+.tags {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex-wrap: wrap;
+}
+.tag {
+  font-size: 12px;
+  color: #444;
+  background: #f4f4f4;
+  border: 1px solid #eee;
+  border-radius: 999px;
+  padding: 2px 10px;
+}

@@ -5,7 +5,6 @@ import ProductDescription from '../ProductDescription/ProductDescription'
 import { FormattedMessage } from 'react-intl'
 import FaqStructuredDataIntl from '../SEO/FaqStructuredDataIntl'
 
-// Your existing structure of IDs stays as-is:
 export type ContentId = string
 export type DescriptionSection = {
   title: string
@@ -24,11 +23,9 @@ export const FAQcontent: DescriptionSection[] = [
   { title: 'faq.question.9', content: ['faq.answer.9.1', 'faq.answer.9.2'] },
 ]
 
-// Visible FAQ + JSON-LD in the same route (important for Google)
 export const FAQ: React.FC = () => {
   return (
     <div className={styles.container}>
-      {/* JSON-LD injector: builds FAQPage schema from current locale */}
       <FaqStructuredDataIntl items={FAQcontent} />
 
       <h2 className={styles.title}>
