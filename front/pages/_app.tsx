@@ -73,7 +73,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="canonical" href={canonicalUrl} />
         <link
           rel="alternate"
-          hrefLang="ru"
+          hrefLang="ro-RO"
+          href={`https://dulap.md${router.pathname.replace('/[locale]', '/ro')}`}
+        />
+        <link
+          rel="alternate"
+          hrefLang="ru-RU"
           href={`https://dulap.md${router.pathname.replace('/[locale]', '/ru')}`}
         />
         <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
