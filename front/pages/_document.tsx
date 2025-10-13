@@ -25,6 +25,14 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
       </Head>
       <body>
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-WG82DZ9B"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
         <Main />
         <NextScript />
       </body>
