@@ -94,7 +94,6 @@ const DrawerComponent: React.FC<DrawerProps> = ({
 
     const {
       panelThickness,
-      defaultScale,
       panelSpacing,
       handleOnTheDrawerTopOffset,
       drawerInsidePanelsOffset,
@@ -115,15 +114,14 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     drawerGroup.children.forEach((panelPivot) => {
       if (panelPivot.userData.isDrawerFront) {
         panelPivot.scale.set(
-          drawerWidth * defaultScale,
-          innerHeight * defaultScale,
-          panelThickness * defaultScale
+          drawerWidth,
+          innerHeight,
+          panelThickness
         )
         panelPivot.position.set(0, 0, drawerDepth - panelThickness)
       } else if (panelPivot.userData.roundHandle) {
         if (openingType === OpeningType.RoundHandle) {
           panelPivot.visible = true
-          panelPivot.scale.set(defaultScale, defaultScale, defaultScale)
           panelPivot.position.set(
             0,
             innerHeight - handleOnTheDrawerTopOffset,
@@ -135,7 +133,6 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       } else if (panelPivot.userData.profileHandle) {
         if (openingType === OpeningType.ProfileHandle) {
           panelPivot.visible = true
-          panelPivot.scale.set(defaultScale, defaultScale, defaultScale)
           panelPivot.position.set(
             0,
             innerHeight - 0.7,
@@ -146,9 +143,9 @@ const DrawerComponent: React.FC<DrawerProps> = ({
         }
       } else if (panelPivot.userData.isDrawerLeft) {
         panelPivot.scale.set(
-          panelThickness * defaultScale,
-          (innerHeight - drawerInsidePanelsOffset) * defaultScale,
-          innerDepth * defaultScale
+          panelThickness,
+          (innerHeight - drawerInsidePanelsOffset),
+          innerDepth
         )
         panelPivot.position.set(
           -halfInnerWidth + panelThickness / 2,
@@ -157,9 +154,9 @@ const DrawerComponent: React.FC<DrawerProps> = ({
         )
       } else if (panelPivot.userData.isDrawerRight) {
         panelPivot.scale.set(
-          panelThickness * defaultScale,
-          (innerHeight - drawerInsidePanelsOffset) * defaultScale,
-          innerDepth * defaultScale
+          panelThickness,
+          (innerHeight - drawerInsidePanelsOffset),
+          innerDepth
         )
         panelPivot.position.set(
           +halfInnerWidth - panelThickness / 2,
@@ -168,9 +165,9 @@ const DrawerComponent: React.FC<DrawerProps> = ({
         )
       } else if (panelPivot.userData.isDrawerBottom) {
         panelPivot.scale.set(
-          innerWidth * defaultScale,
-          panelThickness * defaultScale,
-          innerDepth * defaultScale
+          innerWidth,
+          panelThickness,
+          innerDepth
         )
         panelPivot.position.set(0, 0, panelThickness)
       }

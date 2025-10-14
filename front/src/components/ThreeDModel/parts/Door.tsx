@@ -176,7 +176,7 @@ const DoorComponent: React.FC<DoorProps> = ({
   useEffect(() => {
     if (!doorGroup || !hingeGroup || !anchorGroup) return
 
-    const { panelThickness, defaultScale, panelSpacing, handleOnTheDrawerTopOffset } =
+    const { panelThickness, panelSpacing, handleOnTheDrawerTopOffset } =
       FURNITURE_CONFIG
 
     // Calculate dimensions
@@ -196,16 +196,15 @@ const DoorComponent: React.FC<DoorProps> = ({
       if (panelPivot.userData.isDoorFront) {
         // Front panel of the door
         panelPivot.scale.set(
-          doorWidth * defaultScale,
-          innerHeight * defaultScale,
-          panelThickness * defaultScale
+          doorWidth,
+          innerHeight,
+          panelThickness
         )
         panelPivot.position.set(0, panelSpacing, zPosition)
       } else if (panelPivot.userData.roundHandle) {
         // Round handle
         panelPivot.visible = openingType === OpeningType.RoundHandle
         if (panelPivot.visible) {
-          panelPivot.scale.set(defaultScale, defaultScale, defaultScale)
           panelPivot.position.set(
             0,
             innerHeight - handleOnTheDrawerTopOffset,
@@ -216,7 +215,6 @@ const DoorComponent: React.FC<DoorProps> = ({
         // Profile handle
         panelPivot.visible = openingType === OpeningType.ProfileHandle
         if (panelPivot.visible) {
-          panelPivot.scale.set(defaultScale, defaultScale, defaultScale)
           panelPivot.position.set(
             0,
             innerHeight - DOOR_CONSTANTS.PROFILE_HANDLE_Y_OFFSET,
@@ -232,7 +230,6 @@ const DoorComponent: React.FC<DoorProps> = ({
         const hingeIndex = child.userData.hingeIndex
         const hingeY = calculateHingeYPosition(hingeIndex, innerHeight)
         
-        child.scale.set(defaultScale, defaultScale, defaultScale)
         child.position.set(
           DOOR_CONSTANTS.HINGE_OFFSET_FROM_EDGE,
           hingeY,
@@ -248,7 +245,6 @@ const DoorComponent: React.FC<DoorProps> = ({
         const hingeIndex = child.userData.hingeIndex
         const hingeY = calculateHingeYPosition(hingeIndex, innerHeight)
         
-        child.scale.set(defaultScale, defaultScale, defaultScale)
         child.position.set(
           -panelThickness + DOOR_CONSTANTS.ANCHOR_X_OFFSET,
           hingeY + DOOR_CONSTANTS.ANCHOR_Y_OFFSET,

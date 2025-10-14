@@ -2,7 +2,6 @@ export const FURNITURE_CONFIG = {
   panelThickness: 2,  // толщика панелей
   panelSpacing: 0.2,  // расстояние между ящиками
   maxRenderedDrawers: 5,
-  defaultScale: 10,
 
   // ручка расположена на 4 см ниже от верхней части ящика
   handleOnTheDrawerTopOffset: 4,

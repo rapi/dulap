@@ -155,12 +155,12 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
           enableRotate={true}
           enableDamping={false}
           dampingFactor={0}
-          // minDistance={100}
-          // maxDistance={250}
-          // minAzimuthAngle={-Math.PI / 2 + 0.5}
-          // maxAzimuthAngle={Math.PI / 2 - 0.5}
-          // minPolarAngle={0.3}
-          // maxPolarAngle={Math.PI / 2 + 0.2}
+          minDistance={100}
+          maxDistance={250}
+          minAzimuthAngle={-Math.PI / 2 + 0.5}
+          maxAzimuthAngle={Math.PI / 2 - 0.5}
+          minPolarAngle={0.3}
+          maxPolarAngle={Math.PI / 2 + 0.2}
           target={[0, 50, 0]} // Move scene center down by 50 units to look in the center of the scene
         />
 
