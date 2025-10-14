@@ -1,13 +1,13 @@
+// pages/_document.tsx
 import { Html, Head, Main, NextScript } from 'next/document'
 
 const GTM_ID = 'GTM-WG82DZ9B'
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="ro">
       <Head>
         <script
-          id="gtm-init"
           dangerouslySetInnerHTML={{
             __html: `
               (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -25,8 +25,8 @@ export default function Document() {
           crossOrigin="anonymous"
         />
         <link
-          rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+          rel="stylesheet"
         />
         <link
           href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap"
@@ -37,12 +37,11 @@ export default function Document() {
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
         <link rel="icon" href="/wardrobe-button.svg" type="image/svg+xml" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
       </Head>
       <body>
         <noscript>
           <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-WG82DZ9B"
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
             height="0"
             width="0"
             style={{ display: 'none', visibility: 'hidden' }}

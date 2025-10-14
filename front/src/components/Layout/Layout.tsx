@@ -1,27 +1,12 @@
-import { ReactNode, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { ReactNode } from 'react'
 import Head from 'next/head'
-
 import { Menu } from '~/components/Menu/Menu'
 import { Footer } from '~/components/Footer/Footer'
-import * as gtag from '~/lib/gtag'
 import './Layout.css'
 
-type LayoutProps = {
-  children: ReactNode
-}
-export default function Layout({ children }: LayoutProps) {
-  const router = useRouter()
-  useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      gtag.pageview(url)
-    }
-    router.events.on('routeChangeComplete', handleRouteChange)
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange)
-    }
-  }, [router.events])
+type LayoutProps = { children: ReactNode }
 
+export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Head>
