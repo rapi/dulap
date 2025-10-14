@@ -150,6 +150,12 @@
   "homepage.configurator.columns.title": "Numărul de coloane",
   "homepage.configurator.options.title": "Opțiuni",
 
+  "homepage.configurator.individualColumns.title": "Configurează secțiuni individuale",
+  "homepage.configurator.individualColumns.column": "Coloana {number}",
+  "homepage.configurator.individualColumns.columnType": "Apasă pe mobilă în configurator sau pe unul din butoanele de mai jos pentru a ajusta secțiunea.",
+  "homepage.configurator.individualColumns.drawers": "Sertare",
+  "homepage.configurator.individualColumns.door": "Ușă",
+
   "homepage.configurator.wardrobeArrangement.title": "Aranjare dulap",
   "homepage.configurator.wardrobeArrangement.sectionsNr": "Numărul de secții",
   "homepage.configurator.wardrobeArrangement.mirroring": "Inversare poziție dulap",

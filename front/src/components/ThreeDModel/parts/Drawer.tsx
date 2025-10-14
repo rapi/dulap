@@ -1,6 +1,6 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { memo, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import { useFrame, ThreeEvent } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import {
   applyColorToObject,
@@ -23,6 +23,7 @@ interface DrawerProps {
   positionX?: number
   drawerOffsetZ?: number
   lerpSpeed?: number
+  isHovered?: boolean
 }
 
 const DrawerComponent: React.FC<DrawerProps> = ({
@@ -39,8 +40,8 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   drawerOffsetZ = 15,
   lerpSpeed = 0.15,
   openingType,
+  isHovered = false,
 }) => {
-  const [isHovered, setIsHovered] = React.useState(false)
   const drawerPositionRef = useRef<number>(0)
   const drawerGroupRef = useRef<THREE.Group | null>(null)
 
@@ -94,13 +95,13 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     const {
       panelThickness,
       defaultScale,
-      drawerSpacing,
+      panelSpacing,
       handleOnTheDrawerTopOffset,
       drawerInsidePanelsOffset,
     } = FURNITURE_CONFIG
 
     // Dimensions of the interior parts of the drawer (the box inside)
-    const innerHeight = drawerHeight - drawerSpacing
+    const innerHeight = drawerHeight - panelSpacing
     const innerWidth = drawerWidth - panelThickness * 2
     const innerDepth = drawerDepth - panelThickness * 2
     const halfInnerWidth = innerWidth / 2
@@ -204,16 +205,6 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     })
   }, [drawerGroup, selectedColor])
 
-  // Cleanup
-  useEffect(() => {
-    return () => {
-      if (drawerGroup) {
-        disposeObject(drawerGroup)
-      }
-      document.body.style.cursor = 'auto'
-    }
-  }, [drawerGroup])
-
   // Opening animation
   useFrame(() => {
     if (!drawerGroup) return
@@ -227,26 +218,18 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     drawerPositionRef.current = interpolatedZ
   })
 
-  const handlePointerOver = useCallback((event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation()
-    setIsHovered(true)
-    document.body.style.cursor = 'pointer'
-  }, [])
-
-  const handlePointerOut = useCallback(() => {
-    setIsHovered(false)
-    document.body.style.cursor = 'auto'
-  }, [])
+  // Cleanup
+  useEffect(() => {
+    return () => {
+      if (drawerGroup) {
+        disposeObject(drawerGroup)
+      }
+    }
+  }, [drawerGroup])
 
   if (!drawerGroup) return null
 
-  return (
-    <primitive
-      object={drawerGroup}
-      onPointerOver={handlePointerOver}
-      onPointerOut={handlePointerOut}
-    />
-  )
+  return <primitive object={drawerGroup} />
 }
 
 export const Drawer = memo(DrawerComponent)

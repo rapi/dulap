@@ -1,6 +1,6 @@
 export const FURNITURE_CONFIG = {
   panelThickness: 2,  // толщика панелей
-  drawerSpacing: 0.1,  // расстояние между ящиками
+  panelSpacing: 0.2,  // расстояние между ящиками
   maxRenderedDrawers: 5,
   defaultScale: 10,
 

@@ -148,6 +148,12 @@
   "homepage.configurator.sections.title": "Секции",
   "homepage.configurator.columns.title": "Количество колонн",
   "homepage.configurator.options.title": "Опции",
+
+  "homepage.configurator.individualColumns.title": "Настройте отдельные секции",
+  "homepage.configurator.individualColumns.column": "Колонна {number}",
+  "homepage.configurator.individualColumns.columnType": "Нажмите на мебель в конфигураторе или на одну из кнопок ниже, чтобы настроить секцию.",
+  "homepage.configurator.individualColumns.drawers": "Ящики",
+  "homepage.configurator.individualColumns.door": "Дверца",
   
   "homepage.configurator.wardrobeArrangement.title": "Расположение шкафа",
   "homepage.configurator.wardrobeArrangement.sectionsNr": "Количество секций",
