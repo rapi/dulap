@@ -6,6 +6,7 @@ import { SceneLights } from './SceneLights'
 import * as THREE from 'three'
 import { StandBuilder } from './StandBuilder'
 import { OpeningType } from './furnitureConfig'
+import { ColumnType } from './parts/Column'
 
 // Preload models
 useGLTF.preload('/assets/3d-models/bg.glb')
@@ -29,6 +30,7 @@ const FurnitureScene = memo(function FurnitureScene({
   sections,
   openingType,
   columns,
+  columnConfigurations,
 }: {
   width: number
   height: number
@@ -38,6 +40,7 @@ const FurnitureScene = memo(function FurnitureScene({
   sections: number
   openingType: OpeningType
   columns: number
+  columnConfigurations?: ColumnType[]
 }) {
   return (
     <>
@@ -78,6 +81,7 @@ const FurnitureScene = memo(function FurnitureScene({
           sectionsCount={sections}
           openingType={openingType}
           columns={columns}
+          columnConfigurations={columnConfigurations}
         />
       </Suspense>
     </>
@@ -94,6 +98,7 @@ interface FurnitureViewerProps {
   sections: number
   openingType: OpeningType
   columns: number
+  columnConfigurations?: ColumnType[]
 }
 
 const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
@@ -105,6 +110,7 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
   sections,
   openingType,
   columns,
+  columnConfigurations,
 }) => {
   const handleCanvasCreated = useCallback(
     ({
@@ -144,7 +150,7 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
       >
         {/* Orbit controls for rotation and zoom */}
         <OrbitControls
-          enablePan={false}
+          enablePan={true}
           enableZoom={true}
           enableRotate={true}
           enableDamping={false}
@@ -168,6 +174,7 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
           sections={sections}
           openingType={openingType}
           columns={columns}
+          columnConfigurations={columnConfigurations}
         />
       </Canvas>
     </div>

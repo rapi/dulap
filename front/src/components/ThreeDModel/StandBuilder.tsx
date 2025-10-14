@@ -2,8 +2,8 @@ import React, { Suspense, memo, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { TopAndPlinth } from './parts/TopAndPlinth'
-import { Column } from './parts/Column'
-import { OpeningType } from './furnitureConfig'
+import { Column, ColumnType } from './parts/Column'
+import { FURNITURE_CONFIG, OpeningType } from './furnitureConfig'
 
 interface StandBuilderProps {
   selectedColor: string
@@ -16,6 +16,7 @@ interface StandBuilderProps {
   sectionsCount: number
   openingType: OpeningType
   columns: number
+  columnConfigurations?: ColumnType[]
 }
 
 // Preload assets for better performance
@@ -23,11 +24,15 @@ const VERTICAL_URL = '/assets/3d-models/vertical_sample.glb'
 const HORIZONTAL_URL = '/assets/3d-models/horizontal_sample.glb'
 const ROUND_HANDLE_URL = '/assets/3d-models/round-handle.glb'
 const PROFILE_HANDLE_URL = '/assets/3d-models/profile-handle.glb'
+const HINGE_WING_URL = '/assets/3d-models/hinge_wing.glb'
+const HINGE_ANCHOR_URL = '/assets/3d-models/hinge_anchor.glb'
 
 useGLTF.preload(VERTICAL_URL)
 useGLTF.preload(HORIZONTAL_URL)
 useGLTF.preload(ROUND_HANDLE_URL)
 useGLTF.preload(PROFILE_HANDLE_URL)
+useGLTF.preload(HINGE_WING_URL)
+useGLTF.preload(HINGE_ANCHOR_URL)
 
 const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   selectedColor,
@@ -40,11 +45,15 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   sectionsCount,
   openingType,
   columns,
+  columnConfigurations,
 }) => {
   const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
   const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
   const { scene: roundHandleObject } = useGLTF(ROUND_HANDLE_URL)
   const { scene: profileHandleObject } = useGLTF(PROFILE_HANDLE_URL)
+  const { scene: hingeWingObject } = useGLTF(HINGE_WING_URL)
+  const { scene: hingeAnchorObject } = useGLTF(HINGE_ANCHOR_URL)
+  const { panelThickness, panelSpacing } = FURNITURE_CONFIG
 
   const scenes = useMemo(
     () => ({
@@ -52,8 +61,10 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
       horizontal: horizontalPanelObject,
       roundHandle: roundHandleObject,
       profileHandle: profileHandleObject,
+      hingeWing: hingeWingObject,
+      hingeAnchor: hingeAnchorObject,
     }),
-    [verticalPanelObject, horizontalPanelObject, roundHandleObject, profileHandleObject]
+    [verticalPanelObject, horizontalPanelObject, roundHandleObject, profileHandleObject, hingeWingObject, hingeAnchorObject]
   )
 
   // Don't render until models are loaded
@@ -68,6 +79,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   const columnComponents = Array.from({ length: columns }, (_, index) => {
     const columnPositionX =
       -desiredWidth / 2 + columnWidth * index + columnWidth / 2
+    const columnType = columnConfigurations?.[index] || 'drawers'
 
     return (
       <Column
@@ -75,6 +87,8 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
         horizontalPanelObject={scenes.horizontal}
         roundHandleObject={scenes.roundHandle}
         profileHandleObject={scenes.profileHandle}
+        hingeWingObject={scenes.hingeWing}
+        hingeAnchorObject={scenes.hingeAnchor}
         openingType={openingType}
         columnWidth={columnWidth}
         columnHeight={desiredHeight}
@@ -83,6 +97,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
         sectionsCount={sectionsCount}
         positionX={columnPositionX}
         selectedColor={selectedColor}
+        columnType={columnType}
         drawerOffsetZ={drawerOffsetZ}
         lerpSpeed={lerpSpeed}
       />

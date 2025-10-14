@@ -21,6 +21,10 @@ import {
   ProductColumns,
   ProductColumnsComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductColumns'
+import {
+  ProductIndividualColumns,
+  ProductIndividualColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/stand/ProductIndividualColumns'
 import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import {
   ProductFurniture,
@@ -55,6 +59,7 @@ export type ProductComponent =
   | ProductSelectComponent
   | ProductSectionsComponent
   | ProductColumnsComponent
+  | ProductIndividualColumnsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
 
@@ -113,6 +118,12 @@ export const ProductPage: FC<ProductPageProps> = ({
           <ProductColumns
             configuration={component}
             predefinedValue={values?.[component.type] ?? undefined}
+          />
+        ) : null
+      case 'individualColumns':
+        return isStand3D ? (
+          <ProductIndividualColumns
+            configuration={component}
           />
         ) : null
       case 'select':
@@ -200,6 +211,12 @@ export const ProductPage: FC<ProductPageProps> = ({
     furnitureComponent?.selectedOpeningMethod ??
     OpeningType.Push
 
+  // Extract column configurations for 3D
+  const individualColumnsComponent = currentComponents.find(
+    (c): c is ProductIndividualColumnsComponent => c.type === 'individualColumns'
+  )
+  const currentColumnConfigurations = individualColumnsComponent?.columnConfigurations
+
   return (
     <>
       {/* Left Side: Viewer or Image Carousel */}
@@ -214,6 +231,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           sections={currentSections}
           openingType={currentOpeningType}
           columns={currentColumns}
+          columnConfigurations={currentColumnConfigurations}
         />
         ) : (
           imageCarouselComponent && (
@@ -243,7 +261,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       </div>
 
       <div>
-        {priceComponent && (
+        {priceComponent && !isStand3D && (
           <ProductPrice
             onAddItem={() => {
               addItem('stand', currentComponents, values ?? {})

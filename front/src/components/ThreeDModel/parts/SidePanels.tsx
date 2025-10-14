@@ -40,11 +40,11 @@ const SidePanelsComponent: React.FC<SidePanelsProps> = ({
   useEffect(() => {
     if (!leftSidePanel || !rightSidePanel) return
 
-    const { panelThickness, defaultScale } = FURNITURE_CONFIG
+    const { panelThickness } = FURNITURE_CONFIG
 
-    const sideThickness = panelThickness * defaultScale
-    const sideHeight = (cabinetHeight - panelThickness) * defaultScale
-    const sideDepth = (cabinetDepth - panelThickness) * defaultScale
+    const sideThickness = panelThickness
+    const sideHeight = (cabinetHeight - panelThickness)
+    const sideDepth = (cabinetDepth - panelThickness)
 
     leftSidePanel.scale.set(sideThickness, sideHeight, sideDepth)
     rightSidePanel.scale.set(sideThickness, sideHeight, sideDepth)

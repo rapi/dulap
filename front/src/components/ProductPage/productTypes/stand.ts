@@ -2,6 +2,7 @@ import { ProductComponent } from '~/components/ProductPage/StandProductPage'
 import { useState, useEffect, useMemo } from 'react'
 import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
+import { ColumnConfiguration } from '~/components/ProductPage/productTypeComponents/stand/ProductIndividualColumns'
 
 export const DEFAULT_STAND = {
   width: 80,
@@ -18,6 +19,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [plintHeight, setPlintHeight] = useState(DEFAULT_STAND.plintHeight)
   const [selectedSections, setSelectedSections] = useState(4)
   const [selectedColumns, setSelectedColumns] = useState(1)
+  const [columnConfigurations, setColumnConfigurations] = useState<ColumnConfiguration[]>(['drawers'])
   const [selectedColor, setSelectedColor] = useState(DEFAULT_STAND.selectedColor)
   const [guides, setGuides] = useState(
     'homepage.configurator.fittings.guides.options.1'
@@ -50,6 +52,14 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       if (firstAllowed) setSelectedSections(Number(firstAllowed.value))
     }
   }, [sectionOptions, selectedSections])
+
+  // Update column configurations when number of columns changes
+  useEffect(() => {
+    setColumnConfigurations((prev) => {
+      const newConfigs = Array(selectedColumns).fill('drawers').map((_, i) => prev[i] || 'drawers')
+      return newConfigs as ColumnConfiguration[]
+    })
+  }, [selectedColumns])
 
   const price = useMemo(() => {
     let fittingsPrice = 0
@@ -172,6 +182,12 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       type: 'columns',
       selectedColumns,
       setSelectedColumns,
+    },
+    {
+      type: 'individualColumns',
+      selectedColumns,
+      columnConfigurations,
+      setColumnConfigurations,
     },
     {
       type: 'furniture',

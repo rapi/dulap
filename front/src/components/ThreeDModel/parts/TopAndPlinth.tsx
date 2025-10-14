@@ -63,20 +63,19 @@ const TopAndPlinthComponent: React.FC<TopAndPlinthProps> = ({
 
     const {
       panelThickness: panelThicknessUnits,
-      defaultScale: unitScaleFactor,
     } = FURNITURE_CONFIG
 
     plinthPanel.scale.set(
-      cabinetWidth * unitScaleFactor,
-      plinthHeight * unitScaleFactor,
-      panelThicknessUnits * unitScaleFactor
+      cabinetWidth,
+      plinthHeight,
+      panelThicknessUnits
     )
     plinthPanel.position.set(0, 0, cabinetDepth - panelThicknessUnits)
 
     topPanel.scale.set(
-      cabinetWidth * unitScaleFactor,
-      panelThicknessUnits * unitScaleFactor,
-      cabinetDepth * unitScaleFactor
+      cabinetWidth,
+      panelThicknessUnits,
+      cabinetDepth
     )
     topPanel.position.set(0, cabinetHeight - panelThicknessUnits, 0)
 
