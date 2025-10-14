@@ -6,7 +6,6 @@ import { Menu } from '~/components/Menu/Menu'
 import { Footer } from '~/components/Footer/Footer'
 import * as gtag from '~/lib/gtag'
 import './Layout.css'
-import Gtm from '~/components/Gtm'
 
 type LayoutProps = {
   children: ReactNode
@@ -25,7 +24,6 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <>
-      <Gtm />
       <Head>
         <meta
           name="keywords"
