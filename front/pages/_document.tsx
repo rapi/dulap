@@ -1,7 +1,6 @@
-// pages/_document.tsx
 import { Html, Head, Main, NextScript } from 'next/document'
 
-const GTM_ID = 'GTM-WG82DZ9B'
+export const GTM_ID = process.env.NEXT_GTM_ID
 
 export default function Document() {
   return (

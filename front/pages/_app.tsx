@@ -1,4 +1,3 @@
-// pages/_app.tsx
 import type { AppProps } from 'next/app'
 import Layout from '~/components/Layout/Layout'
 import '~/components/Layout/Layout.css'
@@ -11,10 +10,8 @@ import { useRouter } from 'next/router'
 import { Modal } from '~/components/Modal/Modal'
 import { CopyButton } from '~/components/CopyButton/CopyButton'
 import { FormattedMessage, useIntl } from 'react-intl'
-import Script from 'next/script'
 import Head from 'next/head'
 
-const GA4_ID = 'G-K9E49M4GJ5'
 const localeMap: Record<string, Record<string, string>> = { ro, ru }
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -64,19 +61,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       {/* Direct GA4 (keep this ONLY if GA4 is NOT configured in GTM) */}
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
-        strategy="afterInteractive"
-      />
-      <Script id="ga4-init" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          // SPA pageviews are sent manually on routeChangeComplete:
-          gtag('config', '${GA4_ID}', { send_page_view: false });
-        `}
-      </Script>
 
       <Head>
         <title>{metaTitle}</title>
