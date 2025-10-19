@@ -12,6 +12,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { FAQ } from '~/components/FAQ/FAQ'
 import { landingInfoBarContent } from '~/components/InfoBar/LandingInfoBarContent'
+import BlogsList from '~/components/Blog/BlogsList'
 
 const galleryList = [
   { src: '/bedside/render/Biege 1.png', alt: 'Bedside render 1' },
@@ -71,6 +72,17 @@ export const Dulap: React.FC = () => {
           <FormattedMessage id="homepage.dulapLanding.title3" />
         </h2>
         <Gallery images={galleryList} />
+      </section>
+      <br />
+      <br />
+      <br />
+      <section className={classes.blog}>
+        <h2 className={classes.galleryTitle}>
+          <FormattedMessage id="homepage.dulapLanding.title4" />
+        </h2>
+        <div className={classes.blogList}>
+          <BlogsList></BlogsList>
+        </div>
       </section>
       <section className={classes.faq}>
         <FAQ></FAQ>

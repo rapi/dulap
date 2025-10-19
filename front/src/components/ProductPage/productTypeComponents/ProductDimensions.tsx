@@ -5,6 +5,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Modal } from '~/components/Modal/Modal'
 import { FormattedMessage } from 'react-intl'
 import { Dimension } from '~/components/ProductListPage/products'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import Link from 'next/link'
 
 export type ProductDimensionsComponent = {
   predefinedValue?: Dimension
@@ -34,9 +36,27 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
   return (
     <>
-      <h3 className={styles.dimensionsHeaderTitle}>
-        <FormattedMessage id="homepage.configurator.dimensions.title" />
-      </h3>
+      <br />
+      <div className={styles.dimensionsTitleLabel}>
+        <h3 className={styles.dimensionsHeaderTitle}>
+          <FormattedMessage id="homepage.configurator.dimensions.title" />
+        </h3>
+        <Link
+          href="/blog/measurements"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.dimensionsTooltipContainer}
+          title="Cum să alegi corect mărimile?"
+          aria-describedby="dims-tooltip"
+          aria-label="Cum să alegi corect mărimile?"
+        >
+          <HelpOutlineIcon color="action" sx={{ fontSize: 20 }} />
+          <span id="dims-tooltip" className={styles.dimensionsTooltipText}>
+            <FormattedMessage id="dimensions.title.tooltip" />
+          </span>
+        </Link>
+      </div>
+
       <div className={styles.dimensionsGrid}>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}>

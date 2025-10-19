@@ -60,9 +60,15 @@
 }
 
 /* D I M E N S I O N S */
+.dimensionsTitleLabel {
+  display: flex;
+  align-items: center;
+}
+
 .dimensionsHeaderTitle {
-  margin-top: 27px;
+  margin-top: 9px;
   margin-bottom: 9px;
+  margin-right: 8px;
 }
 
 .dimensionsGrid {
@@ -114,6 +120,43 @@
   border: 1px solid #555;
 }
 
+/* --- NEW: used only for the dimensions title tooltip --- */
+.dimensionsTooltipContainer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dimensionsTooltipText {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  padding: 6px 10px;
+  background: #333;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 300;
+  line-height: 1.2;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+.dimensionsTooltipContainer:hover .dimensionsTooltipText,
+.dimensionsTooltipContainer:focus-within .dimensionsTooltipText {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* M O D A L  1 */
 .modalChildren {
   display: flex;
@@ -148,7 +191,7 @@
 
 /* C O M M O N */
 .dimensionTitle,
-.colorsLabel p,
+.dimensionsTitleLabel,
 .furnitureLabel p,
 .sectionsLabel p,
 .sectionLabel p,
@@ -162,7 +205,7 @@
 }
 
 .sectionTitle,
-.colorsLabel p,
+.dimensionsTitleLabel,
 .dimensionsHeaderTitle,
 .furnitureHeaderTitle,
 .subtitle,
@@ -310,7 +353,7 @@
     font-size: 20px;
   }
   .dimensionTitle,
-  .colorsLabel p,
+  .dimensionsTitleLabel,
   .furnitureLabel p,
   .sectionsLabel p,
   .sectionLabel p,
@@ -373,7 +416,7 @@
 
 @media (max-width: 350px) {
   .dimensionTitle,
-  .colorsLabel p,
+  .dimensionsTitleLabel,
   .furnitureLabel p,
   .sectionsLabel p,
   .sectionLabel p,

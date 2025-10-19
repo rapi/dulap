@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import {
   ProductDimensions,
   ProductDimensionsComponent,
-} from '~/components/ProductPage/productTypeComponents/TVstand/ProductDimensions'
+} from '~/components/ProductPage/productTypeComponents/ProductDimensions'
 import {
   ProductColors,
   ProductColorsComponent,

@@ -5,6 +5,8 @@ import SelectColor, {
 import { getColorItemByName } from '~/utils/colorDictionary'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { FormattedMessage } from 'react-intl'
+import Link from 'next/link'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 export type ProductColorsComponent = {
   type: 'colors'
   colors: string[]
@@ -40,9 +42,25 @@ export const ProductColors: FC<ProductColorsProps> = ({
   }
   return (
     <label className={styles.colorsLabel}>
-      <p>
-        <FormattedMessage id="homepage.configurator.colors.title" />
-      </p>
+      <div className={styles.dimensionsTitleLabel}>
+        <h3 className={styles.dimensionsHeaderTitle}>
+          <FormattedMessage id="homepage.configurator.colors.title" />
+        </h3>
+        <Link
+          href="/blog/colors"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.dimensionsTooltipContainer}
+          title="Cum să alegi corect culoarea?"
+          aria-describedby="dims-tooltip"
+          aria-label="Cum să alegi corect culoarea?"
+        >
+          <HelpOutlineIcon color="action" sx={{ fontSize: 20 }} />
+          <span id="dims-tooltip" className={styles.dimensionsTooltipText}>
+            <FormattedMessage id="colors.title.tooltip" />
+          </span>
+        </Link>
+      </div>
       <SelectColor
         colors={configuration.colors}
         defaultSelected={configuration.selectedColor}

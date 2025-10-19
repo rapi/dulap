@@ -39,6 +39,11 @@ export const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
+              <Link href="/blog">
+                <FormattedMessage id="homepage.menu.blogTitle" />
+              </Link>
+            </li>
+            <li>
               <Link href="/faq">
                 <FormattedMessage id="homepage.menu.faqTitle" />
               </Link>

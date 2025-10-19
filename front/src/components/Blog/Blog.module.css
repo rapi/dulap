@@ -180,3 +180,13 @@
 .link:hover {
   opacity: 0.7;
 }
+
+/* bloglist */
+.wrap {
+  width: 100%;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+}

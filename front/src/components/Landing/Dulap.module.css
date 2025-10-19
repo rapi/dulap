@@ -4,10 +4,14 @@
 .aboutUs,
 .gallery,
 .faq,
+.galleryTitle,
 .infoBar {
   padding: 2vw 12vw;
 }
-
+.blogList {
+  padding: clamp(5px, calc(2vw - 20px), 100px)
+    clamp(25px, calc(2vw - 20px), 100px);
+}
 .productTypesTitle,
 .readyProductsTitle,
 .aboutUsTitle {
@@ -109,10 +113,6 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
-  .productTypes,
-  .gallery {
-    padding: 4vw 0 0 8vw;
-  }
   .aboutUsContent {
     flex-direction: column;
     align-items: center;
