@@ -400,55 +400,44 @@
   "tag.measurements": "Măsurători",
   "tag.dulapmd": "dulap.md",
 
-  "blog.author.elizabet": "Elizabet",
+  "blog.author.vasile": "Vasile",
 
-  "blog.measurements.title": "Cum măsori corect spațiul pentru un dulap",
-  "blog.measurements.subtitle": "Un ghid practic pentru dimensiuni exacte și un montaj fără surprize.",
+  "blog.measurements.title": "Cum măsori corect spațiul pentru mobilier",
+  "blog.measurements.subtitle": "Un ghid practic de luarea corectă a măsurilor.",
   "blog.measurements.cover.alt": "Schemă de măsurare a unui perete pentru montarea unui dulap",
-  "blog.measurements.cover.caption": "Trei măsurători pentru lățime, trei pentru înălțime și verificarea adâncimii – rețeta pentru un dulap care se potrivește perfect.",
+  "blog.measurements.cover.caption": "E mai ușor decât pare, dacă ai o ruletă la îndemână.",
 
-  "blog.measurements.intro.1": "Un dulap făcut pe comandă arată impecabil doar dacă măsurătorile sunt corecte. Cu câteva unelte simple și 10–15 minute, poți evita tăieturile de ajustare și spațiile inestetice.",
+  "blog.measurements.intro.1": "Un dulap făcut pe comandă arată impecabil doar dacă măsurătorile sunt corecte. Ai nevoie de 5-10 minute ca să măsori și să-ți notezi, apoi ești gata să faci comanda.",
   "blog.measurements.intro.2": "În acest ghid îți explicăm pas cu pas cum să măsori lățimea, înălțimea și adâncimea, ce toleranțe să lași și ce obstacole (prize, plinte, țevi) să iei în calcul.",
 
-  "blog.measurements.section.1.title": "1) Măsoară peretele — lățime, înălțime, adâncime",
+  "blog.measurements.section.1.title": "1. Măsoară peretele: lățime, înălțime, adâncime",
   "blog.measurements.section.1.img.alt": "Ilustrație cu punctele de măsurare pe perete: sus, mijloc, jos și în trei colțuri pentru înălțime",
-  "blog.measurements.section.1.img.caption": "Notează fiecare valoare. Abaterile mici sunt normale – de aceea lucrăm cu toleranțe.",
-  "blog.measurements.section.1.p1": "Folosește ruletă, nivela și, ideal, un laser. Lățimea și înălțimea nu sunt întotdeauna identice pe toată suprafața peretelui, așa că măsoară în mai multe puncte.",
+  "blog.measurements.section.1.img.caption": "Notează fiecare valoare. Abaterile mici sunt normale, de aceea vom opera cu valorile cele mai mici din listă.",
+  "blog.measurements.section.1.p1": "Folosește ruleta, iar dacă nu ai, poți comanda una <prod>aici</prod>. Lățimea și înălțimea nu sunt întotdeauna identice pe toată suprafața peretelui, așa că măsoară în mai multe puncte.",
+  "blog.measurements.section.1.prod.label": "Pagina de comanda a produselor dulap.md",
   "blog.measurements.section.1.list.title": "Pași recomandați:",
   "blog.measurements.section.1.li.1": "Lățime: măsoară sus, la mijloc și jos. Notează cea mai mică valoare.",
   "blog.measurements.section.1.li.2": "Înălțime: măsoară în stânga, centru și dreapta. Notează cea mai mică valoare.",
   "blog.measurements.section.1.li.3": "Adâncime: măsoară de la perete până la marginea obstacolului cel mai ieșit în exterior (plintă, țevi, pervaz).",
 
-  "blog.measurements.section.2.title": "2) Ține cont de toleranțe și obstacole",
-  "blog.measurements.quote.text": "Secretul unui montaj curat nu este dimensiunea maximă, ci cea care încape în toate punctele.",
-  "blog.measurements.quote.cite": "Echipa dulap.md",
-  "blog.measurements.section.2.p1": "Din cea mai mică lățime și înălțime scade 10–20 mm pentru toleranță (spațiu de manevră la montaj și pentru pereți nereguli). Verifică poziția prizelor, plintelor, întrerupătoarelor, țevilor și a baghetelor de tavan.",
+  "blog.measurements.section.2.title": "2. Ține cont de toate elementele din spațiu",
+  "blog.measurements.section.2.p1": "Când faci măsurătorile, trebuie să ții cont de plinta de la pardosea, de amplasarea întrerupătoarelor sau prizelor electrice, precum și de poziția altor detalii arhitecturale sau decorative (cum ar fi plintele pentru tavan). Asigură-te că ai suficient spațiu astfel încât dulapul (și ușile sale deschise) să nu lovească, să nu atingă, sau să creeze probleme de spațiu.",
+  "blog.measurements.section.2.p2": "Verifică poziția prizelor, plintelor, întrerupătoarelor, țevilor și a baghetelor de tavan. Lasă cca 1cm distanță de la plintă până la dulap.",
 
   "blog.measurements.section.2.img.alt": "Spațiile de dilatare și jocul recomandat lângă ușile dulapului",
-  "blog.measurements.section.2.img.caption": "Lasă 10–20 mm pe lățime și 10–15 mm pe înălțime pentru montaj și reglaje.",
+  "blog.measurements.section.2.img.caption": "Lasă 1 cm pe lățime pentru montaj și reglaje.",
 
-  "blog.measurements.section.3.title": "3) Uși, goluri de deschidere și pardoseală",
-  "blog.measurements.section.3.p1": "Pentru uși batante asigură-te că există loc de deschidere fără să lovească pereți sau calorifere (recomandat 50–60 mm suplimentar pentru mânere). Pentru uși glisante verifică liniaritatea pardoselii: o denivelare de 5–8 mm poate cere reglaj suplimentar sau o bază ajustabilă.",
+  "blog.measurements.section.3.title": "3. Uși, modul de deschidere și distanța până în tavan",
+  "blog.measurements.section.3.p1": "Verifică din nou că există spațiu suficient pentru ca toate ușile și sertarele să se deschidă complet, fără să atingă paturile, corpurile de iluminat (fixate de tavan) sau alte piese de mobilier. De asemenea, este recomandat să proiectezi dulapul cu 10 cm mai mic decât înălțimea reală a tavanului, pentru a permite o asamblare ușoară.",
+  "blog.measurements.section.3.img.alt": "Distanta de la dulap oana in tavan",
+  "blog.measurements.section.3.img.caption": "Lasă 10 cm - distanța de la dulap până în tavan, pentru o montare ușoară",
 
   "blog.measurements.section.4.title": "Checklist rapid înainte de comandă",
-  "blog.measurements.section.4.li.1": "Am notat L/min, H/min și D — cele mai mici valori din măsurătorile multiple.",
-  "blog.measurements.section.4.li.2": "Am scăzut toleranțele: 10–20 mm pe lățime și 10–15 mm pe înălțime.",
-  "blog.measurements.section.4.li.3": "Am marcat pe plan priză/țevi/plinte și sensul de deschidere al ușilor.",
-  "blog.measurements.section.4.li.4": "Am fotografiat peretele și colțurile — util la proiectare.",
+  "blog.measurements.section.4.list.title": "Sfaturi practice:",
+  "blog.measurements.section.4.li.1": "Verifică ruleta: primele gradații pot fi imprimate imprecis. Pornește de la 1 sau 10 cm și scade această valoare din rezultat.",
+  "blog.measurements.section.4.li.2": "Pereții, pardoseala și tavanul pot fi neregulate — măsoară în mai multe puncte și lasă o marjă de montaj pe contur.",
+  "blog.measurements.section.4.li.3": "Ia în calcul grosimea peretelui din spate și a ușilor în gabaritul final — influențează lățimea și adâncimea.",
 
-  "blog.measurements.section.3.title": "4) Sfaturi practice din atelier",
-  "blog.measurements.section.3.p1": "Câteva detalii simple te ajută să eviți erorile frecvente la măsurători și proiectare.",
-  "blog.measurements.section.3.list.title": "Reține:",
-  "blog.measurements.section.3.li.1": "Verifică ruleta: primele gradații pot fi imprimate imprecis. Pornește de la 1 sau 10 cm și scade această valoare din rezultat.",
-  "blog.measurements.section.3.li.2": "Pereții, pardoseala și tavanul pot fi neregulate — măsoară în mai multe puncte și lasă o marjă de montaj pe contur.",
-  "blog.measurements.section.3.li.3": "Ia în calcul grosimea peretelui din spate și a ușilor în gabaritul final — influențează lățimea și adâncimea.",
-
-  "blog.measurements.section.4.title": "5) Uși, zona de deschidere și pardoseala",
-  "blog.measurements.section.4.p1": "Pentru uși batante lasă spațiu suficient la deschidere (50–60 mm pentru mânere). Pentru uși glisante verifică planeitatea pardoselii: un prag de 5–8 mm cere reglaj sau bază ajustabilă.",
-
-  "blog.measurements.section.5.title": "Checklist rapid înainte de comandă",
-  "blog.measurements.section.5.list.title": "Verifică înainte de comandă:"
-
-
-
+  "blog.measurements.section.5.p1": "Mergi pe <conf>link</conf> și creează-ți dulapul de vis.",
+  "blog.measurements.section.5.conf.label": "Link spre configurator de dulapuri pentru haine"
 }

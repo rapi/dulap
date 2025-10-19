@@ -7,12 +7,12 @@ const BlogPostMeasurements: React.FC = () => {
       headingTag="h1"
       titleId="blog.measurements.title"
       descriptionId="blog.measurements.subtitle"
-      authorNameId="blog.author.elizabet"
+      authorNameId="blog.author.vasile"
       datePublishedISO="2025-10-09"
       readingTimeMin={6}
       tagsIds={['tag.guides', 'tag.measurements', 'tag.dulapmd']}
       cover={{
-        src: '/products/wardrobe-visualization/1.png',
+        src: '/blog/measurement/blog-main.png',
         altId: 'blog.measurements.cover.alt',
         captionId: 'blog.measurements.cover.caption',
       }}
@@ -33,11 +33,20 @@ const BlogPostMeasurements: React.FC = () => {
         },
         {
           type: 'image',
-          src: '/blog/how-to-measurements.png',
+          src: '/blog/measurement/3points.png',
           altId: 'blog.measurements.section.1.img.alt',
           captionId: 'blog.measurements.section.1.img.caption',
         },
-        { type: 'paragraph', contentId: 'blog.measurements.section.1.p1' },
+        {
+          type: 'paragraph',
+          contentId: 'blog.measurements.section.1.p1',
+          links: {
+            prod: {
+              href: '/products/',
+              ariaLabelId: 'blog.measurements.section.1.prod.label',
+            },
+          },
+        },
         {
           type: 'list',
           ordered: true,
@@ -56,15 +65,11 @@ const BlogPostMeasurements: React.FC = () => {
           contentId: 'blog.measurements.section.2.title',
           level: 2,
         },
-        {
-          type: 'quote',
-          contentId: 'blog.measurements.quote.text',
-          citeId: 'blog.measurements.quote.cite',
-        },
         { type: 'paragraph', contentId: 'blog.measurements.section.2.p1' },
+        { type: 'paragraph', contentId: 'blog.measurements.section.2.p2' },
         {
           type: 'image',
-          src: '/images/posts/measurements/doors-gap.jpg',
+          src: '/blog/measurement/plint.png',
           altId: 'blog.measurements.section.2.img.alt',
           captionId: 'blog.measurements.section.2.img.caption',
           fullWidth: true,
@@ -79,14 +84,11 @@ const BlogPostMeasurements: React.FC = () => {
         },
         { type: 'paragraph', contentId: 'blog.measurements.section.3.p1' },
         {
-          type: 'list',
-          ordered: false,
-          titleId: 'blog.measurements.section.3.list.title',
-          itemsIds: [
-            'blog.measurements.section.3.li.1',
-            'blog.measurements.section.3.li.2',
-            'blog.measurements.section.3.li.3',
-          ],
+          type: 'image',
+          src: '/blog/measurement/ceiling.png',
+          altId: 'blog.measurements.section.3.img.alt',
+          captionId: 'blog.measurements.section.3.img.caption',
+          fullWidth: true,
         },
 
         { type: 'divider' },
@@ -94,25 +96,28 @@ const BlogPostMeasurements: React.FC = () => {
         {
           type: 'subheading',
           contentId: 'blog.measurements.section.4.title',
-          level: 2,
-        },
-        { type: 'paragraph', contentId: 'blog.measurements.section.4.p1' },
-
-        {
-          type: 'subheading',
-          contentId: 'blog.measurements.section.5.title',
-          level: 2,
+          level: 3,
         },
         {
           type: 'list',
           ordered: false,
-          titleId: 'blog.measurements.section.5.list.title',
+          titleId: 'blog.measurements.section.4.list.title',
           itemsIds: [
             'blog.measurements.section.4.li.1',
             'blog.measurements.section.4.li.2',
             'blog.measurements.section.4.li.3',
-            'blog.measurements.section.4.li.4',
           ],
+        },
+        { type: 'divider' },
+        {
+          type: 'paragraph',
+          contentId: 'blog.measurements.section.5.p1',
+          links: {
+            conf: {
+              href: '/configurator/wardrobe',
+              ariaLabelId: 'blog.measurements.section.5.conf.label',
+            },
+          },
         },
       ]}
     />

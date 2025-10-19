@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import styles from './Blog.module.css'
-import { FormattedMessage, FormattedDate } from 'react-intl'
+import { FormattedMessage, FormattedDate, useIntl } from 'react-intl'
 
 /** ---------- Types ---------- */
 export type HeadingTag = 'h1' | 'h2' | 'h3'
@@ -13,9 +13,23 @@ export type ImageBlock = {
   fullWidth?: boolean
 }
 
+export type LinkSpec = {
+  /** URL-ul la care duce linkul */
+  href: string
+  /** (Opțional) aria-label traductibil */
+  ariaLabelId?: string
+  /** (Opțional) override pentru clasa CSS a linkului */
+  className?: string
+}
+
 export type ParagraphBlock = {
   type: 'paragraph'
   contentId: string
+  /**
+   * Harta token -> LinkSpec pentru rich text.
+   * Cheile trebuie să corespundă tagurilor din mesajul i18n (ex. <cfg>...</cfg>)
+   */
+  links?: Record<string, LinkSpec>
 }
 
 export type SubheadingBlock = {
@@ -37,9 +51,7 @@ export type ListBlock = {
   titleId?: string
 }
 
-export type DividerBlock = {
-  type: 'divider'
-}
+export type DividerBlock = { type: 'divider' }
 
 export type SpacerBlock = {
   type: 'spacer'
@@ -63,13 +75,24 @@ export type Cover = {
 
 export type Crumb = { id: string; href: string }
 
+/** Link component custom (ex. next/link) */
+type LinkRendererProps = {
+  href: string
+  children: React.ReactNode
+  className?: string
+  target?: string
+  rel?: string
+  'aria-label'?: string
+}
+type LinkRenderer = React.ComponentType<LinkRendererProps>
+
 export interface BlogProps {
   /** SEO + header */
   titleId: string
   descriptionId?: string
   cover?: Cover
 
-  /** Meta (optional but useful for SEO) */
+  /** Meta */
   authorNameId?: string
   datePublishedISO?: string // e.g. "2025-10-09"
   readingTimeMin?: number
@@ -86,6 +109,13 @@ export interface BlogProps {
 
   /** Optional canonical url (used in JSON-LD) */
   canonicalUrl?: string
+
+  /**
+   * (Opțional) Componentă custom pentru linkuri.
+   * Dacă nu este transmisă, se folosește <a>.
+   * Exemplu Next.js: (props) => <Link {...props} />
+   */
+  linkComponent?: LinkRenderer
 }
 
 /** ---------- Helpers ---------- */
@@ -122,7 +152,6 @@ function buildArticleJsonLd(props: BlogProps) {
     tagsIds,
   } = props
 
-  // Minimal Article schema; content is translated on render, but JSON-LD can still carry identifiers
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -136,7 +165,6 @@ function buildArticleJsonLd(props: BlogProps) {
     image: cover?.src,
     keywords: tagsIds?.map((id) => ({ '@id': id })),
   }
-  // Remove undefined keys
   Object.keys(jsonLd).forEach(
     (k) => jsonLd[k] === undefined && delete jsonLd[k]
   )
@@ -159,6 +187,8 @@ function buildBreadcrumbJsonLd(breadcrumbs?: Crumb[]) {
 
 /** ---------- Component ---------- */
 const Blog: React.FC<BlogProps> = (props) => {
+  const intl = useIntl()
+
   const {
     titleId,
     descriptionId,
@@ -167,14 +197,18 @@ const Blog: React.FC<BlogProps> = (props) => {
     datePublishedISO,
     readingTimeMin,
     tagsIds,
-    sections, // might be undefined
+    sections,
     headingTag = 'h1',
     breadcrumbs,
     canonicalUrl,
+    linkComponent,
   } = props
 
   const safeSections: BlogBlock[] = Array.isArray(sections) ? sections : []
   const HeadingTag = (headingTag || 'h1') as React.ElementType
+
+  const DefaultLink: LinkRenderer = (p) => <a {...p} />
+  const LinkComp: LinkRenderer = linkComponent || DefaultLink
 
   const articleJsonLd = useMemo(
     () =>
@@ -186,7 +220,6 @@ const Blog: React.FC<BlogProps> = (props) => {
         canonicalUrl,
         cover,
         tagsIds,
-        // sections removed from JSON-LD builder since it wasn’t used there
       }),
     [
       titleId,
@@ -209,7 +242,6 @@ const Blog: React.FC<BlogProps> = (props) => {
       {/* JSON-LD for SEO */}
       <script
         type="application/ld+json"
-        // It’s okay that values are IDs; your real text is rendered via <FormattedMessage />
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             breadcrumbJsonLd ? [articleJsonLd, breadcrumbJsonLd] : articleJsonLd
@@ -238,6 +270,7 @@ const Blog: React.FC<BlogProps> = (props) => {
         <HeadingTag className={styles.title}>
           <FormattedMessage id={titleId} />
         </HeadingTag>
+
         {descriptionId && (
           <p className={styles.description}>
             <FormattedMessage id={descriptionId} />
@@ -258,7 +291,7 @@ const Blog: React.FC<BlogProps> = (props) => {
                 aria-label="Published date"
               >
                 <FormattedDate
-                  value={new Date(`${datePublishedISO}T00:00:00Z`)} // avoid TZ drift
+                  value={new Date(`${datePublishedISO}T00:00:00Z`)}
                   year="numeric"
                   month="2-digit"
                   day="2-digit"
@@ -277,7 +310,6 @@ const Blog: React.FC<BlogProps> = (props) => {
         {cover && (
           <figure className={styles.cover}>
             <img className={styles.coverImg} src={cover.src} alt="" />
-            {/* alt text is described in the content; for visual similarity to Tylko, keep alt empty and show caption */}
             {cover.captionId && (
               <figcaption className={styles.caption}>
                 <FormattedMessage id={cover.captionId} />
@@ -290,12 +322,43 @@ const Blog: React.FC<BlogProps> = (props) => {
       <section className={styles.content}>
         {safeSections.map((block, idx) => {
           switch (block.type) {
-            case 'paragraph':
+            case 'paragraph': {
+              // Construim funcțiile pentru rich text (token -> <LinkComp/>)
+              const values =
+                block.links &&
+                Object.fromEntries(
+                  Object.entries(block.links).map(([token, spec]) => {
+                    const aria = spec.ariaLabelId
+                      ? intl.formatMessage({ id: spec.ariaLabelId })
+                      : undefined
+                    const cls = spec.className || styles.link
+                    return [
+                      token,
+                      (chunks: React.ReactNode) => (
+                        <LinkComp
+                          href={spec.href}
+                          className={cls}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={aria}
+                        >
+                          {chunks}
+                        </LinkComp>
+                      ),
+                    ]
+                  })
+                )
+
               return (
                 <p key={idx} className={styles.paragraph}>
-                  <FormattedMessage id={block.contentId} />
+                  {/* Dacă nu sunt linkuri definite, FormattedMessage va ignora `values` */}
+                  <FormattedMessage
+                    id={block.contentId}
+                    values={values || {}}
+                  />
                 </p>
               )
+            }
             case 'subheading':
               return (
                 <Subheading
@@ -309,13 +372,13 @@ const Blog: React.FC<BlogProps> = (props) => {
                 <figure
                   key={idx}
                   className={`${styles.figure} ${
-                    block.fullWidth ? styles.figureFull : ''
+                    (block as ImageBlock).fullWidth ? styles.figureFull : ''
                   }`}
                 >
                   <img className={styles.figureImg} src={block.src} alt="" />
-                  {block.captionId && (
+                  {(block as ImageBlock).captionId && (
                     <figcaption className={styles.caption}>
-                      <FormattedMessage id={block.captionId} />
+                      <FormattedMessage id={(block as ImageBlock).captionId!} />
                     </figcaption>
                   )}
                 </figure>
@@ -326,24 +389,24 @@ const Blog: React.FC<BlogProps> = (props) => {
                   <p className={styles.quoteText}>
                     <FormattedMessage id={block.contentId} />
                   </p>
-                  {block.citeId && (
+                  {(block as QuoteBlock).citeId && (
                     <cite className={styles.quoteCite}>
-                      <FormattedMessage id={block.citeId} />
+                      <FormattedMessage id={(block as QuoteBlock).citeId!} />
                     </cite>
                   )}
                 </blockquote>
               )
             case 'list':
-              if (block.ordered) {
+              if ((block as ListBlock).ordered) {
                 return (
                   <div key={idx} className={styles.listWrap}>
-                    {block.titleId && (
+                    {(block as ListBlock).titleId && (
                       <p className={styles.listTitle}>
-                        <FormattedMessage id={block.titleId} />
+                        <FormattedMessage id={(block as ListBlock).titleId!} />
                       </p>
                     )}
                     <ol className={styles.list}>
-                      {block.itemsIds.map((id, i) => (
+                      {(block as ListBlock).itemsIds.map((id, i) => (
                         <li key={i} className={styles.listItem}>
                           <FormattedMessage id={id} />
                         </li>
@@ -354,13 +417,13 @@ const Blog: React.FC<BlogProps> = (props) => {
               }
               return (
                 <div key={idx} className={styles.listWrap}>
-                  {block.titleId && (
+                  {(block as ListBlock).titleId && (
                     <p className={styles.listTitle}>
-                      <FormattedMessage id={block.titleId} />
+                      <FormattedMessage id={(block as ListBlock).titleId!} />
                     </p>
                   )}
                   <ul className={styles.list}>
-                    {block.itemsIds.map((id, i) => (
+                    {(block as ListBlock).itemsIds.map((id, i) => (
                       <li key={i} className={styles.listItem}>
                         <FormattedMessage id={id} />
                       </li>
@@ -375,12 +438,13 @@ const Blog: React.FC<BlogProps> = (props) => {
                 <div
                   key={idx}
                   className={`${styles.spacer} ${
-                    block.size ? styles[`spacer_${block.size}`] : ''
+                    (block as SpacerBlock).size
+                      ? styles[`spacer_${(block as SpacerBlock).size}`]
+                      : ''
                   }`}
                 />
               )
             default:
-              // exhaustive check
               return null
           }
         })}
