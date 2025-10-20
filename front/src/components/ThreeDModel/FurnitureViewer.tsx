@@ -4,9 +4,8 @@ import { OrbitControls, useGLTF } from '@react-three/drei'
 import { GLBModel } from './GLBModel'
 import { SceneLights } from './SceneLights'
 import * as THREE from 'three'
-import { StandBuilder } from './StandBuilder'
-import { OpeningType } from './furnitureConfig'
-import { ColumnType } from './parts/Column'
+import { Furniture3DProps } from '~/types/furniture3D'
+import { FurnitureBuilder } from './FurnitureBuilder'
 
 // Preload models
 useGLTF.preload('/assets/3d-models/bg.glb')
@@ -31,17 +30,7 @@ const FurnitureScene = memo(function FurnitureScene({
   openingType,
   columns,
   columnConfigurations,
-}: {
-  width: number
-  height: number
-  depth: number
-  currentPlintHeight: number
-  selectedColor: string
-  sections: number
-  openingType: OpeningType
-  columns: number
-  columnConfigurations?: ColumnType[]
-}) {
+}: Furniture3DProps) {
   return (
     <>
       <SceneLights
@@ -70,9 +59,9 @@ const FurnitureScene = memo(function FurnitureScene({
         />
       </Suspense>
 
-      {/* Stand Model built from individual components */}
+      {/* Furniture Model built from individual components */}
       <Suspense fallback={<ModelLoadingFallback />}>
-        <StandBuilder
+        <FurnitureBuilder
           selectedColor={selectedColor}
           desiredWidth={width}
           desiredHeight={height}
@@ -88,20 +77,8 @@ const FurnitureScene = memo(function FurnitureScene({
   )
 })
 
-// Main furniture viewer component
-interface FurnitureViewerProps {
-  selectedColor: string
-  width: number
-  height: number
-  depth: number
-  currentPlintHeight: number
-  sections: number
-  openingType: OpeningType
-  columns: number
-  columnConfigurations?: ColumnType[]
-}
-
-const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
+// Main furniture viewer component uses Furniture3DProps
+const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
   width,
   selectedColor,
   height,

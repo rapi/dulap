@@ -1,12 +1,7 @@
-import React, { memo, useEffect, useMemo } from 'react'
+import React, { memo } from 'react'
 import * as THREE from 'three'
 import { FURNITURE_CONFIG } from '../furnitureConfig'
-import {
-  applyColorToObject,
-  createPivotAnchored,
-  disposeObject,
-  cloneWithIndependentMaterials,
-} from '../furnitureUtils'
+import { usePanel } from '~/hooks/usePanel'
 
 interface TopAndPlinthProps {
   verticalPanelObject: THREE.Object3D
@@ -27,82 +22,23 @@ const TopAndPlinthComponent: React.FC<TopAndPlinthProps> = ({
   desiredPlintHeight: plinthHeight,
   selectedColor,
 }) => {
-  // Create object clones for the top panel and plinth panel
-  const { topPanel, plinthPanel } = useMemo(() => {
-    if (!verticalPanelSource || !horizontalPanelSource) {
-      return {
-        topPanel: null as THREE.Object3D | null,
-        plinthPanel: null as THREE.Object3D | null,
-      }
-    }
+  const { panelThickness: panelThicknessUnits } = FURNITURE_CONFIG
 
-    const topPanelModel = cloneWithIndependentMaterials(verticalPanelSource)
-    const plinthPanelModel = cloneWithIndependentMaterials(
-      horizontalPanelSource
-    )
+  // Use the usePanel hook for top panel
+  const topPanel = usePanel(verticalPanelSource, {
+    scale: [cabinetWidth, panelThicknessUnits, cabinetDepth],
+    position: [0, cabinetHeight - panelThicknessUnits, 0],
+    color: selectedColor,
+    anchor: { anchorY: 'min', anchorZ: 'min' },
+  })
 
-    // Anchor each part to bottom-front using a pivot wrapper
-    const topPanelNode = createPivotAnchored(topPanelModel, {
-      anchorY: 'min',
-      anchorZ: 'min',
-    })
-    const plinthPanelNode = createPivotAnchored(plinthPanelModel, {
-      anchorY: 'min',
-      anchorZ: 'min',
-    })
-
-    return {
-      topPanel: topPanelNode,
-      plinthPanel: plinthPanelNode,
-    }
-  }, [verticalPanelSource, horizontalPanelSource])
-
-  // Scale and position the panels accordingly
-  useEffect(() => {
-    if (!topPanel || !plinthPanel) return
-
-    const {
-      panelThickness: panelThicknessUnits,
-    } = FURNITURE_CONFIG
-
-    plinthPanel.scale.set(
-      cabinetWidth,
-      plinthHeight,
-      panelThicknessUnits
-    )
-    plinthPanel.position.set(0, 0, cabinetDepth - panelThicknessUnits)
-
-    topPanel.scale.set(
-      cabinetWidth,
-      panelThicknessUnits,
-      cabinetDepth
-    )
-    topPanel.position.set(0, cabinetHeight - panelThicknessUnits, 0)
-
-    topPanel.updateMatrixWorld(true)
-    plinthPanel.updateMatrixWorld(true)
-  }, [
-    topPanel,
-    plinthPanel,
-    cabinetWidth,
-    cabinetHeight,
-    cabinetDepth,
-    plinthHeight,
-  ])
-
-  // Apply the selected color to the panels
-  useEffect(() => {
-    if (!topPanel || !plinthPanel) return
-    applyColorToObject(topPanel, selectedColor)
-    applyColorToObject(plinthPanel, selectedColor)
-  }, [topPanel, plinthPanel, selectedColor])
-
-  useEffect(() => {
-    return () => {
-      if (topPanel) disposeObject(topPanel)
-      if (plinthPanel) disposeObject(plinthPanel)
-    }
-  }, [topPanel, plinthPanel])
+  // Use the usePanel hook for plinth panel
+  const plinthPanel = usePanel(horizontalPanelSource, {
+    scale: [cabinetWidth, plinthHeight, panelThicknessUnits],
+    position: [0, 0, cabinetDepth - panelThicknessUnits],
+    color: selectedColor,
+    anchor: { anchorY: 'min', anchorZ: 'min' },
+  })
 
   if (!topPanel || !plinthPanel) return null
 
