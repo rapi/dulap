@@ -1,13 +1,13 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import {
   applyColorToObject,
   disposeObject,
   createPanelPivotWithFlag,
 } from '../furnitureUtils'
-import { ColorName, getColorItemByName } from '~/utils/colorDictionary'
+import { getHandleColor, HANDLE_CONSTANTS } from '../handleUtils'
+import { useAnimatedPosition } from '~/hooks/useAnimatedPosition'
 
 interface DrawerProps {
   horizontalPanelObject: THREE.Object3D
@@ -42,7 +42,6 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   openingType,
   isHovered = false,
 }) => {
-  const drawerPositionRef = useRef<number>(0)
   const drawerGroupRef = useRef<THREE.Group | null>(null)
 
   // Create the drawer group with all panels
@@ -108,7 +107,6 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     const baseZ = 0
     drawerGroup.position.set(positionX, positionY, baseZ)
     drawerGroup.userData.baseZ = baseZ
-    drawerPositionRef.current = baseZ
 
     // Position and scale all drawer panels
     drawerGroup.children.forEach((panelPivot) => {
@@ -120,26 +118,22 @@ const DrawerComponent: React.FC<DrawerProps> = ({
         )
         panelPivot.position.set(0, 0, drawerDepth - panelThickness)
       } else if (panelPivot.userData.roundHandle) {
-        if (openingType === OpeningType.RoundHandle) {
-          panelPivot.visible = true
+        panelPivot.visible = openingType === OpeningType.RoundHandle
+        if (panelPivot.visible) {
           panelPivot.position.set(
             0,
             innerHeight - handleOnTheDrawerTopOffset,
-            drawerDepth - 1
+            drawerDepth + HANDLE_CONSTANTS.ROUND_HANDLE_DEPTH_OFFSET
           )
-        } else {
-          panelPivot.visible = false
         }
       } else if (panelPivot.userData.profileHandle) {
-        if (openingType === OpeningType.ProfileHandle) {
-          panelPivot.visible = true
+        panelPivot.visible = openingType === OpeningType.ProfileHandle
+        if (panelPivot.visible) {
           panelPivot.position.set(
             0,
-            innerHeight - 0.7,
-            drawerDepth - 0.2
+            innerHeight - HANDLE_CONSTANTS.PROFILE_HANDLE_Y_OFFSET,
+            drawerDepth - HANDLE_CONSTANTS.PROFILE_HANDLE_DEPTH_OFFSET
           )
-        } else {
-          panelPivot.visible = false
         }
       } else if (panelPivot.userData.isDrawerLeft) {
         panelPivot.scale.set(
@@ -186,15 +180,11 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   useEffect(() => {
     if (!drawerGroup) return
 
+    const handleColor = getHandleColor(selectedColor)
+
     drawerGroup.children.forEach((child) => {
       if (child.userData.roundHandle || child.userData.profileHandle) {
-        const applyWhiteHandleColor = selectedColor === getColorItemByName(ColorName.White)?.hexCode || selectedColor === getColorItemByName(ColorName.Biege)?.hexCode
-
-        if (applyWhiteHandleColor) {
-          applyColorToObject(child, "#ffffff")
-        } else {
-          applyColorToObject(child, "#9c9c9c")
-        }
+        applyColorToObject(child, handleColor)
       } else {
         // Apply the selected color to drawer panels
         applyColorToObject(child, selectedColor)
@@ -202,17 +192,13 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     })
   }, [drawerGroup, selectedColor])
 
-  // Opening animation
-  useFrame(() => {
-    if (!drawerGroup) return
-
-    const baseZ = drawerGroup.userData.baseZ || 0
-    const targetZ = isHovered ? baseZ + drawerOffsetZ : baseZ
-    const currentZ = drawerPositionRef.current
-    const interpolatedZ = THREE.MathUtils.lerp(currentZ, targetZ, lerpSpeed)
-
-    drawerGroup.position.z = interpolatedZ
-    drawerPositionRef.current = interpolatedZ
+  // Opening animation using the hook
+  const baseZ = drawerGroup?.userData.baseZ || 0
+  useAnimatedPosition(drawerGroup, isHovered, {
+    axis: 'z',
+    baseValue: baseZ,
+    activeOffset: drawerOffsetZ,
+    lerpSpeed: lerpSpeed,
   })
 
   // Cleanup

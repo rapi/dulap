@@ -76,7 +76,7 @@ export const cloneWithIndependentMaterials = (
 export const createPanelPivotWithFlag = (
   sourceObject: THREE.Object3D,
   panelFlagKey: string,
-  anchor: { anchorY?: 'min'|'center'|'max'; anchorZ?: 'min'|'center'|'max' } = { anchorY: 'min', anchorZ: 'min' }
+  anchor: { anchorY?: 'min'|'center'|'max'; anchorZ?: 'min'|'center'|'max' } = { anchorY: 'min', anchorZ: 'min' },
 ): THREE.Object3D => {
   const panelModel = cloneWithIndependentMaterials(sourceObject)
   const panelPivot = createPivotAnchored(panelModel, anchor)

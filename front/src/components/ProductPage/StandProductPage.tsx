@@ -35,6 +35,7 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
+import { ProductMetadataComponent } from '~/components/ProductPage/productTypeComponents/ProductMetadata'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import { ProductHelpBox } from '~/components/ProductPage/productTypeComponents/ProductHelpBox'
@@ -44,13 +45,12 @@ import {
 } from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
 import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
 import { use3DVersion } from '~/hooks/use3DVersion'
+import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
-import { getColorItemByName } from '~/utils/colorDictionary'
 import { DEFAULT_STAND } from './productTypes/stand'
-import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -62,6 +62,7 @@ export type ProductComponent =
   | ProductIndividualColumnsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
+  | ProductMetadataComponent
 
 export type PredefinedValue = {
   sections?: number
@@ -166,73 +167,19 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   const isStand3D = use3DVersion()
 
-  // Extract current selected color (map names to HEX for 3D)
-  const colorsComponent = currentComponents.find(
-    (c): c is ProductColorsComponent => c.type === 'colors'
+  // Extract all 3D props using shared hook
+  const furniture3DProps = use3DFurnitureProps(
+    currentComponents,
+    values,
+    DEFAULT_STAND
   )
-  const selectedColorNameOrHex =
-    colorsComponent?.selectedColor ?? DEFAULT_STAND.selectedColor
-  const selectedColorHex =
-    getColorItemByName(selectedColorNameOrHex)?.hexCode ??
-    selectedColorNameOrHex
-
-  // Extract current width & height for 3D scaling
-  const dimensionsComponent = currentComponents.find(
-    (c): c is ProductDimensionsComponent => c.type === 'dimensions'
-  )     
-  const currentWidth = dimensionsComponent?.width ?? DEFAULT_STAND.width
-  const currentHeight = dimensionsComponent?.height ?? DEFAULT_STAND.height
-  const currentDepth = dimensionsComponent?.depth ?? DEFAULT_STAND.depth
-  const currentPlintHeight =
-    dimensionsComponent?.plintHeight ?? DEFAULT_STAND.plintHeight
-
-  // Extract current selected sections for 3D drawers/sections count
-  const sectionsComponent = currentComponents.find(
-    (c): c is ProductSectionsComponent => c.type === 'sections'
-  )
-  const currentSections =
-    sectionsComponent?.selectedSections ??
-    (typeof values?.sections === 'number' ? values.sections : 4)
-
-  // Extract current selected columns for 3D
-  const columnsComponent = currentComponents.find(
-    (c): c is ProductColumnsComponent => c.type === 'columns'
-  )
-  const currentColumns =
-    columnsComponent?.selectedColumns ??
-    (typeof values?.columns === 'number' ? values.columns : 1)
-
-  // Extract opening type for 3D (maner | profile-handle | push)
-  const furnitureComponent = currentComponents.find(
-    (c): c is ProductFurnitureComponent => c.type === 'furniture'
-  )
-  const currentOpeningType: OpeningType =
-    values?.furniture?.openingType ??
-    furnitureComponent?.selectedOpeningMethod ??
-    OpeningType.Push
-
-  // Extract column configurations for 3D
-  const individualColumnsComponent = currentComponents.find(
-    (c): c is ProductIndividualColumnsComponent => c.type === 'individualColumns'
-  )
-  const currentColumnConfigurations = individualColumnsComponent?.columnConfigurations
 
   return (
     <>
       {/* Left Side: Viewer or Image Carousel */}
       <div className={styles.leftContainer}>
         {isStand3D ? (
-          <FurnitureViewer
-          selectedColor={selectedColorHex}
-          width={currentWidth}
-          height={currentHeight}
-          depth={currentDepth}
-          currentPlintHeight={currentPlintHeight}
-          sections={currentSections}
-          openingType={currentOpeningType}
-          columns={currentColumns}
-          columnConfigurations={currentColumnConfigurations}
-        />
+          <FurnitureViewer {...furniture3DProps} />
         ) : (
           imageCarouselComponent && (
             <ProductImageCarousel

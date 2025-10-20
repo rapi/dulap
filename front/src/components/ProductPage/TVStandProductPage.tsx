@@ -18,6 +18,14 @@ import {
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/TVstand/ProductSections'
 import {
+  ProductColumns,
+  ProductColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductColumns'
+import {
+  ProductIndividualColumns,
+  ProductIndividualColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/stand/ProductIndividualColumns'
+import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
@@ -26,16 +34,22 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
+import { ProductMetadataComponent } from '~/components/ProductPage/productTypeComponents/ProductMetadata'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
+import { ProductHelpBox } from '~/components/ProductPage/productTypeComponents/ProductHelpBox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
 } from '~/components/ProductPage/productTypeComponents/TVstand/ProductImageCarousel'
+import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
+import { use3DVersion } from '~/hooks/use3DVersion'
+import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
+import { DEFAULT_TV_STAND } from './productTypes/TVstand'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -43,10 +57,14 @@ export type ProductComponent =
   | ProductColorsComponent
   | ProductSelectComponent
   | ProductSectionsComponent
+  | ProductColumnsComponent
+  | ProductIndividualColumnsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
+  | ProductMetadataComponent
 export type PredefinedValue = {
   sections?: number
+  columns?: number
   imageSelect?: string
   imageCarousel?: string[]
   dimensions?: Dimension
@@ -67,6 +85,8 @@ export const ProductPage: FC<ProductPageProps> = ({
   values,
 }) => {
   const { addItem } = useCart()
+  const isTVStand3D = use3DVersion()
+  
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
@@ -90,6 +110,19 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.[component.type] ?? undefined}
           />
         )
+      case 'columns':
+        return isTVStand3D ? (
+          <ProductColumns
+            configuration={component}
+            predefinedValue={values?.[component.type] ?? undefined}
+          />
+        ) : null
+      case 'individualColumns':
+        return isTVStand3D ? (
+          <ProductIndividualColumns
+            configuration={component}
+          />
+        ) : null
       case 'select':
         return (
           <ProductSelect
@@ -98,9 +131,13 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'furniture':
+        const furnitureConfig = {
+          ...component,
+          is3DEnabled: isTVStand3D
+        }
         return (
           <ProductFurniture
-            configuration={component}
+            configuration={furnitureConfig}
             predefinedValue={values?.[component.type] ?? undefined}
           />
         )
@@ -123,21 +160,32 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
+  // Extract all 3D props using shared hook
+  const furniture3DProps = use3DFurnitureProps(
+    currentComponents,
+    values,
+    DEFAULT_TV_STAND
+  )
+
   return (
     <>
-      {/* Left Side: Image */}
+      {/* Left Side: Viewer or Image Carousel */}
       <div className={styles.leftContainer}>
-        {imageCarouselComponent && (
-          <ProductImageCarousel
-            configuration={
-              values?.imageCarousel
-                ? {
-                    type: 'imageCarousel',
-                    images: values.imageCarousel,
-                  }
-                : imageCarouselComponent
-            }
-          />
+        {isTVStand3D ? (
+          <FurnitureViewer {...furniture3DProps} />
+        ) : (
+          imageCarouselComponent && (
+            <ProductImageCarousel
+              configuration={
+                values?.imageCarousel
+                  ? {
+                      type: 'imageCarousel',
+                      images: values.imageCarousel,
+                    }
+                  : imageCarouselComponent
+              }
+            />
+          )
         )}
       </div>
       {/* Right Side: Product Details */}
@@ -151,8 +199,9 @@ export const ProductPage: FC<ProductPageProps> = ({
           )
         })}
       </div>
+
       <div>
-        {priceComponent && (
+        {priceComponent && !isTVStand3D && (
           <ProductPrice
             onAddItem={() => {
               addItem('tv-stand', currentComponents, values ?? {})
@@ -164,7 +213,10 @@ export const ProductPage: FC<ProductPageProps> = ({
         {values != null && (
           <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
         )}
-        <ProductInfobox />
+        {/* Hiding it for now, have to fix the styles */}
+        {!isTVStand3D && 
+          <><ProductHelpBox /><ProductInfobox /></>
+        }
       </div>
     </>
   )
