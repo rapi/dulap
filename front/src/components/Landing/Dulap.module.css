@@ -3,6 +3,7 @@
 .readyProducts,
 .aboutUs,
 .gallery,
+.blog,
 .faq,
 .galleryTitle,
 .infoBar {
@@ -113,6 +114,9 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
+  .blog {
+    padding: 0;
+  }
   .aboutUsContent {
     flex-direction: column;
     align-items: center;

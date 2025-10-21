@@ -6,7 +6,7 @@ import { grey } from '@mui/material/colors'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { useCart, CartItem } from '~/context/cartContext'
 import { CustomButton } from '../CustomButton/CustomButton'
-import { Modal } from '~/components/Modal/Modal'
+// import { Modal } from '~/components/Modal/Modal'
 import Select from '~/components//Select/Select'
 import axios from 'axios'
 const PROMO_CODES = [
@@ -49,7 +49,7 @@ export const Checkout: FC = () => {
   // other state
   const [paymentMethod, setPaymentMethod] = useState('cash')
   const [discountPercent, setDiscountPercent] = useState(0)
-  const [orderPlaced, setOrderPlaced] = useState(false)
+  // const [orderPlaced, setOrderPlaced] = useState(false)
 
   // calculate totals
   const rawTotal = items.reduce((sum, { config }) => {
@@ -182,14 +182,16 @@ export const Checkout: FC = () => {
       discountPercent,
       totalToPay,
     })
-    setOrderPlaced(true)
+    // setOrderPlaced(true)
     clearCart()
+    await new Promise((r) => setTimeout(r, 1000))
+    router.push('/order/thank-you')
   }
 
-  const handleCloseModal = () => {
-    setOrderPlaced(false)
-    router.push('/')
-  }
+  // const handleCloseModal = () => {
+  //   setOrderPlaced(false)
+  //   router.push('/')
+  // }
 
   return (
     <>
@@ -575,25 +577,25 @@ export const Checkout: FC = () => {
       </div>
 
       {/* Confirmation Modal */}
-      <Modal isOpen={orderPlaced} onClose={handleCloseModal}>
-        <h3>
-          <FormattedMessage
-            id="checkout.modal.title"
-            defaultMessage="Comanda plasată"
-          />
-        </h3>
-        <p>
-          <FormattedMessage
-            id="checkout.modal.message"
-            defaultMessage="Comanda ta a fost plasată, în scurt timp revenim cu un apel!"
-          />
-        </p>
-        <div className={styles.buttonRow}>
-          <CustomButton onClick={handleCloseModal}>
-            <FormattedMessage id="homepage.button.ok" defaultMessage="OK" />
-          </CustomButton>
-        </div>
-      </Modal>
+      {/*<Modal isOpen={orderPlaced} onClose={handleCloseModal}>*/}
+      {/*  <h3>*/}
+      {/*    <FormattedMessage*/}
+      {/*      id="checkout.modal.title"*/}
+      {/*      defaultMessage="Comanda plasată"*/}
+      {/*    />*/}
+      {/*  </h3>*/}
+      {/*  <p>*/}
+      {/*    <FormattedMessage*/}
+      {/*      id="checkout.modal.message"*/}
+      {/*      defaultMessage="Comanda ta a fost plasată, în scurt timp revenim cu un apel!"*/}
+      {/*    />*/}
+      {/*  </p>*/}
+      {/*  <div className={styles.buttonRow}>*/}
+      {/*    <CustomButton onClick={handleCloseModal}>*/}
+      {/*      <FormattedMessage id="homepage.button.ok" defaultMessage="OK" />*/}
+      {/*    </CustomButton>*/}
+      {/*  </div>*/}
+      {/*</Modal>*/}
     </>
   )
 }

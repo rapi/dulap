@@ -80,6 +80,9 @@
   "ro": "RO",
   "ru": "RU",
   "read": "citește",
+  "mainPage": "Pagina principală",
+  "order.thankYou": "Mulțumim pentru comandă!",
+  "order.thankYou.subtitle": "Am primit detaliile comenzii tale. Te apelăm în cel mai scurt timp.",
 
   "homepage.footer.products": "Dulapuri",
   "homepage.footer.stands": "Comode",

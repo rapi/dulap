@@ -74,7 +74,9 @@
   "ro": "RO",
   "ru": "RU",
   "read": "читай",
-
+  "mainPage": "Главная страница",
+  "order.thankYou": "Спасибо за заказ!",
+  "order.thankYou.subtitle": "Мы получили детали Вашего заказа и скоро с Вами свяжемся.",
 
   "homepage.footer.products": "Шкафы",
   "homepage.footer.stands": "Комоды",
@@ -249,6 +251,8 @@
   "infoBar.color.title": "Широкая палитра цветов",
   "infoBar.color.subtitle": "Мы предлагаем более 10 цветов на выбор, которые вы можете протестировать у себя дома перед заказом.",
   "infoBar.choose": "Выбрать",
+
+  "productPage.details.title": "О продукте",
 
   "modal.addedToCart.title": "Шкаф был успешно добавлен в корзину",
 
