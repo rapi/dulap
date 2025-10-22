@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from 'react'
+import React, { FC, useState, useMemo, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import {
   ButtonOptionsType,
@@ -8,6 +8,7 @@ import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
 import { ColumnConfigurationIcon } from './ColumnConfigurationIcons'
 import { useColumnConfigurationConstraints } from '~/hooks/useColumnConfigurationConstraints'
+import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
@@ -37,12 +38,40 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   } = configuration
   const [activeTab, setActiveTab] = useState(0)
 
+  // Reset active tab to first column when it becomes out of bounds
+  useEffect(() => {
+    if (activeTab >= selectedColumns) {
+      setActiveTab(0)
+    }
+  }, [selectedColumns, activeTab])
+
   // Get constraint evaluation
   const { allConfigurations, isValid } = useColumnConfigurationConstraints(
     columnWidth,
     columnHeight,
     columnDepth
   )
+
+  // Automatically switch to nearest available configuration when current becomes invalid
+  useEffect(() => {
+    const dimensions = { width: columnWidth, height: columnHeight, depth: columnDepth }
+    const updatedConfigurations = columnConfigurations.map(config => {
+      if (!isValid(config)) {
+        const nearestConfig = findNearestAvailableConfiguration(config, dimensions)
+        return nearestConfig || config // Keep original if no valid alternative (shouldn't happen)
+      }
+      return config
+    })
+
+    // Only update if there were changes
+    const hasChanges = updatedConfigurations.some(
+      (config, index) => config !== columnConfigurations[index]
+    )
+    
+    if (hasChanges) {
+      setColumnConfigurations(updatedConfigurations)
+    }
+  }, [columnWidth, columnHeight, columnDepth, isValid]) // Note: not including columnConfigurations to avoid infinite loop
 
   const handleColumnTypeChange = (columnIndex: number, value: ColumnConfigurationType) => {
     const newConfigurations = [...columnConfigurations]
@@ -93,7 +122,9 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
         <div className={styles.columnConfigScrollContainer}>
           <div className={styles.columnConfigRow}>
             {configurationOptions.map((option) => {
-              const currentColumnIndex = selectedColumns === 1 ? 0 : activeTab
+              // Ensure we use a valid column index even if activeTab is temporarily out of bounds
+              const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
+              const currentColumnIndex = selectedColumns === 1 ? 0 : safeActiveTab
               const isSelected = columnConfigurations[currentColumnIndex] === option.type
 
               return (

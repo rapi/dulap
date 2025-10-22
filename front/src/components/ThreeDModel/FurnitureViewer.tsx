@@ -103,7 +103,7 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
       webGlRenderer.shadowMap.enabled = true
       webGlRenderer.shadowMap.type = THREE.PCFSoftShadowMap
       webGlRenderer.shadowMap.autoUpdate = true
-      threeScene.fog = new THREE.Fog('#f9f9f9', 300, 400)
+      // threeScene.fog = new THREE.Fog('#f9f9f9', 300, 400)
     },
     []
   )
@@ -132,12 +132,12 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           enableRotate={true}
           enableDamping={false}
           dampingFactor={0}
-          minDistance={100}
-          maxDistance={250}
-          minAzimuthAngle={-Math.PI / 2 + 0.5}
-          maxAzimuthAngle={Math.PI / 2 - 0.5}
-          minPolarAngle={0.3}
-          maxPolarAngle={Math.PI / 2 + 0.2}
+          // minDistance={100}
+          // maxDistance={250}
+          // minAzimuthAngle={-Math.PI / 2 + 0.5}
+          // maxAzimuthAngle={Math.PI / 2 - 0.5}
+          // minPolarAngle={0.3}
+          // maxPolarAngle={Math.PI / 2 + 0.2}
           target={[0, 50, 0]} // Move scene center down by 50 units to look in the center of the scene
         />
 

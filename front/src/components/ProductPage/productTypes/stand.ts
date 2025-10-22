@@ -5,6 +5,9 @@ import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
 import { getConstraints } from '~/config/furnitureConstraints'
 import { useFurnitureConstraints } from '~/hooks/useFurnitureConstraints'
+import { getValidColumnCounts, getFirstValidColumnCount } from '~/utils/columnValidation'
+import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
+import { isConfigurationValid } from '~/config/columnConstraints'
 
 // Get stand constraints
 const CONSTRAINTS = getConstraints('stand')
@@ -74,18 +77,99 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     }
   }, [availableSections, selectedSections])
 
-  // Update column configurations when number of columns changes
+  // Update column configurations ONLY when number of columns changes
   useEffect(() => {
     setColumnConfigurations((prev) => {
-      const newConfigs = Array(selectedColumns).fill(ColumnConfigurationType.DRAWERS_3).map((_, i) => prev[i] || ColumnConfigurationType.DRAWERS_3)
+      const dimensions = { 
+        width: width / selectedColumns, 
+        height: height - plintHeight, 
+        depth: depth 
+      }
+      
+      // Create new configurations array, preserving existing ones
+      const newConfigs = Array(selectedColumns).fill(null).map((_, i) => {
+        // Always try to preserve existing configuration first
+        if (prev[i]) {
+          // Check if it's still valid with new dimensions
+          if (isConfigurationValid(prev[i], dimensions)) {
+            return prev[i]
+          }
+          // If not valid, find nearest alternative
+          const nearestConfig = findNearestAvailableConfiguration(prev[i], dimensions)
+          return nearestConfig || prev[i]
+        }
+        
+        // For new columns (when expanding), use default
+        const defaultConfig = ColumnConfigurationType.DRAWERS_3
+        const nearestConfig = findNearestAvailableConfiguration(defaultConfig, dimensions)
+        return nearestConfig || defaultConfig
+      })
+      
       return newConfigs as ColumnConfigurationType[]
     })
-  }, [selectedColumns])
+  }, [selectedColumns]) // Only trigger when column count changes!
+  
+  // Validate existing configurations when dimensions change
+  useEffect(() => {
+    const dimensions = { 
+      width: width / selectedColumns, 
+      height: height - plintHeight, 
+      depth: depth 
+    }
+    
+    setColumnConfigurations((prev) => {
+      // Check if any configuration needs updating
+      const needsUpdate = prev.some(config => !isConfigurationValid(config, dimensions))
+      
+      if (!needsUpdate) {
+        return prev // No changes needed
+      }
+      
+      // Update only invalid configurations
+      return prev.map(config => {
+        if (isConfigurationValid(config, dimensions)) {
+          return config // Keep valid ones
+        }
+        // Replace invalid with nearest available
+        const nearestConfig = findNearestAvailableConfiguration(config, dimensions)
+        return nearestConfig || config
+      })
+    })
+  }, [width, height, depth, plintHeight, selectedColumns]) // Trigger on dimension changes
 
   // Calculate individual column dimensions for constraint evaluation
   const columnWidth = useMemo(() => width / selectedColumns, [width, selectedColumns])
   const columnHeight = useMemo(() => height - plintHeight, [height, plintHeight])
   const columnDepth = depth
+
+  // Check which column counts are valid based on dimensions
+  const validColumnCounts = useMemo(
+    () => getValidColumnCounts(width, height, depth, plintHeight),
+    [width, height, depth, plintHeight]
+  )
+
+  // Create column options with disabled states
+  const columnOptions = useMemo(() => [
+    { value: '1', label: 1, disabled: !validColumnCounts[1] },
+    { value: '2', label: 2, disabled: !validColumnCounts[2] },
+    { value: '3', label: 3, disabled: !validColumnCounts[3] },
+    { value: '4', label: 4, disabled: !validColumnCounts[4] },
+  ], [validColumnCounts])
+
+  // Auto-select valid column count when current becomes invalid
+  useEffect(() => {
+    if (!validColumnCounts[selectedColumns]) {
+      // Try to keep a count close to the current selection
+      const preferences = [
+        selectedColumns,
+        selectedColumns - 1,
+        selectedColumns + 1,
+        2, 1, 3, 4
+      ].filter(n => n >= 1 && n <= 4)
+      const validCount = getFirstValidColumnCount(validColumnCounts, preferences)
+      setSelectedColumns(validCount)
+    }
+  }, [validColumnCounts, selectedColumns])
 
   // Map color names for image paths
   useEffect(() => {
@@ -132,6 +216,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       type: 'columns',
       selectedColumns,
       setSelectedColumns,
+      options: columnOptions,
     },
     {
       type: 'individualColumns',

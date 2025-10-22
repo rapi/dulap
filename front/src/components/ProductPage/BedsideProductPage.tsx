@@ -101,6 +101,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           <ProductColumns
             configuration={component}
             predefinedValue={values?.[component.type] ?? undefined}
+            options={component.options}
           />
         ) : null
       case 'individualColumns':
