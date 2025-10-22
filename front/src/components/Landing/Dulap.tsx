@@ -13,6 +13,7 @@ import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { FAQ } from '~/components/FAQ/FAQ'
 import { landingInfoBarContent } from '~/components/InfoBar/LandingInfoBarContent'
 import BlogsList from '~/components/Blog/BlogsList'
+import { FAQcontentLanding } from '~/components/FAQ/FAQcontentLanding'
 
 const galleryList = [
   { src: '/bedside/render/Biege 1.png', alt: 'Bedside render 1' },
@@ -85,7 +86,7 @@ export const Dulap: React.FC = () => {
         </div>
       </section>
       <section className={classes.faq}>
-        <FAQ></FAQ>
+        <FAQ content={FAQcontentLanding}></FAQ>
       </section>
       <section className={classes.aboutUs}>
         <AboutUs></AboutUs>

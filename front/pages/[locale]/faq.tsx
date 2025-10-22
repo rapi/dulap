@@ -1,11 +1,12 @@
 import React, { FC } from 'react'
 import { FAQ } from '~/components/FAQ/FAQ'
+import { FAQcontent } from '~/components/FAQ/FAQcontent'
 
 const Product: FC = () => {
   return (
     <>
       <main>
-        <FAQ />
+        <FAQ content={FAQcontent} />
       </main>
     </>
   )
