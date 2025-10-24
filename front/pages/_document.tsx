@@ -1,6 +1,6 @@
 import { Html, Head, Main, NextScript } from 'next/document'
 
-export const GTM_ID = process.env.NEXT_GTM_ID
+export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID
 
 export default function Document() {
   return (

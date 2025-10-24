@@ -30,7 +30,7 @@ jobs:
             mkdir -p front
             echo "TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}" >  front/.env
             echo "TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}"   >> front/.env
-            echo "NEXT_GTM_ID=${NEXT_GTM_ID}" >  front/.env
+            echo "NEXT_PUBLIC_GTM_ID=${NEXT_PUBLIC_GTM_ID}" >  front/.env
 
       - run:
           name: Build Docker image
