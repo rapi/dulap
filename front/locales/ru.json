@@ -402,8 +402,6 @@
   "faqPage.subtitle": "Если у вас есть другие вопросы, свяжитесь с нами.",
 
 
-
-
   "breadcrumb.home": "Главная",
   "breadcrumb.journal": "Блог",
 
@@ -412,6 +410,10 @@
   "tag.guides": "Руководства",
   "tag.measurements": "Замеры",
   "tag.dulapmd": "dulap.md",
+
+  "samples.title": "Образцы с доставкой",
+  "samples.subtitle": "а главное - бесплатно (пока)",
+  "samples.subtitle.delivery": "Доставляем за 2-3 дня",
 
   "blog.author.vasile": "Vasile",
 

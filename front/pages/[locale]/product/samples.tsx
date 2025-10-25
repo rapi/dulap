@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import { ProductListPage } from '~/components/ProductListPage/ProductListPage'
+import { SamplesListPage } from '~/components/Samples/SamplesListPage'
 const Products: FC = () => {
-  return <ProductListPage />
+  return <SamplesListPage />
 }
 
 export default Products

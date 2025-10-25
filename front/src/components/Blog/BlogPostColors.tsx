@@ -45,7 +45,7 @@ const BlogPostColors: React.FC = () => {
           contentId: 'blog.colors.p2.samples',
           links: {
             samples: {
-              href: '/samples',
+              href: '/product/samples',
               ariaLabelId: 'blog.colors.samples.cta.aria',
             },
           },
@@ -107,7 +107,7 @@ const BlogPostColors: React.FC = () => {
               ariaLabelId: 'blog.colors.section.final.conf.aria',
             },
             samples: {
-              href: '/products',
+              href: '/product/samples',
               ariaLabelId: 'blog.colors.samples.cta.aria',
             },
           },

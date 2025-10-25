@@ -1,4 +1,13 @@
 // next.config.js
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  turbopack: {
+    root: __dirname, // lock the root to /dulap/front
+  },
+  reactStrictMode: true,
+}
+
 module.exports = {
   async rewrites() {
     return [
@@ -11,3 +20,5 @@ module.exports = {
     ]
   },
 }
+
+export default nextConfig

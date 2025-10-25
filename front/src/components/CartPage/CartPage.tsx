@@ -1,3 +1,4 @@
+// components/CartPage/CartPage.tsx
 import React, { FC } from 'react'
 import { useRouter } from 'next/router'
 import styles from './CartPage.module.css'
@@ -5,144 +6,191 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import SelectColor from '~/components/SelectColor/SelectColor'
 import { CustomButton } from '~/components/CustomButton/CustomButton'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { CartItem, useCart } from '~/context/cartContext'
+import {
+  CartItem,
+  CartProductItem,
+  CartSampleItem,
+  useCart,
+} from '~/context/cartContext'
 
-const ItemRow: FC<{ item: CartItem; index: number }> = ({ item, index }) => {
+// ✅ strict, no `any`
+const isProductItem = (it: CartItem): it is CartProductItem =>
+  it.type === 'product'
+const isSampleItem = (it: CartItem): it is CartSampleItem =>
+  it.type === 'sample'
+
+// ✅ function declaration avoids "assigned a value but never used"
+function ItemRow({ item, index }: { item: CartItem; index: number }) {
   const { removeItem } = useCart()
-  console.log('CartItem →', item)
   const intl = useIntl()
 
-  const itemConfig = {
-    name: '',
-    dimensions: { width: 0, height: 0, depth: 0, plintHeight: 0 },
-    colors: '',
+  const vm = {
+    displayName: '',
+    image: '',
+    dimensions: {
+      width: null as number | null,
+      height: null as number | null,
+      depth: null as number | null,
+      plintHeight: null as number | null,
+    },
+    color: '' as string,
     furniture: { hinges: '', guides: '', openingType: '' },
-    price: 0,
-    imageCarousel: '',
+    price: 0 as number,
   }
 
-  switch (item.name) {
-    case 'wardrobe':
-      itemConfig.name = intl.formatMessage({ id: 'homepage.products.wardrobe' })
-      break
-    case 'stand':
-      itemConfig.name = intl.formatMessage({ id: 'homepage.products.stand' })
-      break
-    case 'tv-stand':
-      itemConfig.name = intl.formatMessage({ id: 'homepage.products.TVstand' })
-      break
-    case 'bedside':
-      itemConfig.name = intl.formatMessage({ id: 'homepage.products.bedside' })
-      break
-  }
+  if (isProductItem(item)) {
+    switch (item.name) {
+      case 'wardrobe':
+        vm.displayName = intl.formatMessage({
+          id: 'homepage.products.wardrobe',
+        })
+        break
+      case 'stand':
+        vm.displayName = intl.formatMessage({ id: 'homepage.products.stand' })
+        break
+      case 'tv-stand':
+        vm.displayName = intl.formatMessage({ id: 'homepage.products.TVstand' })
+        break
+      case 'bedside':
+        vm.displayName = intl.formatMessage({ id: 'homepage.products.bedside' })
+        break
+      default:
+        vm.displayName = item.name
+    }
 
-  for (const config of item.config) {
-    switch (config.type) {
-      case 'imageCarousel':
-        itemConfig.imageCarousel = config.predefinedValue ?? config.images[0]
-        break
-      case 'dimensions':
-        itemConfig.dimensions = {
-          width: config.predefinedValue?.width ?? config.width,
-          height: config.predefinedValue?.height ?? config.height,
-          depth: config.predefinedValue?.depth ?? config.depth,
-          plintHeight:
-            config.predefinedValue?.plintHeight ?? config.plintHeight,
-        }
-        break
-      case 'colors':
-        itemConfig.colors = config.predefinedValue ?? config.selectedColor
-        break
-      case 'furniture':
-        console.log(config)
-        itemConfig.furniture = {
-          hinges: config.predefinedValue?.hinges ?? config.hinges,
-          guides: config.predefinedValue?.guides ?? config.guides,
-          openingType:
-            config.predefinedValue?.openingType ?? config.selectedOpeningMethod,
-        }
-        break
-      case 'price':
-        itemConfig.price = config.predefinedValue ?? config.price
-        break
+    for (const config of item.config) {
+      switch (config.type) {
+        case 'imageCarousel':
+          vm.image = config.predefinedValue ?? config.images[0]
+          break
+        case 'dimensions':
+          vm.dimensions = {
+            width: config.predefinedValue?.width ?? config.width,
+            height: config.predefinedValue?.height ?? config.height,
+            depth: config.predefinedValue?.depth ?? config.depth,
+            plintHeight:
+              config.predefinedValue?.plintHeight ?? config.plintHeight,
+          }
+          break
+        case 'colors':
+          vm.color = config.predefinedValue ?? config.selectedColor
+          break
+        case 'furniture':
+          vm.furniture = {
+            hinges: config.predefinedValue?.hinges ?? config.hinges,
+            guides: config.predefinedValue?.guides ?? config.guides,
+            openingType:
+              config.predefinedValue?.openingType ??
+              config.selectedOpeningMethod,
+          }
+          break
+        case 'price':
+          vm.price = config.predefinedValue ?? config.price
+          break
+      }
     }
   }
+
+  if (isSampleItem(item)) {
+    vm.displayName =
+      item.name ||
+      intl.formatMessage({
+        id: 'cart.sample.defaultName',
+        defaultMessage: 'Sample',
+      })
+    vm.image =
+      item.sample.imageCarousel?.[0] ??
+      `/products/samples/${item.sample.id}.png`
+    vm.color = item.sample.color ?? ''
+    vm.price = item.sample.price ?? 0
+  }
+
+  const hasDimensions = vm.dimensions.width !== null
 
   return (
     <div className={styles.cartRow} key={index}>
       <span className={styles.indexRow}>{index + 1}</span>
-      <span className={styles.productName}>{itemConfig.name}</span>
+
+      <span className={styles.productName}>{vm.displayName}</span>
+
       <div className={styles.productImageContainer}>
         <img
           className={styles.productImage}
-          src={itemConfig.imageCarousel}
-          alt={intl.formatMessage({ id: 'homepage.products.wardrobe' })}
+          src={vm.image}
+          alt={vm.displayName}
         />
       </div>
+
       <span className={styles.productDetails}>
-        <FormattedMessage id="homepage.configurator.dimensions.title" />:
-        <br />
-        <FormattedMessage id="homepage.configurator.dimensions.width" />:{' '}
-        <b>
-          {itemConfig.dimensions.width}{' '}
-          <FormattedMessage id="homepage.configurator.dimensions.cm" />
-        </b>
-        <br />
-        <FormattedMessage id="homepage.configurator.dimensions.height" />:{' '}
-        <b>
-          {itemConfig.dimensions.height}{' '}
-          <FormattedMessage id="homepage.configurator.dimensions.cm" />
-        </b>
-        <br />
-        <FormattedMessage id="homepage.configurator.dimensions.depth" />:{' '}
-        <b>
-          {itemConfig.dimensions.depth}{' '}
-          <FormattedMessage id="homepage.configurator.dimensions.cm" />
-        </b>
-        <br />
-        <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />:{' '}
-        <b>
-          {itemConfig.dimensions.plintHeight}{' '}
-          <FormattedMessage id="homepage.configurator.dimensions.cm" />
-        </b>
-        <br />
-        <br />
-        <FormattedMessage id="homepage.configurator.fittings.title" />:
-        <br />
-        {itemConfig.furniture.openingType && (
-          <span>
-            <FormattedMessage id="homepage.configurator.fittings.handleType" />:{' '}
-            <b>
-              {intl.formatMessage({
-                id: itemConfig.furniture.openingType,
-              })}
-            </b>
-          </span>
-        )}
-        <br />
-        {itemConfig.furniture.hinges && (
-          <span>
-            <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
-            <b>{intl.formatMessage({ id: itemConfig.furniture.hinges })}</b>
+        {hasDimensions ? (
+          <>
+            <FormattedMessage id="homepage.configurator.dimensions.title" />:
             <br />
-          </span>
-        )}
-        <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
-        {itemConfig.furniture.guides && (
-          <b>{intl.formatMessage({ id: itemConfig.furniture.guides })}</b>
+            <FormattedMessage id="homepage.configurator.dimensions.width" />:{' '}
+            <b>
+              {vm.dimensions.width}{' '}
+              <FormattedMessage id="homepage.configurator.dimensions.cm" />
+            </b>
+            <br />
+            <FormattedMessage id="homepage.configurator.dimensions.height" />:{' '}
+            <b>
+              {vm.dimensions.height}{' '}
+              <FormattedMessage id="homepage.configurator.dimensions.cm" />
+            </b>
+            <br />
+            <FormattedMessage id="homepage.configurator.dimensions.depth" />:{' '}
+            <b>
+              {vm.dimensions.depth}{' '}
+              <FormattedMessage id="homepage.configurator.dimensions.cm" />
+            </b>
+            <br />
+            <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />
+            :{' '}
+            <b>
+              {vm.dimensions.plintHeight}{' '}
+              <FormattedMessage id="homepage.configurator.dimensions.cm" />
+            </b>
+            <br />
+            <br />
+            <FormattedMessage id="homepage.configurator.fittings.title" />:
+            <br />
+            {vm.furniture.openingType && (
+              <span>
+                <FormattedMessage id="homepage.configurator.fittings.handleType" />
+                : <b>{intl.formatMessage({ id: vm.furniture.openingType })}</b>
+              </span>
+            )}
+            <br />
+            {vm.furniture.hinges && (
+              <span>
+                <FormattedMessage id="homepage.configurator.fittings.hinges" />:{' '}
+                <b>{intl.formatMessage({ id: vm.furniture.hinges })}</b>
+                <br />
+              </span>
+            )}
+            <FormattedMessage id="homepage.configurator.fittings.guides" />:{' '}
+            {vm.furniture.guides && (
+              <b>{intl.formatMessage({ id: vm.furniture.guides })}</b>
+            )}
+          </>
+        ) : (
+          <span>—</span>
         )}
       </span>
+
       <div className={styles.colorContainer}>
-        <SelectColor
-          size="medium"
-          colors={[itemConfig.colors]}
-          onChange={() => {}}
-        />
+        {vm.color ? (
+          <SelectColor size="medium" colors={[vm.color]} onChange={() => {}} />
+        ) : (
+          <span>—</span>
+        )}
       </div>
+
       <span className={styles.price}>
-        {itemConfig.price}{' '}
+        {vm.price}{' '}
         <FormattedMessage id="homepage.configurator.price.currencyLei" />
       </span>
+
       <div className={styles.actions}>
         <CustomButton
           icon={<DeleteIcon fontSize="inherit" />}
@@ -159,15 +207,22 @@ export const CartPage: FC = () => {
   const router = useRouter()
   const { items } = useCart()
 
-  const rawTotal = items.reduce((sum, { config }) => {
-    const priceConfig = config.find((c) => c.type === 'price')
-    return sum + (priceConfig?.predefinedValue ?? priceConfig?.price ?? 0)
+  const rawTotal = items.reduce((sum, item) => {
+    if (isProductItem(item)) {
+      const priceConfig = item.config.find((c) => c.type === 'price')
+      return sum + (priceConfig?.predefinedValue ?? priceConfig?.price ?? 0)
+    }
+    if (isSampleItem(item)) {
+      return sum + (item.sample.price ?? 0)
+    }
+    return sum
   }, 0)
 
-  const isEmpty = items.length === 0 || rawTotal === 0
+  const isEmpty = items.length === 0
 
   return (
     <div className={styles.cartContainer}>
+      {/* ...rest of your component stays the same, including <ItemRow /> usage... */}
       <div className={styles.titleContainer}>
         <h1 className={styles.title}>
           <FormattedMessage id="cart.title" />
@@ -208,6 +263,7 @@ export const CartPage: FC = () => {
               <ItemRow item={item} key={index} index={index} />
             ))}
           </div>
+
           <div className={styles.subtotalContainer}>
             <span className={styles.subtotalLabel}>
               <FormattedMessage id="cart.subtotal" />
@@ -225,9 +281,7 @@ export const CartPage: FC = () => {
           <CustomButton size="medium" onClick={() => router.push('/checkout')}>
             <FormattedMessage id="homepage.button.finalizeOrder" />
           </CustomButton>
-        ) : (
-          ''
-        )}
+        ) : null}
       </div>
     </div>
   )

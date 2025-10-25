@@ -33,6 +33,7 @@ import { useRouter } from 'next/router'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
+import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -151,6 +152,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           {values != null && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
+          <OrderSamplesBox />
         </div>
       </div>
       <br />
