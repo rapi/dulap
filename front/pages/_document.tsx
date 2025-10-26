@@ -19,6 +19,13 @@ export default function Document() {
             gtag('config', 'G-K9E49M4GJ5');
           `}
         </Script>
+        <Script id="google-analytics-view" strategy="afterInteractive">
+          {`
+            gtag('event', 'view_configurator', {
+              // <event_parameters>
+            });
+          `}
+        </Script>
 
         <script
           dangerouslySetInnerHTML={{
