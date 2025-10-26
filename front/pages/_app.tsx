@@ -25,22 +25,21 @@ export default function MyApp({ Component, pageProps }: AppProps) {
 
   // Single SPA pageview + custom events
   useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      window.gtag?.('event', 'page_view', {
-        page_title: document.title,
-        page_location: window.location.href,
-        page_path: url,
-      })
-      if (url === '/configurator')
-        window.gtag?.('event', 'view_configurator', { value: 1 })
-      if (url === '/products')
-        window.gtag?.('event', 'view_products', { value: 1 })
-    }
-
-    router.events.on('routeChangeComplete', handleRouteChange)
+    // const handleRouteChange = (url: string) => {
+    //   window.gtag?.('event', 'page_view', {
+    //     page_title: document.title,
+    //     page_location: window.location.href,
+    //     page_path: url,
+    //   })
+    //   if (url === '/configurator')
+    //     window.gtag?.('event', 'view_configurator', { value: 1 })
+    //   if (url === '/products')
+    //     window.gtag?.('event', 'view_products', { value: 1 })
+    // }
+    // router.events.on('routeChangeComplete', handleRouteChange)
     // first load
-    handleRouteChange(window.location.pathname + window.location.search)
-    return () => router.events.off('routeChangeComplete', handleRouteChange)
+    // handleRouteChange(window.location.pathname + window.location.search)
+    // return () => router.events.off('routeChangeComplete', handleRouteChange)
   }, [router.events])
 
   // SEO meta
