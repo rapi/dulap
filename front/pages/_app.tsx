@@ -11,18 +11,16 @@ import { useRouter } from 'next/router'
 import { Modal } from '~/components/Modal/Modal'
 import { CopyButton } from '~/components/CopyButton/CopyButton'
 import { FormattedMessage, useIntl } from 'react-intl'
-import Script from 'next/script'
 import Head from 'next/head'
 
 const localeMap: Record<string, Record<string, string>> = { ro, ru }
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID as string | undefined
-
+const NEXT_GA_ID = process.env.NEXT_GA_ID
 export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const { locale: queryLocale } = router.query
   const currentLocale = (queryLocale as string) ?? 'ro'
   const messages = localeMap[currentLocale] ?? ro
-
+  console.log(NEXT_GA_ID)
   // Single SPA pageview + custom events
   useEffect(() => {
     // const handleRouteChange = (url: string) => {
@@ -65,7 +63,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       return () => clearTimeout(timer)
     }
   }, [])
-
   return (
     <>
       <Head>
@@ -88,26 +85,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         />
         <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
       </Head>
-
-      {/* GA4 via gtag.js (only if not using GTM) */}
-      {GA_MEASUREMENT_ID && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-            strategy="afterInteractive"
-          />
-          <Script id="ga4-init" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              window.gtag = window.gtag || gtag;
-              gtag('js', new Date());
-              gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });
-            `}
-          </Script>
-        </>
-      )}
-
       <CartProvider>
         <IntlProvider locale={currentLocale} messages={messages}>
           <Layout>
