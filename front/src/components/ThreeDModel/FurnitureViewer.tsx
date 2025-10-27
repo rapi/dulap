@@ -6,6 +6,7 @@ import { SceneLights } from './SceneLights'
 import * as THREE from 'three'
 import { Furniture3DProps } from '~/types/furniture3D'
 import { FurnitureBuilder } from './FurnitureBuilder'
+import { getViewerConfig } from './furnitureViewerConfig'
 
 // Preload models
 useGLTF.preload('/assets/3d-models/bg.glb')
@@ -32,7 +33,10 @@ const FurnitureScene = memo(function FurnitureScene({
   columnConfigurations,
   columnWidths,
   columnPositions,
+  furnitureType,
 }: Furniture3DProps) {
+  const config = getViewerConfig(furnitureType)
+  
   return (
     <>
       <SceneLights
@@ -46,14 +50,14 @@ const FurnitureScene = memo(function FurnitureScene({
         <GLBModel
           modelUrl="/assets/3d-models/bg.glb"
           modelPosition={[0, 0, 0]}
-          modelScale={[100, 45, 45]}
+          modelScale={config.backgroundScale}
           shouldReceiveShadow={true}
           overrideColorHex="#ffffff"
           useLambertWhiteMaterial={true}
         />
         <GLBModel
           modelUrl="/assets/3d-models/shadow_man.glb"
-          modelPosition={[-100, 0, 2]}
+          modelPosition={[config.getShadowManXPosition(width), 0, 2]}
           modelScale={1}
           overrideColorHex="#ffffff"
           shouldReceiveShadow={false}
@@ -94,11 +98,11 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
   columnConfigurations,
   columnWidths,
   columnPositions,
+  furnitureType,
 }) => {
   const handleCanvasCreated = useCallback(
     ({
       gl: webGlRenderer,
-      scene: threeScene,
     }: {
       gl: THREE.WebGLRenderer
       scene: THREE.Scene
@@ -114,11 +118,13 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
     []
   )
 
+  const config = getViewerConfig(furnitureType)
+
   return (
     <div style={{ width: '100%', height: '100%', minHeight: '500px' }}>
       <Canvas
         camera={{
-          position: [0, 50, 250],
+          position: config.cameraPosition,
           fov: 60,
           near: 0.5,
           far: 1000,
@@ -138,13 +144,13 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           enableRotate={true}
           enableDamping={false}
           dampingFactor={0}
-          // minDistance={100}
-          // maxDistance={250}
-          // minAzimuthAngle={-Math.PI / 2 + 0.5}
-          // maxAzimuthAngle={Math.PI / 2 - 0.5}
-          // minPolarAngle={0.3}
-          // maxPolarAngle={Math.PI / 2 + 0.2}
-          target={[0, 50, 0]} // Move scene center down by 50 units to look in the center of the scene
+          minDistance={config.minDistance}
+          maxDistance={config.maxDistance}
+          minAzimuthAngle={config.minAzimuthAngle}
+          maxAzimuthAngle={config.maxAzimuthAngle}
+          minPolarAngle={config.minPolarAngle}
+          maxPolarAngle={config.maxPolarAngle}
+          target={config.target}
         />
 
         {/* 3D Scene */}
@@ -160,6 +166,7 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           columnConfigurations={columnConfigurations}
           columnWidths={columnWidths}
           columnPositions={columnPositions}
+          furnitureType={furnitureType}
         />
       </Canvas>
     </div>

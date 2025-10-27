@@ -147,7 +147,8 @@ export const ProductPage: FC<ProductPageProps> = ({
     currentComponents,
     values,
     DEFAULT_WARDROBE,
-    true // isWardrobe = true (enables automatic column layout)
+    true, // isWardrobe = true (enables automatic column layout)
+    'wardrobe' // furnitureType
   )
 
   

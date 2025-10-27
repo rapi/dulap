@@ -12,6 +12,7 @@ import { calculateWardrobeColumnLayout } from '~/utils/wardrobeColumnLayout'
  * @param values - Optional predefined values from URL or configuration
  * @param defaults - Default values for the product type
  * @param isWardrobe - Whether this is a wardrobe (uses automatic column layout)
+ * @param furnitureType - The type of furniture (wardrobe, stand, tv-stand, etc.)
  * @returns Computed props for FurnitureViewer component
  */
 export function use3DFurnitureProps(
@@ -20,7 +21,8 @@ export function use3DFurnitureProps(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   values: any = {},
   defaults: FurnitureDefaults,
-  isWardrobe: boolean = false
+  isWardrobe: boolean = false,
+  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage'
 ): Furniture3DProps {
   return useMemo(() => {
     // Extract color component and convert name to HEX
@@ -105,7 +107,8 @@ export function use3DFurnitureProps(
       columnConfigurations: wardrobeLayout?.columnConfigurations ?? columnConfigurations,
       columnWidths: wardrobeLayout?.columnWidths,
       columnPositions: wardrobeLayout?.columnPositions,
+      furnitureType,
     }
-  }, [currentComponents, values, defaults, isWardrobe])
+  }, [currentComponents, values, defaults, isWardrobe, furnitureType])
 }
 

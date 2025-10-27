@@ -41,7 +41,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [height, setHeight] = useState(260)
   const [depth, setDepth] = useState(50)
   const [plintHeight, setPlintHeight] = useState(2)
-  const [selectedColor, setSelectedColor] = useState('#fcfbf5')
+  const [selectedColor, setSelectedColor] = useState('#ded9d3')
   const [imageSide, setImageSide] = useState('right')
   const [imageWidth, setImageWidth] = useState(50)
   const [imageHeight, setImageHeight] = useState(2100)
@@ -236,7 +236,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     {
       type: 'dimensions',
       widthRange: [40, 250],
-      heightRange: [190, 270],
+      heightRange: [200, 270],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
       width,
