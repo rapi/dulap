@@ -21,6 +21,7 @@ interface SelectColorItemProps {
   hexCode?: string
   name?: string
   materialCode?: string
+  textureUrl?: string
   isAdd?: boolean
   icon?: React.ReactNode
   selected: boolean
@@ -37,12 +38,15 @@ const PALETTE = [
   'Beige Cashmere',
   'Biege Almond',
   'Rose Antique',
+  'Natural Acacia',
+  'Natural Walnut',
 ]
 
 export const SelectColorItem: React.FC<SelectColorItemProps> = ({
   hexCode,
   name,
   materialCode,
+  textureUrl,
   isAdd,
   icon,
   selected,
@@ -53,6 +57,18 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
     e.stopPropagation()
     onClick?.(name, e)
   }
+
+  // Determine the style based on whether it's a texture or a solid color
+  const backgroundStyle = !isAdd
+    ? textureUrl
+      ? {
+          backgroundImage: `url(${textureUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }
+      : { backgroundColor: hexCode }
+    : undefined
+
   return (
     <div
       className={classNames(
@@ -61,7 +77,7 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
         selected && styles.selected,
         isAdd && styles.addCircle
       )}
-      style={!isAdd && hexCode ? { backgroundColor: hexCode } : undefined}
+      style={backgroundStyle}
       onClick={handleClick}
       {...(!isAdd && name
         ? {
@@ -132,6 +148,7 @@ const SelectColor: React.FC<SelectColorProps> = ({
           hexCode={c.hexCode}
           name={c.name}
           materialCode={c.materialCode}
+          textureUrl={c.textureUrl}
           size={size}
           selected={c.name === selected}
           onClick={handleSelect}

@@ -6,6 +6,10 @@
   width: 100%;
 }
 
+.productItem {
+  opacity: 0;
+}
+
 @media (max-width: 900px) {
   .productGrid,
   .productList {

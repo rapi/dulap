@@ -3,6 +3,7 @@ export interface ColorItem {
   hexCode: string
   materialCode: string
   name: string
+  textureUrl?: string // Optional texture image URL
 }
 
 export const colorDictionary: ColorItem[] = [
@@ -22,6 +23,18 @@ export const colorDictionary: ColorItem[] = [
   { name: 'Rose Antique', hexCode: '#c39d94', materialCode: 'EGGER U325 ST9' },
   { name: 'Biege Almond', hexCode: '#baa397', materialCode: 'EGGER U211 ST9' },
   { name: 'Green Salvia', hexCode: '#bdbda6', materialCode: 'EGGER U638 ST9' },
+  {
+    name: 'Natural Acacia',
+    hexCode: '#d4b896',
+    materialCode: 'EGGER H3840 ST10',
+    textureUrl: '/assets/thumbnails/natural_acacia.jpg',
+  },
+  {
+    name: 'Natural Walnut',
+    hexCode: '#8b6f47',
+    materialCode: 'EGGER H3734 ST10',
+    textureUrl: '/assets/thumbnails/natural_walnut.jpg',
+  },
 ]
 
 export function getColorItemByName(name: string): ColorItem | undefined {

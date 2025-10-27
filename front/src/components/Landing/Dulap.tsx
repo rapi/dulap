@@ -14,6 +14,8 @@ import { FAQ } from '~/components/FAQ/FAQ'
 import { landingInfoBarContent } from '~/components/InfoBar/LandingInfoBarContent'
 import BlogsList from '~/components/Blog/BlogsList'
 import { FAQcontentLanding } from '~/components/FAQ/FAQcontentLanding'
+import { useScrollAnimation } from '~/hooks/useScrollAnimation'
+import animationStyles from '~/styles/animations.module.css'
 
 const galleryList = [
   { src: '/bedside/render/Biege 1.png', alt: 'Bedside render 1' },
@@ -36,6 +38,13 @@ const galleryList = [
 ]
 
 export const Dulap: React.FC = () => {
+  const { ref: titleRef, isVisible: isTitleVisible } = useScrollAnimation({ 
+    threshold: 0.3 
+  })
+  const { ref: catalogTitleRef, isVisible: isCatalogTitleVisible } = useScrollAnimation({ 
+    threshold: 0.3 
+  })
+
   return (
     <div>
       <Banner
@@ -48,7 +57,10 @@ export const Dulap: React.FC = () => {
         <InfoBar items={landingInfoBarContent} />
       </section>
       <section className={classes.productTypes}>
-        <h2 className={classes.productTypesTitle}>
+        <h2 
+          ref={titleRef as React.RefObject<HTMLHeadingElement>}
+          className={`${classes.productTypesTitle} ${isTitleVisible ? animationStyles.fadeInDown : ''}`}
+        >
           <FormattedMessage id="homepage.dulapLanding.title1" />
         </h2>
         <ProductTypesList></ProductTypesList>
@@ -62,7 +74,10 @@ export const Dulap: React.FC = () => {
       ></ContactBox>
 
       <section className={classes.readyProducts}>
-        <h2 className={classes.readyProductsTitle}>
+        <h2 
+          ref={catalogTitleRef as React.RefObject<HTMLHeadingElement>}
+          className={`${classes.readyProductsTitle} ${isCatalogTitleVisible ? animationStyles.fadeInDown : ''}`}
+        >
           <FormattedMessage id="homepage.dulapLanding.title2" />
         </h2>
         <ProductCatalog></ProductCatalog>

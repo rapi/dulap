@@ -6,13 +6,18 @@ import { CustomButton } from '../CustomButton/CustomButton'
 import { FormattedMessage } from 'react-intl'
 import clsx from 'clsx'
 import Link from 'next/link'
+import BorderColorIcon from '@mui/icons-material/BorderColor'
+import { useScrollAnimation } from '~/hooks/useScrollAnimation'
+import animationStyles from '~/styles/animations.module.css'
 
 export const ProductTypesList: React.FC = () => {
   const router = useRouter()
+  const { ref: containerRef, isVisible } = useScrollAnimation({ threshold: 0.1 })
+
   return (
     <>
-      <div className={styles.productListSelectContainer}>
-        {productTypes.map(({ image, link, name }) => {
+      <div ref={containerRef as React.RefObject<HTMLDivElement>} className={styles.productListSelectContainer}>
+        {productTypes.map(({ image, link, name }, index) => {
           const isAvailable =
             name === 'homepage.products.wardrobe' ||
             name === 'homepage.products.bedside' ||
@@ -23,8 +28,10 @@ export const ProductTypesList: React.FC = () => {
             <div
               className={clsx(
                 styles.productItemContainer,
-                !isAvailable && styles.unavailable
+                !isAvailable && styles.unavailable,
+                isVisible && animationStyles.fadeInUp
               )}
+              style={{ animationDelay: isVisible ? `${index * 0.15}s` : undefined }}
               key={link}
             >
               <div
@@ -50,7 +57,11 @@ export const ProductTypesList: React.FC = () => {
                 ></Image>
                 {isAvailable ? (
                   <div className={styles.imageButton}>
-                    <CustomButton variant="primary" size="small">
+                    <CustomButton 
+                      variant="primary" 
+                      size="small"
+                      icon={<BorderColorIcon sx={{ color: 'white' }} />}
+                    >
                       <FormattedMessage id="homepage.button.create" />
                     </CustomButton>
                   </div>
