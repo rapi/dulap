@@ -194,12 +194,16 @@ const DrawerComponent: React.FC<DrawerProps> = ({
 
   // Opening animation using the hook
   const baseZ = drawerGroup?.userData.baseZ || 0
-  useAnimatedPosition(drawerGroup, isHovered, {
-    axis: 'z',
+  
+  // Memoize animation config to prevent creating new object on every render
+  const animationConfig = useMemo(() => ({
+    axis: 'z' as const,
     baseValue: baseZ,
     activeOffset: drawerOffsetZ,
     lerpSpeed: lerpSpeed,
-  })
+  }), [baseZ, drawerOffsetZ, lerpSpeed])
+  
+  useAnimatedPosition(drawerGroup, isHovered, animationConfig)
 
   // Cleanup
   useEffect(() => {

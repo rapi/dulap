@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import * as THREE from 'three'
 import { FURNITURE_CONFIG } from '../furnitureConfig'
 import { usePanels } from '~/hooks/usePanel'
@@ -24,21 +24,27 @@ const SidePanelsComponent: React.FC<SidePanelsProps> = ({
   const sideHeight = cabinetHeight - panelThickness
   const sideDepth = cabinetDepth - panelThickness
 
+  // Memoize anchor config to prevent unnecessary recreations
+  const anchorConfig = useMemo(() => ({ anchorY: 'min' as const, anchorZ: 'min' as const }), [])
+
+  // Memoize panel configs to ensure stable references
+  const panelConfigs = useMemo(() => [
+    {
+      scale: [sideThickness, sideHeight, sideDepth] as [number, number, number],
+      position: [-cabinetWidth / 2 + panelThickness / 2, 0, 0] as [number, number, number],
+      color: selectedColor,
+      anchor: anchorConfig,
+    },
+    {
+      scale: [sideThickness, sideHeight, sideDepth] as [number, number, number],
+      position: [cabinetWidth / 2 - panelThickness / 2, 0, 0] as [number, number, number],
+      color: selectedColor,
+      anchor: anchorConfig,
+    },
+  ], [sideThickness, sideHeight, sideDepth, cabinetWidth, panelThickness, selectedColor, anchorConfig])
+
   // Use the usePanels hook to create both panels at once
-  const [leftSidePanel, rightSidePanel] = usePanels(sidePanelSource, [
-    {
-      scale: [sideThickness, sideHeight, sideDepth],
-      position: [-cabinetWidth / 2 + panelThickness / 2, 0, 0],
-      color: selectedColor,
-      anchor: { anchorY: 'min', anchorZ: 'min' },
-    },
-    {
-      scale: [sideThickness, sideHeight, sideDepth],
-      position: [cabinetWidth / 2 - panelThickness / 2, 0, 0],
-      color: selectedColor,
-      anchor: { anchorY: 'min', anchorZ: 'min' },
-    },
-  ])
+  const [leftSidePanel, rightSidePanel] = usePanels(sidePanelSource, panelConfigs)
 
   if (!leftSidePanel || !rightSidePanel) return null
 

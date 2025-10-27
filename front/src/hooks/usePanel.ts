@@ -42,6 +42,8 @@ export const usePanel = (
   config: PanelConfig
 ): THREE.Object3D | null => {
   // Create the panel object
+  // Only recreate when source changes, NOT when config.anchor changes
+  // This prevents unnecessary recreation and flickering
   const panel = useMemo(() => {
     if (!sourceObject) return null
 
@@ -52,7 +54,7 @@ export const usePanel = (
     )
     
     return pivotedPanel
-  }, [sourceObject, config.anchor])
+  }, [sourceObject]) // Removed config.anchor from dependencies
 
   // Scale, position, and rotate the panel
   useEffect(() => {
@@ -90,6 +92,9 @@ export const usePanel = (
  * Hook for creating multiple panels with the same source object
  * Useful for creating pairs of panels like left/right sides
  * 
+ * This implementation properly follows the Rules of Hooks by creating all panels
+ * in a single useMemo instead of calling usePanel multiple times in a loop.
+ * 
  * @param sourceObject - The source THREE.Object3D to clone
  * @param configs - Array of configurations for each panel
  * @returns Array of configured panel objects
@@ -104,8 +109,57 @@ export const usePanels = (
   sourceObject: THREE.Object3D | null,
   configs: PanelConfig[]
 ): (THREE.Object3D | null)[] => {
-  return configs.map(config => 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    usePanel(sourceObject, config)
-  )
+  // Create all panels at once in a single useMemo
+  // Only recreate when the source object changes, NOT when configs change
+  const panels = useMemo(() => {
+    if (!sourceObject) return configs.map(() => null)
+    
+    return configs.map(config => {
+      const model = cloneWithIndependentMaterials(sourceObject)
+      const pivotedPanel = createPivotAnchored(
+        model,
+        config.anchor ?? { anchorY: 'min', anchorZ: 'min' }
+      )
+      return pivotedPanel
+    })
+  }, [sourceObject]) // Only depend on sourceObject to prevent recreation
+
+  // Apply scale, position, and rotation to all panels
+  useEffect(() => {
+    panels.forEach((panel, index) => {
+      if (!panel) return
+      
+      const config = configs[index]
+      panel.scale.set(...config.scale)
+      panel.position.set(...config.position)
+      
+      if (config.rotation) {
+        panel.rotation.set(...config.rotation)
+      }
+      
+      panel.updateMatrixWorld(true)
+    })
+  }, [panels, configs])
+
+  // Apply color to all panels
+  useEffect(() => {
+    panels.forEach((panel, index) => {
+      if (!panel) return
+      const config = configs[index]
+      applyColorToObject(panel, config.color)
+    })
+  }, [panels, configs])
+
+  // Cleanup all panels on unmount or when panels change
+  useEffect(() => {
+    return () => {
+      panels.forEach(panel => {
+        if (panel) {
+          disposeObject(panel)
+        }
+      })
+    }
+  }, [panels])
+
+  return panels
 }

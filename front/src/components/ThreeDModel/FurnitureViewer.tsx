@@ -30,6 +30,8 @@ const FurnitureScene = memo(function FurnitureScene({
   openingType,
   columns,
   columnConfigurations,
+  columnWidths,
+  columnPositions,
 }: Furniture3DProps) {
   return (
     <>
@@ -71,6 +73,8 @@ const FurnitureScene = memo(function FurnitureScene({
           openingType={openingType}
           columns={columns}
           columnConfigurations={columnConfigurations}
+          columnWidths={columnWidths}
+          columnPositions={columnPositions}
         />
       </Suspense>
     </>
@@ -88,6 +92,8 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
   openingType,
   columns,
   columnConfigurations,
+  columnWidths,
+  columnPositions,
 }) => {
   const handleCanvasCreated = useCallback(
     ({
@@ -152,6 +158,8 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           openingType={openingType}
           columns={columns}
           columnConfigurations={columnConfigurations}
+          columnWidths={columnWidths}
+          columnPositions={columnPositions}
         />
       </Canvas>
     </div>

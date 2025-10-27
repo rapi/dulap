@@ -41,6 +41,10 @@ import {
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
+import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
+import { use3DVersion } from '~/hooks/use3DVersion'
+import { DEFAULT_WARDROBE } from './productTypes/wardrobe'
+import { FurnitureViewer } from '../ThreeDModel/FurnitureViewer'
 
 export type ProductComponent =
   | ProductImageSelectComponent
@@ -104,12 +108,12 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'sections':
-        return (
+        return !isStand3D ? (
           <ProductSections
             configuration={component}
             predefinedValue={values?.[component.type] ?? undefined}
           />
-        )
+        ) : null
       case 'furniture':
         return (
           <ProductFurniture
@@ -136,21 +140,36 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
+  const isStand3D = use3DVersion()
+
+  // Extract all 3D props using shared hook (wardrobe uses automatic column layout)
+  const furniture3DProps = use3DFurnitureProps(
+    currentComponents,
+    values,
+    DEFAULT_WARDROBE,
+    true // isWardrobe = true (enables automatic column layout)
+  )
+
+  
   return (
     <>
       {/* Left Side: Image */}
       <div className={styles.leftContainer}>
-        {imageCarouselComponent && (
-          <ProductImageCarousel
-            configuration={
-              values?.imageCarousel
-                ? {
-                    type: 'imageCarousel',
-                    images: values.imageCarousel,
-                  }
-                : imageCarouselComponent
-            }
-          />
+        {isStand3D ? (
+          <FurnitureViewer {...furniture3DProps} />
+        ) : (
+          imageCarouselComponent && (
+            <ProductImageCarousel
+              configuration={
+                values?.imageCarousel
+                  ? {
+                      type: 'imageCarousel',
+                      images: values.imageCarousel,
+                    }
+                  : imageCarouselComponent
+              }
+            />
+          )
         )}
       </div>
       {/* Right Side: Product Details */}
@@ -165,7 +184,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         })}
       </div>
       <div>
-        {priceComponent && (
+        {priceComponent && !isStand3D && (
           <ProductPrice
             onAddItem={() => {
               addItem('wardrobe', currentComponents, values ?? {})
@@ -174,10 +193,12 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.price ?? undefined}
           />
         )}
-        {values != null && (
+        {values != null && isStand3D && (
           <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
         )}
+        {isStand3D && (
         <ProductInfobox />
+        )}
       </div>
     </>
   )

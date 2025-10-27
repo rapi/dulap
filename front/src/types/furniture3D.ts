@@ -27,6 +27,8 @@ export interface Furniture3DProps {
   openingType: OpeningType
   columns: number
   columnConfigurations?: ColumnConfigurationType[]
+  columnWidths?: number[] // Optional: variable column widths (for wardrobe)
+  columnPositions?: number[] // Optional: custom column X positions (for wardrobe)
 }
 
 /**

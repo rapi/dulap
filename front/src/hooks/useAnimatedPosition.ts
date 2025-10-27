@@ -83,6 +83,10 @@ export const useAnimatedPosition = (
 /**
  * Hook for animating multiple properties of an object simultaneously
  * 
+ * This implementation properly follows the Rules of Hooks by managing
+ * multiple animations in a single useFrame call instead of calling
+ * useAnimatedPosition multiple times in a loop.
+ * 
  * @param object - The THREE.Object3D to animate
  * @param isActive - Whether the animation should be in the "active" state  
  * @param configs - Array of animation configurations
@@ -99,8 +103,46 @@ export const useAnimatedPositions = (
   isActive: boolean,
   configs: AnimationConfig[]
 ): void => {
-  configs.forEach(config => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useAnimatedPosition(object, isActive, config)
+  // Create refs for all current values
+  const currentValuesRef = useRef<number[]>(configs.map(c => c.baseValue))
+
+  useFrame(() => {
+    if (!object) return
+
+    configs.forEach((config, index) => {
+      const targetValue = isActive 
+        ? config.baseValue + config.activeOffset 
+        : config.baseValue
+        
+      const interpolated = THREE.MathUtils.lerp(
+        currentValuesRef.current[index],
+        targetValue,
+        config.lerpSpeed ?? 0.15
+      )
+
+      // Apply the interpolated value to the appropriate property
+      switch (config.axis) {
+        case 'x':
+          object.position.x = interpolated
+          break
+        case 'y':
+          object.position.y = interpolated
+          break
+        case 'z':
+          object.position.z = interpolated
+          break
+        case 'rotationX':
+          object.rotation.x = interpolated
+          break
+        case 'rotationY':
+          object.rotation.y = interpolated
+          break
+        case 'rotationZ':
+          object.rotation.z = interpolated
+          break
+      }
+
+      currentValuesRef.current[index] = interpolated
+    })
   })
 }

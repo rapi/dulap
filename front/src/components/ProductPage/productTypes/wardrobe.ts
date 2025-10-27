@@ -28,6 +28,14 @@ const GUIDES_NR: Record<number, number> = {
   6: 0,
 } 
 
+export const DEFAULT_WARDROBE = {
+  width: 200,
+  height: 260,
+  depth: 50,
+  plintHeight: 2,
+  selectedColor: '#ded9d3', // Beige (the first one from the list)
+}
+
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(200)
   const [height, setHeight] = useState(260)
