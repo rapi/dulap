@@ -2,11 +2,11 @@ import React, { memo } from 'react'
 
 type ShadowQuality = 'low' | 'medium' | 'high'
 
-export const SceneLights: React.FC<{
+const SceneLightsComponent: React.FC<{
   enableShadows?: boolean
   ambientLightIntensity?: number
   shadowQuality?: ShadowQuality
-}> = memo(({ enableShadows = true, ambientLightIntensity = 0.25, shadowQuality = 'high' }) => {
+}> = ({ enableShadows = true, ambientLightIntensity = 0.25, shadowQuality = 'high' }) => {
   const shadowMapSize = shadowQuality === 'high' ? 8192 : shadowQuality === 'medium' ? 4096 : 2048
 
   return (
@@ -42,6 +42,10 @@ export const SceneLights: React.FC<{
       <directionalLight position={[0, 120, -200]} intensity={0.3} color="#fff8f0" />
     </>
   )
-})
+}
+
+SceneLightsComponent.displayName = 'SceneLights'
+
+export const SceneLights = memo(SceneLightsComponent)
 
 

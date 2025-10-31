@@ -33,16 +33,16 @@ export const ProductPrice: FC<ProductPriceProps> = ({
       <div className={styles.priceContainer}>
         <div className={styles.priceBlock}>
           <div className={styles.priceTitle}>
-            <h4>
+            <p className={styles.priceTitleText}>
               <FormattedMessage id={titleId} />:
-            </h4>
+            </p>
           </div>
-          <div className={styles.price}>
-            <h2>{price}</h2>
-            <h2>
+          <div className={styles.priceBox}>
+            <p className={styles.price}>{price}</p>
+            <p className={styles.price}>
               &nbsp;
               <FormattedMessage id="homepage.configurator.price.currencyLei" />
-            </h2>
+            </p>
           </div>
         </div>
         <div className={styles.addToCartButtonContainer}>

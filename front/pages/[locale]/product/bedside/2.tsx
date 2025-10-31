@@ -20,6 +20,7 @@ const Product: FC = () => {
         name={preview.name}
         values={{
           imageCarousel: ['/ready-products/bedside/600 bedside_2.png'],
+          gallery: ['/ready-products/bedside/600 bedside_2.png'],
           colors: preview.color,
           dimensions: {
             width: 60,

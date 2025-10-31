@@ -1,3 +1,4 @@
+// context/cartContext.tsx
 import React, {
   createContext,
   useContext,
@@ -10,69 +11,128 @@ import {
   CartProductComponent,
 } from '~/components/ProductPage/productTypeComponents/CartProductComponents'
 
-export type CartItem = { name: string; config: CartProductComponent[] }
+/** ---- Types ---- */
 
-type CartContextType = {
+// Sample payload stored in cart
+export type SampleCartConfig = {
+  id: string
+  color?: string
+  price?: number
+  imageCarousel?: string[]
+}
+
+// Discriminated union for cart items
+export type CartProductItem = {
+  type: 'product'
+  name: string
+  config: CartProductComponent[]
+}
+
+export type CartSampleItem = {
+  type: 'sample'
+  name: string
+  sample: SampleCartConfig
+}
+
+export type CartItem = CartProductItem | CartSampleItem
+
+// Overloaded Cart API
+export interface CartContextType {
   items: CartItem[]
-  addItem: (
+
+  /** Add a PRODUCT (keeps predefined values logic) */
+  addItem(
     name: string,
     config: CartProductComponent[],
     predefinedValues: CartPredefinedValue
-  ) => void
+  ): void
+
+  /** Add a SAMPLE */
+  addItem(name: string, sample: SampleCartConfig): void
+
   removeItem: (index: number) => void
   clearCart: () => void
   itemCount: number
 }
 
+/** ---- Context ---- */
+
 const CartContext = createContext<CartContextType | undefined>(undefined)
+const LS_KEY = 'cartItems'
+
+/** ---- Provider ---- */
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([])
 
+  // Normalize legacy items ({ name, config }) to { type: 'product', ... }
   useEffect(() => {
-    const stored = localStorage.getItem('cartItems')
-    if (stored) {
-      setItems(JSON.parse(stored))
+    const stored = localStorage.getItem(LS_KEY)
+    if (!stored) return
+    try {
+      const parsed = JSON.parse(stored) as Array<any>
+      const normalized: CartItem[] = parsed.map((it) => {
+        if (it && (it.type === 'product' || it.type === 'sample')) {
+          return it as CartItem
+        }
+        // Legacy shape fallback
+        return {
+          type: 'product',
+          name: it?.name ?? 'product',
+          config: Array.isArray(it?.config) ? it.config : [],
+        } as CartProductItem
+      })
+      setItems(normalized)
+    } catch {
+      // Corrupt storage → reset
+      localStorage.removeItem(LS_KEY)
+      setItems([])
     }
   }, [])
 
+  // Implementation handles both overloads
   const addItem = useCallback(
     (
       name: string,
-      config: CartProductComponent[],
-      predefinedValues: CartPredefinedValue
+      second: CartProductComponent[] | SampleCartConfig,
+      predefinedValues?: CartPredefinedValue
     ) => {
-      const newConfig = config.map((component) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        const predefinedValue = predefinedValues[component.type]
-        if (predefinedValue) {
-          return {
-            ...component,
-            predefinedValue,
-          }
-        }
-        return component
-      })
-      const newItems = [...items, { name, config: newConfig }]
-      setItems(newItems)
-      localStorage.setItem('cartItems', JSON.stringify(newItems))
+      let newItem: CartItem
+
+      if (Array.isArray(second)) {
+        // PRODUCT: apply predefined values per component.type
+        const newConfig = second.map((component) => {
+          // predefinedValues is a map keyed by component.type
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error index by discriminated union
+          const pv = predefinedValues?.[component.type]
+          return pv ? { ...component, predefinedValue: pv } : component
+        })
+        newItem = { type: 'product', name, config: newConfig }
+      } else {
+        // SAMPLE
+        newItem = { type: 'sample', name, sample: second }
+      }
+
+      const next = [...items, newItem]
+      setItems(next)
+      localStorage.setItem(LS_KEY, JSON.stringify(next))
     },
     [items]
-  )
+  ) as CartContextType['addItem'] // satisfy the overload type
 
   const removeItem = useCallback(
     (index: number) => {
       const next = items.filter((_, i) => i !== index)
       setItems(next)
-      localStorage.setItem('cartItems', JSON.stringify(next))
+      localStorage.setItem(LS_KEY, JSON.stringify(next))
     },
     [items]
   )
 
   const clearCart = useCallback(() => {
     setItems([])
-    localStorage.removeItem('cartItems')
+    localStorage.removeItem(LS_KEY)
   }, [])
 
   return (
@@ -84,8 +144,10 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
+/** ---- Hook ---- */
+
 export const useCart = () => {
-  const context = useContext(CartContext)
-  if (!context) throw new Error('useCart must be used within a CartProvider')
-  return context
+  const ctx = useContext(CartContext)
+  if (!ctx) throw new Error('useCart must be used within a CartProvider')
+  return ctx
 }

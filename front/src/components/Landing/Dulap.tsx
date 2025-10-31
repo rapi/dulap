@@ -5,11 +5,46 @@ import { Banner } from '~/components/Banner/Banner'
 import { FormattedMessage } from 'react-intl'
 import { ProductTypesList } from '~/components/ProductTypesList/ProductTypesList'
 import { ProductCatalog } from '~/components/ProductCatalog/ProductCatalog'
+import { Gallery } from '~/components/Gallery/Gallery'
 import { AboutUs } from '~/components/AboutUs/AboutUs'
 import ContactBox from '~/components/ContactBox/ContactBox'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import { InfoBar } from '~/components/InfoBar/InfoBar'
+import { FAQ } from '~/components/FAQ/FAQ'
+import { landingInfoBarContent } from '~/components/InfoBar/LandingInfoBarContent'
+import BlogsList from '~/components/Blog/BlogsList'
+import { FAQcontentLanding } from '~/components/FAQ/FAQcontentLanding'
+import { useScrollAnimation } from '~/hooks/useScrollAnimation'
+import animationStyles from '~/styles/animations.module.css'
+
+const galleryList = [
+  { src: '/bedside/render/Biege 1.png', alt: 'Bedside render 1' },
+  { src: '/bedside/render/Biege 2.png', alt: 'Bedside render 2' },
+  {
+    src: '/bedside/render/White 1.png',
+    alt: 'Bedside render white 1',
+  },
+  {
+    src: '/bedside/render/White 2.png',
+    alt: 'Bedside render white 2',
+  },
+  { src: '/bedside/render/Grey 1.png', alt: 'Bedside render grey 1' },
+  { src: '/bedside/render/Grey 2.png', alt: 'Bedside render grey 2' },
+  { src: '/bedside/render/Biege 3.png', alt: 'Bedside render 3' },
+  {
+    src: '/bedside/render/White 3.png',
+    alt: 'Bedside render white 3',
+  },
+]
 
 export const Dulap: React.FC = () => {
+  const { ref: titleRef, isVisible: isTitleVisible } = useScrollAnimation({ 
+    threshold: 0.3 
+  })
+  const { ref: catalogTitleRef, isVisible: isCatalogTitleVisible } = useScrollAnimation({ 
+    threshold: 0.3 
+  })
+
   return (
     <div>
       <Banner
@@ -18,8 +53,14 @@ export const Dulap: React.FC = () => {
         href={'/bedside/render/Biege 1.png'}
         mobileHref={'/bedside/render/Biege 1.png'}
       />
+      <section className={classes.infoBar}>
+        <InfoBar items={landingInfoBarContent} />
+      </section>
       <section className={classes.productTypes}>
-        <h2 className={classes.productTypesTitle}>
+        <h2 
+          ref={titleRef as React.RefObject<HTMLHeadingElement>}
+          className={`${classes.productTypesTitle} ${isTitleVisible ? animationStyles.fadeInDown : ''}`}
+        >
           <FormattedMessage id="homepage.dulapLanding.title1" />
         </h2>
         <ProductTypesList></ProductTypesList>
@@ -29,16 +70,39 @@ export const Dulap: React.FC = () => {
         subtitle={<FormattedMessage id="contactBox.subtitle" />}
         showEmail={true}
         showTextarea={true}
-        modalThankYouMessage='contactForm.modal.thankYouMessage'
+        modalThankYouMessage="contactForm.modal.thankYouMessage"
       ></ContactBox>
 
       <section className={classes.readyProducts}>
-        <h2 className={classes.readyProductsTitle}>
+        <h2 
+          ref={catalogTitleRef as React.RefObject<HTMLHeadingElement>}
+          className={`${classes.readyProductsTitle} ${isCatalogTitleVisible ? animationStyles.fadeInDown : ''}`}
+        >
           <FormattedMessage id="homepage.dulapLanding.title2" />
         </h2>
         <ProductCatalog></ProductCatalog>
       </section>
 
+      <section className={classes.gallery}>
+        <h2 className={classes.galleryTitle}>
+          <FormattedMessage id="homepage.dulapLanding.title3" />
+        </h2>
+        <Gallery images={galleryList} />
+      </section>
+      <br />
+      <br />
+      <br />
+      <section className={classes.blog}>
+        <h2 className={classes.galleryTitle}>
+          <FormattedMessage id="homepage.dulapLanding.title4" />
+        </h2>
+        <div className={classes.blogList}>
+          <BlogsList></BlogsList>
+        </div>
+      </section>
+      <section className={classes.faq}>
+        <FAQ content={FAQcontentLanding}></FAQ>
+      </section>
       <section className={classes.aboutUs}>
         <AboutUs></AboutUs>
       </section>
@@ -51,9 +115,13 @@ export const Dulap: React.FC = () => {
         }
         subtitle={<FormattedMessage id="contactBox.subscribe.subtitle" />}
         showEmail={true}
-        modalThankYouMessage='contactForm.modal.subscribe.thankYouMessage'
+        modalThankYouMessage="contactForm.modal.subscribe.thankYouMessage"
       ></ContactBox>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
     </div>
-    
   )
 }

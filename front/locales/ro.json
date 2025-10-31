@@ -7,6 +7,34 @@
   "meta.cart.title": "Coșul meu",
   "meta.checkout.title": "Comanda mea",
 
+  "meta_title.default": "Dulapuri si mobilier la comanda in Chisinau si Moldova",
+  "meta_title.products": "Mobila la comanda în Chisinau ✅ Dulap.md – mobilier personalizat",
+  "meta_title.configurator.wardrobe": "Dulap pentru haine la comanda Chisinau ✅ Dulap.md",
+  "meta_title.configurator.stand": "Comoda la comanda Chisinau ✅ Dulap.md",
+  "meta_title.configurator.tv-stand": "Comoda TV la comanda Chisinau ✅ Dulap.md",
+  "meta_title.configurator.bedside": "Noptiera la comanda Chisinau ✅ Dulap.md",
+  "meta_title.about-us": "Despre noi - echipa dulap.md",
+  "meta_title.contacts": "Contactați-ne - dulap.md",
+  "meta_title.cart": "Coșul meu - dulap.md",
+  "meta_title.checkout": "Finalizați comanda - dulap.md",
+
+  "meta_description.default": "Dulap.md – Dulapuri si mobilier la comanda în Chisinau si Moldova. Configurator online si mobilier personalizat.",
+  "meta_description.products": "Mobila la comanda în Chisinau: dulapuri haine, comode, noptiere si comode TV. Dulap.md ofera design personalizat, materiale premium – mobilier adaptat stilului tau.",
+  "meta_description.configurator.wardrobe": "Realizam dulapuri pentru haine la comanda in Chisinau. Design personalizat, materiale de calitate si montaj profesionist, conform gustului tau.",
+  "meta_description.configurator.stand": "Comode la comanda in Chisinau, adaptate stilului si spatiului tau. Dulap.md ofera design unic, executie de calitate si montaj rapid.",
+  "meta_description.configurator.tv-stand": "Comode pentru TV la comanda in Chisinau – solutii moderne pentru living. Dulap.md realizeaza mobilier personalizat cu materiale premium si montaj profesionist.",
+  "meta_description.configurator.bedside": "Noptiere la comanda in Chisinau – mobilier personalizat pentru dormitor. Design unic, calitate premium si montaj rapid de la Dulap.md.",
+  "meta_description.about-us": "Află mai multe despre dulap.md: cine suntem, ce facem și cum creăm mobilă la comandă. Echipa noastră este formată din specialiști în design, calitate și soluții personalizate.",
+  "meta_description.contacts": "Doriți să comandați mobilă sau să adresați o întrebare? Contactați dulap.md — suntem mereu disponibili. Aici găsiți adresa, telefonul, emailul și formularul de contact.",
+  "meta_description.cart": "Coșul dvs. pe dulap.md. Verificați produsele selectate și pregătiți-vă să finalizați comanda pentru mobila creată special pentru dvs.",
+  "meta_description.checkout": "Finalizarea comenzii pe dulap.md: alegeți metoda de plată și livrare potrivită. Mobila personalizată ajunge mai aproape de casa dvs.",
+
+  "meta.header.products": "Mobila la comanda in Chisinau - Produsele noastre",
+  "meta.header.configurator.wardrobe": "Dulap pentru haine la comanda in Chisinau",
+  "meta.header.configurator.stand": "Comoda la comanda in Chisinau",
+  "meta.header.configurator.tv-stand": "Comoda TV la comanda in Chisinau",
+  "meta.header.configurator.bedside": "Noptiera la comanda in Chisinau",
+
   "homepage.banner.title.0": "Dulapul tău -",
   "homepage.banner.title.1": " exact cum îl vrei",
   "homepage.banner.subtitle": "Mobilier creat după",
@@ -28,7 +56,7 @@
 
   "homepage.button.tryIt": "Încearcă aici",
   "homepage.button.yourWardrobe": "Dulapul tău",
-  "homepage.button.create": "Creează",
+  "homepage.button.create": "Personalizează",
   "homepage.button.edit": "Editează",
   "homepage.button.addToCart": "Adaugă în coș",
   "homepage.button.addToCartShort": "în coș",
@@ -38,7 +66,7 @@
   "homepage.button.openCart": "Vezi coșul",
   "homepage.button.backToPurchase": "Înapoi la cumpărături",
   "homepage.button.ok": "OK",
-  "homepage.button.preorder": "Comandă",
+  "homepage.button.preorder": "Creează mobila ta",
   "homepage.copyButton.copy": "Copiază",
   "homepage.copyButton.coppied": "Copiat !",
 
@@ -47,8 +75,14 @@
   "homepage.menu.aboutUsTitle": "Despre noi",
   "homepage.menu.contactsTitle": "Contacte",
   "homepage.menu.tryIt": "Încearcă aici",
+  "homepage.menu.faqTitle": "FAQ",
+  "homepage.menu.blogTitle": "Blog",
   "ro": "RO",
   "ru": "RU",
+  "read": "citește",
+  "mainPage": "Pagina principală",
+  "order.thankYou": "Mulțumim pentru comandă!",
+  "order.thankYou.subtitle": "Am primit detaliile comenzii tale. Te apelăm în cel mai scurt timp.",
 
   "homepage.footer.products": "Dulapuri",
   "homepage.footer.stands": "Comode",
@@ -61,6 +95,8 @@
 
   "homepage.dulapLanding.title1": "Alege ce tip de dulap ai nevoie și începe personalizarea!",
   "homepage.dulapLanding.title2": "Alege produse gata din lista noastră",
+  "homepage.dulapLanding.title3": "descoperă colecția noastră de dulapuri gata făcute...",
+"homepage.dulapLanding.title4": "Citește mai multe informații utile aici...",
 
   "homepage.dulapLanding.aboutUs.title": "Despre noi",
   "homepage.dulapLanding.aboutUs.body.1": "La dulap.md facem mobilier personalizat, la prețuri corecte. Simplu.",
@@ -123,6 +159,7 @@
   "homepage.configurator.bedside.title": "Noptieră",
 
   "homepage.configurator.dimensions.title": "Dimensiuni",
+  "dimensions.title.tooltip": "Cum să alegi corect mărimile?",
   "homepage.configurator.dimensions.width": "Lățime",
   "homepage.configurator.dimensions.height": "Înălțime",
   "homepage.configurator.dimensions.depth": "Adâncime",
@@ -136,6 +173,7 @@
   "homepage.configurator.dimensions.hintPlintHeight.5": "Dacă ai plinte la pereți, optează pentru o plintă de aceeași înălțime la dulap, pentru un design uniform.",
   
   "homepage.configurator.colors.title": "Culori",
+  "colors.title.tooltip": "Cum să alegi corect culoarea?",
 
   "selectColor.modal.title": "Culori adiționale disponibile",
   
@@ -149,6 +187,28 @@
   "homepage.configurator.sections.title": "Secțiuni",
   "homepage.configurator.columns.title": "Numărul de coloane",
   "homepage.configurator.options.title": "Opțiuni",
+
+  "homepage.configurator.individualColumns.title": "Configurează secțiuni individuale",
+  "homepage.configurator.individualColumns.column": "Coloana {number}",
+  "homepage.configurator.individualColumns.columnType": "Apasă pe mobilă în configurator sau pe unul din butoanele de mai jos pentru a ajusta secțiunea.",
+  "homepage.configurator.individualColumns.drawers": "Sertare",
+  "homepage.configurator.individualColumns.door": "Ușă",
+  
+  "homepage.configurator.columnConfig.drawers1": "1 Sertar",
+  "homepage.configurator.columnConfig.drawers2": "2 Sertare",
+  "homepage.configurator.columnConfig.drawers3": "3 Sertare",
+  "homepage.configurator.columnConfig.drawers4": "4 Sertare",
+  "homepage.configurator.columnConfig.drawers5": "5 Sertare",
+  "homepage.configurator.columnConfig.door1Shelf": "Ușă + 1 Raft",
+  "homepage.configurator.columnConfig.door2Shelves": "Ușă + 2 Rafturi",
+  "homepage.configurator.columnConfig.door3Shelves": "Ușă + 3 Rafturi",
+  "homepage.configurator.columnConfig.door4Shelves": "Ușă + 4 Rafturi",
+  "homepage.configurator.columnConfig.door5Shelves": "Ușă + 5 Rafturi",
+  "homepage.configurator.columnConfig.doorSplit1Shelf": "2 Uși + 1 Raft",
+  "homepage.configurator.columnConfig.doorSplit2Shelves": "2 Uși + 2 Rafturi",
+  "homepage.configurator.columnConfig.doorSplit3Shelves": "2 Uși + 3 Rafturi",
+  "homepage.configurator.columnConfig.doorSplit4Shelves": "2 Uși + 4 Rafturi",
+  "homepage.configurator.columnConfig.doorSplit5Shelves": "2 Uși + 5 Rafturi",
 
   "homepage.configurator.wardrobeArrangement.title": "Aranjare dulap",
   "homepage.configurator.wardrobeArrangement.sectionsNr": "Numărul de secții",
@@ -201,6 +261,9 @@
   "configurator.infobox.delivery.title": "Livrare",
   "configurator.infobox.delivery.1": "Livrarea se efectuează gratuit, în raza mun. Chișinău.",
   "configurator.infobox.delivery.2": "Termenul de livrare este de 10-15 zile lucrătare de la plasarea comenzii.",
+  "configurator.infobox.warranty.title": "Garanție",
+  "configurator.infobox.warranty.1": "Toate produsele noastre vin cu o garanție de 5 ani pentru toate componentele și materialele folosite.",
+  "configurator.infobox.warranty.2": "Tinem la calitatea produselor noastre și suntem aici să te ajutăm cu orice problemă.",
 
   "configurator.infobox.config.title": "Vrei mărimi personalizate?",
 
@@ -209,6 +272,23 @@
   "configurator.infobox.help.dimensions": "Vrei alte dimensiuni?",
   "configurator.infobox.help.personalized": "Vrei mai personalizat?",
   "configurator.infobox.help.message": "Lasă-ne un mesaj și revenim cu un apel în scurt timp.",
+  "infoBar.warranty.title": "Garanție",
+  "infoBar.warranty.subtitle": "Garanție 5 ani pentru toate componentele și materialele folosite",
+  "infoBar.delivery.title": "Livrare",
+  "infoBar.delivery.subtitle": "Livrare gratuită în raza municipiului Chișinău în 10-15 zile lucrătoare",
+  "infoBar.assembly.title": "Montare",
+  "infoBar.assembly.subtitle": "Montare ușoară, cu instrucțiuni pas cu pas sau serviciu de montare opțional",
+  "infoBar.readMore": "Detalii",
+
+  "infoBar.design.title": "Design unic",
+  "infoBar.design.subtitle": "Mobilierul este proiectat de echipa noastră de designeri de interior - de talie europeană. Mobilă cu gust.",
+  "infoBar.fastDelivery.title": "Executare rapidă",
+  "infoBar.fastDelivery.subtitle": "Noi executăm mobilierul în 10-15 zile lucrătoare, spre deosebire de media pieței de 30-45 zile.",
+  "infoBar.color.title": "Paletă largă de culori",
+  "infoBar.color.subtitle": "Iti oferim peste 10 culori la alegere, pe care le poți testa chiar la tine acasă înainte de a comanda.",
+  "infoBar.choose": "Alege",
+
+  "productPage.details.title": "Despre produs",
 
   "modal.addedToCart.title": "Produsul a fost adăgat în coș cu succes",
 
@@ -300,5 +380,159 @@
   "aboutUs.founder4.details": "Acum clienții pot beneficia de o experiență vizuală realistă înainte de achiziție datorită Iuliei, care creează vizualizări fotorealiste perfecte ale mobilierului în interior.",
 
   "terms.title": "Termeni și condiții",
-  "terms.text": "1. Definiții\n\n1.1 Prestator / Vânzător – Societatea cu Răspundere Limitată GRINCIUC FAMILY SRL, înregistrată în Republica Moldova sub IDNO 1020600009000, cu sediul social în mun. Chișinău, bd. Dacia, 22/3, of. 28 (denumită în continuare „Grinciuc Family” sau „dulap.md”).\n1.2 Cumpărător / Client – persoana fizică sau juridică ce plasează o comandă prin intermediul site-ului www.dulap.md.\n1.3 Produse – articole de mobilier predefinite („Produse standard”) afișate pe site, precum și mobilier executat la comandă („Produse personalizate”) din material PAL sau alte materiale disponibile, configurat de Client prin selecția opțiunilor.\n1.4 Comandă – document electronic generat la finalizarea procesului de configurare și adăugare în coș, care constituie intenția fermă a Clientului de a achiziționa Produsele selectate.\n1.5 Contract – acordul la distanță încheiat între Grinciuc Family și Client odată cu confirmarea Comenzii de către Prestator, în condițiile prezentului document.\n\n2. Acceptarea Termenilor\n\nNavigarea pe site, configurarea produselor și/sau plasarea unei comenzi implică acceptarea integrală și necondiționată a prezentelor Termeni și Condiții.\n\n3. Obiectul Contractului\n\nPrestatorul se obligă să proiecteze, să execute și să livreze Clientului mobilierul personalizat conform specificațiilor confirmate, iar Clientul se obligă să achite prețul și să recepționeze produsul.\n\n4. Caracteristicile Produselor și Confirmarea Specificațiilor\n\n4.1 Categorii de Produse\n* Produse standard – articole predefinite afișate pe site cu fotografii, descrieri tehnice, dimensiuni fixe și preț ferm. Acestea se livrează exact în configurația afișată.\n* Produse personalizate – mobilier realizat după specificațiile individuale ale Clientului, stabilite prin configuratorul online sau prin altă consultanță la distanță.\n4.2 Pentru ambele categorii, caracteristicile finale sunt listate în pagina „Sumar comandă” și pe factura proformă. Clientul confirmă aceste valori înainte de plată, iar Prestatorul garantează livrarea conformă.\n4.3 Imaginile și randările 3D sunt cu titlu informativ; variații cromatice/ de textură de ±5 % și abatere dimensională de ±2 mm nu constituie neconformitate.\n4.4 Pentru produsele standard, în caz de epuizare de stoc, Prestatorul informează Clientul și rambursează sau confirmă termenul de reaprovizionare.\n\n5. Procesul de Comandă\n\n5.1 Clientul configurează/alege produsul, completează datele de facturare și livrare.\n5.2 Comanda este considerată trimisă după parcurgerea pașilor din coș și primirea e-mailului de confirmare automată.\n5.3 Contractul se încheie după confirmarea manuală a comenzii de către Prestator și încasarea avansului.\n\n6. Preț, Facturare și Plată\n\n6.1 Prețul final este afișat în checkout și include TVA, dacă este aplicabil.\n6.2 Modalități de plată: transfer bancar, card online, numerar la sediu (max. 10 000 MDL).\n6.3 Pentru produse la comandă se solicită avans 50 %; restul se achită la livrare.\n\n7. Termen de Execuție\n\nDurată standard: până la 15 zile lucrătoare de la încasarea avansului și confirmarea desenelor tehnice.\n\n8. Livrare\n\nLivrarea pe teritoriul Republicii Moldova prin curier propriu/partener; costul este calculat la finalizarea comenzii.\n\n9. Recepție și Montaj\n\nClientul inspectează coletul la livrare; montajul este inclus/exclus conform opțiunii selectate.\n\n10. Garanție\n\n24 luni persoane fizice / 12 luni persoane juridice; garanția nu acoperă uzura normală, montaj necorespunzător, umiditate excesivă etc.\n\n11. Politica de Anulare și Returnare\n\n11.1 Anulare gratuită în 24 h de la plasare, înainte de producție.\n11.2 După începerea producției, comanda nu mai poate fi anulată (bun personalizat).\n11.3 Returnarea produselor personalizate este posibilă doar pentru defecte ascunse; remediere/înlocuire sau rambursare în max. 15 zile.\n\n12. Limitarea Răspunderii\n\nPrestatorul nu răspunde pentru întârzieri cauzate de forță majoră, pagube indirecte, montaj neautorizat.\n\n13. Drepturi de Proprietate Intelectuală\n\nConținutul site-ului aparține Grinciuc Family; reproducerea este interzisă fără acord scris.\n\n14. Protecția Datelor cu Caracter Personal\n\nDatele sunt prelucrate conform Legii 133/2011 și folosite exclusiv pentru procesarea comenzii.\n\n15. Forța Majoră\n\nNeresponsabilitatea părților pentru evenimente confirmate de Camera de Comerț și Industrie.\n\n16. Legea Aplicabilă și Litigii\n\nLegea Republicii Moldova; competența aparține instanțelor de la sediul Prestatorului.\n\n17. Modificarea Termenilor\n\nVersiunea aplicabilă este cea publicată la data plasării comenzii.\n\n18. Contact\n\nTelefon: +373 79398167\nE-mail: elizabet.galaju@gmail.com\nAdresă: bd. Decebal 6, Chișinău, MD-2025\n\nUltima actualizare: 17 iunie 2025."
+  "terms.text": "1. Definiții\n\n1.1 Prestator / Vânzător – Societatea cu Răspundere Limitată GRINCIUC FAMILY SRL, înregistrată în Republica Moldova sub IDNO 1020600009000, cu sediul social în mun. Chișinău, bd. Dacia, 22/3, of. 28 (denumită în continuare „Grinciuc Family” sau „dulap.md”).\n1.2 Cumpărător / Client – persoana fizică sau juridică ce plasează o comandă prin intermediul site-ului www.dulap.md.\n1.3 Produse – articole de mobilier predefinite („Produse standard”) afișate pe site, precum și mobilier executat la comandă („Produse personalizate”) din material PAL sau alte materiale disponibile, configurat de Client prin selecția opțiunilor.\n1.4 Comandă – document electronic generat la finalizarea procesului de configurare și adăugare în coș, care constituie intenția fermă a Clientului de a achiziționa Produsele selectate.\n1.5 Contract – acordul la distanță încheiat între Grinciuc Family și Client odată cu confirmarea Comenzii de către Prestator, în condițiile prezentului document.\n\n2. Acceptarea Termenilor\n\nNavigarea pe site, configurarea produselor și/sau plasarea unei comenzi implică acceptarea integrală și necondiționată a prezentelor Termeni și Condiții.\n\n3. Obiectul Contractului\n\nPrestatorul se obligă să proiecteze, să execute și să livreze Clientului mobilierul personalizat conform specificațiilor confirmate, iar Clientul se obligă să achite prețul și să recepționeze produsul.\n\n4. Caracteristicile Produselor și Confirmarea Specificațiilor\n\n4.1 Categorii de Produse\n* Produse standard – articole predefinite afișate pe site cu fotografii, descrieri tehnice, dimensiuni fixe și preț ferm. Acestea se livrează exact în configurația afișată.\n* Produse personalizate – mobilier realizat după specificațiile individuale ale Clientului, stabilite prin configuratorul online sau prin altă consultanță la distanță.\n4.2 Pentru ambele categorii, caracteristicile finale sunt listate în pagina „Sumar comandă” și pe factura proformă. Clientul confirmă aceste valori înainte de plată, iar Prestatorul garantează livrarea conformă.\n4.3 Imaginile și randările 3D sunt cu titlu informativ; variații cromatice/ de textură de ±5 % și abatere dimensională de ±2 mm nu constituie neconformitate.\n4.4 Pentru produsele standard, în caz de epuizare de stoc, Prestatorul informează Clientul și rambursează sau confirmă termenul de reaprovizionare.\n\n5. Procesul de Comandă\n\n5.1 Clientul configurează/alege produsul, completează datele de facturare și livrare.\n5.2 Comanda este considerată trimisă după parcurgerea pașilor din coș și primirea e-mailului de confirmare automată.\n5.3 Contractul se încheie după confirmarea manuală a comenzii de către Prestator și încasarea avansului.\n\n6. Preț, Facturare și Plată\n\n6.1 Prețul final este afișat în checkout și include TVA, dacă este aplicabil.\n6.2 Modalități de plată: transfer bancar, card online, numerar la sediu (max. 10 000 MDL).\n6.3 Pentru produse la comandă se solicită avans 50 %; restul se achită la livrare.\n\n7. Termen de Execuție\n\nDurată standard: până la 15 zile lucrătoare de la încasarea avansului și confirmarea desenelor tehnice.\n\n8. Livrare\n\nLivrarea pe teritoriul Republicii Moldova prin curier propriu/partener; costul este calculat la finalizarea comenzii.\n\n9. Recepție și Montaj\n\nClientul inspectează coletul la livrare; montajul este inclus/exclus conform opțiunii selectate.\n\n10. Garanție\n\n24 luni persoane fizice / 12 luni persoane juridice; garanția nu acoperă uzura normală, montaj necorespunzător, umiditate excesivă etc.\n\n11. Politica de Anulare și Returnare\n\n11.1 Anulare gratuită în 24 h de la plasare, înainte de producție.\n11.2 După începerea producției, comanda nu mai poate fi anulată (bun personalizat).\n11.3 Returnarea produselor personalizate este posibilă doar pentru defecte ascunse; remediere/înlocuire sau rambursare în max. 15 zile.\n\n12. Limitarea Răspunderii\n\nPrestatorul nu răspunde pentru întârzieri cauzate de forță majoră, pagube indirecte, montaj neautorizat.\n\n13. Drepturi de Proprietate Intelectuală\n\nConținutul site-ului aparține Grinciuc Family; reproducerea este interzisă fără acord scris.\n\n14. Protecția Datelor cu Caracter Personal\n\nDatele sunt prelucrate conform Legii 133/2011 și folosite exclusiv pentru procesarea comenzii.\n\n15. Forța Majoră\n\nNeresponsabilitatea părților pentru evenimente confirmate de Camera de Comerț și Industrie.\n\n16. Legea Aplicabilă și Litigii\n\nLegea Republicii Moldova; competența aparține instanțelor de la sediul Prestatorului.\n\n17. Modificarea Termenilor\n\nVersiunea aplicabilă este cea publicată la data plasării comenzii.\n\n18. Contact\n\nTelefon: +373 79398167\nE-mail: elizabet.galaju@gmail.com\nAdresă: bd. Decebal 6, Chișinău, MD-2025\n\nUltima actualizare: 17 iunie 2025.",
+
+  "blogItem.articleType.helpfulArticle": "ArticolUtil",
+  "blogListPage.title": "Blogul dulapului",
+  "blogListPage.subtitle": "Tot ce ai nevoie să știi înainte să comanzi un dulap - găsești aici",
+  "faq.title": "Întrebări frecvente",
+  "faq.question.1": "Ce materiale folosiți și există garanție pentru produsele dulap.md?",
+  "faq.answer.1.1": "Mobilierul nostru este realizat din PAL melaminat Egger – un material rezistent, elegant și ușor de întreținut, folosit pe scară largă în producția de mobilier premium european.",
+  "faq.answer.1.2": "Pentru feronerie utilizăm doar mărci consacrate, precum Blum și Häfele, ceea ce garantează o experiență de utilizare confortabilă și durabilă. Toate produsele dulap.md beneficiază de garanție de 5 ani pentru materiale și componente.",
+
+  "faq.question.2": "Aveți showroom?",
+  "faq.answer.2.1": "Momentan nu avem showroom fizic, însă îți oferim o alternativă mai practică – poți comanda mostre gratuite de culori și texturi, pentru a le vedea și atinge înainte de a plasa comanda.",
+  "faq.answer.2.2": "Astfel, alegerea nu se face doar din poze, ci și din experiență reală.",
+
+  "faq.question.3": "În cât timp se execută o comandă?",
+  "faq.answer.3.1": "Timpul de execuție este de 10–15 zile lucrătoare, în funcție de model și disponibilitatea materialelor.",
+  "faq.answer.3.2": "După confirmarea comenzii, îți trimitem actualizări despre stadiul producției și livrării.",
+
+  "faq.question.4": "Pot achita la livrare?",
+  "faq.answer.4.1": "Da. Poți alege plata la livrare (numerar sau card bancar) sau plata online în momentul comenzii – integral sau parțial.",
+
+  "faq.question.5": "Livrați și montați mobila?",
+  "faq.answer.5.1": "Da. Oferim livrare gratuită în raza municipiului Chișinău.",
+  "faq.answer.5.2": "Montarea poate fi efectuată de echipa noastră sau o poți face chiar tu: fiecare produs vine cu instrucțiuni clare, pas cu pas, și toate accesoriile incluse.",
+
+  "faq.question.6": "Pot comanda un dulap personalizat?",
+  "faq.answer.6.1": "Absolut! Toate produsele dulap.md sunt personalizabile complet – poți alege dimensiunea, compartimentarea, culoarea, finisajul și tipul de mânere.",
+  "faq.answer.6.2": "Folosind configuratorul nostru 3D online, vezi în timp real designul final și prețul actualizat.",
+
+  "faq.question.7": "Cum pot comanda un produs?",
+  "faq.answer.7.1": "Comanda se face direct pe site, în câțiva pași simpli: alegi produsul dorit, îl personalizezi în configuratorul 3D, completezi datele de contact și alegi metoda de plată.",
+  "faq.answer.7.2": "După plasarea comenzii, te contactăm pentru confirmare și detalii suplimentare.",
+
+  "faq.question.8": "Livrați și în afara Chișinăului sau în România?",
+  "faq.answer.8.1": "Da. Livrăm în toată Republica Moldova, iar pentru comenzile în România oferim livrare prin curier, cu ambalare de siguranță adaptată transportului internațional.",
+  "faq.answer.8.2": "Costul livrării se calculează automat în funcție de localitate și greutate.",
+
+  "faq.question.9": "Pot returna produsul dacă nu se potrivește?",
+  "faq.answer.9.1": "Da, poți returna produsul în termen de 30 zile calendaristice, dacă nu este ceea ce ți-ai dorit.",
+  "faq.answer.9.2": "Îți rambursăm suma achitată sau, dacă dorești, îți refacem produsul conform necesităților.",
+
+  "faq.question.10": "Oferiți asistență în alegerea designului?",
+  "faq.answer.10.1": "Desigur. Echipa noastră te poate ajuta gratuit cu sfaturi de design și optimizare a spațiului, pentru ca mobilierul să se potrivească perfect casei tale.",
+  "faq.answer.10.2": "Ne poți contacta pe chat, WhatsApp sau telefonic pentru consultanță personalizată.",
+
+  "faq.question.11": "Care sunt avantajele noastre?",
+  "faq.answer.11.1": "Mobilă la comandă de orice nivel de complexitate — de la soluții compacte până la construcții încorporate;\nDesign modern — minimalism, scandinav, clasic, loft și alte stiluri;\nProducție în Moldova cu utilizarea feroneriei europene;",
+  "faq.answer.11.2": "Ne puteți contacta prin chat, WhatsApp sau telefon pentru o consultație personalizată.",
+
+  "faq.question.12": "De ce să alegi dulap.md?",
+  "faq.answer.12.1": "Dulap.md este un serviciu online modern, unde poți comanda mobilă la comandă în Chișinău și în toată Moldova. Confecționăm dulapuri, comode, noptiere, comode TV și alt mobilier de corp, complet adaptat la dimensiunile spațiului tău și preferințele de design.",
+  "faq.answer.12.2": "Fiecare proiect este elaborat ținând cont de configurația camerei și stilul interiorului. Designerii noștri te vor ajuta să alegi culoarea optimă. Creăm comode și mobilier pentru dormitor, living sau hol, care îmbină estetica și practicitatea.",
+
+  "faqPage.title": "Află răspunsuri la întrebările tale",
+  "faqPage.subtitle": "Dacă nu găsești răspunsul dorit, nu ezita să ne contactezi.",
+
+
+  "breadcrumb.home": "Acasă",
+  "breadcrumb.journal": "Blog",
+
+  "blog.readingTime": "Timp de citire",
+
+  "tag.guides": "Ghiduri",
+  "tag.measurements": "Măsurători",
+  "tag.dulapmd": "dulap.md",
+
+  "orderSamplesBox.title": "Nu poți decide culoarea?",
+  "orderSamplesBox.p1": "Comandă mostre de culori acum. ",
+  "orderSamplesBox.p2": "Livrarea în 2-3 zile lucrătoare.",
+  "orderSamplesBox.btn": "Comandă gratuit",
+  "samples.title": "Mostre cu livrare la domiciliu",
+  "samples.subtitle": "gratuit",
+  "samples.subtitle.delivery": "Livrăm în 2-3 zile",
+
+  "blog.author.vasile": "Vasile",
+
+  "blog.measurements.title": "Cum măsori corect spațiul pentru mobilier",
+  "blog.measurements.subtitle": "Un ghid practic de luarea corectă a măsurilor.",
+  "blog.measurements.cover.alt": "Schemă de măsurare a unui perete pentru montarea unui dulap",
+  "blog.measurements.cover.caption": "E mai ușor decât pare, dacă ai o ruletă la îndemână.",
+
+  "blog.measurements.intro.1": "Un dulap făcut pe comandă arată impecabil doar dacă măsurătorile sunt corecte. Ai nevoie de 5-10 minute ca să măsori și să-ți notezi, apoi ești gata să faci comanda.",
+  "blog.measurements.intro.2": "În acest ghid îți explicăm pas cu pas cum să măsori lățimea, înălțimea și adâncimea, ce toleranțe să lași și ce obstacole (prize, plinte, țevi) să iei în calcul.",
+
+  "blog.measurements.section.1.title": "1. Măsoară peretele: lățime, înălțime, adâncime",
+  "blog.measurements.section.1.img.alt": "Ilustrație cu punctele de măsurare pe perete: sus, mijloc, jos și în trei colțuri pentru înălțime",
+  "blog.measurements.section.1.img.caption": "Notează fiecare valoare. Abaterile mici sunt normale, de aceea vom opera cu valorile cele mai mici din listă.",
+  "blog.measurements.section.1.p1": "Folosește ruleta, iar dacă nu ai, poți comanda una <prod>aici</prod>. Lățimea și înălțimea nu sunt întotdeauna identice pe toată suprafața peretelui, așa că măsoară în mai multe puncte.",
+  "blog.measurements.section.1.prod.label": "Pagina de comanda a produselor dulap.md",
+  "blog.measurements.section.1.list.title": "Pași recomandați:",
+  "blog.measurements.section.1.li.1": "Lățime: măsoară sus, la mijloc și jos. Notează cea mai mică valoare.",
+  "blog.measurements.section.1.li.2": "Înălțime: măsoară în stânga, centru și dreapta. Notează cea mai mică valoare.",
+  "blog.measurements.section.1.li.3": "Adâncime: măsoară de la perete până la marginea obstacolului cel mai ieșit în exterior (plintă, țevi, pervaz).",
+
+  "blog.measurements.section.2.title": "2. Ține cont de toate elementele din spațiu",
+  "blog.measurements.section.2.p1": "Când faci măsurătorile, trebuie să ții cont de plinta de la pardosea, de amplasarea întrerupătoarelor sau prizelor electrice, precum și de poziția altor detalii arhitecturale sau decorative (cum ar fi plintele pentru tavan). Asigură-te că ai suficient spațiu astfel încât dulapul (și ușile sale deschise) să nu lovească, să nu atingă, sau să creeze probleme de spațiu.",
+  "blog.measurements.section.2.p2": "Verifică poziția prizelor, plintelor, întrerupătoarelor, țevilor și a baghetelor de tavan. Lasă cca 1cm distanță de la plintă până la dulap.",
+
+  "blog.measurements.section.2.img.alt": "Spațiile de dilatare și jocul recomandat lângă ușile dulapului",
+  "blog.measurements.section.2.img.caption": "Lasă 1 cm pe lățime pentru montaj și reglaje.",
+
+  "blog.measurements.section.3.title": "3. Uși, modul de deschidere și distanța până în tavan",
+  "blog.measurements.section.3.p1": "Verifică din nou că există spațiu suficient pentru ca toate ușile și sertarele să se deschidă complet, fără să atingă paturile, corpurile de iluminat (fixate de tavan) sau alte piese de mobilier. De asemenea, este recomandat să proiectezi dulapul cu 10 cm mai mic decât înălțimea reală a tavanului, pentru a permite o asamblare ușoară.",
+  "blog.measurements.section.3.img.alt": "Distanta de la dulap oana in tavan",
+  "blog.measurements.section.3.img.caption": "Lasă 10 cm - distanța de la dulap până în tavan, pentru o montare ușoară",
+
+  "blog.measurements.section.4.title": "Checklist rapid înainte de comandă",
+  "blog.measurements.section.4.list.title": "Sfaturi practice:",
+  "blog.measurements.section.4.li.1": "Verifică ruleta: primele gradații pot fi imprimate imprecis. Pornește de la 1 sau 10 cm și scade această valoare din rezultat.",
+  "blog.measurements.section.4.li.2": "Pereții, pardoseala și tavanul pot fi neregulate — măsoară în mai multe puncte și lasă o marjă de montaj pe contur.",
+  "blog.measurements.section.4.li.3": "Ia în calcul grosimea peretelui din spate și a ușilor în gabaritul final — influențează lățimea și adâncimea.",
+
+  "blog.measurements.section.5.p1": "Mergi pe <conf>link</conf> și creează-ți dulapul de vis.",
+  "blog.measurements.section.5.conf.label": "Link spre configurator de dulapuri pentru haine",
+
+
+
+  "tag.colors": "Culori",
+
+  "blog.colors.title": "Cum alegi culoarea potrivită pentru dulapul tău",
+  "blog.colors.subtitle": "Ghid scurt: culori calde vs. reci, mostre livrate în 2 zile lucrătoare.",
+
+  "blog.colors.cover.alt": "Mostre EGGER așezate pe o masă, în lumină naturală",
+  "blog.colors.cover.caption": "Evaluează culorile în camera unde va sta dulapul, la lumină naturală.",
+
+  "blog.colors.p1.warmcool": "Primul filtru de alegere este între nuanțe calde și nuanțe reci. Caldele (bejuri, grejuri, tonuri ușor rozalii sau cu subton galben) creează senzație primitoare și se potrivesc cu pardoseli în tonuri de lemn cald. Reci (alb curat, griuri neutre sau ușor albăstrui) aduc claritate și un aer modern, mai ales lângă pereți albi sau iluminat rece. Alege direcția care se potrivește pardoselii, pereților și textilelor din cameră — apoi rafinezi nuanța.",
+  "blog.colors.p1.warm.img.alt": "Paletă cu nuanțe calde așezată lângă pardoseală caldă",
+  "blog.colors.p1.warm.img.caption": "Exemplu de paletă caldă (bejuri, grejuri, accente soft): plasează mostrele lângă pardoseală și perete.",
+  "blog.colors.p1.cool.img.alt": "Paletă cu nuanțe reci așezată lângă perete alb",
+  "blog.colors.p1.cool.img.caption": "Exemplu de paletă rece (alb, griuri neutre/reci): ideală pentru interioare minimaliste și lumini reci.",
+
+  "blog.colors.p2.samples": "Dacă ești perfecționist și vrei nuanța exactă, nu te baza doar pe ecran: <samples>comandă mostre</samples> și testează-le acasă, în condiții reale de lumină. Le livrăm în 2 zile lucrătoare. {samples}",
+  "blog.colors.samples.cta.aria": "Comandă mostre de culori EGGER",
+
+  "blog.colors.section.light.title": "Verifică nuanțele în lumină reală",
+  "blog.colors.section.light.img.alt": "Compararea aceleiași culori în lumină rece vs. lumină caldă",
+  "blog.colors.section.light.img.caption": "Nordul tinde să răcească, sudul încălzește nuanțele. Verifică dimineața, la prânz și seara.",
+  "blog.colors.section.light.p1": "Lumina schimbă percepția. Camerele orientate spre nord „răcesc” culorile, iar cele spre sud le încălzesc. Așază mostrele pe verticală, exact acolo unde va sta dulapul, și observă-le pe parcursul zilei.",
+  "blog.colors.section.light.list.title": "3 pași rapizi",
+  "blog.colors.section.light.li.1": "Evaluează întâi la lumină naturală: trage perdelele, stinge luminile artificiale.",
+  "blog.colors.section.light.li.2": "Pune mostrele lângă perete și pardoseală, la înălțimea dulapului.",
+  "blog.colors.section.light.li.3": "Nu uita să verifici și seara, după ce soarele a apus, cu lumina artificală din cameră. Vei descoperi culorile din nou.",
+  "blog.colors.section.light.li.4": "Acum ești gata să iei o decizie.",
+
+  "blog.colors.section.finish.title": "Textură și întreținere (Egger ST9)",
+  "blog.colors.section.finish.p1": "Textura ST9 de la Egger este mată, uniformă și modernă. Se curăță ușor și reduce reflexiile de lumină, ceea ce păstrează nuanța stabilă vizual în încăperi luminoase.",
+  "blog.colors.section.finish.list.title": "Sfaturi utile",
+  "blog.colors.section.finish.li.1": "Dacă vrei să eviți amprentele: alege nuanțele mai deschise: alb, gri sau bej. Nuanțele închise cer o atenție mai mare la curățire.",
+  "blog.colors.section.finish.li.2": "Pentru spații mici, nuanțele deschise reflectă mai bine lumina și măresc vizual camera.",
+  "blog.colors.section.finish.li.3": "Pentru camera copiilor, alege nuanțe calde, verdele pal sau roz nisipos: nuanțe mai jucăușe și pline de copilărie.",
+
+  "blog.colors.section.final.cta": "Gata de testat? Deschide <conf>configuratorul</conf> pentru o simulare rapidă și, pentru decizia finală, <samples>comandă mostrele</samples> — ajung în 2 zile lucrătoare. {conf} {samples}",
+  "blog.colors.section.final.conf.aria": "Deschide configuratorul dulapului"
+
+
 }

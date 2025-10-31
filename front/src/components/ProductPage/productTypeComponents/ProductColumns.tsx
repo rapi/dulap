@@ -10,6 +10,7 @@ export type ProductColumnsComponent = {
   type: 'columns'
   selectedColumns: number
   setSelectedColumns: (value: number) => void
+  options?: ButtonOptionsType[]
 }
 
 interface ProductColumnsProps {
@@ -28,8 +29,10 @@ export const columnsOptions: ButtonOptionsType[] = [
 export const ProductColumns: FC<ProductColumnsProps> = ({
   configuration,
   predefinedValue,
-  options = columnsOptions,
+  options: propOptions,
 }) => {
+  // Use options from configuration if available, otherwise from props, otherwise default
+  const options = configuration.options ?? propOptions ?? columnsOptions
   return (
     <div>
       <label className={styles.furnitureLabel}>
