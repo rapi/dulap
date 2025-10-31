@@ -1,40 +1,93 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useMemo, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import {
   ButtonOptionsType,
   ButtonSelect,
 } from '~/components/ButtonSelect/ButtonSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
-
-export type ColumnConfiguration = 'drawers' | 'door'
+import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationIcon } from './ColumnConfigurationIcons'
+import { useColumnConfigurationConstraints } from '~/hooks/useColumnConfigurationConstraints'
+import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
   selectedColumns: number
-  columnConfigurations: ColumnConfiguration[]
-  setColumnConfigurations: (configurations: ColumnConfiguration[]) => void
+  columnConfigurations: ColumnConfigurationType[]
+  setColumnConfigurations: (configurations: ColumnConfigurationType[]) => void
+  // Column dimensions for constraint evaluation
+  columnWidth: number
+  columnHeight: number
+  columnDepth: number
 }
 
 interface ProductIndividualColumnsProps {
   configuration: ProductIndividualColumnsComponent
 }
 
-const columnTypeOptions: ButtonOptionsType<ColumnConfiguration>[] = [
-  { value: 'drawers', label: 'homepage.configurator.individualColumns.drawers' },
-  { value: 'door', label: 'homepage.configurator.individualColumns.door' },
-]
-
 export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   configuration,
 }) => {
-  const { selectedColumns, columnConfigurations, setColumnConfigurations } = configuration
+  const { 
+    selectedColumns, 
+    columnConfigurations, 
+    setColumnConfigurations,
+    columnWidth,
+    columnHeight,
+    columnDepth,
+  } = configuration
   const [activeTab, setActiveTab] = useState(0)
 
-  const handleColumnTypeChange = (columnIndex: number, value: ColumnConfiguration) => {
+  // Reset active tab to first column when it becomes out of bounds
+  useEffect(() => {
+    if (activeTab >= selectedColumns) {
+      setActiveTab(0)
+    }
+  }, [selectedColumns, activeTab])
+
+  // Get constraint evaluation
+  const { allConfigurations, isValid } = useColumnConfigurationConstraints(
+    columnWidth,
+    columnHeight,
+    columnDepth
+  )
+
+  // Automatically switch to nearest available configuration when current becomes invalid
+  useEffect(() => {
+    const dimensions = { width: columnWidth, height: columnHeight, depth: columnDepth }
+    const updatedConfigurations = columnConfigurations.map(config => {
+      if (!isValid(config)) {
+        const nearestConfig = findNearestAvailableConfiguration(config, dimensions)
+        return nearestConfig || config // Keep original if no valid alternative (shouldn't happen)
+      }
+      return config
+    })
+
+    // Only update if there were changes
+    const hasChanges = updatedConfigurations.some(
+      (config, index) => config !== columnConfigurations[index]
+    )
+    
+    if (hasChanges) {
+      setColumnConfigurations(updatedConfigurations)
+    }
+  }, [columnWidth, columnHeight, columnDepth, isValid]) // Note: not including columnConfigurations to avoid infinite loop
+
+  const handleColumnTypeChange = (columnIndex: number, value: ColumnConfigurationType) => {
     const newConfigurations = [...columnConfigurations]
     newConfigurations[columnIndex] = value
     setColumnConfigurations(newConfigurations)
   }
+
+  // Get configuration options with metadata - filter out invalid ones
+  const configurationOptions = useMemo(() => {
+    return allConfigurations
+      .filter(configType => isValid(configType)) // Only show valid configurations
+      .map(configType => ({
+        type: configType,
+        metadata: getConfigurationMetadata(configType),
+      }))
+  }, [allConfigurations, isValid])
 
   const columnTabOptions: ButtonOptionsType[] = Array.from({ length: selectedColumns }).map((_, index) => ({
     value: String(index),
@@ -66,46 +119,39 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
       )}
 
       <label className={styles.furnitureLabel}>
-        <div className={styles.columnTypeImages}>
-              {columnTypeOptions.map((option) => (
+        <div className={styles.columnConfigScrollContainer}>
+          <div className={styles.columnConfigRow}>
+            {configurationOptions.map((option) => {
+              // Ensure we use a valid column index even if activeTab is temporarily out of bounds
+              const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
+              const currentColumnIndex = selectedColumns === 1 ? 0 : safeActiveTab
+              const isSelected = columnConfigurations[currentColumnIndex] === option.type
+
+              return (
                 <div
-                  key={option.value}
-                  className={`${styles.columnTypeImage} ${
-                    columnConfigurations[selectedColumns === 1 ? 0 : activeTab] === option.value
-                      ? styles.columnTypeImageSelected
-                      : ''
+                  key={option.type}
+                  className={`${styles.columnConfigOption} ${
+                    isSelected ? styles.columnConfigSelected : ''
                   }`}
-                  onClick={() => handleColumnTypeChange(selectedColumns === 1 ? 0 : activeTab, option.value)}
+                  onClick={() => handleColumnTypeChange(currentColumnIndex, option.type)}
+                  title={option.metadata.description}
                 >
-                  {/* Placeholder for images - we'll use SVG icons */}
-                  <div className={styles.columnTypeIcon}>
-                    {option.value === 'drawers' ? (
-                      // Drawers icon
-                      <svg width="60" height="70" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="10" y="10" width="80" height="100" fill="none" stroke="currentColor" strokeWidth="2"/>
-                        <line x1="10" y1="36.67" x2="90" y2="36.67" stroke="currentColor" strokeWidth="2"/>
-                        <line x1="10" y1="63.33" x2="90" y2="63.33" stroke="currentColor" strokeWidth="2"/>
-                        <line x1="45" y1="20" x2="55" y2="20" stroke="currentColor" strokeWidth="3"/>
-                        <line x1="45" y1="47" x2="55" y2="47" stroke="currentColor" strokeWidth="3"/>
-                        <line x1="45" y1="77" x2="55" y2="77" stroke="currentColor" strokeWidth="3"/>
-                      </svg>
-                    ) : (
-                      // Door icon
-                      <svg width="60" height="70" viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="10" y="10" width="80" height="100" fill="none" stroke="currentColor" strokeWidth="2"/>
-                        <line x1="30" y1="15" x2="30" y2="105" stroke="currentColor" strokeWidth="1"/>
-                        <circle cx="25" cy="60" r="3" fill="currentColor"/>
-                      </svg>
-                    )}
+                  <div className={styles.columnConfigIcon}>
+                    <ColumnConfigurationIcon type={option.type} width={60} height={75} />
                   </div>
-                  <div className={styles.columnTypeLabel}>
-                    <FormattedMessage id={option.label as string} />
+                  <div className={styles.columnConfigLabel}>
+                    <FormattedMessage 
+                      id={option.metadata.label}
+                      defaultMessage={option.metadata.description}
+                    />
                   </div>
-                  {columnConfigurations[selectedColumns === 1 ? 0 : activeTab] === option.value && (
-                    <div className={styles.columnTypeCheckmark}>✓</div>
+                  {isSelected && (
+                    <div className={styles.columnConfigCheckmark}>✓</div>
                   )}
                 </div>
-              ))}
+              )
+            })}
+          </div>
         </div>
       </label>
     </div>

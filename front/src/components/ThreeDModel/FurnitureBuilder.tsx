@@ -2,10 +2,11 @@ import React, { Suspense, memo, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { TopAndPlinth } from './parts/TopAndPlinth'
-import { Column, ColumnType } from './parts/Column'
-import { FURNITURE_CONFIG, OpeningType } from './furnitureConfig'
+import { Column } from './parts/Column'
+import { OpeningType } from './furnitureConfig'
+import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 
-interface StandBuilderProps {
+interface FurnitureBuilderProps {
   selectedColor: string
   desiredWidth: number
   desiredHeight: number
@@ -16,7 +17,9 @@ interface StandBuilderProps {
   sectionsCount: number
   openingType: OpeningType
   columns: number
-  columnConfigurations?: ColumnType[]
+  columnConfigurations?: ColumnConfigurationType[]
+  columnWidths?: number[] // Optional: variable column widths (for wardrobe)
+  columnPositions?: number[] // Optional: custom column X positions
 }
 
 // Preload assets for better performance
@@ -34,7 +37,7 @@ useGLTF.preload(PROFILE_HANDLE_URL)
 useGLTF.preload(HINGE_WING_URL)
 useGLTF.preload(HINGE_ANCHOR_URL)
 
-const StandBuilderComponent: React.FC<StandBuilderProps> = ({
+const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
   selectedColor,
   desiredWidth,
   desiredHeight,
@@ -46,6 +49,8 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   openingType,
   columns,
   columnConfigurations,
+  columnWidths,
+  columnPositions,
 }) => {
   const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
   const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
@@ -53,7 +58,6 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   const { scene: profileHandleObject } = useGLTF(PROFILE_HANDLE_URL)
   const { scene: hingeWingObject } = useGLTF(HINGE_WING_URL)
   const { scene: hingeAnchorObject } = useGLTF(HINGE_ANCHOR_URL)
-  const { panelThickness, panelSpacing } = FURNITURE_CONFIG
 
   const scenes = useMemo(
     () => ({
@@ -73,13 +77,27 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   }
 
   // Calculate column configuration
-  const columnWidth = desiredWidth / columns
+  // Use provided widths or fall back to equal distribution
+  const useVariableWidths = columnWidths && columnWidths.length === columns
+  const useCustomPositions = columnPositions && columnPositions.length === columns
+  
+  const defaultColumnWidth = desiredWidth / columns
 
   // Generate columns with explicit configuration
   const columnComponents = Array.from({ length: columns }, (_, index) => {
-    const columnPositionX =
-      -desiredWidth / 2 + columnWidth * index + columnWidth / 2
-    const columnType = columnConfigurations?.[index] || 'drawers'
+    // Get column width (variable or equal)
+    const columnWidth = useVariableWidths ? columnWidths[index] : defaultColumnWidth
+    
+    // Get column position (custom or calculated)
+    let columnPositionX: number
+    if (useCustomPositions) {
+      columnPositionX = columnPositions[index]
+    } else {
+      // Default equal distribution
+      columnPositionX = -desiredWidth / 2 + defaultColumnWidth * index + defaultColumnWidth / 2
+    }
+    
+    const columnType = columnConfigurations?.[index] || ColumnConfigurationType.DRAWERS_3
 
     return (
       <Column
@@ -94,7 +112,7 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
         columnHeight={desiredHeight}
         columnDepth={desiredDepth}
         plintHeight={desiredPlintHeight}
-        sectionsCount={sectionsCount}
+        sectionsCount={sectionsCount} // Legacy fallback - Column will use config type instead
         positionX={columnPositionX}
         selectedColor={selectedColor}
         columnType={columnType}
@@ -131,4 +149,4 @@ const StandBuilderComponent: React.FC<StandBuilderProps> = ({
   )
 }
 
-export const StandBuilder = memo(StandBuilderComponent)
+export const FurnitureBuilder = memo(FurnitureBuilderComponent)

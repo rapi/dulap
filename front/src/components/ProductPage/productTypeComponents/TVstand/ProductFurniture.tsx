@@ -9,14 +9,15 @@ import { FormattedMessage } from 'react-intl'
 import { useIntl } from 'react-intl'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Modal } from '~/components/Modal/Modal'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
-  selectedOpeningMethod: string
+  selectedOpeningMethod: string | OpeningType
 
-  openingOption: string
+  openingOption: string | OpeningType
   hinges: string
-  setOpeningOption: (openingOption: string) => void
+  setOpeningOption: ((openingOption: string | OpeningType) => void) | ((value: OpeningType) => void)
   guides: string
   setGuides: (value: string) => void
   predefinedValue?: ProductFurniturePredefinedValue

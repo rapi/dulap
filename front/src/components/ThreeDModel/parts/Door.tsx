@@ -1,53 +1,64 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react'
-import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
+import * as THREE from 'three'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import {
   applyColorToObject,
   disposeObject,
   createPanelPivotWithFlag,
 } from '../furnitureUtils'
-import { ColorName, getColorItemByName } from '~/utils/colorDictionary'
+import { HingePositionRule } from '~/types/columnConfigurationTypes'
+import { getHandleColor, HANDLE_CONSTANTS } from '../handleUtils'
+import { useAnimatedPosition } from '~/hooks/useAnimatedPosition'
 
-// Door-specific constants
 const DOOR_CONSTANTS = {
-  HINGE_COUNT: 3,
-  HINGE_OFFSET_FROM_EDGE: 2,
-  HINGE_DEPTH_OFFSET: -1,
-  ANCHOR_X_OFFSET: -1, // Offset from panel thickness
-  ANCHOR_Y_OFFSET: 1.8,
-  ROUND_HANDLE_DEPTH_OFFSET: -1,
-  PROFILE_HANDLE_Y_OFFSET: 0.7,
-  PROFILE_HANDLE_DEPTH_OFFSET: 0.2,
-  ANIMATION_LERP_SPEED: 0.15,
-  OPEN_ANGLE: Math.PI / 2,
-  METALLIC_HANDLE_COLOR: '#9c9c9c',
-  WHITE_HANDLE_COLOR: '#ffffff',
+  METALLIC_HANDLE_COLOR: HANDLE_CONSTANTS.METALLIC_COLOR,
 } as const
 
 /**
  * Helper Functions
  */
 
-/** Calculate Y position for hinges distributed evenly along the door */
-const calculateHingeYPosition = (hingeIndex: number, innerHeight: number): number => {
-  const hingeSpacing = innerHeight / (DOOR_CONSTANTS.HINGE_COUNT + 1)
+/** Calculate Y position for hinges distributed along the door */
+const calculateHingeYPosition = (
+  hingeIndex: number,
+  innerHeight: number,
+  hingeCount: number,
+  positionRule: HingePositionRule
+): number => {
+  const { hingeTopBottomOffset, hingeMiddleShift } = FURNITURE_CONFIG
+
+  // First hinge: 10cm from top
+  if (hingeIndex === 0) {
+    return hingeTopBottomOffset
+  }
+
+  // Last hinge: 10cm from bottom
+  if (hingeIndex === hingeCount - 1) {
+    return innerHeight - hingeTopBottomOffset
+  }
+
+  // Middle hinge(s) logic
+  if (hingeCount === 3 && hingeIndex === 1) {
+    const middlePosition = innerHeight / 2
+
+    // For 'offset-middle' rule, shift middle hinge down 5cm
+    if (positionRule === 'offset-middle') {
+      return middlePosition + hingeMiddleShift
+    }
+
+    // For 'even' rule, position exactly at center
+    return middlePosition
+  }
+
+  // Fallback for any other cases (evenly distributed)
+  const hingeSpacing = innerHeight / (hingeCount + 1)
   return (hingeIndex + 1) * hingeSpacing
 }
 
-/** Determine if handles should be white based on door color */
-const shouldUseWhiteHandle = (selectedColor: string): boolean => {
-  const whiteHex = getColorItemByName(ColorName.White)?.hexCode
-  const beigeHex = getColorItemByName(ColorName.Biege)?.hexCode
-  return selectedColor === whiteHex || selectedColor === beigeHex
-}
+// Handle color utilities moved to handleUtils.ts
 
-/** Get appropriate handle color based on door color */
-const getHandleColor = (selectedColor: string): string => {
-  return shouldUseWhiteHandle(selectedColor)
-    ? DOOR_CONSTANTS.WHITE_HANDLE_COLOR
-    : DOOR_CONSTANTS.METALLIC_HANDLE_COLOR
-}
+export type OpeningSide = 'left' | 'right'
 
 interface DoorProps {
   horizontalPanelObject: THREE.Object3D
@@ -64,6 +75,9 @@ interface DoorProps {
   positionY: number
   positionX?: number
   isHovered?: boolean
+  openingSide?: OpeningSide
+  hingeCount?: number
+  hingePositionRule?: HingePositionRule
 }
 
 const DoorComponent: React.FC<DoorProps> = ({
@@ -81,6 +95,9 @@ const DoorComponent: React.FC<DoorProps> = ({
   positionX = 0,
   openingType,
   isHovered = false,
+  openingSide = 'left',
+  hingeCount = 3,
+  hingePositionRule = 'even',
 }) => {
   const doorGroupRef = useRef<THREE.Group | null>(null)
   const hingeGroupRef = useRef<THREE.Group | null>(null)
@@ -103,7 +120,7 @@ const DoorComponent: React.FC<DoorProps> = ({
       roundHandleObject,
       'roundHandle'
     )
-    
+
     const profileHandlePivot = createPanelPivotWithFlag(
       profileHandleObject,
       'profileHandle',
@@ -121,24 +138,27 @@ const DoorComponent: React.FC<DoorProps> = ({
   // Hinge wing pivots (rotate with the door)
   const hingeWingPivots = useMemo(() => {
     if (!hingeWingObject) return []
-    
-    return Array.from({ length: DOOR_CONSTANTS.HINGE_COUNT }, (_, i) => {
+
+    return Array.from({ length: hingeCount }, (_, i) => {
       const hingePivot = createPanelPivotWithFlag(hingeWingObject, 'hingeWing')
       hingePivot.userData.hingeIndex = i
       return hingePivot
     })
-  }, [hingeWingObject])
+  }, [hingeWingObject, hingeCount])
 
   // Hinge anchor pivots (stay fixed to the frame)
   const hingeAnchorPivots = useMemo(() => {
     if (!hingeAnchorObject) return []
-    
-    return Array.from({ length: DOOR_CONSTANTS.HINGE_COUNT }, (_, i) => {
-      const anchorPivot = createPanelPivotWithFlag(hingeAnchorObject, 'hingeAnchor')
+
+    return Array.from({ length: hingeCount }, (_, i) => {
+      const anchorPivot = createPanelPivotWithFlag(
+        hingeAnchorObject,
+        'hingeAnchor'
+      )
       anchorPivot.userData.hingeIndex = i
       return anchorPivot
     })
-  }, [hingeAnchorObject])
+  }, [hingeAnchorObject, hingeCount])
 
   // Anchor group (stays fixed to the frame, doesn't rotate)
   const anchorGroup = useMemo(() => {
@@ -151,13 +171,13 @@ const DoorComponent: React.FC<DoorProps> = ({
   // Hinge group (wraps the door and allows rotation around right edge)
   const hingeGroup = useMemo(() => {
     if (!doorGroup) return null
-    
+
     const hinge = new THREE.Group()
     hinge.add(doorGroup)
-    
+
     // Add hinge wings so they rotate with the door
     hingeWingPivots.forEach((hingePivot) => hinge.add(hingePivot))
-    
+
     hinge.userData.isHingeGroup = true
     return hinge
   }, [doorGroup, hingeWingPivots])
@@ -176,50 +196,83 @@ const DoorComponent: React.FC<DoorProps> = ({
   useEffect(() => {
     if (!doorGroup || !hingeGroup || !anchorGroup) return
 
-    const { panelThickness, panelSpacing, handleOnTheDrawerTopOffset } =
-      FURNITURE_CONFIG
+    const { panelThickness, panelSpacing, handleOnTheDrawerTopOffset } = FURNITURE_CONFIG
 
     // Calculate dimensions
     const innerHeight = doorHeight - 2 * panelSpacing
     const zPosition = doorDepth - panelThickness
 
-    // Position the main groups at the right edge of the door (hinge position)
-    const hingeX = positionX + doorWidth / 2 - panelThickness
+    // Position the main groups at the hinge edge (right or left)
+    const isRightOpening = openingSide === 'right'
+    const hingeX = isRightOpening
+      ? positionX + doorWidth / 2 - panelThickness // Right edge
+      : positionX - doorWidth / 2 + panelThickness // Left edge
+
     hingeGroup.position.set(hingeX, positionY, zPosition)
     anchorGroup.position.set(hingeX, positionY, zPosition)
-    
-    // Offset door group to the left so its right edge aligns with the hinge
-    doorGroup.position.set(-doorWidth / 2 + panelThickness, 0, -zPosition)
+
+    // Offset door group so its hinge edge aligns with the hinge position
+    const doorOffsetX = isRightOpening
+      ? -doorWidth / 2 + panelThickness // Door extends left from hinge
+      : doorWidth / 2 - panelThickness // Door extends right from hinge
+    doorGroup.position.set(doorOffsetX, 0, -zPosition)
 
     // Setup door panels (front panel and handles)
     doorGroup.children.forEach((panelPivot) => {
       if (panelPivot.userData.isDoorFront) {
         // Front panel of the door
         panelPivot.scale.set(
-          doorWidth,
+          doorWidth - panelSpacing,
           innerHeight,
           panelThickness
         )
+
         panelPivot.position.set(0, panelSpacing, zPosition)
       } else if (panelPivot.userData.roundHandle) {
         // Round handle
         panelPivot.visible = openingType === OpeningType.RoundHandle
+        
         if (panelPivot.visible) {
-          panelPivot.position.set(
-            0,
-            innerHeight - handleOnTheDrawerTopOffset,
-            doorDepth + DOOR_CONSTANTS.ROUND_HANDLE_DEPTH_OFFSET
-          )
+          const roundHandleWidth = 2.5
+          
+          if (isRightOpening) {
+            panelPivot.position.set(
+              doorOffsetX+roundHandleWidth,
+              innerHeight - handleOnTheDrawerTopOffset,
+              doorDepth + HANDLE_CONSTANTS.ROUND_HANDLE_DEPTH_OFFSET
+            )
+          } else {
+            panelPivot.position.set(
+              doorOffsetX-roundHandleWidth,
+              innerHeight - handleOnTheDrawerTopOffset,
+              doorDepth + HANDLE_CONSTANTS.ROUND_HANDLE_DEPTH_OFFSET
+            )
+          }
         }
       } else if (panelPivot.userData.profileHandle) {
         // Profile handle
         panelPivot.visible = openingType === OpeningType.ProfileHandle
+
         if (panelPivot.visible) {
-          panelPivot.position.set(
-            0,
-            innerHeight - DOOR_CONSTANTS.PROFILE_HANDLE_Y_OFFSET,
-            doorDepth - DOOR_CONSTANTS.PROFILE_HANDLE_DEPTH_OFFSET
-          )
+          const profileHandleLength = 17.5
+          const profileHandleWidth = 1.2
+          const profileHandleBottomMetalWidth = 0.1
+  
+          if (isRightOpening) {
+            panelPivot.rotation.set(0, 0, Math.PI / 2)
+            panelPivot.position.set(
+              doorOffsetX - profileHandleWidth,
+              innerHeight - profileHandleLength / 2,
+              doorDepth - profileHandleBottomMetalWidth
+            )
+          } else {
+            panelPivot.rotation.set(0, 0, -Math.PI / 2)
+            panelPivot.position.set(
+              doorOffsetX + profileHandleWidth,
+              innerHeight - profileHandleLength / 2,
+              doorDepth - profileHandleBottomMetalWidth
+            )
+          }
         }
       }
     })
@@ -228,14 +281,30 @@ const DoorComponent: React.FC<DoorProps> = ({
     hingeGroup.children.forEach((child) => {
       if (child.userData.hingeWing) {
         const hingeIndex = child.userData.hingeIndex
-        const hingeY = calculateHingeYPosition(hingeIndex, innerHeight)
-        
-        child.position.set(
-          DOOR_CONSTANTS.HINGE_OFFSET_FROM_EDGE,
-          hingeY,
-          DOOR_CONSTANTS.HINGE_DEPTH_OFFSET
+        const hingeY = calculateHingeYPosition(
+          hingeIndex,
+          innerHeight,
+          hingeCount,
+          hingePositionRule
         )
-        child.rotation.set(0, -Math.PI / 2, 0) // Align with door edge
+
+        if (isRightOpening) {
+          child.rotation.set(0, -Math.PI / 2, 0)
+          child.position.set(
+            FURNITURE_CONFIG.hingeOffsetFromEdge,
+            hingeY,
+            FURNITURE_CONFIG.hingeDepthOffset
+          )
+        } else {
+          const hingeHeightOffset = 5 // because the hinge is rotated and inverted, we need to offset the position by 5 units (its height) to the top
+
+          child.rotation.set(Math.PI / 2, Math.PI / 2, Math.PI / 2)
+          child.position.set(
+            -FURNITURE_CONFIG.hingeOffsetFromEdge,
+            hingeY + hingeHeightOffset,
+            FURNITURE_CONFIG.hingeDepthOffset
+          )
+        }
       }
     })
 
@@ -243,14 +312,28 @@ const DoorComponent: React.FC<DoorProps> = ({
     anchorGroup.children.forEach((child) => {
       if (child.userData.hingeAnchor) {
         const hingeIndex = child.userData.hingeIndex
-        const hingeY = calculateHingeYPosition(hingeIndex, innerHeight)
-        
-        child.position.set(
-          -panelThickness + DOOR_CONSTANTS.ANCHOR_X_OFFSET,
-          hingeY + DOOR_CONSTANTS.ANCHOR_Y_OFFSET,
-          0
+        const hingeY = calculateHingeYPosition(
+          hingeIndex,
+          innerHeight,
+          hingeCount,
+          hingePositionRule
         )
-        child.rotation.set(0, Math.PI / 2, 0) // Face opposite direction
+
+        if (isRightOpening) {
+          child.rotation.set(0, Math.PI / 2, 0) // Face opposite direction
+          child.position.set(
+            FURNITURE_CONFIG.hingeAnchorXOffset - panelThickness,
+            hingeY + FURNITURE_CONFIG.hingeAnchorYOffset,
+            0
+          )
+        } else {
+          child.rotation.set(-Math.PI / 2, -Math.PI / 2, Math.PI / 2)
+          child.position.set(
+            panelThickness - FURNITURE_CONFIG.hingeAnchorXOffset,
+            hingeY + FURNITURE_CONFIG.hingeAnchorYOffset + 1,
+            0
+          )
+        }
       }
     })
   }, [
@@ -263,6 +346,9 @@ const DoorComponent: React.FC<DoorProps> = ({
     positionY,
     positionX,
     openingType,
+    openingSide,
+    hingeCount,
+    hingePositionRule,
   ])
 
   // Apply colors to all door parts
@@ -297,30 +383,43 @@ const DoorComponent: React.FC<DoorProps> = ({
 
   /**
    * ANIMATION
-   * Smooth opening/closing animation using lerp interpolation
+   * Separate concerns: rotation animation vs z-position management
    */
+  const isRightOpening = openingSide === 'right'
+  const openAngle = isRightOpening
+    ? FURNITURE_CONFIG.doorOpenAngle
+    : -FURNITURE_CONFIG.doorOpenAngle
+  const baseZPosition = doorDepth - FURNITURE_CONFIG.panelThickness
+
+  // Use separate animation hooks for independent control
+  // Rotation: smooth animation on hover
+  const rotationConfig = useMemo(() => ({
+    axis: 'rotationY' as const,
+    baseValue: 0,
+    activeOffset: openAngle,
+    lerpSpeed: FURNITURE_CONFIG.animationLerpSpeed,
+  }), [openAngle])
+
+  useAnimatedPosition(hingeGroupRef.current, isHovered, rotationConfig)
+
+  // Z-position: smooth animation on hover, instant update on depth change
+  const zOffsetRef = useRef(0)
+  
   useFrame(() => {
-    const hinge = hingeGroupRef.current
-    if (!hinge) return
-
-    const { panelThickness } = FURNITURE_CONFIG
-
-    // Calculate target values based on hover state
-    const targetRotation = isHovered ? DOOR_CONSTANTS.OPEN_ANGLE : 0
-    const targetZPosition = isHovered ? panelThickness : 0
-    const baseZPosition = doorDepth - panelThickness
-
-    // Smoothly interpolate to target values
-    hinge.rotation.y = THREE.MathUtils.lerp(
-      hinge.rotation.y,
-      targetRotation,
-      DOOR_CONSTANTS.ANIMATION_LERP_SPEED
+    if (!hingeGroup) return
+    
+    // Target offset: 0 when not hovered, +thickness when hovered
+    const targetOffset = isHovered ? FURNITURE_CONFIG.panelThickness : 0
+    
+    // Smoothly interpolate the offset
+    zOffsetRef.current = THREE.MathUtils.lerp(
+      zOffsetRef.current,
+      targetOffset,
+      FURNITURE_CONFIG.animationLerpSpeed
     )
-    hinge.position.z = THREE.MathUtils.lerp(
-      hinge.position.z,
-      baseZPosition + targetZPosition,
-      DOOR_CONSTANTS.ANIMATION_LERP_SPEED
-    )
+    
+    // Apply base position + animated offset
+    hingeGroup.position.z = baseZPosition + zOffsetRef.current
   })
 
   /**
@@ -348,4 +447,3 @@ const DoorComponent: React.FC<DoorProps> = ({
 }
 
 export const Door = memo(DoorComponent)
-
