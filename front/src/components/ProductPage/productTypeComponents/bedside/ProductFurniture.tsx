@@ -64,7 +64,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
               options={openingOptions}
               defaultSelected={configuration.openingOption}
               onChange={(value) => {
-                configuration.setOpeningOption(value)
+                configuration.setOpeningOption(value as OpeningType)
               }}
             />
           )}

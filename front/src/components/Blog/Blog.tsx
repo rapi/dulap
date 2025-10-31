@@ -205,7 +205,7 @@ const Blog: React.FC<BlogProps> = (props) => {
   } = props
 
   const safeSections: BlogBlock[] = Array.isArray(sections) ? sections : []
-  const HeadingTag = (headingTag || 'h1') as React.ElementType
+  const HeadingTag = (headingTag || 'h1') as HeadingTag
 
   const DefaultLink: LinkRenderer = (p) => <a {...p} />
   const LinkComp: LinkRenderer = linkComponent || DefaultLink

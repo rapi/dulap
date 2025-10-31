@@ -99,11 +99,11 @@ export const disposeObject = (obj: THREE.Object3D): void => {
         materials.forEach((mat) => {
           if (mat && mat instanceof THREE.Material) {
             // Dispose textures if any
-            if ('map' in mat && mat.map) mat.map.dispose()
-            if ('normalMap' in mat && mat.normalMap) mat.normalMap.dispose()
-            if ('roughnessMap' in mat && mat.roughnessMap) mat.roughnessMap.dispose()
-            if ('metalnessMap' in mat && mat.metalnessMap) mat.metalnessMap.dispose()
-            if ('aoMap' in mat && mat.aoMap) mat.aoMap.dispose()
+            if ('map' in mat && mat.map && mat.map instanceof THREE.Texture) mat.map.dispose()
+            if ('normalMap' in mat && mat.normalMap && mat.normalMap instanceof THREE.Texture) mat.normalMap.dispose()
+            if ('roughnessMap' in mat && mat.roughnessMap && mat.roughnessMap instanceof THREE.Texture) mat.roughnessMap.dispose()
+            if ('metalnessMap' in mat && mat.metalnessMap && mat.metalnessMap instanceof THREE.Texture) mat.metalnessMap.dispose()
+            if ('aoMap' in mat && mat.aoMap && mat.aoMap instanceof THREE.Texture) mat.aoMap.dispose()
             
             // Dispose material
             mat.dispose()
