@@ -237,6 +237,19 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       ],
     },
     {
+      type: 'gallery',
+      images: [
+        `/tv-stand/render/${imageColor} 1.png`,
+        `/tv-stand/render/${imageColor} 2.png`,
+        `/tv-stand/render/${imageColor} 1.png`,
+        `/tv-stand/render/${imageColor} 2.png`,
+        `/tv-stand/render/${imageColor} 1.png`,
+        `/tv-stand/render/${imageColor} 2.png`,
+        `/tv-stand/render/${imageColor} 1.png`,
+        `/tv-stand/render/${imageColor} 2.png`,
+      ],
+    },
+    {
       type: 'metadata',
       derivedSections, // Provide derivedSections for new 3D system
     },

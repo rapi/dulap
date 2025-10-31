@@ -9,7 +9,7 @@ import {
 import {
   ProductDimensions,
   ProductDimensionsComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductDimensions'
+} from '~/components/ProductPage/productTypeComponents/ProductDimensions'
 import {
   ProductColors,
   ProductColorsComponent,
@@ -32,19 +32,26 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
+} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
+import {
+  ProductGallery,
+  ProductGalleryComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductGallery'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
+import { InfoBar } from '~/components/InfoBar/InfoBar'
+import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
+import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
 
 export type ProductComponent =
   | ProductImageSelectComponent
   | ProductImageCarouselComponent
+  | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
@@ -55,6 +62,8 @@ export type PredefinedValue = {
   sections?: ProductSectionPredefinedValue
   imageSelect?: string
   imageCarousel?: string[]
+  gallery?: string[]
+
   dimensions?: Dimension
   colors?: string
   select?: string
@@ -127,6 +136,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   const imageCarouselComponent = currentComponents.find(
     (component) => component.type === 'imageCarousel'
   )
+  const galleryComponent = currentComponents.find(
+    (component) => component.type === 'gallery'
+  )
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -138,46 +150,72 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   return (
     <>
-      {/* Left Side: Image */}
-      <div className={styles.leftContainer}>
-        {imageCarouselComponent && (
-          <ProductImageCarousel
+      <div className={styles.contentContainer}>
+        {/* Left Side: Image */}
+        <div className={styles.leftContainer}>
+          {imageCarouselComponent && (
+            <ProductImageCarousel
+              configuration={
+                values?.imageCarousel
+                  ? {
+                      type: 'imageCarousel',
+                      images: values.imageCarousel,
+                    }
+                  : imageCarouselComponent
+              }
+            />
+          )}
+        </div>
+        {/* Right Side: Product Details */}
+        <div className={styles.detailsContainer}>
+          <h1 className={styles.visuallyHiddenTitle}>
+            <FormattedMessage id="meta.header.configurator.wardrobe" />
+          </h1>
+          <h2 className={styles.title}>
+            <FormattedMessage id={name} />
+          </h2>
+          {currentComponents.map((component, index) => {
+            return (
+              <div key={index + component.type}>{getComponent(component)}</div>
+            )
+          })}
+        </div>
+        <div>
+          {priceComponent && (
+            <ProductPrice
+              onAddItem={() => {
+                addItem('wardrobe', currentComponents, values ?? {})
+              }}
+              configuration={priceComponent}
+              predefinedValue={values?.price ?? undefined}
+            />
+          )}
+          {values != null && (
+            <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
+          )}
+          <OrderSamplesBox />
+        </div>
+      </div>
+      <br />
+      <br />
+      <br />
+      <InfoBar items={productInfoBarContent} />
+      <br />
+      <br />
+      <br />
+      <div>
+        {galleryComponent && (
+          <ProductGallery
             configuration={
-              values?.imageCarousel
+              values?.gallery
                 ? {
-                    type: 'imageCarousel',
-                    images: values.imageCarousel,
+                    type: 'gallery',
+                    images: values.gallery,
                   }
-                : imageCarouselComponent
+                : galleryComponent
             }
           />
         )}
-      </div>
-      {/* Right Side: Product Details */}
-      <div className={styles.detailsContainer}>
-        <h3 className={styles.title}>
-          <FormattedMessage id={name} />
-        </h3>
-        {currentComponents.map((component, index) => {
-          return (
-            <div key={index + component.type}>{getComponent(component)}</div>
-          )
-        })}
-      </div>
-      <div>
-        {priceComponent && (
-          <ProductPrice
-            onAddItem={() => {
-              addItem('wardrobe', currentComponents, values ?? {})
-            }}
-            configuration={priceComponent}
-            predefinedValue={values?.price ?? undefined}
-          />
-        )}
-        {values != null && (
-          <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
-        )}
-        <ProductInfobox />
       </div>
     </>
   )

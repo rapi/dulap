@@ -249,6 +249,19 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       ],
     },
     {
+      type: 'gallery',
+      images: [
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
+        `/stand2/render/${imageColor} 1.png`,
+        `/stand2/render/${imageColor} 2.png`,
+      ],
+    },
+    {
       type: 'metadata',
       derivedSections, // Provide derivedSections for new 3D system
     },
