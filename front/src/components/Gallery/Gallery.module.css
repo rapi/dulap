@@ -1,0 +1,235 @@
+.galleryGrid {
+  --gap: 16px;
+
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(12, 1fr);
+}
+
+/* Base tile */
+.tile {
+  --radius: 10px;
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition:
+    transform 0.5s ease,
+    filter 0.5s ease;
+}
+.tile:hover .image {
+  transform: scale(1.05);
+  filter: saturate(1.02);
+}
+
+/* --------- EXACT MOSAIC PLACEMENT (desktop) --------- */
+/* We use fixed rows to anchor items; aspect is controlled by row-span.
+   Tweak the row-height by changing 7vw (roughly matches your reference). */
+@media (min-width: 900px) {
+  .galleryGrid {
+    grid-auto-rows: 7vw;
+  } /* row height unit */
+
+  /* Top-left hero: spans cols 1-8 and two rows tall */
+  .tile1 {
+    grid-column: 1 / 9;
+    grid-row: 1 / span 6;
+  }
+
+  /* Two stacked on the right */
+  .tile2 {
+    grid-column: 9 / 13;
+    grid-row: 1 / span 3;
+  }
+  .tile3 {
+    grid-column: 9 / 13;
+    grid-row: 4 / span 3;
+  }
+
+  /* Full-width banner below */
+  .tile4 {
+    grid-column: 1 / 13;
+    grid-row: 7 / span 3;
+  }
+
+  /* Bottom block: two small left, tall right, then wide left */
+  .tile5 {
+    grid-column: 1 / 5;
+    grid-row: 10 / span 3;
+  }
+  .tile6 {
+    grid-column: 5 / 9;
+    grid-row: 10 / span 3;
+  }
+  .tile7 {
+    grid-column: 9 / 13;
+    grid-row: 10 / span 6;
+  } /* tall */
+  .tile8 {
+    grid-column: 1 / 9;
+    grid-row: 13 / span 3;
+  }
+}
+
+/* Tablet: keep two columns without strict placement */
+@media (min-width: 640px) and (max-width: 899px) {
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .tile {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* Mobile: single column */
+@media (max-width: 639px) {
+  .galleryGrid {
+    grid-template-columns: 1fr;
+  }
+  .tile {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* --- Lightbox --- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.7);
+  display: grid;
+  place-items: center;
+  cursor: zoom-out; /* clicking outside closes */
+  opacity: 0;
+  animation: fadeIn 0.25s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.lightboxInner {
+  position: relative;
+  cursor: default; /* prevent close on content click */
+}
+
+.lightboxImage {
+  max-width: min(90vw, 1600px);
+  max-height: 85vh;
+  border-radius: 8px;
+  display: block;
+  opacity: 0;
+  transform: scale(0.97);
+  animation: zoomIn 0.25s ease forwards;
+}
+
+@keyframes zoomIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --- Close button --- */
+.close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.close::before,
+.close::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 28px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+  transform-origin: center;
+}
+.close::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+.close:hover {
+  opacity: 0.8;
+}
+
+/* --- Navigation arrows --- */
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 68px;
+  height: 68px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: white;
+  opacity: 0.9;
+}
+.nav:hover {
+  opacity: 1;
+}
+
+.nav::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform-origin: center;
+}
+.prev {
+  left: 24px;
+}
+.next {
+  right: 24px;
+}
+.prev::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.next::before {
+  transform: translate(-50%, -50%) rotate(-135deg);
+}
+
+@media (max-width: 600px) {
+  .nav {
+    width: 48px;
+    height: 48px;
+  }
+  .nav::before {
+    width: 16px;
+    height: 16px;
+  }
+  .close {
+    top: 12px;
+    right: 12px;
+  }
+}
