@@ -1,0 +1,75 @@
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3rem;
+  padding: 2rem;
+  /*background: #f9f8f7;*/
+  /*background: #f1f1f1;*/
+  color: #111;
+}
+
+.wrapper h2 {
+  flex: 1 1 200px;
+  font-size: 1.8rem;
+  font-weight: 550;
+}
+
+.section {
+  border-top: 1px solid #ccc;
+  padding: 0.5rem 0;
+}
+
+.section.first {
+  border-top: none;
+}
+
+.panel {
+  flex: 2 1 320px;
+  max-width: 640px;
+}
+
+.button {
+  all: unset;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.8rem 0;
+  cursor: pointer;
+}
+
+.text {
+  font-size: 1.1rem;
+  margin: 0.4rem 0 1rem;
+  font-family: inherit;
+  font-weight: 300;
+  white-space: pre-wrap;
+  color: #444;
+  line-height: 1.5;
+}
+
+/*Animation*/
+
+.icon {
+  display: inline-block;
+  transition: transform 0.25s ease;
+  font-size: 1.9rem;
+  transform: rotate(0deg);
+}
+.icon.open {
+  transform: rotate(45deg); /* + becomes × */
+}
+
+.contentWrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.25s ease-out,
+    opacity 0.2s ease;
+  opacity: 0;
+}
+.expanded {
+  max-height: 500px;
+  opacity: 1;
+}

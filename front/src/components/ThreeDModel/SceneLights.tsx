@@ -2,11 +2,11 @@ import React, { memo } from 'react'
 
 type ShadowQuality = 'low' | 'medium' | 'high'
 
-export const SceneLights: React.FC<{
+const SceneLightsComponent: React.FC<{
   enableShadows?: boolean
   ambientLightIntensity?: number
   shadowQuality?: ShadowQuality
-}> = memo(({ enableShadows = true, ambientLightIntensity = 0.25, shadowQuality = 'high' }) => {
+}> = ({ enableShadows = true, ambientLightIntensity = 0.25, shadowQuality = 'high' }) => {
   const shadowMapSize = shadowQuality === 'high' ? 8192 : shadowQuality === 'medium' ? 4096 : 2048
 
   return (
@@ -16,7 +16,7 @@ export const SceneLights: React.FC<{
 
       {/* Key light – main directional light simulating window light */}
       <directionalLight
-        position={[-80, 200, 150]}
+        position={[-100, 150, 175]}
         intensity={2.5}
         castShadow={enableShadows}
         shadow-mapSize-width={shadowMapSize}
@@ -29,11 +29,11 @@ export const SceneLights: React.FC<{
         shadow-bias={-0.0001}
         shadow-normalBias={0.02}
         shadow-radius={2}
-        color="#fff8f0"
+        color="#ffffff"
       />
 
       {/* Fill light – softer light from opposite side */}
-      <directionalLight position={[150, 180, 100]} intensity={1.2} color="#e6f3ff" />
+      <directionalLight position={[150, 180, 100]} intensity={2} color="#e6f3ff" />
 
       {/* Top light – simulating ceiling lighting */}
       <directionalLight position={[0, 300, 0]} intensity={0.8} color="#ffffff" />
@@ -42,6 +42,10 @@ export const SceneLights: React.FC<{
       <directionalLight position={[0, 120, -200]} intensity={0.3} color="#fff8f0" />
     </>
   )
-})
+}
+
+SceneLightsComponent.displayName = 'SceneLights'
+
+export const SceneLights = memo(SceneLightsComponent)
 
 

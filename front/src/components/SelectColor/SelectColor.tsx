@@ -21,6 +21,7 @@ interface SelectColorItemProps {
   hexCode?: string
   name?: string
   materialCode?: string
+  textureUrl?: string
   isAdd?: boolean
   icon?: React.ReactNode
   selected: boolean
@@ -30,22 +31,44 @@ interface SelectColorItemProps {
 
 const PALETTE = [
   'Dark Grey',
-  'Grey Cubanit', 
-  'Grey Stone', 
+  'Grey Cubanit',
+  'Grey Stone',
   'Green Salvia',
-  'Green Eucalypt',
-  'Green Fjord',
+  'Beige Sand',
+  'Beige Cashmere',
   'Biege Almond',
-  'Rose Antique'
+  'Rose Antique',
+  'Natural Acacia',
+  'Natural Walnut',
 ]
 
 export const SelectColorItem: React.FC<SelectColorItemProps> = ({
-  hexCode, name, materialCode, isAdd, icon, selected, size, onClick
+  hexCode,
+  name,
+  materialCode,
+  textureUrl,
+  isAdd,
+  icon,
+  selected,
+  size,
+  onClick,
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     onClick?.(name, e)
   }
+
+  // Determine the style based on whether it's a texture or a solid color
+  const backgroundStyle = !isAdd
+    ? textureUrl
+      ? {
+          backgroundImage: `url(${textureUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }
+      : { backgroundColor: hexCode }
+    : undefined
+
   return (
     <div
       className={classNames(
@@ -54,14 +77,14 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
         selected && styles.selected,
         isAdd && styles.addCircle
       )}
-      style={!isAdd && hexCode ? { backgroundColor: hexCode } : undefined}
+      style={backgroundStyle}
       onClick={handleClick}
       {...(!isAdd && name
-       ? {
-           'data-tooltip-name': name,
-           'data-tooltip-code': materialCode,
-         }
-       : {})}
+        ? {
+            'data-tooltip-name': name,
+            'data-tooltip-code': materialCode,
+          }
+        : {})}
     >
       {isAdd && icon}
     </div>
@@ -74,11 +97,11 @@ const SelectColor: React.FC<SelectColorProps> = ({
   onChange,
   size = 'medium',
   showAdd = false,
-  addIcon = <AddIcon fontSize="small" sx={{ color: grey[600] }}/>,
+  addIcon = <AddIcon fontSize="small" sx={{ color: grey[600] }} />,
   onAddClick,
 }) => {
   const initialItems: ColorItem[] = colorNames
-    .map(n => getColorItemByName(n))
+    .map((n) => getColorItemByName(n))
     .filter((i): i is ColorItem => !!i)
 
   const [items, setItems] = useState<ColorItem[]>(initialItems)
@@ -91,15 +114,17 @@ const SelectColor: React.FC<SelectColorProps> = ({
 
   const [isModalOpen, setModalOpen] = useState(false)
 
-  const handleSelect = (name?: string, e?: React.MouseEvent<HTMLDivElement>) => {
+  const handleSelect = (
+    name?: string,
+    e?: React.MouseEvent<HTMLDivElement>
+  ) => {
     e?.stopPropagation()
     if (!name) return
     setSelected(name)
-    onChange(name)  
+    onChange(name)
   }
 
   const handleAdd = (_?: string, e?: React.MouseEvent<HTMLDivElement>) => {
-    
     if (onAddClick) return onAddClick()
     e?.stopPropagation()
     setTimeout(() => setModalOpen(true), 0)
@@ -109,20 +134,21 @@ const SelectColor: React.FC<SelectColorProps> = ({
     setModalOpen(false)
     const newItem = getColorItemByName(newName)
     if (!newItem) return
-    if (!items.find(i => i.name === newItem.name)) {
-      setItems(prev => [...prev, newItem])
+    if (!items.find((i) => i.name === newItem.name)) {
+      setItems((prev) => [...prev, newItem])
     }
     handleSelect(newName)
   }
 
   return (
     <div className={styles.container}>
-      {items.map(c => (
+      {items.map((c) => (
         <SelectColorItem
           key={c.materialCode}
           hexCode={c.hexCode}
           name={c.name}
           materialCode={c.materialCode}
+          textureUrl={c.textureUrl}
           size={size}
           selected={c.name === selected}
           onClick={handleSelect}
@@ -140,7 +166,9 @@ const SelectColor: React.FC<SelectColorProps> = ({
       )}
 
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
-        <h3><FormattedMessage id="selectColor.modal.title"/></h3>
+        <h3>
+          <FormattedMessage id="selectColor.modal.title" />
+        </h3>
         <div className={styles.modalColorsContainer}>
           <SelectColor
             colors={PALETTE}

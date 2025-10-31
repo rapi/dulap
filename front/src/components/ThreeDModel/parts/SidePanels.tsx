@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 import * as THREE from 'three'
 import { FURNITURE_CONFIG } from '../furnitureConfig'
-import { applyColorToObject, createPivotAnchored, disposeObject, cloneWithIndependentMaterials } from '../furnitureUtils'
+import { usePanels } from '~/hooks/usePanel'
 
 interface SidePanelsProps {
   horizontalPanelObject: THREE.Object3D
@@ -18,57 +18,33 @@ const SidePanelsComponent: React.FC<SidePanelsProps> = ({
   desiredDepth: cabinetDepth,
   selectedColor,
 }) => {
-  // Create object clones for the left panel and right panel
-  const { leftSidePanel, rightSidePanel } = useMemo(() => {
-    if (!sidePanelSource) {
-      return {
-        leftSidePanel: null as THREE.Object3D | null,
-        rightSidePanel: null as THREE.Object3D | null,
-      }
-    }
+  const { panelThickness } = FURNITURE_CONFIG
 
-    const leftPanelModel = cloneWithIndependentMaterials(sidePanelSource)
-    const rightPanelModel = cloneWithIndependentMaterials(sidePanelSource)
+  const sideThickness = panelThickness
+  const sideHeight = cabinetHeight - panelThickness
+  const sideDepth = cabinetDepth - panelThickness
 
-    const leftSidePanel = createPivotAnchored(leftPanelModel, { anchorY: 'min', anchorZ: 'min' })
-    const rightSidePanel = createPivotAnchored(rightPanelModel, { anchorY: 'min', anchorZ: 'min' })
+  // Memoize anchor config to prevent unnecessary recreations
+  const anchorConfig = useMemo(() => ({ anchorY: 'min' as const, anchorZ: 'min' as const }), [])
 
-    return { leftSidePanel, rightSidePanel }
-  }, [sidePanelSource])
+  // Memoize panel configs to ensure stable references
+  const panelConfigs = useMemo(() => [
+    {
+      scale: [sideThickness, sideHeight, sideDepth] as [number, number, number],
+      position: [-cabinetWidth / 2 + panelThickness / 2, 0, 0] as [number, number, number],
+      color: selectedColor,
+      anchor: anchorConfig,
+    },
+    {
+      scale: [sideThickness, sideHeight, sideDepth] as [number, number, number],
+      position: [cabinetWidth / 2 - panelThickness / 2, 0, 0] as [number, number, number],
+      color: selectedColor,
+      anchor: anchorConfig,
+    },
+  ], [sideThickness, sideHeight, sideDepth, cabinetWidth, panelThickness, selectedColor, anchorConfig])
 
-  // Scale and position the panels accordingly
-  useEffect(() => {
-    if (!leftSidePanel || !rightSidePanel) return
-
-    const { panelThickness, defaultScale } = FURNITURE_CONFIG
-
-    const sideThickness = panelThickness * defaultScale
-    const sideHeight = (cabinetHeight - panelThickness) * defaultScale
-    const sideDepth = (cabinetDepth - panelThickness) * defaultScale
-
-    leftSidePanel.scale.set(sideThickness, sideHeight, sideDepth)
-    rightSidePanel.scale.set(sideThickness, sideHeight, sideDepth)
-
-    leftSidePanel.position.set(-cabinetWidth / 2 + panelThickness / 2, 0, 0)
-    rightSidePanel.position.set(+cabinetWidth / 2 - panelThickness / 2, 0, 0)
-
-    leftSidePanel.updateMatrixWorld(true)
-    rightSidePanel.updateMatrixWorld(true)
-  }, [leftSidePanel, rightSidePanel, cabinetWidth, cabinetHeight, cabinetDepth])
-
-  // Apply the selected color to the panels
-  useEffect(() => {
-    if (!leftSidePanel || !rightSidePanel) return
-    applyColorToObject(leftSidePanel, selectedColor)
-    applyColorToObject(rightSidePanel, selectedColor)
-  }, [leftSidePanel, rightSidePanel, selectedColor])
-
-  useEffect(() => {
-    return () => {
-      if (leftSidePanel) disposeObject(leftSidePanel)
-      if (rightSidePanel) disposeObject(rightSidePanel)
-    }
-  }, [leftSidePanel, rightSidePanel])
+  // Use the usePanels hook to create both panels at once
+  const [leftSidePanel, rightSidePanel] = usePanels(sidePanelSource, panelConfigs)
 
   if (!leftSidePanel || !rightSidePanel) return null
 

@@ -26,6 +26,7 @@
 
 .subtitle {
   margin: 0;
+  font-size: 16px;
 }
 
 .icon {
@@ -143,7 +144,7 @@
 
 .productItem {
   display: flex;
-  align-items:start;
+  align-items: start;
   margin-bottom: 10px;
   gap: 15px;
 }

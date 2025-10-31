@@ -1,16 +1,18 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { memo, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import { useFrame, ThreeEvent } from '@react-three/fiber'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import {
   applyColorToObject,
   disposeObject,
   createPanelPivotWithFlag,
 } from '../furnitureUtils'
+import { getHandleColor, HANDLE_CONSTANTS } from '../handleUtils'
+import { useAnimatedPosition } from '~/hooks/useAnimatedPosition'
 
 interface DrawerProps {
   horizontalPanelObject: THREE.Object3D
-  handleObject: THREE.Object3D
+  roundHandleObject: THREE.Object3D
+  profileHandleObject: THREE.Object3D
   openingType: OpeningType
   drawerWidth: number
   drawerHeight: number
@@ -21,11 +23,13 @@ interface DrawerProps {
   positionX?: number
   drawerOffsetZ?: number
   lerpSpeed?: number
+  isHovered?: boolean
 }
 
 const DrawerComponent: React.FC<DrawerProps> = ({
   horizontalPanelObject,
-  handleObject,
+  roundHandleObject,
+  profileHandleObject,
   drawerWidth,
   drawerHeight,
   drawerDepth,
@@ -36,9 +40,8 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   drawerOffsetZ = 15,
   lerpSpeed = 0.15,
   openingType,
+  isHovered = false,
 }) => {
-  const [isHovered, setIsHovered] = React.useState(false)
-  const drawerPositionRef = useRef<number>(0)
   const drawerGroupRef = useRef<THREE.Group | null>(null)
 
   // Create the drawer group with all panels
@@ -61,7 +64,8 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       horizontalPanelObject,
       'isDrawerRight'
     )
-    const handlePivot = createPanelPivotWithFlag(handleObject, 'handle')
+    const roundHandlePivot = createPanelPivotWithFlag(roundHandleObject, 'roundHandle')
+    const profileHandlePivot = createPanelPivotWithFlag(profileHandleObject, 'profileHandle', { anchorY: 'center', anchorZ: 'center' })
 
     const group = new THREE.Group()
     group.add(
@@ -69,13 +73,14 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       bottomPanelPivot,
       leftPanelPivot,
       rightPanelPivot,
-      handlePivot
+      roundHandlePivot,
+      profileHandlePivot
     )
     group.userData.isDrawerGroup = true
     group.userData.drawerIndex = drawerIndex
 
     return group
-  }, [horizontalPanelObject, handleObject, drawerIndex])
+  }, [horizontalPanelObject, roundHandleObject, profileHandleObject, drawerIndex])
 
   // Store ref for animation
   useEffect(() => {
@@ -88,14 +93,13 @@ const DrawerComponent: React.FC<DrawerProps> = ({
 
     const {
       panelThickness,
-      defaultScale,
-      drawerSpacing,
+      panelSpacing,
       handleOnTheDrawerTopOffset,
       drawerInsidePanelsOffset,
     } = FURNITURE_CONFIG
 
     // Dimensions of the interior parts of the drawer (the box inside)
-    const innerHeight = drawerHeight - drawerSpacing
+    const innerHeight = drawerHeight - panelSpacing
     const innerWidth = drawerWidth - panelThickness * 2
     const innerDepth = drawerDepth - panelThickness * 2
     const halfInnerWidth = innerWidth / 2
@@ -103,34 +107,39 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     const baseZ = 0
     drawerGroup.position.set(positionX, positionY, baseZ)
     drawerGroup.userData.baseZ = baseZ
-    drawerPositionRef.current = baseZ
 
     // Position and scale all drawer panels
     drawerGroup.children.forEach((panelPivot) => {
       if (panelPivot.userData.isDrawerFront) {
         panelPivot.scale.set(
-          drawerWidth * defaultScale,
-          innerHeight * defaultScale,
-          panelThickness * defaultScale
+          drawerWidth,
+          innerHeight,
+          panelThickness
         )
         panelPivot.position.set(0, 0, drawerDepth - panelThickness)
-      } else if (panelPivot.userData.handle) {
-        if (openingType === OpeningType.Handle) {
-          panelPivot.visible = true
-          panelPivot.scale.set(defaultScale, defaultScale, defaultScale)
+      } else if (panelPivot.userData.roundHandle) {
+        panelPivot.visible = openingType === OpeningType.RoundHandle
+        if (panelPivot.visible) {
           panelPivot.position.set(
             0,
             innerHeight - handleOnTheDrawerTopOffset,
-            drawerDepth - 1
+            drawerDepth + HANDLE_CONSTANTS.ROUND_HANDLE_DEPTH_OFFSET
           )
-        } else {
-          panelPivot.visible = false
+        }
+      } else if (panelPivot.userData.profileHandle) {
+        panelPivot.visible = openingType === OpeningType.ProfileHandle
+        if (panelPivot.visible) {
+          panelPivot.position.set(
+            0,
+            innerHeight - HANDLE_CONSTANTS.PROFILE_HANDLE_Y_OFFSET,
+            drawerDepth - HANDLE_CONSTANTS.PROFILE_HANDLE_DEPTH_OFFSET
+          )
         }
       } else if (panelPivot.userData.isDrawerLeft) {
         panelPivot.scale.set(
-          panelThickness * defaultScale,
-          (innerHeight - drawerInsidePanelsOffset) * defaultScale,
-          innerDepth * defaultScale
+          panelThickness,
+          (innerHeight - drawerInsidePanelsOffset),
+          innerDepth
         )
         panelPivot.position.set(
           -halfInnerWidth + panelThickness / 2,
@@ -139,9 +148,9 @@ const DrawerComponent: React.FC<DrawerProps> = ({
         )
       } else if (panelPivot.userData.isDrawerRight) {
         panelPivot.scale.set(
-          panelThickness * defaultScale,
-          (innerHeight - drawerInsidePanelsOffset) * defaultScale,
-          innerDepth * defaultScale
+          panelThickness,
+          (innerHeight - drawerInsidePanelsOffset),
+          innerDepth
         )
         panelPivot.position.set(
           +halfInnerWidth - panelThickness / 2,
@@ -150,9 +159,9 @@ const DrawerComponent: React.FC<DrawerProps> = ({
         )
       } else if (panelPivot.userData.isDrawerBottom) {
         panelPivot.scale.set(
-          innerWidth * defaultScale,
-          panelThickness * defaultScale,
-          innerDepth * defaultScale
+          innerWidth,
+          panelThickness,
+          innerDepth
         )
         panelPivot.position.set(0, 0, panelThickness)
       }
@@ -170,8 +179,31 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   // Apply the selected color
   useEffect(() => {
     if (!drawerGroup) return
-    applyColorToObject(drawerGroup, selectedColor)
+
+    const handleColor = getHandleColor(selectedColor)
+
+    drawerGroup.children.forEach((child) => {
+      if (child.userData.roundHandle || child.userData.profileHandle) {
+        applyColorToObject(child, handleColor)
+      } else {
+        // Apply the selected color to drawer panels
+        applyColorToObject(child, selectedColor)
+      }
+    })
   }, [drawerGroup, selectedColor])
+
+  // Opening animation using the hook
+  const baseZ = drawerGroup?.userData.baseZ || 0
+  
+  // Memoize animation config to prevent creating new object on every render
+  const animationConfig = useMemo(() => ({
+    axis: 'z' as const,
+    baseValue: baseZ,
+    activeOffset: drawerOffsetZ,
+    lerpSpeed: lerpSpeed,
+  }), [baseZ, drawerOffsetZ, lerpSpeed])
+  
+  useAnimatedPosition(drawerGroup, isHovered, animationConfig)
 
   // Cleanup
   useEffect(() => {
@@ -179,43 +211,12 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       if (drawerGroup) {
         disposeObject(drawerGroup)
       }
-      document.body.style.cursor = 'auto'
     }
   }, [drawerGroup])
 
-  // Opening animation
-  useFrame(() => {
-    if (!drawerGroup) return
-
-    const baseZ = drawerGroup.userData.baseZ || 0
-    const targetZ = isHovered ? baseZ + drawerOffsetZ : baseZ
-    const currentZ = drawerPositionRef.current
-    const interpolatedZ = THREE.MathUtils.lerp(currentZ, targetZ, lerpSpeed)
-
-    drawerGroup.position.z = interpolatedZ
-    drawerPositionRef.current = interpolatedZ
-  })
-
-  const handlePointerOver = useCallback((event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation()
-    setIsHovered(true)
-    document.body.style.cursor = 'pointer'
-  }, [])
-
-  const handlePointerOut = useCallback(() => {
-    setIsHovered(false)
-    document.body.style.cursor = 'auto'
-  }, [])
-
   if (!drawerGroup) return null
 
-  return (
-    <primitive
-      object={drawerGroup}
-      onPointerOver={handlePointerOver}
-      onPointerOut={handlePointerOut}
-    />
-  )
+  return <primitive object={drawerGroup} />
 }
 
 export const Drawer = memo(DrawerComponent)

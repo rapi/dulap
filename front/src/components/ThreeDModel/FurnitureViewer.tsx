@@ -4,8 +4,9 @@ import { OrbitControls, useGLTF } from '@react-three/drei'
 import { GLBModel } from './GLBModel'
 import { SceneLights } from './SceneLights'
 import * as THREE from 'three'
-import { StandBuilder } from './StandBuilder'
-import { OpeningType } from './furnitureConfig'
+import { Furniture3DProps } from '~/types/furniture3D'
+import { FurnitureBuilder } from './FurnitureBuilder'
+import { getViewerConfig } from './furnitureViewerConfig'
 
 // Preload models
 useGLTF.preload('/assets/3d-models/bg.glb')
@@ -29,16 +30,13 @@ const FurnitureScene = memo(function FurnitureScene({
   sections,
   openingType,
   columns,
-}: {
-  width: number
-  height: number
-  depth: number
-  currentPlintHeight: number
-  selectedColor: string
-  sections: number
-  openingType: OpeningType
-  columns: number
-}) {
+  columnConfigurations,
+  columnWidths,
+  columnPositions,
+  furnitureType,
+}: Furniture3DProps) {
+  const config = getViewerConfig(furnitureType)
+  
   return (
     <>
       <SceneLights
@@ -52,14 +50,14 @@ const FurnitureScene = memo(function FurnitureScene({
         <GLBModel
           modelUrl="/assets/3d-models/bg.glb"
           modelPosition={[0, 0, 0]}
-          modelScale={[100, 45, 45]}
+          modelScale={config.backgroundScale}
           shouldReceiveShadow={true}
           overrideColorHex="#ffffff"
           useLambertWhiteMaterial={true}
         />
         <GLBModel
           modelUrl="/assets/3d-models/shadow_man.glb"
-          modelPosition={[-100, 0, 2]}
+          modelPosition={[config.getShadowManXPosition(width), 0, 2]}
           modelScale={1}
           overrideColorHex="#ffffff"
           shouldReceiveShadow={false}
@@ -67,9 +65,9 @@ const FurnitureScene = memo(function FurnitureScene({
         />
       </Suspense>
 
-      {/* Stand Model built from individual components */}
+      {/* Furniture Model built from individual components */}
       <Suspense fallback={<ModelLoadingFallback />}>
-        <StandBuilder
+        <FurnitureBuilder
           selectedColor={selectedColor}
           desiredWidth={width}
           desiredHeight={height}
@@ -78,25 +76,17 @@ const FurnitureScene = memo(function FurnitureScene({
           sectionsCount={sections}
           openingType={openingType}
           columns={columns}
+          columnConfigurations={columnConfigurations}
+          columnWidths={columnWidths}
+          columnPositions={columnPositions}
         />
       </Suspense>
     </>
   )
 })
 
-// Main furniture viewer component
-interface FurnitureViewerProps {
-  selectedColor: string
-  width: number
-  height: number
-  depth: number
-  currentPlintHeight: number
-  sections: number
-  openingType: OpeningType
-  columns: number
-}
-
-const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
+// Main furniture viewer component uses Furniture3DProps
+const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
   width,
   selectedColor,
   height,
@@ -105,11 +95,14 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
   sections,
   openingType,
   columns,
+  columnConfigurations,
+  columnWidths,
+  columnPositions,
+  furnitureType,
 }) => {
   const handleCanvasCreated = useCallback(
     ({
       gl: webGlRenderer,
-      scene: threeScene,
     }: {
       gl: THREE.WebGLRenderer
       scene: THREE.Scene
@@ -120,16 +113,18 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
       webGlRenderer.shadowMap.enabled = true
       webGlRenderer.shadowMap.type = THREE.PCFSoftShadowMap
       webGlRenderer.shadowMap.autoUpdate = true
-      threeScene.fog = new THREE.Fog('#f9f9f9', 150, 400)
+      // threeScene.fog = new THREE.Fog('#f9f9f9', 300, 400)
     },
     []
   )
+
+  const config = getViewerConfig(furnitureType)
 
   return (
     <div style={{ width: '100%', height: '100%', minHeight: '500px' }}>
       <Canvas
         camera={{
-          position: [-150, 150, 150],
+          position: config.cameraPosition,
           fov: 60,
           near: 0.5,
           far: 1000,
@@ -144,18 +139,18 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
       >
         {/* Orbit controls for rotation and zoom */}
         <OrbitControls
-          enablePan={false}
+          enablePan={true}
           enableZoom={true}
           enableRotate={true}
           enableDamping={false}
           dampingFactor={0}
-          minDistance={2}
-          maxDistance={250}
-          minAzimuthAngle={-Math.PI / 2 + 0.5}
-          maxAzimuthAngle={Math.PI / 2 - 0.5}
-          minPolarAngle={0.3}
-          maxPolarAngle={Math.PI / 2 + 0.2}
-          target={[0, 50, 0]} // Move scene center down by 50 units to look in the center of the stand
+          minDistance={config.minDistance}
+          maxDistance={config.maxDistance}
+          minAzimuthAngle={config.minAzimuthAngle}
+          maxAzimuthAngle={config.maxAzimuthAngle}
+          minPolarAngle={config.minPolarAngle}
+          maxPolarAngle={config.maxPolarAngle}
+          target={config.target}
         />
 
         {/* 3D Scene */}
@@ -168,6 +163,10 @@ const FurnitureViewerComponent: React.FC<FurnitureViewerProps> = ({
           sections={sections}
           openingType={openingType}
           columns={columns}
+          columnConfigurations={columnConfigurations}
+          columnWidths={columnWidths}
+          columnPositions={columnPositions}
+          furnitureType={furnitureType}
         />
       </Canvas>
     </div>

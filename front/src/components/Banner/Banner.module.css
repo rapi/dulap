@@ -14,7 +14,7 @@
 .heroImage {
   width: 100%;
   height: auto;
-  max-height: 1200px;
+  max-height: 100vh;
   object-fit: cover;
   object-position: 50% 85%;
   opacity: 0.7;
