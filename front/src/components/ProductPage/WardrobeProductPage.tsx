@@ -9,7 +9,7 @@ import {
 import {
   ProductDimensions,
   ProductDimensionsComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductDimensions'
+} from '~/components/ProductPage/productTypeComponents/ProductDimensions'
 import {
   ProductColors,
   ProductColorsComponent,
@@ -32,12 +32,15 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductImageCarousel'
+} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
+import {
+  ProductGallery,
+  ProductGalleryComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductGallery'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
@@ -45,10 +48,14 @@ import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { use3DVersion } from '~/hooks/use3DVersion'
 import { DEFAULT_WARDROBE } from './productTypes/wardrobe'
 import { FurnitureViewer } from '../ThreeDModel/FurnitureViewer'
+import { InfoBar } from '~/components/InfoBar/InfoBar'
+import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
+import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
 
 export type ProductComponent =
   | ProductImageSelectComponent
   | ProductImageCarouselComponent
+  | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
@@ -59,6 +66,8 @@ export type PredefinedValue = {
   sections?: ProductSectionPredefinedValue
   imageSelect?: string
   imageCarousel?: string[]
+  gallery?: string[]
+
   dimensions?: Dimension
   colors?: string
   select?: string
@@ -83,42 +92,42 @@ export const ProductPage: FC<ProductPageProps> = ({
         return (
           <ProductImageSelect
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.imageSelect ?? undefined}
           />
         )
       case 'dimensions':
         return (
           <ProductDimensions
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.dimensions ?? undefined}
           />
         )
       case 'colors':
         return (
           <ProductColors
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.colors ?? undefined}
           />
         )
       case 'select':
         return (
           <ProductSelect
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.select ?? undefined}
           />
         )
       case 'sections':
         return !isStand3D ? (
           <ProductSections
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.sections ?? undefined}
           />
         ) : null
       case 'furniture':
         return (
           <ProductFurniture
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.furniture ?? undefined}
           />
         )
     }
@@ -130,6 +139,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   )
   const imageCarouselComponent = currentComponents.find(
     (component) => component.type === 'imageCarousel'
+  )
+  const galleryComponent = currentComponents.find(
+    (component) => component.type === 'gallery'
   )
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -154,51 +166,75 @@ export const ProductPage: FC<ProductPageProps> = ({
   
   return (
     <>
-      {/* Left Side: Image */}
-      <div className={styles.leftContainer}>
-        {isStand3D ? (
-          <FurnitureViewer {...furniture3DProps} />
-        ) : (
-          imageCarouselComponent && (
-            <ProductImageCarousel
-              configuration={
-                values?.imageCarousel
-                  ? {
-                      type: 'imageCarousel',
-                      images: values.imageCarousel,
-                    }
-                  : imageCarouselComponent
-              }
+      <div className={styles.contentContainer}>
+        {/* Left Side: Viewer or Image Carousel */}
+        <div className={styles.leftContainer}>
+          {isStand3D ? (
+            <FurnitureViewer {...furniture3DProps} />
+          ) : (
+            imageCarouselComponent && (
+              <ProductImageCarousel
+                configuration={
+                  values?.imageCarousel
+                    ? {
+                        type: 'imageCarousel',
+                        images: values.imageCarousel,
+                      }
+                    : imageCarouselComponent
+                }
+              />
+            )
+          )}
+        </div>
+        {/* Right Side: Product Details */}
+        <div className={styles.detailsContainer}>
+          <h1 className={styles.visuallyHiddenTitle}>
+            <FormattedMessage id="meta.header.configurator.wardrobe" />
+          </h1>
+          <h2 className={styles.title}>
+            <FormattedMessage id={name} />
+          </h2>
+          {currentComponents.map((component, index) => {
+            return (
+              <div key={index + component.type}>{getComponent(component)}</div>
+            )
+          })}
+        </div>
+        <div>
+          {priceComponent && !isStand3D && (
+            <ProductPrice
+              onAddItem={() => {
+                addItem('wardrobe', currentComponents, values ?? {})
+              }}
+              configuration={priceComponent}
+              predefinedValue={values?.price ?? undefined}
             />
-          )
-        )}
+          )}
+          {values != null && (
+            <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
+          )}
+          <OrderSamplesBox />
+        </div>
       </div>
-      {/* Right Side: Product Details */}
-      <div className={styles.detailsContainer}>
-        <h3 className={styles.title}>
-          <FormattedMessage id={name} />
-        </h3>
-        {currentComponents.map((component, index) => {
-          return (
-            <div key={index + component.type}>{getComponent(component)}</div>
-          )
-        })}
-      </div>
+      <br />
+      <br />
+      <br />
+      <InfoBar items={productInfoBarContent} />
+      <br />
+      <br />
+      <br />
       <div>
-        {priceComponent && !isStand3D && (
-          <ProductPrice
-            onAddItem={() => {
-              addItem('wardrobe', currentComponents, values ?? {})
-            }}
-            configuration={priceComponent}
-            predefinedValue={values?.price ?? undefined}
+        {galleryComponent && (
+          <ProductGallery
+            configuration={
+              values?.gallery
+                ? {
+                    type: 'gallery',
+                    images: values.gallery,
+                  }
+                : galleryComponent
+            }
           />
-        )}
-        {values != null && isStand3D && (
-          <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
-        )}
-        {isStand3D && (
-        <ProductInfobox />
         )}
       </div>
     </>
