@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useMemo, useRef } from 'react'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import {
@@ -8,7 +9,7 @@ import {
 } from '../furnitureUtils'
 import { HingePositionRule } from '~/types/columnConfigurationTypes'
 import { getHandleColor, HANDLE_CONSTANTS } from '../handleUtils'
-import { useAnimatedPositions } from '~/hooks/useAnimatedPosition'
+import { useAnimatedPosition } from '~/hooks/useAnimatedPosition'
 
 const DOOR_CONSTANTS = {
   METALLIC_HANDLE_COLOR: HANDLE_CONSTANTS.METALLIC_COLOR,
@@ -382,7 +383,7 @@ const DoorComponent: React.FC<DoorProps> = ({
 
   /**
    * ANIMATION
-   * Smooth opening/closing animation using the useAnimatedPositions hook
+   * Separate concerns: rotation animation vs z-position management
    */
   const isRightOpening = openingSide === 'right'
   const openAngle = isRightOpening
@@ -390,20 +391,36 @@ const DoorComponent: React.FC<DoorProps> = ({
     : -FURNITURE_CONFIG.doorOpenAngle
   const baseZPosition = doorDepth - FURNITURE_CONFIG.panelThickness
 
-  useAnimatedPositions(hingeGroupRef.current, isHovered, [
-    {
-      axis: 'rotationY',
-      baseValue: 0,
-      activeOffset: openAngle,
-      lerpSpeed: FURNITURE_CONFIG.animationLerpSpeed,
-    },
-    {
-      axis: 'z',
-      baseValue: baseZPosition,
-      activeOffset: FURNITURE_CONFIG.panelThickness,
-      lerpSpeed: FURNITURE_CONFIG.animationLerpSpeed,
-    },
-  ])
+  // Use separate animation hooks for independent control
+  // Rotation: smooth animation on hover
+  const rotationConfig = useMemo(() => ({
+    axis: 'rotationY' as const,
+    baseValue: 0,
+    activeOffset: openAngle,
+    lerpSpeed: FURNITURE_CONFIG.animationLerpSpeed,
+  }), [openAngle])
+
+  useAnimatedPosition(hingeGroupRef.current, isHovered, rotationConfig)
+
+  // Z-position: smooth animation on hover, instant update on depth change
+  const zOffsetRef = useRef(0)
+  
+  useFrame(() => {
+    if (!hingeGroup) return
+    
+    // Target offset: 0 when not hovered, +thickness when hovered
+    const targetOffset = isHovered ? FURNITURE_CONFIG.panelThickness : 0
+    
+    // Smoothly interpolate the offset
+    zOffsetRef.current = THREE.MathUtils.lerp(
+      zOffsetRef.current,
+      targetOffset,
+      FURNITURE_CONFIG.animationLerpSpeed
+    )
+    
+    // Apply base position + animated offset
+    hingeGroup.position.z = baseZPosition + zOffsetRef.current
+  })
 
   /**
    * CLEANUP

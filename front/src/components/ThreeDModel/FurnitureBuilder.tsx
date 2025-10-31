@@ -18,6 +18,8 @@ interface FurnitureBuilderProps {
   openingType: OpeningType
   columns: number
   columnConfigurations?: ColumnConfigurationType[]
+  columnWidths?: number[] // Optional: variable column widths (for wardrobe)
+  columnPositions?: number[] // Optional: custom column X positions
 }
 
 // Preload assets for better performance
@@ -47,6 +49,8 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
   openingType,
   columns,
   columnConfigurations,
+  columnWidths,
+  columnPositions,
 }) => {
   const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
   const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
@@ -73,12 +77,26 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
   }
 
   // Calculate column configuration
-  const columnWidth = desiredWidth / columns
+  // Use provided widths or fall back to equal distribution
+  const useVariableWidths = columnWidths && columnWidths.length === columns
+  const useCustomPositions = columnPositions && columnPositions.length === columns
+  
+  const defaultColumnWidth = desiredWidth / columns
 
   // Generate columns with explicit configuration
   const columnComponents = Array.from({ length: columns }, (_, index) => {
-    const columnPositionX =
-      -desiredWidth / 2 + columnWidth * index + columnWidth / 2
+    // Get column width (variable or equal)
+    const columnWidth = useVariableWidths ? columnWidths[index] : defaultColumnWidth
+    
+    // Get column position (custom or calculated)
+    let columnPositionX: number
+    if (useCustomPositions) {
+      columnPositionX = columnPositions[index]
+    } else {
+      // Default equal distribution
+      columnPositionX = -desiredWidth / 2 + defaultColumnWidth * index + defaultColumnWidth / 2
+    }
+    
     const columnType = columnConfigurations?.[index] || ColumnConfigurationType.DRAWERS_3
 
     return (
