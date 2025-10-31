@@ -6,6 +6,7 @@ import {
   widthMap,
   imageWidthMap,
 } from '~/components/ProductPage/productTypes/wardrobeMap'
+import { colorHexCodes, ColorName } from '~/utils/colorDictionary'
 export type MainImageParams = {
   imageWidth: number
   imageSections: number
@@ -28,12 +29,20 @@ const GUIDES_NR: Record<number, number> = {
   6: 0,
 }
 
+export const DEFAULT_WARDROBE = {
+  width: 200,
+  height: 260,
+  depth: 50,
+  plintHeight: 2,
+  selectedColor: colorHexCodes[ColorName.White], // White (the first one from the list)
+}
+
 export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(200)
   const [height, setHeight] = useState(260)
   const [depth, setDepth] = useState(50)
   const [plintHeight, setPlintHeight] = useState(2)
-  const [selectedColor, setSelectedColor] = useState('#fcfbf5')
+  const [selectedColor, setSelectedColor] = useState(colorHexCodes[ColorName.White])
   const [imageSide, setImageSide] = useState('right')
   const [imageWidth, setImageWidth] = useState(50)
   const [imageHeight, setImageHeight] = useState(2100)
@@ -238,7 +247,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     {
       type: 'dimensions',
       widthRange: [40, 250],
-      heightRange: [190, 270],
+      heightRange: [200, 270],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
       width,

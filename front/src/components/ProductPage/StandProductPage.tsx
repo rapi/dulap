@@ -17,6 +17,14 @@ import {
   ProductSections,
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
+import {
+  ProductColumns,
+  ProductColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductColumns'
+import {
+  ProductIndividualColumns,
+  ProductIndividualColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/stand/ProductIndividualColumns'
 import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import {
   ProductFurniture,
@@ -27,8 +35,8 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
+import { ProductMetadataComponent } from '~/components/ProductPage/productTypeComponents/ProductMetadata'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
-import { ProductHelpBox } from '~/components/ProductPage/productTypeComponents/ProductHelpBox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
@@ -37,10 +45,14 @@ import {
   ProductGallery,
   ProductGalleryComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductGallery'
+import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
+import { use3DVersion } from '~/hooks/use3DVersion'
+import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
+import { DEFAULT_STAND } from './productTypes/stand'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
 import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
@@ -52,12 +64,16 @@ export type ProductComponent =
   | ProductColorsComponent
   | ProductSelectComponent
   | ProductSectionsComponent
+  | ProductColumnsComponent
+  | ProductIndividualColumnsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
+  | ProductMetadataComponent
+
 export type PredefinedValue = {
   sections?: number
+  columns?: number
   gallery?: string[]
-
   imageSelect?: string
   imageCarousel?: string[]
   dimensions?: Dimension
@@ -84,14 +100,14 @@ export const ProductPage: FC<ProductPageProps> = ({
         return (
           <ProductDimensions
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.dimensions ?? undefined}
           />
         )
       case 'colors':
         return (
           <ProductColors
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.colors ?? undefined}
           />
         )
       case 'sections':
@@ -101,22 +117,41 @@ export const ProductPage: FC<ProductPageProps> = ({
         return (
           <ProductSections
             configuration={compWithOpts}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.sections ?? undefined}
             options={compWithOpts.options}
           />
         )
+      case 'columns':
+        return isStand3D ? (
+          <ProductColumns
+            configuration={component}
+            predefinedValue={values?.columns ?? undefined}
+            options={component.options}
+          />
+        ) : null
+      case 'individualColumns':
+        return isStand3D ? (
+          <ProductIndividualColumns
+            configuration={component}
+          />
+        ) : null
       case 'select':
         return (
           <ProductSelect
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.select ?? undefined}
           />
         )
       case 'furniture':
+        // Pass the is3DEnabled flag to furniture component
+        const furnitureConfig = {
+          ...component,
+          is3DEnabled: isStand3D
+        }
         return (
           <ProductFurniture
-            configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            configuration={furnitureConfig}
+            predefinedValue={values?.furniture ?? undefined}
           />
         )
     }
@@ -141,22 +176,35 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
+  const isStand3D = use3DVersion()
+
+  // Extract all 3D props using shared hook
+  const furniture3DProps = use3DFurnitureProps(
+    currentComponents,
+    values,
+    DEFAULT_STAND
+  )
+
   return (
     <>
       <div className={styles.contentContainer}>
-        {/* Left Side: Image */}
+        {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
-          {imageCarouselComponent && (
-            <ProductImageCarousel
-              configuration={
-                values?.imageCarousel
-                  ? {
-                      type: 'imageCarousel',
-                      images: values.imageCarousel,
-                    }
-                  : imageCarouselComponent
-              }
-            />
+          {isStand3D ? (
+            <FurnitureViewer {...furniture3DProps} />
+          ) : (
+            imageCarouselComponent && (
+              <ProductImageCarousel
+                configuration={
+                  values?.imageCarousel
+                    ? {
+                        type: 'imageCarousel',
+                        images: values.imageCarousel,
+                      }
+                    : imageCarouselComponent
+                }
+              />
+            )
           )}
         </div>
         {/* Right Side: Product Details */}
@@ -174,7 +222,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           })}
         </div>
         <div>
-          {priceComponent && (
+          {priceComponent && !isStand3D && (
             <ProductPrice
               onAddItem={() => {
                 addItem('stand', currentComponents, values ?? {})
@@ -193,7 +241,6 @@ export const ProductPage: FC<ProductPageProps> = ({
       <br />
       <br />
       <InfoBar items={productInfoBarContent} />
-
       <br />
       <br />
       <br />

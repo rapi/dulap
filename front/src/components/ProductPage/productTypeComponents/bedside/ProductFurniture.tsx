@@ -9,20 +9,21 @@ import { FormattedMessage } from 'react-intl'
 import { useIntl } from 'react-intl'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Modal } from '~/components/Modal/Modal'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
-  openingOption: string
-  selectedOpeningMethod: string
+  openingOption: string | OpeningType
+  selectedOpeningMethod: string | OpeningType
 
-  setOpeningOption: (openingOption: string) => void
+  setOpeningOption: ((openingOption: string | OpeningType) => void) | ((value: OpeningType) => void)
   guides: string
   hinges: string
   setGuides: (value: string) => void
   predefinedValue?: ProductFurniturePredefinedValue
 }
 export const openingOptions: ButtonOptionsType[] = [
-  { value: 'maner', label: 'homepage.configurator.fittings.handle' },
+  { value: 'maner', label: 'homepage.configurator.fittings.roundHandle' },
   { value: 'push', label: 'homepage.configurator.fittings.pushToOpen' },
 ]
 interface ProductSelectProps {
@@ -30,7 +31,7 @@ interface ProductSelectProps {
   predefinedValue?: ProductFurniturePredefinedValue
 }
 export type ProductFurniturePredefinedValue = {
-  openingType: 'maner' | 'push'
+  openingType: 'maner' | 'profile-handle' | 'push'
   hinges?:
     | 'homepage.configurator.fittings.hinges.options.1'
     | 'homepage.configurator.fittings.hinges.options.2'
@@ -63,7 +64,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
               options={openingOptions}
               defaultSelected={configuration.openingOption}
               onChange={(value) => {
-                configuration.setOpeningOption(value)
+                configuration.setOpeningOption(value as OpeningType)
               }}
             />
           )}

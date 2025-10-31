@@ -10,6 +10,18 @@ import {
   ProductColorsComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductColors'
 import {
+  ProductSections,
+  ProductSectionsComponent,
+} from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
+import {
+  ProductColumns,
+  ProductColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductColumns'
+import {
+  ProductIndividualColumns,
+  ProductIndividualColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/stand/ProductIndividualColumns'
+import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
@@ -18,6 +30,8 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
+import { ProductMetadataComponent } from '~/components/ProductPage/productTypeComponents/ProductMetadata'
+import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
@@ -26,11 +40,14 @@ import {
   ProductGallery,
   ProductGalleryComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductGallery'
+import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
+import { use3DVersion } from '~/hooks/use3DVersion'
+import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
-import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
+import { DEFAULT_BEDSIDE } from './productTypes/bedside'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
 import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
@@ -40,9 +57,15 @@ export type ProductComponent =
   | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
+  | ProductSectionsComponent
+  | ProductColumnsComponent
+  | ProductIndividualColumnsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
+  | ProductMetadataComponent
 export type PredefinedValue = {
+  sections?: number
+  columns?: number
   imageCarousel?: string[]
   gallery?: string[]
   dimensions?: Dimension
@@ -62,27 +85,54 @@ export const ProductPage: FC<ProductPageProps> = ({
   values,
 }) => {
   const { addItem } = useCart()
+  const isBedside3D = use3DVersion()
+  
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
         return (
           <ProductDimensions
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.dimensions ?? undefined}
           />
         )
       case 'colors':
         return (
           <ProductColors
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.colors ?? undefined}
           />
         )
+      case 'sections':
+        return (
+          <ProductSections
+            configuration={component}
+            predefinedValue={values?.sections ?? undefined}
+          />
+        )
+      case 'columns':
+        return isBedside3D ? (
+          <ProductColumns
+            configuration={component}
+            predefinedValue={values?.columns ?? undefined}
+            options={component.options}
+          />
+        ) : null
+      case 'individualColumns':
+        return isBedside3D ? (
+          <ProductIndividualColumns
+            configuration={component}
+          />
+        ) : null
       case 'furniture':
+        const furnitureConfig = {
+          ...component,
+          is3DEnabled: isBedside3D
+        }
         return (
           <ProductFurniture
-            configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            configuration={furnitureConfig}
+            predefinedValue={values?.furniture ?? undefined}
           />
         )
     }
@@ -107,22 +157,33 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
+  // Extract all 3D props using shared hook
+  const furniture3DProps = use3DFurnitureProps(
+    currentComponents,
+    values,
+    DEFAULT_BEDSIDE
+  )
+
   return (
     <>
       <div className={styles.contentContainer}>
-        {/* Left Side: Image */}
+        {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
-          {imageCarouselComponent && (
-            <ProductImageCarousel
-              configuration={
-                values?.imageCarousel
-                  ? {
-                      type: 'imageCarousel',
-                      images: values.imageCarousel,
-                    }
-                  : imageCarouselComponent
-              }
-            />
+          {isBedside3D ? (
+            <FurnitureViewer {...furniture3DProps} />
+          ) : (
+            imageCarouselComponent && (
+              <ProductImageCarousel
+                configuration={
+                  values?.imageCarousel
+                    ? {
+                        type: 'imageCarousel',
+                        images: values.imageCarousel,
+                      }
+                    : imageCarouselComponent
+                }
+              />
+            )
           )}
         </div>
         {/* Right Side: Product Details */}
@@ -140,7 +201,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           })}
         </div>
         <div>
-          {priceComponent && (
+          {priceComponent && !isBedside3D && (
             <ProductPrice
               onAddItem={() => {
                 addItem('bedside', currentComponents, values ?? {})
