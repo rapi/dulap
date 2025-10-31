@@ -27,7 +27,7 @@
   margin: 0;
   color: #fff;
   margin-bottom: 5px;
-  font-weight: 300!important;
+  font-weight: 300 !important;
 }
 
 .visuallyHiddenHeader {
@@ -59,7 +59,6 @@
 
 .heroSubtitle p {
   font-size: 18px;
-  
 }
 
 .heroSubtitle ol {
@@ -95,10 +94,10 @@
     max-width: 450px;
     padding: 2.8rem;
   } */
-   .heroContent {
+  .heroContent {
     bottom: -10%;
     left: 1%;
-   }
+  }
   .heroHeader {
     font-size: 12px;
     font-weight: 200;
@@ -129,7 +128,6 @@
     display: flex;
     justify-content: end;
   } */
-   
 }
 
 @media (max-width: 480px) {

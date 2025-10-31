@@ -1,8 +1,6 @@
 import React, { FC, useState } from 'react'
-import {
-  ButtonOptionsType,
-  ButtonSelect,
-} from '~/components/ButtonSelect/ButtonSelect'
+import { ButtonOptionsType, ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import Select from '~/components/Select/Select'
 import { FormattedMessage } from 'react-intl'
@@ -12,24 +10,26 @@ import { Modal } from '~/components/Modal/Modal'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
-  openingOption: string
-  selectedOpeningMethod: string
-  setOpeningOption: (openingOption: string) => void
+  openingOption: OpeningType
+  selectedOpeningMethod: OpeningType
+  setOpeningOption: (openingOption: OpeningType) => void
   guides: string
   setGuides: (value: string) => void
   predefinedValue?: ProductFurniturePredefinedValue
   hinges: string
+  is3DEnabled?: boolean
 }
-export const openingOptions: ButtonOptionsType[] = [
-  { value: 'maner', label: 'homepage.configurator.fittings.handle' },
-  { value: 'push', label: 'homepage.configurator.fittings.pushToOpen' },
+export const openingOptions: ButtonOptionsType<OpeningType>[] = [
+  { value: OpeningType.RoundHandle, label: 'homepage.configurator.fittings.roundHandle' },
+  { value: OpeningType.ProfileHandle, label: 'homepage.configurator.fittings.profileHandle' },
+  { value: OpeningType.Push, label: 'homepage.configurator.fittings.pushToOpen' },
 ]
 interface ProductSelectProps {
   configuration: ProductFurnitureComponent
   predefinedValue?: ProductFurniturePredefinedValue
 }
 export type ProductFurniturePredefinedValue = {
-  openingType: 'maner' | 'push'
+  openingType: OpeningType
   hinges?:
     | 'homepage.configurator.fittings.hinges.options.1'
     | 'homepage.configurator.fittings.hinges.options.2'
@@ -43,6 +43,11 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
 }) => {
   const intl = useIntl()
   const [isModalOpen3, setIsModalOpen3] = useState(false)
+
+  // Filter opening options based on 3D availability
+  const availableOpeningOptions = configuration.is3DEnabled
+    ? openingOptions
+    : openingOptions.filter(option => option.value !== OpeningType.ProfileHandle)
 
   return (
     <div>
@@ -60,7 +65,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
             intl.formatMessage({ id: predefinedValue.openingType })
           ) : (
             <ButtonSelect
-              options={openingOptions}
+              options={availableOpeningOptions}
               defaultSelected={configuration.openingOption}
               onChange={(value) => {
                 configuration.setOpeningOption(value)

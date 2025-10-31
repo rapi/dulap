@@ -19,17 +19,23 @@
   margin-right: auto;
 }
 
+.title {
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+  color: #333;
+}
 /* 3. Hero / Page Title */
 .pageHero {
-  background-color: #f9f9f9; 
-  padding: 20px 0;           
+  background-color: #f9f9f9;
+  padding: 20px 0;
   text-align: center;
 }
 
 .pageHero h1 {
   font-size: 2rem;
   font-weight: 600;
-  margin-bottom: 8px; 
+  margin-bottom: 8px;
 }
 
 .pageHero p {
@@ -39,57 +45,57 @@
 
 /* 4. Contact Section */
 .contactSection {
-  padding: 20px 0; 
+  padding: 20px 0;
 }
 
 .contactColumns {
   display: flex;
   flex-wrap: wrap;
-  gap: 32px;       
-  margin-top: 16px; 
+  gap: 32px;
+  margin-top: 16px;
 }
 
 /* 4.1. Contact Form */
 .contactFormWrapper {
   flex: 1 1 500px;
-  padding: 32px;    
+  padding: 32px;
   border-radius: 4px;
 }
 
 .contactForm .formGroup {
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
 }
 
 .contactForm label {
   display: block;
   font-weight: 500;
-  margin-bottom: 8px;  
-  color: #333333;      
+  margin-bottom: 8px;
+  color: #333333;
 }
 
 .contactForm input,
 .contactForm textarea {
   width: 100%;
   max-width: 100%;
-  padding: 8px;            
+  padding: 8px;
   border: 1px solid #cccccc;
   border-radius: 4px;
   font-size: 1rem;
   font-family: 'Onest', sans-serif;
-  color: #333333;          
-  box-sizing: border-box;     
+  color: #333333;
+  box-sizing: border-box;
 }
 
 .contactForm input:focus,
 .contactForm textarea:focus {
   outline: none;
-  border-color: #c0392b; 
+  border-color: #c0392b;
 }
 
 .btnSubmit {
-  background-color: #c0392b; 
+  background-color: #c0392b;
   color: #ffffff;
-  padding: 8px 16px;      
+  padding: 8px 16px;
   border: none;
   border-radius: 4px;
   font-weight: 500;
@@ -98,7 +104,7 @@
 }
 
 .btnSubmit:hover {
-  background-color: #a8322a; 
+  background-color: #a8322a;
 }
 
 /* 4.2. Contact Info */
@@ -110,7 +116,7 @@
 .contactInfo {
   flex: 1 1 350px;
   background-color: #f9f9f9;
-  padding: 20px;            
+  padding: 20px;
   border-radius: 4px;
 }
 
@@ -121,7 +127,7 @@
 
 .contactInfo h2 {
   font-size: 1.5rem;
-  margin-bottom: 16px; 
+  margin-bottom: 16px;
 }
 
 .buttonContainer {
@@ -137,23 +143,23 @@
 .infoLabel {
   display: block;
   font-weight: 500;
-  color: #333333;      
-  margin-bottom: 8px;  
+  color: #333333;
+  margin-bottom: 8px;
 }
 
 .infoText {
-  color: #666666;      
+  color: #666666;
   font-size: 0.95rem;
 }
 
 .infoText:hover {
-  color: #333333;      
+  color: #333333;
   text-decoration: underline;
 }
 
 /* 5. Map Embed */
 .mapWrapper {
-  margin-top: 32px; 
+  margin-top: 32px;
   border-radius: 4px;
   overflow: hidden;
 }
@@ -196,12 +202,12 @@
     padding: 10px 0;
   }
   .contactSection {
-    padding: 10px 0; 
+    padding: 10px 0;
   }
   .contactFormWrapper {
     padding: 10px;
-    box-sizing: border-box;     
-    overflow: auto;   
+    box-sizing: border-box;
+    overflow: auto;
     max-width: 100%;
   }
   .contactDetailsContainer {

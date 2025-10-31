@@ -7,26 +7,51 @@ import ru from '../locales/ru.json'
 import { IntlProvider } from 'react-intl'
 import { CartProvider } from '~/context/cartContext'
 import React, { useEffect } from 'react'
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { Modal } from '~/components/Modal/Modal'
 import { CopyButton } from '~/components/CopyButton/CopyButton'
 import { FormattedMessage, useIntl } from 'react-intl'
-import Script from 'next/script'
 import Head from 'next/head'
 
 const localeMap: Record<string, Record<string, string>> = { ro, ru }
-function pageview(url: string) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  window.gtag?.('event', 'page_view', { page_location: url })
-}
-function MyApp({ Component, pageProps }: AppProps) {
+const NEXT_GA_ID = process.env.NEXT_GA_ID
+export default function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter()
   const { locale: queryLocale } = router.query
   const currentLocale = (queryLocale as string) ?? 'ro'
-  const messages = localeMap[queryLocale as string] ?? ro
-  Router.events.on('routeChangeComplete', pageview)
-  const canonicalUrl = `https://dulap.md${router.pathname.replace('[locale]', 'ro')}`
+  const messages = localeMap[currentLocale] ?? ro
+  console.log(NEXT_GA_ID)
+  // Single SPA pageview + custom events
+  useEffect(() => {
+    // const handleRouteChange = (url: string) => {
+    //   window.gtag?.('event', 'page_view', {
+    //     page_title: document.title,
+    //     page_location: window.location.href,
+    //     page_path: url,
+    //   })
+    //   if (url === '/configurator')
+    //     window.gtag?.('event', 'view_configurator', { value: 1 })
+    //   if (url === '/products')
+    //     window.gtag?.('event', 'view_products', { value: 1 })
+    // }
+    // router.events.on('routeChangeComplete', handleRouteChange)
+    // first load
+    // handleRouteChange(window.location.pathname + window.location.search)
+    // return () => router.events.off('routeChangeComplete', handleRouteChange)
+  }, [router.events])
+
+  // SEO meta
+  const path = router.pathname.replace('/[locale]', '/').replace('//', '/')
+  const metaCode =
+    router.pathname
+      .replace('/[locale]/', '')
+      .replace('/[locale]', '')
+      .replace('/', '.') || 'default'
+  const metaDescription = messages[`meta_description.${metaCode}`]
+  const metaTitle = messages[`meta_title.${metaCode}`]
+  const canonicalUrl = `https://dulap.md${path}`
+
+  // Promo modal timer
   useEffect(() => {
     const delayMs = 30000
     const already = localStorage.getItem('promoShown')
@@ -35,31 +60,28 @@ function MyApp({ Component, pageProps }: AppProps) {
         window.dispatchEvent(new Event('openPromo'))
         localStorage.setItem('promoShown', 'true')
       }, delayMs)
-
       return () => clearTimeout(timer)
     }
   }, [])
-
   return (
     <>
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=G-K9E49M4GJ5`}
-        strategy="afterInteractive"
-      />
-      <Script id="ga4-init" strategy="afterInteractive">
-        {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-K9E49M4GJ5', { send_page_view: false });
-            `}
-      </Script>
       <Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
         <link rel="canonical" href={canonicalUrl} />
         <link
           rel="alternate"
-          hrefLang="ru"
-          href={canonicalUrl.replace('ro', 'ru')}
+          hrefLang="ro-RO"
+          href={`https://dulap.md${router.pathname.replace('/[locale]', '/ro')}`}
+        />
+        <link
+          rel="alternate"
+          hrefLang="ru-RU"
+          href={`https://dulap.md${router.pathname.replace('/[locale]', '/ru')}`}
         />
         <link rel="alternate" hrefLang="x-default" href={canonicalUrl} />
       </Head>
@@ -74,8 +96,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   )
 }
-
-export default MyApp
 
 function PromoListener() {
   const intl = useIntl()

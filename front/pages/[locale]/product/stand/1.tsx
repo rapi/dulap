@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { ProductPageLayout } from '~/components/ProductPageLayout/ProductPageLayout'
 import { ProductPage } from '~/components/ProductPage/StandProductPage'
 import { StandProductConfigurator } from '~/components/ProductPage/productTypes/stand'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export const preview = {
   name: 'products.stand.1.name',
@@ -28,7 +29,7 @@ const Product: FC = () => {
             plintHeight: 2,
           },
           furniture: {
-            openingType: 'push',
+            openingType: OpeningType.Push,
             hinges: 'homepage.configurator.fittings.hinges.options.1',
             guides: 'homepage.configurator.fittings.guides.options.1',
           },

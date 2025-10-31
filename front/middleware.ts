@@ -24,15 +24,22 @@ export function middleware(request: NextRequest) {
 
   // Skip asset files
   if (/\.(png|jpe?g|gif|svg|webp|avif|mp4|fbx|glb)$/.test(pathname)) {
-    // Special handling for FBX files and texture files in local development
     const isLocalhost = request.nextUrl.hostname === 'localhost' || request.nextUrl.hostname === '127.0.0.1'
-    const isFBX = /\.fbx$/.test(pathname)
-    const isGLB = /\.glb$/.test(pathname)
 
-    if ((isFBX || isGLB) && isLocalhost) {
+    // Define paths that should always be served locally in development
+    const localOnlyPaths = [
+      '/assets/thumbnails/',
+      '/assets/3d-models/',
+    ]
+    
+    const shouldServeLocally = isLocalhost && localOnlyPaths.some(path => pathname.includes(path))
+    
+    if (shouldServeLocally) {
+      console.log('Serving locally (whitelisted):', pathname);
       return NextResponse.next()
     }
-    // For all other assets (including images), use the original rewrite logic
+    
+    // For all other assets - rewrite to production
     const url = request.nextUrl.clone()
     url.protocol = 'https'
     url.hostname = 'dulap.md'
@@ -62,15 +69,17 @@ export function middleware(request: NextRequest) {
   // Redirect to locale-prefixed URL using cookie or default
   const locale = getLocaleFromRequest(request)
   const newUrl = request.nextUrl.clone()
-  newUrl.pathname = `/${locale}${pathname}`
-  const response = NextResponse.redirect(newUrl)
-  response.cookies.set(LOCALE_COOKIE_NAME, locale, {
-    path: '/',
-    maxAge: 60 * 60 * 24 * 30,
-  })
-  return response
+  if (locale !== 'ro' && newUrl.pathname.split('/')[0] !== locale) {
+    newUrl.pathname = `/${locale}${pathname}`
+    const response = NextResponse.redirect(newUrl)
+    response.cookies.set(LOCALE_COOKIE_NAME, locale, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+    })
+    return response
+  }
 }
 
 export const config = {
-  matcher: ['/((?!_next).*)'],
+  matcher: ['/((?!_next|assets).*)'],
 }
