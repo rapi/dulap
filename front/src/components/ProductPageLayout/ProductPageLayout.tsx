@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './ProductPageLayout.module.css'
 import { Breadcrumb } from '~/components/Breadcrumb/Breadcrumb'
-import { DevStand3DToggle } from '~/components/DevStand3DToggle'
+import { DevStand3DToggle } from '~/components/DevStand3DToggle/DevStand3DToggle'
 import ProductDescription from '~/components/ProductDescription/ProductDescription'
 import { productTypes } from '~/components/ProductTypesList/productTypes'
 import { useRouter } from 'next/router'

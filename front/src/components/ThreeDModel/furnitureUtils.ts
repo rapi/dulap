@@ -38,8 +38,8 @@ export const anchorGeometryToWall = (mesh: THREE.Mesh): void => {
 
 export const applyColorToObject = (obj: THREE.Object3D, color: string): void => {
   obj.traverse((o) => {
-    if ((o as THREE.Mesh).isMesh) {
-      const mesh = o as THREE.Mesh
+    if (o instanceof THREE.Mesh) {
+      const mesh = o
       const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
       materials.forEach((mat) => {
         if (mat && 'color' in mat && mat.color instanceof THREE.Color) {
@@ -56,10 +56,10 @@ export const cloneWithIndependentMaterials = (
   sourceObject: THREE.Object3D,
   { castShadow = true, receiveShadow = true }: { castShadow?: boolean; receiveShadow?: boolean } = {}
 ): THREE.Object3D => {
-  const clonedRoot = SkeletonUtils.clone(sourceObject) as THREE.Object3D
+  const clonedRoot = SkeletonUtils.clone(sourceObject)
   clonedRoot.traverse((node) => {
-    const meshNode = node as THREE.Mesh
-    if (meshNode.isMesh) {
+    if (node instanceof THREE.Mesh) {
+      const meshNode = node
       const originalMaterial = meshNode.material
       if (originalMaterial) {
         meshNode.material = Array.isArray(originalMaterial)
@@ -87,8 +87,8 @@ export const createPanelPivotWithFlag = (
 // Dispose of geometries and materials to free GPU memory
 export const disposeObject = (obj: THREE.Object3D): void => {
   obj.traverse((child) => {
-    if ((child as THREE.Mesh).isMesh) {
-      const mesh = child as THREE.Mesh
+    if (child instanceof THREE.Mesh) {
+      const mesh = child
       
       if (mesh.geometry) {
         mesh.geometry.dispose()
@@ -99,12 +99,11 @@ export const disposeObject = (obj: THREE.Object3D): void => {
         materials.forEach((mat) => {
           if (mat && mat instanceof THREE.Material) {
             // Dispose textures if any
-            const texturedMat = mat as THREE.MeshStandardMaterial | THREE.MeshBasicMaterial | THREE.MeshPhysicalMaterial
-            if (texturedMat.map) texturedMat.map.dispose()
-            if ('normalMap' in texturedMat && texturedMat.normalMap) texturedMat.normalMap.dispose()
-            if ('roughnessMap' in texturedMat && texturedMat.roughnessMap) texturedMat.roughnessMap.dispose()
-            if ('metalnessMap' in texturedMat && texturedMat.metalnessMap) texturedMat.metalnessMap.dispose()
-            if ('aoMap' in texturedMat && texturedMat.aoMap) texturedMat.aoMap.dispose()
+            if ('map' in mat && mat.map) mat.map.dispose()
+            if ('normalMap' in mat && mat.normalMap) mat.normalMap.dispose()
+            if ('roughnessMap' in mat && mat.roughnessMap) mat.roughnessMap.dispose()
+            if ('metalnessMap' in mat && mat.metalnessMap) mat.metalnessMap.dispose()
+            if ('aoMap' in mat && mat.aoMap) mat.aoMap.dispose()
             
             // Dispose material
             mat.dispose()

@@ -24,21 +24,6 @@ export function middleware(request: NextRequest) {
 
   // Skip asset files
   if (/\.(png|jpe?g|gif|svg|webp|avif|mp4|fbx|glb)$/.test(pathname)) {
-    const isLocalhost = request.nextUrl.hostname === 'localhost' || request.nextUrl.hostname === '127.0.0.1'
-
-    // Define paths that should always be served locally in development
-    const localOnlyPaths = [
-      '/assets/thumbnails/',
-      '/assets/3d-models/',
-    ]
-    
-    const shouldServeLocally = isLocalhost && localOnlyPaths.some(path => pathname.includes(path))
-    
-    if (shouldServeLocally) {
-      console.log('Serving locally (whitelisted):', pathname);
-      return NextResponse.next()
-    }
-    
     // For all other assets - rewrite to production
     const url = request.nextUrl.clone()
     url.protocol = 'https'

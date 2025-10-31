@@ -7,6 +7,7 @@ import * as THREE from 'three'
 import { Furniture3DProps } from '~/types/furniture3D'
 import { FurnitureBuilder } from './FurnitureBuilder'
 import { getViewerConfig } from './furnitureViewerConfig'
+import styles from './FurnitureViewer.module.css'
 
 // Preload models
 useGLTF.preload('/assets/3d-models/bg.glb')
@@ -58,7 +59,7 @@ const FurnitureScene = memo(function FurnitureScene({
         <GLBModel
           modelUrl="/assets/3d-models/shadow_man.glb"
           modelPosition={[config.getShadowManXPosition(width), 0, 2]}
-          modelScale={1}
+          modelScale={[1, 1, 1]}
           overrideColorHex="#ffffff"
           shouldReceiveShadow={false}
           forceFlatColorHex="#ffffff"
@@ -121,7 +122,7 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
   const config = getViewerConfig(furnitureType)
 
   return (
-    <div style={{ width: '100%', height: '100%', minHeight: '500px' }}>
+    <div className={styles.container}>
       <Canvas
         camera={{
           position: config.cameraPosition,
@@ -132,9 +133,7 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
         shadows
         dpr={[1, 1.75]}
         gl={{ powerPreference: 'high-performance' }}
-        style={{
-          background: 'linear-gradient(135deg, #f9f9f9 0%,#f9f9f9 100%)',
-        }}
+        className={styles.canvas}
         onCreated={handleCanvasCreated}
       >
         {/* Orbit controls for rotation and zoom */}

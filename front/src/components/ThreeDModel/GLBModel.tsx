@@ -5,7 +5,7 @@ import * as THREE from 'three'
 export const GLBModel = memo(function GLBModel({
   modelUrl,
   modelPosition = [0, 0, 0],
-  modelScale = 1,
+  modelScale = [1, 1, 1],
   modelRotation = [0, 0, 0],
   overrideColorHex,
   shouldCastShadow = true,
@@ -15,7 +15,7 @@ export const GLBModel = memo(function GLBModel({
 }: {
   modelUrl: string
   modelPosition?: [number, number, number]
-  modelScale?: number | [number, number, number]
+  modelScale?: [number, number, number]
   modelRotation?: [number, number, number]
   overrideColorHex?: string
   shouldCastShadow?: boolean
@@ -29,27 +29,35 @@ export const GLBModel = memo(function GLBModel({
     if (!gltfScene) return
 
     gltfScene.traverse((object3D) => {
-      if ((object3D as THREE.Mesh).isMesh) {
-        const mesh = object3D as THREE.Mesh
+      if (object3D instanceof THREE.Mesh) {
+        const mesh = object3D
 
         if (forceFlatColorHex) {
           if (Array.isArray(mesh.material)) {
-            mesh.material.forEach((material) => (material as THREE.Material).dispose?.())
-          } else {
-            (mesh.material as THREE.Material)?.dispose?.()
+            mesh.material.forEach((material) => {
+              if (material instanceof THREE.Material) {
+                material.dispose()
+              }
+            })
+          } else if (mesh.material instanceof THREE.Material) {
+            mesh.material.dispose()
           }
           mesh.material = new THREE.MeshBasicMaterial({ color: forceFlatColorHex, toneMapped: false })
         } else if (useLambertWhiteMaterial) {
           if (Array.isArray(mesh.material)) {
-            mesh.material.forEach((material) => (material as THREE.Material).dispose?.())
-          } else {
-            (mesh.material as THREE.Material)?.dispose?.()
+            mesh.material.forEach((material) => {
+              if (material instanceof THREE.Material) {
+                material.dispose()
+              }
+            })
+          } else if (mesh.material instanceof THREE.Material) {
+            mesh.material.dispose()
           }
           mesh.material = new THREE.MeshLambertMaterial({ color: '#ffffff' })
         } else if (overrideColorHex) {
-          const initialMaterial = mesh.material as THREE.Material & { color?: THREE.Color }
-          if (initialMaterial && 'color' in initialMaterial && initialMaterial.color instanceof THREE.Color) {
-            initialMaterial.color.set(overrideColorHex)
+          const material = mesh.material
+          if (!Array.isArray(material) && 'color' in material && material.color instanceof THREE.Color) {
+            material.color.set(overrideColorHex)
           }
         }
 
@@ -62,13 +70,9 @@ export const GLBModel = memo(function GLBModel({
   return (
     <primitive
       object={gltfScene}
-      position={modelPosition as unknown as [number, number, number]}
-      scale={
-        Array.isArray(modelScale)
-          ? (modelScale as unknown as [number, number, number])
-          : [modelScale, modelScale, modelScale]
-      }
-      rotation={modelRotation as unknown as [number, number, number]}
+      position={modelPosition}
+      scale={modelScale}
+      rotation={modelRotation}
       castShadow={shouldCastShadow}
       receiveShadow={shouldReceiveShadow}
     />
