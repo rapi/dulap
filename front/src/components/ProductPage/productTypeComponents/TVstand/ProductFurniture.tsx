@@ -9,20 +9,21 @@ import { FormattedMessage } from 'react-intl'
 import { useIntl } from 'react-intl'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Modal } from '~/components/Modal/Modal'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
-  selectedOpeningMethod: string
+  selectedOpeningMethod: string | OpeningType
 
-  openingOption: string
+  openingOption: string | OpeningType
   hinges: string
-  setOpeningOption: (openingOption: string) => void
+  setOpeningOption: ((openingOption: string | OpeningType) => void) | ((value: OpeningType) => void)
   guides: string
   setGuides: (value: string) => void
   predefinedValue?: ProductFurniturePredefinedValue
 }
 export const openingOptions: ButtonOptionsType[] = [
-  { value: 'maner', label: 'homepage.configurator.fittings.handle' },
+  { value: 'maner', label: 'homepage.configurator.fittings.roundHandle' },
   { value: 'push', label: 'homepage.configurator.fittings.pushToOpen' },
 ]
 interface ProductSelectProps {
@@ -30,7 +31,7 @@ interface ProductSelectProps {
   predefinedValue?: ProductFurniturePredefinedValue
 }
 export type ProductFurniturePredefinedValue = {
-  openingType: 'maner' | 'push'
+  openingType: 'maner' | 'profile-handle' | 'push'
   guides:
     | 'homepage.configurator.fittings.guides.options.1'
     | 'homepage.configurator.fittings.guides.options.2'

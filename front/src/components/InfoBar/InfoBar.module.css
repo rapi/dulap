@@ -1,0 +1,96 @@
+.infoBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 36px 0;
+  border-top: 1px solid #e9e9e9;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1 1 240px; /* grows evenly, wraps on small screens */
+  min-width: 220px;
+}
+
+.icon {
+  flex-shrink: 0;
+  line-height: 0;
+  margin-top: 2px;
+}
+.icon svg {
+  width: 28px;
+  height: 28px;
+}
+.icon img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.text {
+  display: grid;
+  gap: 4px;
+}
+
+.title {
+  margin: 0.4rem 0;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  font-weight: 400;
+  color: #1d1e1f;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 14px;
+  color: #6b6b6b;
+}
+
+.link,
+.linkButton {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #1d1e1f;
+  /*text-decoration: none;*/
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  align-self: start;
+}
+
+/*.link::after,*/
+/*.linkButton::after {*/
+/*  content: '';*/
+/*  position: absolute;*/
+/*  left: 0;*/
+/*  right: 0;*/
+/*  bottom: -2px;*/
+/*  height: 1px;*/
+/*  background: currentColor;*/
+/*  transition: transform 0.2s ease;*/
+/*  transform-origin: left;*/
+/*  transform: scaleX(1);*/
+/*}*/
+/*.link:hover::after,*/
+/*.linkButton:hover::after {*/
+/*  transform: scaleX(0.05);*/
+/*}*/
+
+/* compact on small screens */
+@media (max-width: 640px) {
+  .infoBar {
+    gap: 24px;
+    padding: 28px 0;
+  }
+  .title {
+    font-size: 16px;
+  }
+}

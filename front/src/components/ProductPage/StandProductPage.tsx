@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import {
   ProductDimensions,
   ProductDimensionsComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductDimensions'
+} from '~/components/ProductPage/productTypeComponents/ProductDimensions'
 import {
   ProductColors,
   ProductColorsComponent,
@@ -17,6 +17,14 @@ import {
   ProductSections,
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
+import {
+  ProductColumns,
+  ProductColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductColumns'
+import {
+  ProductIndividualColumns,
+  ProductIndividualColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/stand/ProductIndividualColumns'
 import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import {
   ProductFurniture,
@@ -27,33 +35,45 @@ import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
+import { ProductMetadataComponent } from '~/components/ProductPage/productTypeComponents/ProductMetadata'
 import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
-import { ProductInfobox } from '~/components/ProductPage/productTypeComponents/ProductInfobox'
-import { ProductHelpBox } from '~/components/ProductPage/productTypeComponents/ProductHelpBox'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductImageCarousel'
+} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
+import {
+  ProductGallery,
+  ProductGalleryComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductGallery'
 import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
 import { use3DVersion } from '~/hooks/use3DVersion'
+import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { useRouter } from 'next/router'
-import { getColorItemByName } from '~/utils/colorDictionary'
 import { DEFAULT_STAND } from './productTypes/stand'
+import { InfoBar } from '~/components/InfoBar/InfoBar'
+import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
+import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
+  | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
   | ProductSectionsComponent
+  | ProductColumnsComponent
+  | ProductIndividualColumnsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
+  | ProductMetadataComponent
 
 export type PredefinedValue = {
   sections?: number
+  columns?: number
+  gallery?: string[]
   imageSelect?: string
   imageCarousel?: string[]
   dimensions?: Dimension
@@ -80,14 +100,14 @@ export const ProductPage: FC<ProductPageProps> = ({
         return (
           <ProductDimensions
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.dimensions ?? undefined}
           />
         )
       case 'colors':
         return (
           <ProductColors
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.colors ?? undefined}
           />
         )
       case 'sections':
@@ -97,22 +117,41 @@ export const ProductPage: FC<ProductPageProps> = ({
         return (
           <ProductSections
             configuration={compWithOpts}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.sections ?? undefined}
             options={compWithOpts.options}
           />
         )
+      case 'columns':
+        return isStand3D ? (
+          <ProductColumns
+            configuration={component}
+            predefinedValue={values?.columns ?? undefined}
+            options={component.options}
+          />
+        ) : null
+      case 'individualColumns':
+        return isStand3D ? (
+          <ProductIndividualColumns
+            configuration={component}
+          />
+        ) : null
       case 'select':
         return (
           <ProductSelect
             configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            predefinedValue={values?.select ?? undefined}
           />
         )
       case 'furniture':
+        // Pass the is3DEnabled flag to furniture component
+        const furnitureConfig = {
+          ...component,
+          is3DEnabled: isStand3D
+        }
         return (
           <ProductFurniture
-            configuration={component}
-            predefinedValue={values?.[component.type] ?? undefined}
+            configuration={furnitureConfig}
+            predefinedValue={values?.furniture ?? undefined}
           />
         )
     }
@@ -125,6 +164,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   const imageCarouselComponent = currentComponents.find(
     (component) => component.type === 'imageCarousel'
   )
+  const galleryComponent = currentComponents.find(
+    (component) => component.type === 'gallery'
+  )
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -136,82 +178,85 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   const isStand3D = use3DVersion()
 
-  // Extract current selected color (map names to HEX for 3D)
-  const colorsComponent = currentComponents.find(
-    (c): c is ProductColorsComponent => c.type === 'colors'
+  // Extract all 3D props using shared hook
+  const furniture3DProps = use3DFurnitureProps(
+    currentComponents,
+    values,
+    DEFAULT_STAND
   )
-  const selectedColorNameOrHex =
-    colorsComponent?.selectedColor ?? DEFAULT_STAND.selectedColor
-  const selectedColorHex =
-    getColorItemByName(selectedColorNameOrHex)?.hexCode ??
-    selectedColorNameOrHex
-
-  // Extract current width & height for 3D scaling
-  const dimensionsComponent = currentComponents.find(
-    (c): c is ProductDimensionsComponent => c.type === 'dimensions'
-  )
-  const currentWidth = dimensionsComponent?.width ?? DEFAULT_STAND.width
-  const currentHeight = dimensionsComponent?.height ?? DEFAULT_STAND.height
-  const currentDepth = dimensionsComponent?.depth ?? DEFAULT_STAND.depth
-  const currentPlintHeight =
-    dimensionsComponent?.plintHeight ?? DEFAULT_STAND.plintHeight
 
   return (
     <>
-      {/* Left Side: Viewer or Image Carousel */}
-      <div className={styles.leftContainer}>
-        {isStand3D ? (
-          <FurnitureViewer
-            selectedColor={selectedColorHex}
-            width={currentWidth}
-            height={currentHeight}
-            depth={currentDepth}
-            currentPlintHeight={currentPlintHeight}
-          />
-        ) : (
-          imageCarouselComponent && (
-            <ProductImageCarousel
-              configuration={
-                values?.imageCarousel
-                  ? {
-                      type: 'imageCarousel',
-                      images: values.imageCarousel,
-                    }
-                  : imageCarouselComponent
-              }
+      <div className={styles.contentContainer}>
+        {/* Left Side: Viewer or Image Carousel */}
+        <div className={styles.leftContainer}>
+          {isStand3D ? (
+            <FurnitureViewer {...furniture3DProps} />
+          ) : (
+            imageCarouselComponent && (
+              <ProductImageCarousel
+                configuration={
+                  values?.imageCarousel
+                    ? {
+                        type: 'imageCarousel',
+                        images: values.imageCarousel,
+                      }
+                    : imageCarouselComponent
+                }
+              />
+            )
+          )}
+        </div>
+        {/* Right Side: Product Details */}
+        <div className={styles.detailsContainer}>
+          <h1 className={styles.visuallyHiddenTitle}>
+            <FormattedMessage id="meta.header.configurator.stand" />
+          </h1>
+          <h2 className={styles.title}>
+            <FormattedMessage id={name} />
+          </h2>
+          {currentComponents.map((component, index) => {
+            return (
+              <div key={index + component.type}>{getComponent(component)}</div>
+            )
+          })}
+        </div>
+        <div>
+          {priceComponent && !isStand3D && (
+            <ProductPrice
+              onAddItem={() => {
+                addItem('stand', currentComponents, values ?? {})
+              }}
+              configuration={priceComponent}
+              predefinedValue={values?.price ?? undefined}
             />
-          )
-        )}
+          )}
+          {values != null && (
+            <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
+          )}
+          <OrderSamplesBox />
+        </div>
       </div>
-      {/* Right Side: Product Details */}
-      <div className={styles.detailsContainer}>
-        <h3 className={styles.title}>
-          <FormattedMessage id={name} />
-        </h3>
-        {currentComponents.map((component, index) => {
-          return (
-            <div key={index + component.type}>{getComponent(component)}</div>
-          )
-        })}
-      </div>
-
+      <br />
+      <br />
+      <br />
+      <InfoBar items={productInfoBarContent} />
+      <br />
+      <br />
+      <br />
       <div>
-        {priceComponent && (
-          <ProductPrice
-            onAddItem={() => {
-              addItem('stand', currentComponents, values ?? {})
-            }}
-            configuration={priceComponent}
-            predefinedValue={values?.price ?? undefined}
+        {galleryComponent && (
+          <ProductGallery
+            configuration={
+              values?.gallery
+                ? {
+                    type: 'gallery',
+                    images: values.gallery,
+                  }
+                : galleryComponent
+            }
           />
         )}
-        {values != null && (
-          <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
-        )}
-        {/* Hiding it for now, have to fix the styles */}
-        {!isStand3D && 
-        <><ProductHelpBox /><ProductInfobox /></>
-        }
       </div>
     </>
   )

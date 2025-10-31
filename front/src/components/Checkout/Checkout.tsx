@@ -1,14 +1,20 @@
+// components/Checkout/Checkout.tsx
 import React, { FC, useState } from 'react'
 import { useRouter } from 'next/router'
 import styles from './Checkout.module.css'
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag'
 import { grey } from '@mui/material/colors'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { useCart, CartItem } from '~/context/cartContext'
+import {
+  useCart,
+  CartItem,
+  CartProductItem,
+  CartSampleItem,
+} from '~/context/cartContext'
 import { CustomButton } from '../CustomButton/CustomButton'
-import { Modal } from '~/components/Modal/Modal'
-import Select from '~/components//Select/Select'
+import Select from '~/components/Select/Select'
 import axios from 'axios'
+
 const PROMO_CODES = [
   { code: 'PROMO10', discount: 10 },
   { code: 'LAUNCH10', discount: 10 },
@@ -17,11 +23,17 @@ const PROMO_CODES = [
   { code: 'UP20', discount: 20 },
 ]
 
+// Type guards
+export const isProductItem = (it: CartItem): it is CartProductItem =>
+  it.type === 'product'
+
+export const isSampleItem = (it: CartItem): it is CartSampleItem =>
+  it.type === 'sample'
+
 export const Checkout: FC = () => {
   const router = useRouter()
   const intl = useIntl()
-  const { items } = useCart()
-  const { clearCart } = useCart()
+  const { items, clearCart } = useCart()
 
   // form fields
   const [name, setName] = useState('')
@@ -46,25 +58,30 @@ export const Checkout: FC = () => {
   const [termsError, setTermsError] = useState('')
   const [commonError, setCommonError] = useState('')
 
-  // other state
   const [paymentMethod, setPaymentMethod] = useState('cash')
   const [discountPercent, setDiscountPercent] = useState(0)
-  const [orderPlaced, setOrderPlaced] = useState(false)
 
-  // calculate totals
-  const rawTotal = items.reduce((sum, { config }) => {
-    let itemPrice = 0
-    config.forEach((comp) => {
-      if (comp.type === 'price') {
-        itemPrice = comp.predefinedValue ?? comp.price
-      }
-    })
-    return sum + itemPrice
+  // ---- Totals (union-safe) ----
+  const rawTotal = items.reduce((sum, item) => {
+    if (isProductItem(item)) {
+      const priceComp = item.config.find((c) => c.type === 'price')
+      const price = priceComp?.predefinedValue ?? priceComp?.price ?? 0
+      return sum + price
+    }
+    if (isSampleItem(item)) {
+      return sum + (item.sample.price ?? 0)
+    }
+    return sum
   }, 0)
+
   const deliveryPrice = 0
   const discountAmount = Math.round((rawTotal * discountPercent) / 100)
+
+  // apply assembly only to PRODUCTS
+  const productCount = items.filter(isProductItem).length
   const assemblyCost =
-    assemblyNeeded === 'checkout.assembly.yes' ? items.length * 350 : 0
+    assemblyNeeded === 'checkout.assembly.yes' ? productCount * 350 : 0
+
   const totalToPay = rawTotal - discountAmount + deliveryPrice + assemblyCost
 
   const handleApplyPromo = () => {
@@ -95,7 +112,6 @@ export const Checkout: FC = () => {
   }
 
   const handlePlaceOrder = async () => {
-    // reset errors
     setNameError('')
     setPhoneError('')
     setEmailError('')
@@ -104,7 +120,6 @@ export const Checkout: FC = () => {
     setTermsError('')
     setCommonError('')
 
-    // validate
     let valid = true
     if (!name.trim()) {
       setNameError(
@@ -170,6 +185,7 @@ export const Checkout: FC = () => {
       )
       return
     }
+
     await axios.post('/api/checkout', {
       items: JSON.stringify(items),
       name,
@@ -181,175 +197,176 @@ export const Checkout: FC = () => {
       assemblyCost,
       discountPercent,
       totalToPay,
+      paymentMethod,
     })
-    setOrderPlaced(true)
-    clearCart()
-  }
 
-  const handleCloseModal = () => {
-    setOrderPlaced(false)
-    router.push('/')
+    await new Promise((r) => setTimeout(r, 1000))
+    clearCart()
+    router.push('/order/thank-you')
   }
 
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.titleContainer}>
-          <ShoppingBagIcon fontSize="large" sx={{ color: grey[800] }} />
-          <p className={styles.title}>
-            <FormattedMessage id="checkout.title" />
-          </p>
+    <div className={styles.container}>
+      <div className={styles.titleContainer}>
+        <ShoppingBagIcon fontSize="large" sx={{ color: grey[800] }} />
+        <h1 className={styles.title}>
+          <FormattedMessage id="checkout.title" />
+        </h1>
+      </div>
+
+      <div className={styles.checkoutWrapper}>
+        {/* Left Section */}
+        <div className={styles.detailsSection}>
+          <h2 className={styles.subtitle}>
+            {' '}
+            <FormattedMessage id="checkout.subtitle1.orderDetails" />{' '}
+          </h2>{' '}
+          <div className={styles.row}>
+            {' '}
+            <div className={styles.formGroup}>
+              {' '}
+              <label>
+                {' '}
+                <FormattedMessage id="checkout.nameSurname" />{' '}
+              </label>{' '}
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={intl.formatMessage({ id: 'checkout.nameSurname' })}
+              />{' '}
+              {nameError && <p className={styles.error}>{nameError}</p>}{' '}
+            </div>{' '}
+            <div className={styles.formGroup}>
+              {' '}
+              <label>
+                {' '}
+                <FormattedMessage id="checkout.phoneNumber" />{' '}
+              </label>{' '}
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder={intl.formatMessage({
+                  id: 'checkout.phoneNumber.placeholder',
+                })}
+              />{' '}
+              {phoneError && <p className={styles.error}>{phoneError}</p>}{' '}
+            </div>{' '}
+            <div className={styles.formGroup}>
+              {' '}
+              <label>
+                {' '}
+                <FormattedMessage id="checkout.email" />{' '}
+              </label>{' '}
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={intl.formatMessage({
+                  id: 'checkout.email.placeholder',
+                })}
+              />{' '}
+              {emailError && <p className={styles.error}>{emailError}</p>}{' '}
+            </div>{' '}
+          </div>{' '}
+          <h4 className={styles.subtitle}>
+            {' '}
+            <FormattedMessage id="checkout.subtitle2.delivery" />{' '}
+          </h4>{' '}
+          <div className={styles.deliveryInputContainer}>
+            {' '}
+            <div className={styles.row}>
+              {' '}
+              <div className={styles.formGroup}>
+                {' '}
+                <label>
+                  {' '}
+                  <FormattedMessage id="checkout.city" />{' '}
+                </label>{' '}
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder={intl.formatMessage({
+                    id: 'checkout.city.placeholder',
+                  })}
+                />{' '}
+                {cityError && <p className={styles.error}>{cityError}</p>}{' '}
+              </div>{' '}
+              <div className={styles.formGroup}>
+                {' '}
+                <label>
+                  {' '}
+                  <FormattedMessage id="checkout.fullAddress" />{' '}
+                </label>{' '}
+                <input
+                  type="text"
+                  value={fullAddress}
+                  onChange={(e) => setFullAddress(e.target.value)}
+                  placeholder={intl.formatMessage({
+                    id: 'checkout.fullAddress.placeholder',
+                  })}
+                />{' '}
+                {addressError && (
+                  <p className={styles.error}>{addressError}</p>
+                )}{' '}
+              </div>{' '}
+            </div>{' '}
+            <div className={styles.formGroup}>
+              {' '}
+              <label>
+                {' '}
+                <FormattedMessage id="checkout.comment" />{' '}
+              </label>{' '}
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder={intl.formatMessage({
+                  id: 'checkout.comment.placeholder',
+                })}
+              />{' '}
+            </div>{' '}
+          </div>{' '}
+          <h4 className={styles.subtitle}>
+            {' '}
+            <FormattedMessage id="checkout.subtitle3.paymentOption" />{' '}
+          </h4>{' '}
+          <div className={styles.paymentMethods}>
+            {' '}
+            <label className={styles.paymentOption}>
+              {' '}
+              <img
+                src="/checkout/wallet.svg"
+                alt="Cash"
+                className={styles.paymentIcon}
+              />{' '}
+              <p className={styles.paymentTitle}>
+                {' '}
+                <FormattedMessage id="checkout.paymentOption.cash" />{' '}
+              </p>{' '}
+              <input
+                type="radio"
+                name="payment"
+                value="cash"
+                checked={paymentMethod === 'cash'}
+                onChange={() => setPaymentMethod('cash')}
+              />{' '}
+            </label>{' '}
+            {/* <label className={styles.paymentOption}> <img src="/checkout/mia.png" alt="MIA" className={styles.paymentIcon} /> <p className={styles.paymentTitle}> <FormattedMessage id="checkout.paymentOption.MIA" /> </p> <input type="radio" name="payment" value="mia" checked={paymentMethod === 'mia'} onChange={() => setPaymentMethod('mia')} /> </label> */}{' '}
+          </div>
         </div>
 
-        <div className={styles.checkoutWrapper}>
-          {/* Left Section: Order Details */}
-          <div className={styles.detailsSection}>
-            <h4 className={styles.subtitle}>
-              <FormattedMessage id="checkout.subtitle1.orderDetails" />
-            </h4>
-            <div className={styles.row}>
-              <div className={styles.formGroup}>
-                <label>
-                  <FormattedMessage id="checkout.nameSurname" />
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder={intl.formatMessage({
-                    id: 'checkout.nameSurname',
-                  })}
-                />
-                {nameError && <p className={styles.error}>{nameError}</p>}
-              </div>
-              <div className={styles.formGroup}>
-                <label>
-                  <FormattedMessage id="checkout.phoneNumber" />
-                </label>
-                <input
-                  type="text"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder={intl.formatMessage({
-                    id: 'checkout.phoneNumber.placeholder',
-                  })}
-                />
-                {phoneError && <p className={styles.error}>{phoneError}</p>}
-              </div>
-              <div className={styles.formGroup}>
-                <label>
-                  <FormattedMessage id="checkout.email" />
-                </label>
-                <input
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder={intl.formatMessage({
-                    id: 'checkout.email.placeholder',
-                  })}
-                />
-                {emailError && <p className={styles.error}>{emailError}</p>}
-              </div>
-            </div>
-
-            <h4 className={styles.subtitle}>
-              <FormattedMessage id="checkout.subtitle2.delivery" />
-            </h4>
-            <div className={styles.deliveryInputContainer}>
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>
-                    <FormattedMessage id="checkout.city" />
-                  </label>
-                  <input
-                    type="text"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder={intl.formatMessage({
-                      id: 'checkout.city.placeholder',
-                    })}
-                  />
-                  {cityError && <p className={styles.error}>{cityError}</p>}
-                </div>
-                <div className={styles.formGroup}>
-                  <label>
-                    <FormattedMessage id="checkout.fullAddress" />
-                  </label>
-                  <input
-                    type="text"
-                    value={fullAddress}
-                    onChange={(e) => setFullAddress(e.target.value)}
-                    placeholder={intl.formatMessage({
-                      id: 'checkout.fullAddress.placeholder',
-                    })}
-                  />
-                  {addressError && (
-                    <p className={styles.error}>{addressError}</p>
-                  )}
-                </div>
-              </div>
-              <div className={styles.formGroup}>
-                <label>
-                  <FormattedMessage id="checkout.comment" />
-                </label>
-                <textarea
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                  placeholder={intl.formatMessage({
-                    id: 'checkout.comment.placeholder',
-                  })}
-                />
-              </div>
-            </div>
-
-            <h4 className={styles.subtitle}>
-              <FormattedMessage id="checkout.subtitle3.paymentOption" />
-            </h4>
-            <div className={styles.paymentMethods}>
-              <label className={styles.paymentOption}>
-                <img
-                  src="/checkout/wallet.svg"
-                  alt="Cash"
-                  className={styles.paymentIcon}
-                />
-                <p className={styles.paymentTitle}>
-                  <FormattedMessage id="checkout.paymentOption.cash" />
-                </p>
-                <input
-                  type="radio"
-                  name="payment"
-                  value="cash"
-                  checked={paymentMethod === 'cash'}
-                  onChange={() => setPaymentMethod('cash')}
-                />
-              </label>
-              {/* <label className={styles.paymentOption}>
-                <img
-                  src="/checkout/mia.png"
-                  alt="MIA"
-                  className={styles.paymentIcon}
-                />
-                <p className={styles.paymentTitle}>
-                  <FormattedMessage id="checkout.paymentOption.MIA" />
-                </p>
-                <input
-                  type="radio"
-                  name="payment"
-                  value="mia"
-                  checked={paymentMethod === 'mia'}
-                  onChange={() => setPaymentMethod('mia')}
-                />
-              </label> */}
-            </div>
-          </div>
-
-          {/* Right Section: Order Summary */}
-          <div className={styles.summarySection}>
-            <div className={styles.summaryCard}>
-              {items.map((item: CartItem, idx: number) => {
+        {/* Right Section: Order Summary */}
+        <div className={styles.summarySection}>
+          <div className={styles.summaryCard}>
+            {items.map((item: CartItem, idx: number) => {
+              // per-item view model
+              if (isProductItem(item)) {
                 let imageSrc = ''
                 const dims = { width: 0, height: 0, depth: 0 }
                 let itemPrice = 0
+
                 item.config.forEach((comp) => {
                   switch (comp.type) {
                     case 'imageCarousel':
@@ -370,10 +387,18 @@ export const Checkout: FC = () => {
                       break
                   }
                 })
+
                 const titleId =
                   item.name === 'wardrobe'
                     ? 'homepage.products.wardrobe'
-                    : 'homepage.products.dulap'
+                    : item.name === 'tv-stand'
+                      ? 'homepage.products.TVstand'
+                      : item.name === 'stand'
+                        ? 'homepage.products.stand'
+                        : item.name === 'bedside'
+                          ? 'homepage.products.bedside'
+                          : 'homepage.products.dulap'
+
                 return (
                   <div className={styles.productItem} key={idx}>
                     <img
@@ -396,204 +421,235 @@ export const Checkout: FC = () => {
                     </div>
                   </div>
                 )
-              })}
+              }
 
-              {/* Promo Code Section */}
-              <div className={styles.promoSection}>
-                <div className={styles.promoFirstRow}>
-                  <label>
-                    {intl.formatMessage({
-                      id: 'checkout.promo.title',
-                      defaultMessage: 'Ai un promocod?',
-                    })}
-                  </label>
-                  <input
-                    type="text"
-                    placeholder={intl.formatMessage({
-                      id: 'checkout.promo.placeholder',
-                      defaultMessage: 'Introdu-l aici',
-                    })}
-                    value={promoCode}
-                    onChange={(e) => setPromoCode(e.target.value)}
-                    className={styles.promoInput}
-                  />
-                  <CustomButton
-                    size="small"
-                    variant="grey"
-                    onClick={handleApplyPromo}
-                  >
-                    <FormattedMessage
-                      id="checkout.promo.apply"
-                      defaultMessage="Aplică"
+              if (isSampleItem(item)) {
+                const imageSrc =
+                  item.sample.imageCarousel?.[0] ??
+                  `/products/samples/${item.sample.id}.png`
+                const price = item.sample.price ?? 0
+                const title =
+                  item.name ||
+                  intl.formatMessage({
+                    id: 'cart.sample.defaultName',
+                    defaultMessage: 'Sample',
+                  })
+
+                return (
+                  <div className={styles.productItem} key={idx}>
+                    <img
+                      src={imageSrc}
+                      alt={title}
+                      className={styles.productImage}
                     />
-                  </CustomButton>
-                </div>
-                <div className={styles.promoSecondRow}>
-                  {promoError && (
-                    <p className={styles.promoError}>{promoError}</p>
-                  )}
-                  {discountPercent > 0 && (
-                    <p className={styles.promoSuccess}>
+                    <div className={styles.productdetails}>
+                      <p className={styles.productTitle}>{title}</p>
+                      {/* samples: no dimensions */}
+                      <p className={styles.productPrice}>
+                        {price}{' '}
+                        <FormattedMessage id="homepage.configurator.price.currencyLei" />
+                      </p>
+                    </div>
+                  </div>
+                )
+              }
+
+              return null
+            })}
+            {/* Promo Code Section (unchanged) */}
+            {/* Promo Code Section */}{' '}
+            {rawTotal ? (
+              <>
+                <div className={styles.promoSection}>
+                  {' '}
+                  <div className={styles.promoFirstRow}>
+                    {' '}
+                    <label>
+                      {' '}
                       {intl.formatMessage({
-                        id: 'checkout.promo.applied',
-                        defaultMessage: 'Reducere: ',
+                        id: 'checkout.promo.title',
+                        defaultMessage: 'Ai un promocod?',
+                      })}{' '}
+                    </label>{' '}
+                    <input
+                      type="text"
+                      placeholder={intl.formatMessage({
+                        id: 'checkout.promo.placeholder',
+                        defaultMessage: 'Introdu-l aici',
                       })}
-                      {discountPercent}%
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Assembly Section */}
-              <div className={styles.assemblySection}>
-                <div className={styles.assemblyFirstRow}>
-                  <label>
-                    <h4>
-                      <FormattedMessage
-                        id="checkout.assembly.title"
-                        defaultMessage="Ai nevoie de asamblare?*"
-                      />
-                    </h4>
-                  </label>
-                  <Select
-                    options={['checkout.assembly.yes', 'checkout.assembly.no']}
-                    defaultValue={assemblyNeeded}
-                    onChange={(value) =>
-                      setAssemblyNeeded(
-                        value as
-                          | 'checkout.assembly.yes'
-                          | 'checkout.assembly.no'
-                      )
-                    }
-                    size="small"
-                  />
-                </div>
-                <p className={styles.assemblyNote}>
-                  <FormattedMessage
-                    id="checkout.assembly.comment1"
-                    defaultMessage="*Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare."
-                  />
-                </p>
-                <p className={styles.assemblyNote}>
-                  <FormattedMessage
-                    id="checkout.assembly.comment2"
-                    defaultMessage="**Costul asamblării pentru fiecare produs este de 350 lei."
-                  />
-                </p>
-              </div>
-
-              {/* Totals */}
-              <div className={styles.totalSection}>
-                <p>
-                  <FormattedMessage id="checkout.subtotal" />{' '}
-                  <span>
-                    {rawTotal}{' '}
-                    <FormattedMessage id="homepage.configurator.price.currencyLei" />
-                  </span>
-                </p>
-                {discountPercent > 0 && (
-                  <p>
-                    <FormattedMessage
-                      id="checkout.discount"
-                      defaultMessage="Reducere"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value)}
+                      className={styles.promoInput}
                     />{' '}
-                    <span>
-                      -{discountAmount}{' '}
-                      <FormattedMessage id="homepage.configurator.price.currencyLei" />
-                    </span>
-                  </p>
-                )}
-                <p>
-                  <FormattedMessage id="checkout.delivery" />{' '}
-                  <span>
-                    {deliveryPrice}{' '}
-                    <FormattedMessage id="homepage.configurator.price.currencyLei" />
-                  </span>
-                </p>
+                    <CustomButton
+                      size="small"
+                      variant="grey"
+                      onClick={handleApplyPromo}
+                    >
+                      {' '}
+                      <FormattedMessage
+                        id="checkout.promo.apply"
+                        defaultMessage="Aplică"
+                      />{' '}
+                    </CustomButton>{' '}
+                  </div>{' '}
+                  <div className={styles.promoSecondRow}>
+                    {' '}
+                    {promoError && (
+                      <p className={styles.promoError}>{promoError}</p>
+                    )}{' '}
+                    {discountPercent > 0 && (
+                      <p className={styles.promoSuccess}>
+                        {' '}
+                        {intl.formatMessage({
+                          id: 'checkout.promo.applied',
+                          defaultMessage: 'Reducere: ',
+                        })}{' '}
+                        {discountPercent}%{' '}
+                      </p>
+                    )}{' '}
+                  </div>{' '}
+                </div>{' '}
+                {/* Assembly Section */}{' '}
+                <div className={styles.assemblySection}>
+                  {' '}
+                  <div className={styles.assemblyFirstRow}>
+                    {' '}
+                    <label>
+                      {' '}
+                      <h4>
+                        {' '}
+                        <FormattedMessage
+                          id="checkout.assembly.title"
+                          defaultMessage="Ai nevoie de asamblare?*"
+                        />{' '}
+                      </h4>{' '}
+                    </label>{' '}
+                    <Select
+                      options={[
+                        'checkout.assembly.yes',
+                        'checkout.assembly.no',
+                      ]}
+                      defaultValue={assemblyNeeded}
+                      onChange={(value) =>
+                        setAssemblyNeeded(
+                          value as
+                            | 'checkout.assembly.yes'
+                            | 'checkout.assembly.no'
+                        )
+                      }
+                      size="small"
+                    />{' '}
+                  </div>{' '}
+                  <p className={styles.assemblyNote}>
+                    {' '}
+                    <FormattedMessage
+                      id="checkout.assembly.comment1"
+                      defaultMessage="*Acest dulap nu are nevoie de asamblare profesionistă, iar pentru comoditate, oferim și o instrucțiune de asamblare."
+                    />{' '}
+                  </p>{' '}
+                  <p className={styles.assemblyNote}>
+                    {' '}
+                    <FormattedMessage
+                      id="checkout.assembly.comment2"
+                      defaultMessage="**Costul asamblării pentru fiecare produs este de 350 lei."
+                    />{' '}
+                  </p>{' '}
+                </div>
+              </>
+            ) : null}
+            {/* Totals */}
+            <div className={styles.totalSection}>
+              <p>
+                <FormattedMessage id="checkout.subtotal" />{' '}
+                <span>
+                  {rawTotal}{' '}
+                  <FormattedMessage id="homepage.configurator.price.currencyLei" />
+                </span>
+              </p>
+              {discountPercent > 0 && (
                 <p>
                   <FormattedMessage
-                    id="checkout.assembly"
-                    defaultMessage="Asamblare"
+                    id="checkout.discount"
+                    defaultMessage="Reducere"
                   />{' '}
                   <span>
-                    {assemblyCost}{' '}
+                    -{discountAmount}{' '}
                     <FormattedMessage id="homepage.configurator.price.currencyLei" />
                   </span>
                 </p>
-                <p className={styles.finalTotal}>
-                  <FormattedMessage id="checkout.totalToPay" />{' '}
-                  <span>
-                    {totalToPay}{' '}
-                    <FormattedMessage id="homepage.configurator.price.currencyLei" />
-                  </span>
-                </p>
-              </div>
-
-              {/* Terms & Place Order */}
-              <div className={styles.termsSection}>
-                <label className={styles.termsLabel}>
-                  <input
-                    type="checkbox"
-                    checked={termsAccepted}
-                    onChange={(e) => setTermsAccepted(e.target.checked)}
+              )}
+              <p>
+                <FormattedMessage id="checkout.delivery" />{' '}
+                <span>
+                  0{' '}
+                  <FormattedMessage id="homepage.configurator.price.currencyLei" />
+                </span>
+              </p>
+              <p>
+                <FormattedMessage
+                  id="checkout.assembly"
+                  defaultMessage="Asamblare"
+                />{' '}
+                <span>
+                  {assemblyCost}{' '}
+                  <FormattedMessage id="homepage.configurator.price.currencyLei" />
+                </span>
+              </p>
+              <p className={styles.finalTotal}>
+                <FormattedMessage id="checkout.totalToPay" />{' '}
+                <span>
+                  {totalToPay}{' '}
+                  <FormattedMessage id="homepage.configurator.price.currencyLei" />
+                </span>
+              </p>
+            </div>
+            {/* Terms & Place Order (unchanged UI) */}
+            <div className={styles.termsSection}>
+              {' '}
+              <label className={styles.termsLabel}>
+                {' '}
+                <input
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                />{' '}
+                <span>
+                  {' '}
+                  <FormattedMessage
+                    id="checkout.terms.accept"
+                    defaultMessage="Accept {link}"
+                    values={{
+                      link: (
+                        <a
+                          href="/terms"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {' '}
+                          <FormattedMessage id="checkout.terms.termsAndConditions" />{' '}
+                        </a>
+                      ),
+                    }}
                   />{' '}
-                  <span>
-                    <FormattedMessage
-                      id="checkout.terms.accept"
-                      defaultMessage="Accept {link}"
-                      values={{
-                        link: (
-                          <a
-                            href="/terms"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <FormattedMessage id="checkout.terms.termsAndConditions" />
-                          </a>
-                        ),
-                      }}
-                    />
-                  </span>
-                </label>
-                {termsError && <p className={styles.error}>{termsError}</p>}
-              </div>
-
-              <div className={styles.placeOrderButtonContainer}>
-                <CustomButton size="medium" onClick={handlePlaceOrder}>
-                  <FormattedMessage id="homepage.button.placeOrder" />
-                </CustomButton>
-                <p className={styles.attentionMessage}>
-                  <FormattedMessage id="checkout.message.attentionOrderDetails" />
-                </p>
-                <div>
-                  {commonError && <p className={styles.error}>{commonError}</p>}
-                </div>
+                </span>{' '}
+              </label>{' '}
+              {termsError && <p className={styles.error}>{termsError}</p>}{' '}
+            </div>
+            <div className={styles.placeOrderButtonContainer}>
+              <CustomButton size="medium" onClick={handlePlaceOrder}>
+                <FormattedMessage id="homepage.button.placeOrder" />
+              </CustomButton>
+              <p className={styles.attentionMessage}>
+                <FormattedMessage id="checkout.message.attentionOrderDetails" />
+              </p>
+              <div>
+                {commonError && <p className={styles.error}>{commonError}</p>}
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Confirmation Modal */}
-      <Modal isOpen={orderPlaced} onClose={handleCloseModal}>
-        <h3>
-          <FormattedMessage
-            id="checkout.modal.title"
-            defaultMessage="Comanda plasată"
-          />
-        </h3>
-        <p>
-          <FormattedMessage
-            id="checkout.modal.message"
-            defaultMessage="Comanda ta a fost plasată, în scurt timp revenim cu un apel!"
-          />
-        </p>
-        <div className={styles.buttonRow}>
-          <CustomButton onClick={handleCloseModal}>
-            <FormattedMessage id="homepage.button.ok" defaultMessage="OK" />
-          </CustomButton>
-        </div>
-      </Modal>
-    </>
+    </div>
   )
 }
