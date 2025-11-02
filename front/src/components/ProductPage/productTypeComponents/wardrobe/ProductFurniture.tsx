@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl'
 import { useIntl } from 'react-intl'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Modal } from '~/components/Modal/Modal'
+import { use3DVersion } from '~/hooks/use3DVersion'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
@@ -45,6 +46,12 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
   const intl = useIntl()
   const [isModalOpen2, setIsModalOpen2] = useState(false)
   const [isModalOpen3, setIsModalOpen3] = useState(false)
+  const is3DVersion = use3DVersion()
+
+  // Filter opening options: only show profile-handle for 3D version
+  const availableOpeningOptions = is3DVersion
+    ? openingOptions
+    : openingOptions.filter(option => option.value !== 'profile-handle')
 
   return (
     <div>
@@ -62,7 +69,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
             intl.formatMessage({ id: predefinedValue.openingType })
           ) : (
             <ButtonSelect
-              options={openingOptions}
+              options={availableOpeningOptions}
               defaultSelected={'maner'}
               onChange={(value) => {
                 setSelectedOpeningMethod(value)
