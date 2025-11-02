@@ -54,6 +54,7 @@ const FurnitureScene = memo(function FurnitureScene({
     columns,
     columnWidths,
     columnPositions,
+    columnConfigurations,
     gl,
   ])
   
