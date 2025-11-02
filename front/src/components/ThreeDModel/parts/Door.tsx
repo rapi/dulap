@@ -78,6 +78,7 @@ interface DoorProps {
   openingSide?: OpeningSide
   hingeCount?: number
   hingePositionRule?: HingePositionRule
+  handleHeightFromBottom?: number // Optional: Override handle height (measured from door bottom)
 }
 
 const DoorComponent: React.FC<DoorProps> = ({
@@ -98,6 +99,7 @@ const DoorComponent: React.FC<DoorProps> = ({
   openingSide = 'left',
   hingeCount = 3,
   hingePositionRule = 'even',
+  handleHeightFromBottom,
 }) => {
   const doorGroupRef = useRef<THREE.Group | null>(null)
   const hingeGroupRef = useRef<THREE.Group | null>(null)
@@ -235,16 +237,21 @@ const DoorComponent: React.FC<DoorProps> = ({
         if (panelPivot.visible) {
           const roundHandleWidth = 2.5
           
+          // Use custom height if provided (for wardrobes), otherwise use default offset from top
+          const handleY = handleHeightFromBottom !== undefined 
+            ? handleHeightFromBottom 
+            : innerHeight - handleOnTheDrawerTopOffset
+          
           if (isRightOpening) {
             panelPivot.position.set(
               doorOffsetX+roundHandleWidth,
-              innerHeight - handleOnTheDrawerTopOffset,
+              handleY,
               doorDepth + HANDLE_CONSTANTS.ROUND_HANDLE_DEPTH_OFFSET
             )
           } else {
             panelPivot.position.set(
               doorOffsetX-roundHandleWidth,
-              innerHeight - handleOnTheDrawerTopOffset,
+              handleY,
               doorDepth + HANDLE_CONSTANTS.ROUND_HANDLE_DEPTH_OFFSET
             )
           }
@@ -257,19 +264,24 @@ const DoorComponent: React.FC<DoorProps> = ({
           const profileHandleLength = 17.5
           const profileHandleWidth = 1.2
           const profileHandleBottomMetalWidth = 0.1
+          
+          // Use custom height if provided (for wardrobes), otherwise use default centered position
+          const handleY = handleHeightFromBottom !== undefined
+            ? handleHeightFromBottom
+            : innerHeight - profileHandleLength / 2
   
           if (isRightOpening) {
             panelPivot.rotation.set(0, 0, Math.PI / 2)
             panelPivot.position.set(
               doorOffsetX - profileHandleWidth,
-              innerHeight - profileHandleLength / 2,
+              handleY,
               doorDepth - profileHandleBottomMetalWidth
             )
           } else {
             panelPivot.rotation.set(0, 0, -Math.PI / 2)
             panelPivot.position.set(
               doorOffsetX + profileHandleWidth,
-              innerHeight - profileHandleLength / 2,
+              handleY,
               doorDepth - profileHandleBottomMetalWidth
             )
           }
@@ -349,6 +361,7 @@ const DoorComponent: React.FC<DoorProps> = ({
     openingSide,
     hingeCount,
     hingePositionRule,
+    handleHeightFromBottom,
   ])
 
   // Apply colors to all door parts

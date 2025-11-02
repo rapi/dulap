@@ -1,11 +1,12 @@
-import React, { Suspense, memo, useCallback } from 'react'
-import { Canvas } from '@react-three/fiber'
+import React, { Suspense, memo, useCallback, useEffect } from 'react'
+import { Canvas, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import { GLBModel } from './GLBModel'
 import { SceneLights } from './SceneLights'
 import * as THREE from 'three'
 import { Furniture3DProps } from '~/types/furniture3D'
 import { FurnitureBuilder } from './FurnitureBuilder'
+import { WardrobeBuilder } from './WardrobeBuilder'
 import { getViewerConfig } from './furnitureViewerConfig'
 import styles from './FurnitureViewer.module.css'
 
@@ -37,6 +38,24 @@ const FurnitureScene = memo(function FurnitureScene({
   furnitureType,
 }: Furniture3DProps) {
   const config = getViewerConfig(furnitureType)
+  const { gl } = useThree()
+  
+  // Trigger shadow update when furniture dimensions or configuration changes
+  // Since autoUpdate is disabled, we manually trigger updates only when needed
+  useEffect(() => {
+    if (gl.shadowMap.enabled && !gl.shadowMap.autoUpdate) {
+      gl.shadowMap.needsUpdate = true
+    }
+  }, [
+    width,
+    height,
+    depth,
+    currentPlintHeight,
+    columns,
+    columnWidths,
+    columnPositions,
+    gl,
+  ])
   
   return (
     <>
@@ -68,19 +87,35 @@ const FurnitureScene = memo(function FurnitureScene({
 
       {/* Furniture Model built from individual components */}
       <Suspense fallback={<ModelLoadingFallback />}>
-        <FurnitureBuilder
-          selectedColor={selectedColor}
-          desiredWidth={width}
-          desiredHeight={height}
-          desiredDepth={depth}
-          desiredPlintHeight={currentPlintHeight}
-          sectionsCount={sections}
-          openingType={openingType}
-          columns={columns}
-          columnConfigurations={columnConfigurations}
-          columnWidths={columnWidths}
-          columnPositions={columnPositions}
-        />
+        {furnitureType === 'wardrobe' ? (
+          <WardrobeBuilder
+            selectedColor={selectedColor}
+            desiredWidth={width}
+            desiredHeight={height}
+            desiredDepth={depth}
+            desiredPlintHeight={currentPlintHeight}
+            sectionsCount={sections}
+            openingType={openingType}
+            columns={columns}
+            columnConfigurations={columnConfigurations}
+            columnWidths={columnWidths}
+            columnPositions={columnPositions}
+          />
+        ) : (
+          <FurnitureBuilder
+            selectedColor={selectedColor}
+            desiredWidth={width}
+            desiredHeight={height}
+            desiredDepth={depth}
+            desiredPlintHeight={currentPlintHeight}
+            sectionsCount={sections}
+            openingType={openingType}
+            columns={columns}
+            columnConfigurations={columnConfigurations}
+            columnWidths={columnWidths}
+            columnPositions={columnPositions}
+          />
+        )}
       </Suspense>
     </>
   )
@@ -113,7 +148,13 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
       webGlRenderer.toneMappingExposure = 1.0
       webGlRenderer.shadowMap.enabled = true
       webGlRenderer.shadowMap.type = THREE.PCFSoftShadowMap
-      webGlRenderer.shadowMap.autoUpdate = true
+      
+      // Performance optimization: Disable automatic shadow updates
+      // Shadows only need to update when furniture geometry/position changes
+      // This saves significant GPU resources as shadow recalculation is expensive
+      webGlRenderer.shadowMap.autoUpdate = false
+      webGlRenderer.shadowMap.needsUpdate = true // Update once on initialization
+      
       // threeScene.fog = new THREE.Fog('#f9f9f9', 300, 400)
     },
     []
@@ -143,13 +184,13 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           enableRotate={true}
           enableDamping={false}
           dampingFactor={0}
-          minDistance={config.minDistance}
-          maxDistance={config.maxDistance}
-          minAzimuthAngle={config.minAzimuthAngle}
-          maxAzimuthAngle={config.maxAzimuthAngle}
-          minPolarAngle={config.minPolarAngle}
-          maxPolarAngle={config.maxPolarAngle}
-          target={config.target}
+          // minDistance={config.minDistance}
+          // maxDistance={config.maxDistance}
+          // minAzimuthAngle={config.minAzimuthAngle}
+          // maxAzimuthAngle={config.maxAzimuthAngle}
+          // minPolarAngle={config.minPolarAngle}
+          // maxPolarAngle={config.maxPolarAngle}
+          // target={config.target}
         />
 
         {/* 3D Scene */}

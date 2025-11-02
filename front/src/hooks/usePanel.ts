@@ -54,7 +54,8 @@ export const usePanel = (
     )
     
     return pivotedPanel
-  }, [sourceObject]) // Removed config.anchor from dependencies
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceObject]) // Intentionally omit config.anchor to prevent recreation
 
   // Scale, position, and rotate the panel
   useEffect(() => {
@@ -122,33 +123,45 @@ export const usePanels = (
       )
       return pivotedPanel
     })
-  }, [sourceObject]) // Only depend on sourceObject to prevent recreation
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceObject]) // Intentionally omit configs to prevent recreation
+
+  // Performance optimization: Serialize configs to detect actual value changes
+  // This prevents unnecessary effect runs when configs array reference changes
+  // but the actual values inside haven't changed
+  const configsStr = useMemo(() => JSON.stringify(configs), [configs])
 
   // Apply scale, position, and rotation to all panels
   useEffect(() => {
+    const currentConfigs = JSON.parse(configsStr) as PanelConfig[]
     panels.forEach((panel, index) => {
       if (!panel) return
       
-      const config = configs[index]
-      panel.scale.set(...config.scale)
-      panel.position.set(...config.position)
+      const config = currentConfigs[index]
+      const [scaleX, scaleY, scaleZ] = config.scale
+      const [posX, posY, posZ] = config.position
+      
+      panel.scale.set(scaleX, scaleY, scaleZ)
+      panel.position.set(posX, posY, posZ)
       
       if (config.rotation) {
-        panel.rotation.set(...config.rotation)
+        const [rotX, rotY, rotZ] = config.rotation
+        panel.rotation.set(rotX, rotY, rotZ)
       }
       
       panel.updateMatrixWorld(true)
     })
-  }, [panels, configs])
+  }, [panels, configsStr])
 
   // Apply color to all panels
   useEffect(() => {
+    const currentConfigs = JSON.parse(configsStr) as PanelConfig[]
     panels.forEach((panel, index) => {
       if (!panel) return
-      const config = configs[index]
+      const config = currentConfigs[index]
       applyColorToObject(panel, config.color)
     })
-  }, [panels, configs])
+  }, [panels, configsStr])
 
   // Cleanup all panels on unmount or when panels change
   useEffect(() => {

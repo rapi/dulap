@@ -1,28 +1,27 @@
 import React, { Suspense, memo, useMemo } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
-import { TopAndPlinth } from './parts/TopAndPlinth'
-import { Column } from './parts/Column'
+import { WardrobeTopAndPlinth } from './parts/WardrobeTopAndPlinth'
+import { WardrobeColumn } from './parts/WardrobeColumn'
 import { OpeningType } from './furnitureConfig'
-import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 
-interface FurnitureBuilderProps {
+interface WardrobeBuilderProps {
   selectedColor: string
   desiredWidth: number
   desiredHeight: number
   desiredDepth: number
   desiredPlintHeight: number
-  drawerOffsetZ?: number
+  drawerOffsetZ?: number // Kept for compatibility with FurnitureViewer props but not used
   lerpSpeed?: number
-  sectionsCount: number
+  sectionsCount: number // Kept for compatibility with FurnitureViewer props but not used
   openingType: OpeningType
   columns: number
-  columnConfigurations?: ColumnConfigurationType[]
-  columnWidths?: number[] // Optional: variable column widths (for wardrobe)
-  columnPositions?: number[] // Optional: custom column X positions
+  columnConfigurations?: unknown[] // Kept for compatibility with FurnitureViewer props but not used
+  columnWidths?: number[] // Wardrobe-specific: variable column widths
+  columnPositions?: number[] // Wardrobe-specific: custom column X positions
 }
 
-// Preload assets for better performance
+// Preload assets for better performance (same as FurnitureBuilder)
 const VERTICAL_URL = '/assets/3d-models/vertical_sample.glb'
 const HORIZONTAL_URL = '/assets/3d-models/horizontal_sample.glb'
 const ROUND_HANDLE_URL = '/assets/3d-models/round-handle.glb'
@@ -37,18 +36,14 @@ useGLTF.preload(PROFILE_HANDLE_URL)
 useGLTF.preload(HINGE_WING_URL)
 useGLTF.preload(HINGE_ANCHOR_URL)
 
-const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
+const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
   selectedColor,
   desiredWidth,
   desiredHeight,
   desiredDepth,
   desiredPlintHeight,
-  drawerOffsetZ = 10,
-  lerpSpeed = 0.1,
-  sectionsCount,
   openingType,
   columns,
-  columnConfigurations,
   columnWidths,
   columnPositions,
 }) => {
@@ -71,21 +66,21 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
     [verticalPanelObject, horizontalPanelObject, roundHandleObject, profileHandleObject, hingeWingObject, hingeAnchorObject]
   )
 
-  // Calculate column configuration
-  // Use provided widths or fall back to equal distribution
+  // Wardrobe-specific column configuration
+  // Use provided widths/positions or fall back to equal distribution
   const useVariableWidths = columnWidths && columnWidths.length === columns
   const useCustomPositions = columnPositions && columnPositions.length === columns
   
   const defaultColumnWidth = desiredWidth / columns
 
   // Memoize column generation to prevent unnecessary recreation on every render
-  // This is critical for performance - prevents unmounting/remounting of Column components
+  // This is critical for performance - prevents unmounting/remounting of Door components
   const columnComponents = useMemo(() => {
     return Array.from({ length: columns }, (_, index) => {
-      // Get column width (variable or equal)
+      // Get column width (variable widths from wardrobeColumnLayout or equal)
       const columnWidth = useVariableWidths ? columnWidths![index] : defaultColumnWidth
       
-      // Get column position (custom or calculated)
+      // Get column position (custom positions from wardrobeColumnLayout or calculated)
       let columnPositionX: number
       if (useCustomPositions) {
         columnPositionX = columnPositions![index]
@@ -94,11 +89,14 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
         columnPositionX = -desiredWidth / 2 + defaultColumnWidth * index + defaultColumnWidth / 2
       }
       
-      const columnType = columnConfigurations?.[index] || ColumnConfigurationType.DRAWERS_3
+      // Determine door type based on column width (wardrobe-specific logic)
+      // Narrow columns (40-60cm): single door
+      // Wide columns (61-100cm): split doors
+      const doorType: 'single' | 'split' = columnWidth >= 61 ? 'split' : 'single'
 
       return (
-        <Column
-          key={`column-${index}`}
+        <WardrobeColumn
+          key={`wardrobe-column-${index}`}
           horizontalPanelObject={scenes.horizontal}
           roundHandleObject={scenes.roundHandle}
           profileHandleObject={scenes.profileHandle}
@@ -109,12 +107,9 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
           columnHeight={desiredHeight}
           columnDepth={desiredDepth}
           plintHeight={desiredPlintHeight}
-          sectionsCount={sectionsCount}
           positionX={columnPositionX}
           selectedColor={selectedColor}
-          columnType={columnType}
-          drawerOffsetZ={drawerOffsetZ}
-          lerpSpeed={lerpSpeed}
+          doorType={doorType}
         />
       )
     })
@@ -129,12 +124,8 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
     desiredHeight,
     desiredDepth,
     desiredPlintHeight,
-    sectionsCount,
     selectedColor,
     openingType,
-    columnConfigurations,
-    drawerOffsetZ,
-    lerpSpeed,
     scenes.horizontal,
     scenes.roundHandle,
     scenes.profileHandle,
@@ -158,7 +149,8 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
           selectedColor={selectedColor}
         />
 
-        <TopAndPlinth
+        {/* Wardrobe-specific TopAndPlinth with smaller top panel */}
+        <WardrobeTopAndPlinth
           verticalPanelObject={scenes.vertical}
           horizontalPanelObject={scenes.horizontal}
           desiredWidth={desiredWidth}
@@ -174,4 +166,5 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
   )
 }
 
-export const FurnitureBuilder = memo(FurnitureBuilderComponent)
+export const WardrobeBuilder = memo(WardrobeBuilderComponent)
+

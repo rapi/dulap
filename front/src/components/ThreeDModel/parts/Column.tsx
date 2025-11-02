@@ -54,18 +54,30 @@ const ColumnComponent: React.FC<ColumnProps> = ({
   const { panelThickness, panelSpacing } = FURNITURE_CONFIG
   const [isColumnHovered, setIsColumnHovered] = useState(false)
 
-  // Get configuration metadata
-  const metadata = getConfigurationMetadata(columnType)
-  
-  // Determine sections count from configuration type
-  const actualSections = metadata.drawerCount > 0 ? metadata.drawerCount : (metadata.shelfCount+1)
-  const usableSectionsCount = actualSections > 0 ? actualSections : sectionsCount
+  // Memoize configuration metadata and calculations to prevent recalculation
+  const columnConfig = useMemo(() => {
+    // Get configuration metadata
+    const metadata = getConfigurationMetadata(columnType)
+    
+    // Determine sections count from configuration type
+    const actualSections = metadata.drawerCount > 0 ? metadata.drawerCount : (metadata.shelfCount + 1)
+    const usableSectionsCount = actualSections > 0 ? actualSections : sectionsCount
 
-  // Calculate drawer/shelf dimensions based on column configuration
-  const usableHeight = columnHeight - panelThickness - plintHeight
-  const singleSectionTotalHeight = usableHeight / usableSectionsCount
-  const sectionHeight = singleSectionTotalHeight - panelSpacing
-  const sectionWidth = columnWidth - panelSpacing
+    // Calculate drawer/shelf dimensions based on column configuration
+    const usableHeight = columnHeight - panelThickness - plintHeight
+    const singleSectionTotalHeight = usableHeight / usableSectionsCount
+    const sectionHeight = singleSectionTotalHeight - panelSpacing
+    const sectionWidth = columnWidth - panelSpacing
+
+    return {
+      metadata,
+      usableSectionsCount,
+      usableHeight,
+      singleSectionTotalHeight,
+      sectionHeight,
+      sectionWidth,
+    }
+  }, [columnType, sectionsCount, columnHeight, panelThickness, plintHeight, columnWidth, panelSpacing])
 
   // Pointer event handlers for column hover
   const handlePointerOver = useCallback((event: ThreeEvent<PointerEvent>) => {
@@ -79,30 +91,30 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     document.body.style.cursor = 'auto'
   }, [])
 
-  // Render side and bottom panels
-  const renderPanels = () => (
+  // Memoize panel geometry to prevent recreation
+  const panels = useMemo(() => (
     <>
       {/* Left side panel */}
       <mesh
-        position={[-columnWidth / 2 + 0.1, columnHeight / 2, columnDepth/2]}
+        position={[-columnWidth / 2 + 0.1, columnHeight / 2, columnDepth / 2]}
         rotation={[0, Math.PI / 2, 0]}
       >
-        <planeGeometry args={[columnDepth-2*panelThickness, columnHeight]} />
+        <planeGeometry args={[columnDepth - 2 * panelThickness, columnHeight]} />
         <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Right side panel */}
       <mesh
-        position={[columnWidth / 2 - 0.1, columnHeight / 2, columnDepth/2]}
+        position={[columnWidth / 2 - 0.1, columnHeight / 2, columnDepth / 2]}
         rotation={[0, Math.PI / 2, 0]}
       >
-        <planeGeometry args={[columnDepth-2*panelThickness, columnHeight]} />
+        <planeGeometry args={[columnDepth - 2 * panelThickness, columnHeight]} />
         <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Back panel */}
       <mesh
-        position={[0, columnHeight / 2, 2*panelThickness]}
+        position={[0, columnHeight / 2, 2 * panelThickness]}
         rotation={[0, Math.PI, 0]}
       >
         <planeGeometry args={[columnWidth, columnHeight]} />
@@ -111,18 +123,18 @@ const ColumnComponent: React.FC<ColumnProps> = ({
 
       {/* Bottom panel */}
       <mesh
-        position={[0, plintHeight, columnDepth/2]}
+        position={[0, plintHeight, columnDepth / 2]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
         <planeGeometry args={[columnWidth, columnDepth]} />
         <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
       </mesh>
     </>
-  )
+  ), [columnWidth, columnHeight, columnDepth, plintHeight, panelThickness, selectedColor])
 
   // Create shelf objects (horizontal panels) using the same pattern as doors/top/plinth
   const shelfPivots = useMemo(() => {
-    const shelfCount = metadata.shelfCount
+    const shelfCount = columnConfig.metadata.shelfCount
     if (shelfCount === 0 || !horizontalPanelObject) return []
     
     return Array.from({ length: shelfCount }, (_, index) => {
@@ -133,19 +145,19 @@ const ColumnComponent: React.FC<ColumnProps> = ({
       shelfPivot.userData.shelfIndex = index
       return shelfPivot
     })
-  }, [horizontalPanelObject, metadata.shelfCount])
+  }, [horizontalPanelObject, columnConfig.metadata.shelfCount])
 
   // Scale and position shelves
   useEffect(() => {
     if (shelfPivots.length === 0) return
 
-    const doorWidth = metadata.doorCount === 2 
+    const doorWidth = columnConfig.metadata.doorCount === 2 
       ? columnWidth 
       : columnWidth - panelSpacing
 
     shelfPivots.forEach((shelfPivot) => {
       const index = shelfPivot.userData.shelfIndex
-      const shelfPositionY = plintHeight + singleSectionTotalHeight * (index + 1)
+      const shelfPositionY = plintHeight + columnConfig.singleSectionTotalHeight * (index + 1)
       
       // Scale the shelf to fit the width and depth
       shelfPivot.scale.set(
@@ -162,10 +174,10 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     columnWidth,
     columnDepth,
     plintHeight,
-    singleSectionTotalHeight,
+    columnConfig.singleSectionTotalHeight,
+    columnConfig.metadata.doorCount,
     panelSpacing,
     panelThickness,
-    metadata.doorCount,
   ])
 
   // Apply color to shelves
@@ -200,8 +212,10 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     )
   }
 
-  // Render based on configuration type
-  const renderContent = () => {
+  // Memoize content rendering to prevent recreation
+  const content = useMemo(() => {
+    const { metadata, usableSectionsCount, singleSectionTotalHeight, sectionHeight, sectionWidth } = columnConfig
+    
     // DRAWERS CONFIGURATIONS (1-5 drawers)
     if (metadata.hasDrawers) {
       const drawers = Array.from({ length: usableSectionsCount }, (_, index) => {
@@ -329,7 +343,24 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     }
 
     return null
-  }
+  }, [
+    columnConfig,
+    plintHeight,
+    panelSpacing,
+    horizontalPanelObject,
+    roundHandleObject,
+    profileHandleObject,
+    hingeWingObject,
+    hingeAnchorObject,
+    openingType,
+    columnDepth,
+    selectedColor,
+    isColumnHovered,
+    drawerOffsetZ,
+    lerpSpeed,
+    columnWidth,
+    columnHeight,
+  ])
 
   return (
     <group 
@@ -337,8 +368,8 @@ const ColumnComponent: React.FC<ColumnProps> = ({
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
     >
-      {renderPanels()}
-      {renderContent()}
+      {panels}
+      {content}
     </group>
   )
 }

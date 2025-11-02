@@ -22,6 +22,7 @@ export type ProductFurnitureComponent = {
 }
 export const openingOptions: ButtonOptionsType[] = [
   { value: 'maner', label: 'homepage.configurator.fittings.roundHandle' },
+  { value: 'profile-handle', label: 'homepage.configurator.fittings.profileHandle' },
   { value: 'push', label: 'homepage.configurator.fittings.pushToOpen' },
 ]
 interface ProductSelectProps {
