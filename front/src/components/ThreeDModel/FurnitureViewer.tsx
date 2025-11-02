@@ -184,13 +184,13 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           enableRotate={true}
           enableDamping={false}
           dampingFactor={0}
-          // minDistance={config.minDistance}
-          // maxDistance={config.maxDistance}
-          // minAzimuthAngle={config.minAzimuthAngle}
-          // maxAzimuthAngle={config.maxAzimuthAngle}
-          // minPolarAngle={config.minPolarAngle}
-          // maxPolarAngle={config.maxPolarAngle}
-          // target={config.target}
+          minDistance={config.minDistance}
+          maxDistance={config.maxDistance}
+          minAzimuthAngle={config.minAzimuthAngle}
+          maxAzimuthAngle={config.maxAzimuthAngle}
+          minPolarAngle={config.minPolarAngle}
+          maxPolarAngle={config.maxPolarAngle}
+          target={config.target}
         />
 
         {/* 3D Scene */}
