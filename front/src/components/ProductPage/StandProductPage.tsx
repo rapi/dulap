@@ -55,7 +55,6 @@ import { useRouter } from 'next/router'
 import { DEFAULT_STAND } from './productTypes/stand'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
-import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -131,9 +130,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         ) : null
       case 'individualColumns':
         return isStand3D ? (
-          <ProductIndividualColumns
-            configuration={component}
-          />
+          <ProductIndividualColumns configuration={component} />
         ) : null
       case 'select':
         return (
@@ -146,7 +143,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         // Pass the is3DEnabled flag to furniture component
         const furnitureConfig = {
           ...component,
-          is3DEnabled: isStand3D
+          is3DEnabled: isStand3D,
         }
         return (
           <ProductFurniture
@@ -233,9 +230,6 @@ export const ProductPage: FC<ProductPageProps> = ({
           )}
           {values != null && !isStand3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
-          )}
-          {!isStand3D && (
-            <OrderSamplesBox />
           )}
         </div>
       </div>

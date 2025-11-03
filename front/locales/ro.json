@@ -176,7 +176,9 @@
   "colors.title.tooltip": "Cum să alegi corect culoarea?",
 
   "selectColor.modal.title": "Culori adiționale disponibile",
-  
+  "colorCTA.p1": "Nu ești sigur?",
+  "colorCTA.p2": "Comandă mostre de culori",
+
   "homepage.configurator.sections.nr.1": "1",
   "homepage.configurator.sections.nr.2": "2",
   "homepage.configurator.sections.nr.3": "3",

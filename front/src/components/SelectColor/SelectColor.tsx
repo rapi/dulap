@@ -15,6 +15,10 @@ interface SelectColorProps {
   showAdd?: boolean
   addIcon?: React.ReactNode
   onAddClick?: () => void
+  /** Optional: render a CTA (e.g., <ColorCTA />) under the color row */
+  colorCTA?: React.ReactNode
+  /** Optional: wrapper class for the CTA */
+  colorCTAWrapperClassName?: string
 }
 
 interface SelectColorItemProps {
@@ -58,15 +62,14 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
     onClick?.(name, e)
   }
 
-  // Determine the style based on whether it's a texture or a solid color
   const backgroundStyle = !isAdd
     ? textureUrl
-      ? {
+      ? ({
           backgroundImage: `url(${textureUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-        }
-      : { backgroundColor: hexCode }
+        } as React.CSSProperties)
+      : ({ backgroundColor: hexCode } as React.CSSProperties)
     : undefined
 
   return (
@@ -99,6 +102,8 @@ const SelectColor: React.FC<SelectColorProps> = ({
   showAdd = false,
   addIcon = <AddIcon fontSize="small" sx={{ color: grey[600] }} />,
   onAddClick,
+  colorCTA,
+  colorCTAWrapperClassName,
 }) => {
   const initialItems: ColorItem[] = colorNames
     .map((n) => getColorItemByName(n))
@@ -163,6 +168,13 @@ const SelectColor: React.FC<SelectColorProps> = ({
           selected={false}
           onClick={handleAdd}
         />
+      )}
+      <br />
+      {/* CTA under the color row */}
+      {colorCTA && (
+        <div className={colorCTAWrapperClassName} style={{ marginTop: 12 }}>
+          {colorCTA}
+        </div>
       )}
 
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>

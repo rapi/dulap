@@ -65,6 +65,10 @@
   align-items: center;
 }
 
+.colorsTitleLabel {
+  display: flex;
+}
+
 .dimensionsHeaderTitle {
   margin-top: 9px;
   margin-bottom: 9px;
@@ -124,7 +128,8 @@
 .dimensionsTooltipContainer {
   position: relative;
   display: inline-flex;
-  align-items: center;
+  margin-top: 10px;
+  /*align-items: center;*/
   cursor: pointer;
 }
 
@@ -192,6 +197,7 @@
 /* C O M M O N */
 .dimensionTitle,
 .dimensionsTitleLabel,
+.colorsTitleLabel,
 .furnitureLabel p,
 .sectionsLabel p,
 .sectionLabel p,
@@ -206,6 +212,7 @@
 
 .sectionTitle,
 .dimensionsTitleLabel,
+.colorsTitleLabel,
 .dimensionsHeaderTitle,
 .furnitureHeaderTitle,
 .subtitle,
@@ -225,7 +232,7 @@
 /* C O L O R S */
 .colorsLabel {
   display: flex;
-  align-items: center;
+  /*align-items: center;*/
   margin-top: 20px;
 }
 
@@ -354,6 +361,7 @@
   }
   .dimensionTitle,
   .dimensionsTitleLabel,
+  .colorsTitleLabel,
   .furnitureLabel p,
   .sectionsLabel p,
   .sectionLabel p,
@@ -417,6 +425,7 @@
 @media (max-width: 350px) {
   .dimensionTitle,
   .dimensionsTitleLabel,
+  .colorsTitleLabel,
   .furnitureLabel p,
   .sectionsLabel p,
   .sectionLabel p,
@@ -651,19 +660,19 @@
   .columnConfigRow {
     gap: 8px;
   }
-  
+
   .columnConfigOption {
     padding: 6px;
     min-height: 100px;
     min-width: 80px;
     max-width: 100px;
   }
-  
+
   .columnConfigIcon {
     width: 50px;
     height: 62px;
   }
-  
+
   .columnConfigLabel {
     font-size: 10px;
   }

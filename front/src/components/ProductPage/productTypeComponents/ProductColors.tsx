@@ -7,6 +7,7 @@ import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { FormattedMessage } from 'react-intl'
 import Link from 'next/link'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import ColorCTA from '~/components/ColorCTA/ColorCTA'
 export type ProductColorsComponent = {
   type: 'colors'
   colors: string[]
@@ -42,7 +43,7 @@ export const ProductColors: FC<ProductColorsProps> = ({
   }
   return (
     <label className={styles.colorsLabel}>
-      <div className={styles.dimensionsTitleLabel}>
+      <div className={styles.colorsTitleLabel}>
         <h3 className={styles.dimensionsHeaderTitle}>
           <FormattedMessage id="homepage.configurator.colors.title" />
         </h3>
@@ -67,6 +68,7 @@ export const ProductColors: FC<ProductColorsProps> = ({
         onChange={(value) => configuration.setSelectedColor(value)}
         size="medium"
         showAdd
+        colorCTA={<ColorCTA trackingId="color_cta_configurator" />}
       />
     </label>
   )

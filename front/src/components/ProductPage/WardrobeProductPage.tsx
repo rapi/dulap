@@ -50,7 +50,6 @@ import { DEFAULT_WARDROBE } from './productTypes/wardrobe'
 import { FurnitureViewer } from '../ThreeDModel/FurnitureViewer'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
-import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
 
 export type ProductComponent =
   | ProductImageSelectComponent
@@ -212,7 +211,6 @@ export const ProductPage: FC<ProductPageProps> = ({
           {values != null && !isWardrobe3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
-          {!isWardrobe3D && <OrderSamplesBox />}
         </div>
       </div>
       <br />

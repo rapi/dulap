@@ -54,7 +54,6 @@ import { useRouter } from 'next/router'
 import { DEFAULT_TV_STAND } from './productTypes/TVstand'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
-import { OrderSamplesBox } from '~/components/ProductPage/productTypeComponents/OrderSamplesBox'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -226,7 +225,6 @@ export const ProductPage: FC<ProductPageProps> = ({
           {values != null && !isTVStand3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
-          {!isTVStand3D && <OrderSamplesBox />}
         </div>
       </div>
       <br />
