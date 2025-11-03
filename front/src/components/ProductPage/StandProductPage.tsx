@@ -114,7 +114,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         const compWithOpts = component as ProductSectionsComponent & {
           options?: ButtonOptionsType[]
         }
-        return (
+        return isStand3D ? null : (
           <ProductSections
             configuration={compWithOpts}
             predefinedValue={values?.sections ?? undefined}
@@ -231,10 +231,12 @@ export const ProductPage: FC<ProductPageProps> = ({
               predefinedValue={values?.price ?? undefined}
             />
           )}
-          {values != null && (
+          {values != null && !isStand3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
-          <OrderSamplesBox />
+          {!isStand3D && (
+            <OrderSamplesBox />
+          )}
         </div>
       </div>
       <br />

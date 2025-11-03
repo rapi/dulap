@@ -86,7 +86,7 @@ export const ProductPage: FC<ProductPageProps> = ({
 }) => {
   const { addItem } = useCart()
   const isBedside3D = use3DVersion()
-  
+
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
@@ -104,7 +104,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'sections':
-        return (
+        return isBedside3D ? null : (
           <ProductSections
             configuration={component}
             predefinedValue={values?.sections ?? undefined}
@@ -120,14 +120,12 @@ export const ProductPage: FC<ProductPageProps> = ({
         ) : null
       case 'individualColumns':
         return isBedside3D ? (
-          <ProductIndividualColumns
-            configuration={component}
-          />
+          <ProductIndividualColumns configuration={component} />
         ) : null
       case 'furniture':
         const furnitureConfig = {
           ...component,
-          is3DEnabled: isBedside3D
+          is3DEnabled: isBedside3D,
         }
         return (
           <ProductFurniture
@@ -210,10 +208,10 @@ export const ProductPage: FC<ProductPageProps> = ({
               predefinedValue={values?.price ?? undefined}
             />
           )}
-          {values != null && (
+          {values != null && !isBedside3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
-          <OrderSamplesBox />
+          {!isBedside3D && <OrderSamplesBox />}
         </div>
       </div>
       <br />

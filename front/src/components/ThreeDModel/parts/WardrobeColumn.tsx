@@ -94,7 +94,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         rotation={[0, Math.PI / 2, 0]}
       >
         <planeGeometry args={[columnDepth - 2 * panelThickness, columnHeight]} />
-        <meshStandardMaterial color={'#ffffff'} side={THREE.DoubleSide} />
+        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Right side panel */}
@@ -103,7 +103,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         rotation={[0, Math.PI / 2, 0]}
       >
         <planeGeometry args={[columnDepth - 2 * panelThickness, columnHeight]} />
-        <meshStandardMaterial color={'#ffffff'} side={THREE.DoubleSide} />
+        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
       </mesh>
 
       {/* Back panel (white interior) */}
@@ -125,7 +125,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         <meshStandardMaterial color={'#ffffff'} side={THREE.DoubleSide} />
       </mesh>
     </>
-  ), [columnWidth, columnHeight, columnDepth, plintHeight, panelThickness])
+  ), [columnWidth, columnHeight, columnDepth, plintHeight, panelThickness, selectedColor])
 
   // Apply color/texture to panels
   useEffect(() => {

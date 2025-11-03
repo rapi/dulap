@@ -117,7 +117,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'sections':
-        return !isStand3D ? (
+        return !isWardrobe3D ? (
           <ProductSections
             configuration={component}
             predefinedValue={values?.sections ?? undefined}
@@ -152,7 +152,7 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
-  const isStand3D = use3DVersion()
+  const isWardrobe3D = use3DVersion()
 
   // Extract all 3D props using shared hook (wardrobe uses automatic column layout)
   const furniture3DProps = use3DFurnitureProps(
@@ -163,13 +163,12 @@ export const ProductPage: FC<ProductPageProps> = ({
     'wardrobe' // furnitureType
   )
 
-  
   return (
     <>
       <div className={styles.contentContainer}>
         {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
-          {isStand3D ? (
+          {isWardrobe3D ? (
             <FurnitureViewer {...furniture3DProps} />
           ) : (
             imageCarouselComponent && (
@@ -201,7 +200,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           })}
         </div>
         <div>
-          {priceComponent && !isStand3D && (
+          {priceComponent && !isWardrobe3D && (
             <ProductPrice
               onAddItem={() => {
                 addItem('wardrobe', currentComponents, values ?? {})
@@ -210,10 +209,10 @@ export const ProductPage: FC<ProductPageProps> = ({
               predefinedValue={values?.price ?? undefined}
             />
           )}
-          {values != null && (
+          {values != null && !isWardrobe3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
-          <OrderSamplesBox />
+          {!isWardrobe3D && <OrderSamplesBox />}
         </div>
       </div>
       <br />

@@ -94,7 +94,7 @@ export const ProductPage: FC<ProductPageProps> = ({
 }) => {
   const { addItem } = useCart()
   const isTVStand3D = use3DVersion()
-  
+
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
@@ -112,7 +112,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'sections':
-        return (
+        return isTVStand3D ? null : (
           <ProductSections
             configuration={component}
             predefinedValue={values?.sections ?? undefined}
@@ -128,9 +128,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         ) : null
       case 'individualColumns':
         return isTVStand3D ? (
-          <ProductIndividualColumns
-            configuration={component}
-          />
+          <ProductIndividualColumns configuration={component} />
         ) : null
       case 'select':
         return (
@@ -142,7 +140,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture':
         const furnitureConfig = {
           ...component,
-          is3DEnabled: isTVStand3D
+          is3DEnabled: isTVStand3D,
         }
         return (
           <ProductFurniture
@@ -225,10 +223,10 @@ export const ProductPage: FC<ProductPageProps> = ({
               predefinedValue={values?.price ?? undefined}
             />
           )}
-          {values != null && (
+          {values != null && !isTVStand3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
-          <OrderSamplesBox />
+          {!isTVStand3D && <OrderSamplesBox />}
         </div>
       </div>
       <br />
