@@ -2,6 +2,7 @@ import { useMemo, useEffect } from 'react'
 import * as THREE from 'three'
 import {
   applyColorToObject,
+  applyMaterialToObject,
   cloneWithIndependentMaterials,
   createPivotAnchored,
   disposeObject,
@@ -71,10 +72,10 @@ export const usePanel = (
     panel.updateMatrixWorld(true)
   }, [panel, config.scale, config.position, config.rotation])
 
-  // Apply color
+  // Apply color/texture (with PBR support)
   useEffect(() => {
     if (!panel) return
-    applyColorToObject(panel, config.color)
+    applyMaterialToObject(panel, config.color)
   }, [panel, config.color])
 
   // Cleanup on unmount or when panel changes
@@ -153,13 +154,13 @@ export const usePanels = (
     })
   }, [panels, configsStr])
 
-  // Apply color to all panels
+  // Apply color/texture to all panels (with PBR support)
   useEffect(() => {
     const currentConfigs = JSON.parse(configsStr) as PanelConfig[]
     panels.forEach((panel, index) => {
       if (!panel) return
       const config = currentConfigs[index]
-      applyColorToObject(panel, config.color)
+      applyMaterialToObject(panel, config.color)
     })
   }, [panels, configsStr])
 

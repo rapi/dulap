@@ -37,11 +37,21 @@ export const colorHexCodes: Record<ColorName, string> = {
   [ColorName.NaturalWalnut]: '#8b6f47',
 }
 
+export interface PBRTextures {
+  diffuse: string      // Base color/albedo map
+  normal: string       // Normal map for surface detail
+  roughness: string    // Roughness map
+  aoRoughMetal?: string // Combined AO/Roughness/Metalness map (optional)
+  displacement?: string // Height/displacement map (optional)
+  colorTint?: string   // Color tint multiplied with texture (default: white)
+}
+
 export interface ColorItem {
   hexCode: string
   materialCode: string
   name: string
-  textureUrl?: string // Optional texture image URL
+  textureUrl?: string // Optional texture thumbnail for UI preview
+  pbrTextures?: PBRTextures // Optional PBR texture maps for realistic rendering
 }
 
 export const colorDictionary: ColorItem[] = [
@@ -64,12 +74,29 @@ export const colorDictionary: ColorItem[] = [
     hexCode: colorHexCodes[ColorName.NaturalAcacia],
     materialCode: 'EGGER H3840 ST10',
     textureUrl: '/assets/thumbnails/natural_acacia.jpg',
+    pbrTextures: {
+      diffuse: '/assets/textures/wood/diffuse.jpg',
+      normal: '/assets/textures/wood/normal.jpg',
+      roughness: '/assets/textures/wood/rough.jpg',
+      aoRoughMetal: '/assets/textures/wood/ao_rough_metal.jpg',
+      displacement: '/assets/textures/wood/displacement.jpg',
+      colorTint: '#ffffff', // White - shows natural texture color
+    },
   },
   {
     name: ColorName.NaturalWalnut,
     hexCode: colorHexCodes[ColorName.NaturalWalnut],
     materialCode: 'EGGER H3734 ST10',
     textureUrl: '/assets/thumbnails/natural_walnut.jpg',
+    pbrTextures: {
+      // Use same textures as Natural Acacia
+      diffuse: '/assets/textures/wood/diffuse.jpg',
+      normal: '/assets/textures/wood/normal.jpg',
+      roughness: '/assets/textures/wood/rough.jpg',
+      aoRoughMetal: '/assets/textures/wood/ao_rough_metal.jpg',
+      displacement: '/assets/textures/wood/displacement.jpg',
+      colorTint: '#8C837A', // Brown tint for walnut appearance
+    },
   },
 ]
 
@@ -77,4 +104,22 @@ export function getColorItemByName(name: string): ColorItem | undefined {
   return colorDictionary.find(
     (c) => c.name.toLowerCase() === name.toLowerCase()
   )
+}
+
+export function getColorItemByHex(hexCode: string): ColorItem | undefined {
+  return colorDictionary.find(
+    (c) => c.hexCode.toLowerCase() === hexCode.toLowerCase()
+  )
+}
+
+export function getColorItem(nameOrHex: string): ColorItem | undefined {
+  // Try to find by name first
+  let colorItem = getColorItemByName(nameOrHex)
+  
+  // If not found and looks like a hex code, try hex lookup
+  if (!colorItem && nameOrHex.startsWith('#')) {
+    colorItem = getColorItemByHex(nameOrHex)
+  }
+  
+  return colorItem
 }

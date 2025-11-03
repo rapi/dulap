@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import {
   applyColorToObject,
+  applyMaterialToObject,
   disposeObject,
   createPanelPivotWithFlag,
 } from '../furnitureUtils'
@@ -186,8 +187,8 @@ const DrawerComponent: React.FC<DrawerProps> = ({
       if (child.userData.roundHandle || child.userData.profileHandle) {
         applyColorToObject(child, handleColor)
       } else {
-        // Apply the selected color to drawer panels
-        applyColorToObject(child, selectedColor)
+        // Apply material with PBR texture support to drawer panels
+        applyMaterialToObject(child, selectedColor)
       }
     })
   }, [drawerGroup, selectedColor])

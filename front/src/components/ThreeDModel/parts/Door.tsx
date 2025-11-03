@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import {
   applyColorToObject,
+  applyMaterialToObject,
   disposeObject,
   createPanelPivotWithFlag,
 } from '../furnitureUtils'
@@ -375,7 +376,8 @@ const DoorComponent: React.FC<DoorProps> = ({
       if (child.userData.roundHandle || child.userData.profileHandle) {
         applyColorToObject(child, handleColor)
       } else {
-        applyColorToObject(child, selectedColor)
+        // Use smart material application for door panels (supports PBR textures)
+        applyMaterialToObject(child, selectedColor)
       }
     })
 

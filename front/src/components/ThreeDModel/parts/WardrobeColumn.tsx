@@ -1,8 +1,9 @@
-import React, { memo, useState, useCallback, useMemo } from 'react'
+import React, { memo, useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { ThreeEvent } from '@react-three/fiber'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import { Door } from './Door'
+import { applyMaterialToObject } from '../furnitureUtils'
 
 interface WardrobeColumnProps {
   horizontalPanelObject: THREE.Object3D
@@ -46,6 +47,9 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
 }) => {
   const { panelThickness, panelSpacing } = FURNITURE_CONFIG
   const [isColumnHovered, setIsColumnHovered] = useState(false)
+  
+  // Refs for panels to apply textures
+  const bottomPanelRef = useRef<THREE.Mesh>(null)
 
   // Memoize door dimensions and configuration to prevent recalculation
   const doorConfig = useMemo(() => {
@@ -113,6 +117,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
 
       {/* Bottom panel */}
       <mesh
+        ref={bottomPanelRef}
         position={[0, plintHeight, columnDepth / 2]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
@@ -121,6 +126,13 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
       </mesh>
     </>
   ), [columnWidth, columnHeight, columnDepth, plintHeight, panelThickness])
+
+  // Apply color/texture to panels
+  useEffect(() => {
+    if (bottomPanelRef.current) {
+      applyMaterialToObject(bottomPanelRef.current, selectedColor)
+    }
+  }, [selectedColor])
 
   // Memoize door components to prevent recreation when only hover state changes
   const doors = useMemo(() => {

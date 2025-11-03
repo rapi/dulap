@@ -1,4 +1,4 @@
-import React, { memo, useState, useCallback, useMemo, useEffect } from 'react'
+import React, { memo, useState, useCallback, useMemo, useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { ThreeEvent } from '@react-three/fiber'
 import { Drawer } from './Drawer'
@@ -9,7 +9,7 @@ import {
   getConfigurationMetadata
 } from '~/types/columnConfigurationTypes'
 import {
-  applyColorToObject,
+  applyMaterialToObject,
   createPanelPivotWithFlag,
   disposeObject,
 } from '../furnitureUtils'
@@ -53,6 +53,9 @@ const ColumnComponent: React.FC<ColumnProps> = ({
 }) => {
   const { panelThickness, panelSpacing } = FURNITURE_CONFIG
   const [isColumnHovered, setIsColumnHovered] = useState(false)
+  
+  // Refs for bottom and back panels to apply textures
+  const bottomPanelRef = useRef<THREE.Mesh>(null)
 
   // Memoize configuration metadata and calculations to prevent recalculation
   const columnConfig = useMemo(() => {
@@ -123,6 +126,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
 
       {/* Bottom panel */}
       <mesh
+        ref={bottomPanelRef}
         position={[0, plintHeight, columnDepth / 2]}
         rotation={[-Math.PI / 2, 0, 0]}
       >
@@ -180,12 +184,13 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     panelThickness,
   ])
 
-  // Apply color to shelves
+  // Apply color/texture to shelves
   useEffect(() => {
     if (shelfPivots.length === 0) return
     
     shelfPivots.forEach((shelfPivot) => {
-      applyColorToObject(shelfPivot, selectedColor)
+      // Use smart material application (supports PBR textures)
+      applyMaterialToObject(shelfPivot, selectedColor)
     })
   }, [shelfPivots, selectedColor])
 
@@ -195,6 +200,18 @@ const ColumnComponent: React.FC<ColumnProps> = ({
       shelfPivots.forEach((shelfPivot) => disposeObject(shelfPivot))
     }
   }, [shelfPivots])
+
+  // Apply color/texture to bottom and back panels
+  useEffect(() => {
+    if (bottomPanelRef.current) {
+      // Apply smart material to bottom panel (supports PBR textures)
+      applyMaterialToObject(bottomPanelRef.current, selectedColor)
+    }
+    // if (backPanelRef.current) {
+    //   // Back panel stays white
+    //   applyMaterialToObject(backPanelRef.current, '#ffffff')
+    // }
+  }, [selectedColor])
 
   // Render shelves as primitives
   const renderShelves = () => {

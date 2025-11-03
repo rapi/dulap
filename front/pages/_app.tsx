@@ -12,6 +12,7 @@ import { Modal } from '~/components/Modal/Modal'
 import { CopyButton } from '~/components/CopyButton/CopyButton'
 import { FormattedMessage, useIntl } from 'react-intl'
 import Head from 'next/head'
+import { preloadPBRTextures } from '~/components/ThreeDModel/furnitureUtils'
 
 const localeMap: Record<string, Record<string, string>> = { ro, ru }
 const NEXT_GA_ID = process.env.NEXT_GA_ID
@@ -39,6 +40,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     // handleRouteChange(window.location.pathname + window.location.search)
     // return () => router.events.off('routeChangeComplete', handleRouteChange)
   }, [router.events])
+
+  // Preload PBR textures for instant material switching
+  useEffect(() => {
+    preloadPBRTextures()
+  }, [])
 
   // SEO meta
   const path = router.pathname.replace('/[locale]', '/').replace('//', '/')
