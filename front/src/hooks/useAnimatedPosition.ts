@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 
 export interface AnimationConfig {
@@ -40,6 +40,7 @@ export const useAnimatedPosition = (
   config: AnimationConfig
 ): void => {
   const currentValueRef = useRef(config.baseValue)
+  const { gl } = useThree()
 
   useFrame(() => {
     if (!object) return
@@ -53,6 +54,9 @@ export const useAnimatedPosition = (
       targetValue,
       config.lerpSpeed ?? 0.15
     )
+
+    // Check if object is actually moving (not at target yet)
+    const isAnimating = Math.abs(interpolated - targetValue) > 0.001
 
     // Apply the interpolated value to the appropriate property
     switch (config.axis) {
@@ -77,6 +81,11 @@ export const useAnimatedPosition = (
     }
 
     currentValueRef.current = interpolated
+    
+    // Trigger shadow update while animating
+    if (isAnimating && gl.shadowMap.enabled && !gl.shadowMap.autoUpdate) {
+      gl.shadowMap.needsUpdate = true
+    }
   })
 }
 
@@ -105,9 +114,12 @@ export const useAnimatedPositions = (
 ): void => {
   // Create refs for all current values
   const currentValuesRef = useRef<number[]>(configs.map(c => c.baseValue))
+  const { gl } = useThree()
 
   useFrame(() => {
     if (!object) return
+
+    let isAnimating = false
 
     configs.forEach((config, index) => {
       const targetValue = isActive 
@@ -119,6 +131,11 @@ export const useAnimatedPositions = (
         targetValue,
         config.lerpSpeed ?? 0.15
       )
+
+      // Check if any property is animating
+      if (Math.abs(interpolated - targetValue) > 0.001) {
+        isAnimating = true
+      }
 
       // Apply the interpolated value to the appropriate property
       switch (config.axis) {
@@ -144,5 +161,10 @@ export const useAnimatedPositions = (
 
       currentValuesRef.current[index] = interpolated
     })
+    
+    // Trigger shadow update while any property is animating
+    if (isAnimating && gl.shadowMap.enabled && !gl.shadowMap.autoUpdate) {
+      gl.shadowMap.needsUpdate = true
+    }
   })
 }

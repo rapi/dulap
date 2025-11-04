@@ -1,4 +1,4 @@
-import React, { Suspense, memo, useMemo } from 'react'
+import React, { Suspense, memo, useMemo, useState, useCallback } from 'react'
 import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { WardrobeTopAndPlinth } from './parts/WardrobeTopAndPlinth'
@@ -19,6 +19,8 @@ interface WardrobeBuilderProps {
   columnConfigurations?: unknown[] // Kept for compatibility with FurnitureViewer props but not used
   columnWidths?: number[] // Wardrobe-specific: variable column widths
   columnPositions?: number[] // Wardrobe-specific: custom column X positions
+  selectedColumnIndex?: number | null
+  onColumnSelectionChange?: (index: number | null) => void
 }
 
 // Preload assets for better performance (same as FurnitureBuilder)
@@ -46,7 +48,14 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
   columns,
   columnWidths,
   columnPositions,
+  selectedColumnIndex: externalSelectedColumnIndex,
+  onColumnSelectionChange,
 }) => {
+  // Use local state if no external state is provided (for standalone use)
+  const [internalSelectedColumnIndex, setInternalSelectedColumnIndex] = useState<number | null>(null)
+  
+  const selectedColumnIndex = externalSelectedColumnIndex !== undefined ? externalSelectedColumnIndex : internalSelectedColumnIndex
+  
   const { scene: verticalPanelObject } = useGLTF(VERTICAL_URL)
   const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
   const { scene: roundHandleObject } = useGLTF(ROUND_HANDLE_URL)
@@ -65,6 +74,17 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
     }),
     [verticalPanelObject, horizontalPanelObject, roundHandleObject, profileHandleObject, hingeWingObject, hingeAnchorObject]
   )
+
+  // Handle column selection
+  const handleColumnClick = useCallback((index: number) => {
+    if (onColumnSelectionChange) {
+      // External setter - calculate new value
+      onColumnSelectionChange(selectedColumnIndex === index ? null : index)
+    } else {
+      // Internal setter - use functional update
+      setInternalSelectedColumnIndex((prevIndex) => (prevIndex === index ? null : index))
+    }
+  }, [onColumnSelectionChange, selectedColumnIndex])
 
   // Wardrobe-specific column configuration
   // Use provided widths/positions or fall back to equal distribution
@@ -110,6 +130,9 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
           positionX={columnPositionX}
           selectedColor={selectedColor}
           doorType={doorType}
+          columnIndex={index}
+          isSelected={selectedColumnIndex === index}
+          onColumnClick={handleColumnClick}
         />
       )
     })
@@ -131,6 +154,8 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
     scenes.profileHandle,
     scenes.hingeWing,
     scenes.hingeAnchor,
+    selectedColumnIndex,
+    handleColumnClick,
   ])
 
   // Don't render until models are loaded

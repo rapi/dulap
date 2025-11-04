@@ -30,6 +30,8 @@ export interface Furniture3DProps {
   columnWidths?: number[] // Optional: variable column widths (for wardrobe)
   columnPositions?: number[] // Optional: custom column X positions (for wardrobe)
   furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage'
+  onColumnClick?: (index: number) => void // Callback when a column is clicked in 3D
+  onDeselectFunctionReady?: (deselectFn: () => void) => void // Called with the deselection function that parent can store and call
 }
 
 /**

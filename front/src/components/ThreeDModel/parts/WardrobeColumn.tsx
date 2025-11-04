@@ -19,6 +19,9 @@ interface WardrobeColumnProps {
   positionX: number
   selectedColor: string
   doorType: 'single' | 'split' // Wardrobe-specific: single or split doors
+  columnIndex?: number
+  isSelected?: boolean
+  onColumnClick?: (index: number) => void
 }
 
 /**
@@ -44,9 +47,15 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
   positionX,
   selectedColor,
   doorType,
+  columnIndex = 0,
+  isSelected = false,
+  onColumnClick,
 }) => {
   const { panelThickness, panelSpacing } = FURNITURE_CONFIG
   const [isColumnHovered, setIsColumnHovered] = useState(false)
+  
+  // Combine hover and selected states - column should be "open" if either is true
+  const isColumnOpen = isSelected || isColumnHovered
   
   // Refs for panels to apply textures
   const bottomPanelRef = useRef<THREE.Mesh>(null)
@@ -84,6 +93,14 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     setIsColumnHovered(false)
     document.body.style.cursor = 'auto'
   }, [])
+
+  // Click handler for column selection
+  const handleClick = useCallback((event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation()
+    if (onColumnClick) {
+      onColumnClick(columnIndex)
+    }
+  }, [columnIndex, onColumnClick])
 
   // Memoize panel geometry to prevent recreation
   const panels = useMemo(() => (
@@ -127,6 +144,28 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     </>
   ), [columnWidth, columnHeight, columnDepth, plintHeight, panelThickness, selectedColor])
 
+
+  const hoverPanel = useMemo(() => (
+    <>
+      {/* HOVER panel 
+      - It becomes transparent red on hover or when selected
+      */}
+      <mesh
+        position={[0, columnHeight / 2, columnDepth-panelThickness+0.1]}
+        rotation={[0, Math.PI, 0]}
+      >
+        <planeGeometry args={[columnWidth, columnHeight]} />
+        <meshStandardMaterial 
+          color={isColumnOpen ? '#ff0000' : '#ffffff'} 
+          transparent={true}
+          opacity={isColumnOpen ? 0.3 : 0}
+          side={THREE.DoubleSide} 
+        />
+      </mesh>
+    </>
+  ), [columnWidth, columnHeight, columnDepth, panelThickness, isColumnOpen])
+
+  
   // Apply color/texture to panels
   useEffect(() => {
     if (bottomPanelRef.current) {
@@ -161,7 +200,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
             doorIndex={0}
             positionY={doorPositionY}
             positionX={-halfWidth / 2}
-            isHovered={isColumnHovered}
+            isHovered={isColumnOpen}
             openingSide="left"
             hingeCount={hingeCount}
             hingePositionRule={hingePositionRule}
@@ -183,7 +222,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
             doorIndex={1}
             positionY={doorPositionY}
             positionX={halfWidth / 2}
-            isHovered={isColumnHovered}
+            isHovered={isColumnOpen}
             openingSide="right"
             hingeCount={hingeCount}
             hingePositionRule={hingePositionRule}
@@ -212,7 +251,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         doorIndex={0}
         positionY={doorPositionY}
         positionX={0}
-        isHovered={isColumnHovered}
+        isHovered={isColumnOpen}
         hingeCount={hingeCount}
         openingSide="right"
         hingePositionRule={hingePositionRule}
@@ -232,19 +271,22 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     hingeAnchorObject,
     openingType,
     selectedColor,
-    isColumnHovered,
+    isColumnOpen,
   ])
 
   return (
-    <group
+    <>
+    <group 
       position={[positionX, 0, 0]}
       onPointerOver={handlePointerOver}
       onPointerOut={handlePointerOut}
+        onClick={handleClick}
     >
+      {hoverPanel}
       {panels}
       {doors}
-      {/* TODO: Add wardrobe interiors here (rods, shelves, etc.) */}
-    </group>
+      </group>
+    </>
   )
 }
 

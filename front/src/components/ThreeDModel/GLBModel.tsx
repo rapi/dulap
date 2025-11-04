@@ -12,6 +12,7 @@ export const GLBModel = memo(function GLBModel({
   shouldReceiveShadow = true,
   forceFlatColorHex,
   useLambertWhiteMaterial,
+  onClick,
 }: {
   modelUrl: string
   modelPosition?: [number, number, number]
@@ -22,6 +23,7 @@ export const GLBModel = memo(function GLBModel({
   shouldReceiveShadow?: boolean
   forceFlatColorHex?: string
   useLambertWhiteMaterial?: boolean
+  onClick?: () => void
 }) {
   const { scene: gltfScene } = useGLTF(modelUrl)
 
@@ -75,6 +77,7 @@ export const GLBModel = memo(function GLBModel({
       rotation={modelRotation}
       castShadow={shouldCastShadow}
       receiveShadow={shouldReceiveShadow}
+      onClick={onClick}
     />
   )
 })

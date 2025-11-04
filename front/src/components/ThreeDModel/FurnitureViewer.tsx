@@ -36,12 +36,41 @@ const FurnitureScene = memo(function FurnitureScene({
   columnWidths,
   columnPositions,
   furnitureType,
+  onColumnClick,
+  onDeselectFunctionReady,
 }: Furniture3DProps) {
   const config = getViewerConfig(furnitureType)
   const { gl } = useThree()
+  const [selectedColumnIndex, setSelectedColumnIndex] = React.useState<number | null>(null)
+  
+  // Handle column selection - combine internal state with external callback
+  const handleColumnSelectionChange = useCallback((index: number | null) => {
+    setSelectedColumnIndex(index)
+    // Call external callback if provided
+    if (index !== null && onColumnClick) {
+      onColumnClick(index)
+    }
+  }, [onColumnClick])
+  
+  // Expose deselection function to parent
+  const deselectColumn = useCallback(() => {
+    setSelectedColumnIndex(null)
+  }, [])
+  
+  // Provide the deselect function to parent when ready
+  React.useEffect(() => {
+    if (onDeselectFunctionReady) {
+      onDeselectFunctionReady(deselectColumn)
+    }
+  }, [onDeselectFunctionReady, deselectColumn])
+  
+  // Handle deselecting column when clicking on background or shadow man
+  const handleBackgroundClick = useCallback(() => {
+    setSelectedColumnIndex(null)
+  }, [])
   
   // Trigger shadow update when furniture dimensions or configuration changes
-  // Since autoUpdate is disabled, we manually trigger updates only when needed
+  // Note: Shadow updates during animations are handled automatically by useAnimatedPosition hook
   useEffect(() => {
     if (gl.shadowMap.enabled && !gl.shadowMap.autoUpdate) {
       gl.shadowMap.needsUpdate = true
@@ -75,6 +104,7 @@ const FurnitureScene = memo(function FurnitureScene({
           shouldReceiveShadow={true}
           overrideColorHex="#ffffff"
           useLambertWhiteMaterial={true}
+          onClick={handleBackgroundClick}
         />
         <GLBModel
           modelUrl="/assets/3d-models/shadow_man.glb"
@@ -83,6 +113,7 @@ const FurnitureScene = memo(function FurnitureScene({
           overrideColorHex="#ffffff"
           shouldReceiveShadow={false}
           forceFlatColorHex="#ffffff"
+          onClick={handleBackgroundClick}
         />
       </Suspense>
 
@@ -101,6 +132,8 @@ const FurnitureScene = memo(function FurnitureScene({
             columnConfigurations={columnConfigurations}
             columnWidths={columnWidths}
             columnPositions={columnPositions}
+            selectedColumnIndex={selectedColumnIndex}
+            onColumnSelectionChange={handleColumnSelectionChange}
           />
         ) : (
           <FurnitureBuilder
@@ -115,6 +148,8 @@ const FurnitureScene = memo(function FurnitureScene({
             columnConfigurations={columnConfigurations}
             columnWidths={columnWidths}
             columnPositions={columnPositions}
+            selectedColumnIndex={selectedColumnIndex}
+            onColumnSelectionChange={handleColumnSelectionChange}
           />
         )}
       </Suspense>
@@ -136,6 +171,8 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
   columnWidths,
   columnPositions,
   furnitureType,
+  onColumnClick,
+  onDeselectFunctionReady,
 }) => {
   const handleCanvasCreated = useCallback(
     ({
@@ -208,6 +245,8 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           columnWidths={columnWidths}
           columnPositions={columnPositions}
           furnitureType={furnitureType}
+          onColumnClick={onColumnClick}
+          onDeselectFunctionReady={onDeselectFunctionReady}
         />
       </Canvas>
     </div>

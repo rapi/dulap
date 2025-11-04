@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo, useEffect } from 'react'
+import React, { FC, useState, useMemo, useEffect, useRef } from 'react'
 import { FormattedMessage } from 'react-intl'
 import {
   ButtonOptionsType,
@@ -23,10 +23,16 @@ export type ProductIndividualColumnsComponent = {
 
 interface ProductIndividualColumnsProps {
   configuration: ProductIndividualColumnsComponent
+  activeTab?: number
+  onActiveTabChange?: (index: number) => void
+  onColumnDeselect?: () => void // Callback to deselect column in 3D viewer
 }
 
 export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   configuration,
+  activeTab: externalActiveTab,
+  onActiveTabChange,
+  onColumnDeselect,
 }) => {
   const { 
     selectedColumns, 
@@ -36,14 +42,56 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     columnHeight,
     columnDepth,
   } = configuration
-  const [activeTab, setActiveTab] = useState(0)
+  const [internalActiveTab, setInternalActiveTab] = useState(0)
+  
+  // Use external activeTab if provided, otherwise use internal state
+  const activeTab = externalActiveTab !== undefined ? externalActiveTab : internalActiveTab
+  const setActiveTab = onActiveTabChange || setInternalActiveTab
 
   // Reset active tab to first column when it becomes out of bounds
   useEffect(() => {
     if (activeTab >= selectedColumns) {
       setActiveTab(0)
     }
-  }, [selectedColumns, activeTab])
+  }, [selectedColumns, activeTab, setActiveTab])
+  
+  // Sync internal state when external activeTab changes
+  useEffect(() => {
+    if (externalActiveTab !== undefined && externalActiveTab !== internalActiveTab) {
+      setInternalActiveTab(externalActiveTab)
+    }
+  }, [externalActiveTab, internalActiveTab])
+  
+  // Track previous configuration for active column to detect changes
+  const prevActiveColumnConfigRef = useRef<ColumnConfigurationType | undefined>(undefined)
+  const prevActiveTabRef = useRef<number>(activeTab)
+  
+  // Deselect column in 3D viewer when active column's configuration changes
+  useEffect(() => {
+    const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
+    const currentColumnIndex = selectedColumns === 1 ? 0 : safeActiveTab
+    const currentConfig = columnConfigurations[currentColumnIndex]
+    
+    // Reset tracking when switching to a different column
+    if (prevActiveTabRef.current !== safeActiveTab) {
+      prevActiveColumnConfigRef.current = currentConfig
+      prevActiveTabRef.current = safeActiveTab
+      return
+    }
+    
+    // If the configuration changed for the same column and we have a callback, deselect the column
+    if (
+      prevActiveColumnConfigRef.current !== undefined &&
+      prevActiveColumnConfigRef.current !== currentConfig &&
+      onColumnDeselect
+    ) {
+      onColumnDeselect()
+    }
+    
+    // Update the refs for next comparison
+    prevActiveColumnConfigRef.current = currentConfig
+    prevActiveTabRef.current = safeActiveTab
+  }, [activeTab, selectedColumns, columnConfigurations, onColumnDeselect])
 
   // Get constraint evaluation
   const { allConfigurations, isValid } = useColumnConfigurationConstraints(

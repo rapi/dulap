@@ -1,5 +1,5 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import React, { FC } from 'react'
+import React, { FC, useState, useCallback } from 'react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import {
@@ -90,6 +90,8 @@ export const ProductPage: FC<ProductPageProps> = ({
   values,
 }) => {
   const { addItem } = useCart()
+  const [activeColumnTab, setActiveColumnTab] = useState(0)
+  
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'imageSelect':
@@ -170,6 +172,11 @@ export const ProductPage: FC<ProductPageProps> = ({
     true, // isWardrobe = true (enables automatic column layout)
     'wardrobe' // furnitureType
   )
+  
+  // Handle column click from 3D viewer to update active tab
+  const handleColumnClick = useCallback((index: number) => {
+    setActiveColumnTab(index)
+  }, [])
 
   return (
     <>
@@ -177,7 +184,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
           {isWardrobe3D ? (
-            <FurnitureViewer {...furniture3DProps} />
+            <FurnitureViewer {...furniture3DProps} onColumnClick={handleColumnClick} />
           ) : (
             imageCarouselComponent && (
               <ProductImageCarousel

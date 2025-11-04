@@ -1,5 +1,6 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import React, { FC, useEffect } from 'react'
+import React, { FC, useState, useCallback, useRef } from 'react'
+import { useEffect } from 'react'
 import {
   ProductDimensions,
   ProductDimensionsComponent,
@@ -101,7 +102,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   values,
 }) => {
   const { addItem } = useCart()
-
+  const [activeColumnTab, setActiveColumnTab] = useState(0)
+  const deselectColumnRef = useRef<(() => void) | null>(null)
+  
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
@@ -140,8 +143,15 @@ export const ProductPage: FC<ProductPageProps> = ({
         ) : null
       case 'individualColumns':
         return isStand3D ? (
-          <ProductIndividualColumns
-            configuration={component as ProductIndividualColumnsComponent}
+          <ProductIndividualColumns 
+            configuration={component}
+            activeTab={activeColumnTab}
+            onActiveTabChange={setActiveColumnTab}
+            onColumnDeselect={() => {
+              if (deselectColumnRef.current) {
+                deselectColumnRef.current()
+              }
+            }}
           />
         ) : null
       case 'select':
@@ -203,6 +213,16 @@ export const ProductPage: FC<ProductPageProps> = ({
     values,
     DEFAULT_STAND
   )
+  
+  // Handle column click from 3D viewer to update active tab
+  const handleColumnClick = useCallback((index: number) => {
+    setActiveColumnTab(index)
+  }, [])
+  
+  // Store the deselect function from FurnitureViewer
+  const handleDeselectFunctionReady = useCallback((deselectFn: () => void) => {
+    deselectColumnRef.current = deselectFn
+  }, [])
 
   return (
     <>
@@ -210,7 +230,11 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
           {isStand3D ? (
-            <FurnitureViewer {...furniture3DProps} />
+            <FurnitureViewer 
+              {...furniture3DProps} 
+              onColumnClick={handleColumnClick}
+              onDeselectFunctionReady={handleDeselectFunctionReady}
+            />
           ) : (
             imageCarouselComponent && (
               <ProductImageCarousel
