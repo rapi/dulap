@@ -1,6 +1,5 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import React, { FC } from 'react'
-import { useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import {
   ProductDimensions,
   ProductDimensionsComponent,
@@ -45,6 +44,10 @@ import {
   ProductGallery,
   ProductGalleryComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductGallery'
+import {
+  ProductGalleryColors,
+  ProductGalleryColorsConfig,
+} from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
 import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
 import { use3DVersion } from '~/hooks/use3DVersion'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
@@ -68,6 +71,7 @@ export type ProductComponent =
   | ProductFurnitureComponent
   | ProductPriceComponent
   | ProductMetadataComponent
+  | ProductGalleryColorsConfig // ← include galleryColors in the union
 
 export type PredefinedValue = {
   sections?: number
@@ -76,11 +80,15 @@ export type PredefinedValue = {
   imageSelect?: string
   imageCarousel?: string[]
   dimensions?: Dimension
+  /** Preselects/locks the MAIN product color */
   colors?: string
+  /** Preselects/locks the GALLERY color (independent) */
+  galleryColors?: string
   select?: string
   furniture?: ProductFurniturePredefinedValue
   price?: number
 }
+
 interface ProductPageProps {
   components: () => ProductComponent[]
   name: string
@@ -93,6 +101,7 @@ export const ProductPage: FC<ProductPageProps> = ({
   values,
 }) => {
   const { addItem } = useCart()
+
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
@@ -109,7 +118,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.colors ?? undefined}
           />
         )
-      case 'sections':
+      case 'sections': {
         const compWithOpts = component as ProductSectionsComponent & {
           options?: ButtonOptionsType[]
         }
@@ -120,17 +129,20 @@ export const ProductPage: FC<ProductPageProps> = ({
             options={compWithOpts.options}
           />
         )
+      }
       case 'columns':
         return isStand3D ? (
           <ProductColumns
             configuration={component}
             predefinedValue={values?.columns ?? undefined}
-            options={component.options}
+            options={(component as ProductColumnsComponent).options}
           />
         ) : null
       case 'individualColumns':
         return isStand3D ? (
-          <ProductIndividualColumns configuration={component} />
+          <ProductIndividualColumns
+            configuration={component as ProductIndividualColumnsComponent}
+          />
         ) : null
       case 'select':
         return (
@@ -139,10 +151,9 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.select ?? undefined}
           />
         )
-      case 'furniture':
-        // Pass the is3DEnabled flag to furniture component
+      case 'furniture': {
         const furnitureConfig = {
-          ...component,
+          ...(component as ProductFurnitureComponent),
           is3DEnabled: isStand3D,
         }
         return (
@@ -151,19 +162,30 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.furniture ?? undefined}
           />
         )
+      }
+      default:
+        return null
     }
   }
 
   const currentComponents = components()
-  const priceComponent = currentComponents.find(
-    (component) => component.type === 'price'
-  )
+
+  const priceComponent = currentComponents.find((c) => c.type === 'price') as
+    | ProductPriceComponent
+    | undefined
+
   const imageCarouselComponent = currentComponents.find(
-    (component) => component.type === 'imageCarousel'
-  )
+    (c) => c.type === 'imageCarousel'
+  ) as ProductImageCarouselComponent | undefined
+
+  const galleryColorsComp = currentComponents.find(
+    (c) => c.type === 'galleryColors'
+  ) as ProductGalleryColorsConfig | undefined
+
   const galleryComponent = currentComponents.find(
-    (component) => component.type === 'gallery'
-  )
+    (c) => c.type === 'gallery'
+  ) as ProductGalleryComponent | undefined
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -204,6 +226,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             )
           )}
         </div>
+
         {/* Right Side: Product Details */}
         <div className={styles.detailsContainer}>
           <h1 className={styles.visuallyHiddenTitle}>
@@ -212,12 +235,12 @@ export const ProductPage: FC<ProductPageProps> = ({
           <h2 className={styles.title}>
             <FormattedMessage id={name} />
           </h2>
-          {currentComponents.map((component, index) => {
-            return (
-              <div key={index + component.type}>{getComponent(component)}</div>
-            )
-          })}
+
+          {currentComponents.map((component, index) => (
+            <div key={index + component.type}>{getComponent(component)}</div>
+          ))}
         </div>
+
         <div>
           {priceComponent && !isStand3D && (
             <ProductPrice
@@ -233,6 +256,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           )}
         </div>
       </div>
+
       <br />
       <br />
       <br />
@@ -240,6 +264,18 @@ export const ProductPage: FC<ProductPageProps> = ({
       <br />
       <br />
       <br />
+
+      {galleryColorsComp && (
+        <div className={styles.galleryColorContainer}>
+          <ProductGalleryColors
+            configuration={galleryColorsComp}
+            // If values.galleryColors is provided, this becomes read-only chip
+            predefinedValue={values?.galleryColors ?? undefined}
+          />
+        </div>
+      )}
+
+      {/* Gallery */}
       <div>
         {galleryComponent && (
           <ProductGallery
@@ -257,3 +293,5 @@ export const ProductPage: FC<ProductPageProps> = ({
     </>
   )
 }
+
+export default ProductPage

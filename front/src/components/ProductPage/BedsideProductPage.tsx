@@ -50,6 +50,10 @@ import { useRouter } from 'next/router'
 import { DEFAULT_BEDSIDE } from './productTypes/bedside'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
+import {
+  ProductGalleryColors,
+  ProductGalleryColorsConfig,
+} from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -62,6 +66,7 @@ export type ProductComponent =
   | ProductFurnitureComponent
   | ProductPriceComponent
   | ProductMetadataComponent
+  | ProductGalleryColorsConfig
 export type PredefinedValue = {
   sections?: number
   columns?: number
@@ -69,6 +74,7 @@ export type PredefinedValue = {
   gallery?: string[]
   dimensions?: Dimension
   colors?: string
+  galleryColors?: string
   furniture?: ProductFurniturePredefinedValue
   price?: number
 }
@@ -142,6 +148,10 @@ export const ProductPage: FC<ProductPageProps> = ({
   const imageCarouselComponent = currentComponents.find(
     (component) => component.type === 'imageCarousel'
   )
+  const galleryColorsComp = currentComponents.find(
+    (c) => c.type === 'galleryColors'
+  ) as ProductGalleryColorsConfig | undefined
+
   const galleryComponent = currentComponents.find(
     (component) => component.type === 'gallery'
   )
@@ -219,6 +229,15 @@ export const ProductPage: FC<ProductPageProps> = ({
       <br />
       <br />
       <br />
+      {galleryColorsComp && (
+        <div className={styles.galleryColorContainer}>
+          <ProductGalleryColors
+            configuration={galleryColorsComp}
+            // If values.galleryColors is provided, this becomes read-only chip
+            predefinedValue={values?.galleryColors ?? undefined}
+          />
+        </div>
+      )}
       <div>
         {galleryComponent && (
           <ProductGallery

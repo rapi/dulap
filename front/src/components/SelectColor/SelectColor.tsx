@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import styles from './SelectColor.module.css'
 import { getColorItemByName, ColorItem } from '~/utils/colorDictionary'
@@ -7,17 +7,16 @@ import AddIcon from '@mui/icons-material/Add'
 import { grey } from '@mui/material/colors'
 import { FormattedMessage } from 'react-intl'
 
-interface SelectColorProps {
+export interface SelectColorProps {
   colors: string[]
   defaultSelected?: string
+  value?: string
   onChange: (colorName: string) => void
   size?: 'small' | 'medium' | 'large'
   showAdd?: boolean
   addIcon?: React.ReactNode
   onAddClick?: () => void
-  /** Optional: render a CTA (e.g., <ColorCTA />) under the color row */
   colorCTA?: React.ReactNode
-  /** Optional: wrapper class for the CTA */
   colorCTAWrapperClassName?: string
 }
 
@@ -54,7 +53,7 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
   isAdd,
   icon,
   selected,
-  size,
+  size = 'medium',
   onClick,
 }) => {
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -97,6 +96,7 @@ export const SelectColorItem: React.FC<SelectColorItemProps> = ({
 const SelectColor: React.FC<SelectColorProps> = ({
   colors: colorNames,
   defaultSelected,
+  value, // NEW
   onChange,
   size = 'medium',
   showAdd = false,
@@ -105,17 +105,45 @@ const SelectColor: React.FC<SelectColorProps> = ({
   colorCTA,
   colorCTAWrapperClassName,
 }) => {
-  const initialItems: ColorItem[] = colorNames
-    .map((n) => getColorItemByName(n))
-    .filter((i): i is ColorItem => !!i)
+  const isControlled = value !== undefined
+
+  // Build items from `colors` prop
+  const initialItems: ColorItem[] = useMemo(
+    () =>
+      colorNames
+        .map((n) => getColorItemByName(n))
+        .filter((i): i is ColorItem => !!i),
+    [colorNames]
+  )
 
   const [items, setItems] = useState<ColorItem[]>(initialItems)
 
-  const [selected, setSelected] = useState<string>(
-    defaultSelected && getColorItemByName(defaultSelected)
-      ? defaultSelected
-      : initialItems[0]?.name || ''
-  )
+  // Keep items in sync if `colors` prop changes
+  useEffect(() => {
+    setItems(initialItems)
+  }, [initialItems])
+
+  // Uncontrolled internal selected
+  const [internalSelected, setInternalSelected] = useState<string>(() => {
+    const def =
+      defaultSelected && getColorItemByName(defaultSelected)
+        ? defaultSelected
+        : initialItems[0]?.name || ''
+    return def
+  })
+
+  // If consumer updates defaultSelected later (rare), reflect it in uncontrolled mode
+  useEffect(() => {
+    if (!isControlled) {
+      const def =
+        defaultSelected && getColorItemByName(defaultSelected)
+          ? defaultSelected
+          : initialItems[0]?.name || ''
+      setInternalSelected(def)
+    }
+  }, [defaultSelected, initialItems, isControlled])
+
+  const effectiveSelected = isControlled ? (value as string) : internalSelected
 
   const [isModalOpen, setModalOpen] = useState(false)
 
@@ -125,7 +153,7 @@ const SelectColor: React.FC<SelectColorProps> = ({
   ) => {
     e?.stopPropagation()
     if (!name) return
-    setSelected(name)
+    if (!isControlled) setInternalSelected(name)
     onChange(name)
   }
 
@@ -155,7 +183,7 @@ const SelectColor: React.FC<SelectColorProps> = ({
           materialCode={c.materialCode}
           textureUrl={c.textureUrl}
           size={size}
-          selected={c.name === selected}
+          selected={c.name === effectiveSelected}
           onClick={handleSelect}
         />
       ))}
@@ -169,19 +197,18 @@ const SelectColor: React.FC<SelectColorProps> = ({
           onClick={handleAdd}
         />
       )}
+
       <br />
+
       {/* CTA under the color row */}
-      {colorCTA && (
-        <div className={colorCTAWrapperClassName} style={{ marginTop: 12 }}>
-          {colorCTA}
-        </div>
-      )}
+      {colorCTA && <div className={colorCTAWrapperClassName}>{colorCTA}</div>}
 
       <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)}>
         <h3>
           <FormattedMessage id="selectColor.modal.title" />
         </h3>
         <div className={styles.modalColorsContainer}>
+          {/* Uncontrolled usage inside modal is fine */}
           <SelectColor
             colors={PALETTE}
             onChange={handleModalPick}

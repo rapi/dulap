@@ -1,9 +1,9 @@
 /**
  * Centralized Furniture Constraints Configuration
- * 
+ *
  * This file defines all dimension ranges, section rules, pricing formulas,
  * and validation logic for furniture products.
- * 
+ *
  * Benefits:
  * - Single source of truth for all constraints
  * - Type-safe with TypeScript
@@ -31,7 +31,10 @@ export interface SectionConstraints {
   max: number
   default: number
   // Function that determines available sections based on dimensions
-  getAvailableSections?: (dimensions: { width: number; height: number }) => number[]
+  getAvailableSections?: (dimensions: {
+    width: number
+    height: number
+  }) => number[]
   // Function that auto-calculates sections (for auto rule)
   autoCalculate?: (dimensions: { width: number; height: number }) => number
 }
@@ -56,7 +59,10 @@ export interface PricingFormula {
 export interface ImageConstraints {
   heightThresholds: Array<{ maxHeight: number; imageDimension: number }>
   widthThresholds: Array<{ maxWidth: number; imageDimension: number }>
-  plintHeightThresholds: Array<{ maxPlintHeight: number; imageDimension: number }>
+  plintHeightThresholds: Array<{
+    maxPlintHeight: number
+    imageDimension: number
+  }>
 }
 
 export interface ProductConstraints {
@@ -79,7 +85,7 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
     depth: { min: 35, max: 50, default: 40, unit: 'cm' },
     plintHeight: { min: 2, max: 10, default: 2, unit: 'cm' },
   },
-  
+
   sections: {
     rule: 'height-based',
     min: 3,
@@ -91,14 +97,14 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
       return height >= 110 ? [5] : [3, 4]
     },
   },
-  
+
   columns: {
     min: 1,
     max: 10,
     default: 1,
     allowCustomConfiguration: true,
   },
-  
+
   pricing: {
     basePrice: 600,
     perSection: 600,
@@ -108,7 +114,7 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
     premiumGuidesPerSection: 390,
     vatMultiplier: 1.3,
   },
-  
+
   images: {
     heightThresholds: [
       { maxHeight: 90, imageDimension: 700 },
@@ -125,8 +131,8 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
       { maxPlintHeight: Infinity, imageDimension: 60 },
     ],
   },
-  
-  colors: ['Biege', 'White', 'Light Grey', 'Grey'],
+
+  colors: ['White', 'Biege', 'Light Grey', 'Grey'],
 }
 
 // ============================================================================
@@ -140,7 +146,7 @@ export const BEDSIDE_CONSTRAINTS: ProductConstraints = {
     depth: { min: 35, max: 50, default: 40, unit: 'cm' },
     plintHeight: { min: 2, max: 10, default: 2, unit: 'cm' },
   },
-  
+
   sections: {
     rule: 'auto',
     min: 1,
@@ -153,14 +159,14 @@ export const BEDSIDE_CONSTRAINTS: ProductConstraints = {
       return height > 35 ? 2 : 1
     },
   },
-  
+
   columns: {
     min: 1,
     max: 10,
     default: 1,
     allowCustomConfiguration: true,
   },
-  
+
   pricing: {
     basePrice: 600,
     perSection: 600,
@@ -170,7 +176,7 @@ export const BEDSIDE_CONSTRAINTS: ProductConstraints = {
     premiumGuidesPerSection: 390,
     vatMultiplier: 1.3,
   },
-  
+
   images: {
     heightThresholds: [
       { maxHeight: 36, imageDimension: 300 },
@@ -186,8 +192,8 @@ export const BEDSIDE_CONSTRAINTS: ProductConstraints = {
       { maxPlintHeight: Infinity, imageDimension: 60 },
     ],
   },
-  
-  colors: ['Biege', 'White', 'Light Grey', 'Grey'],
+
+  colors: ['White', 'Biege', 'Light Grey', 'Grey'],
 }
 
 // ============================================================================
@@ -222,7 +228,7 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
     default: 2,
     allowCustomConfiguration: true,
   },
-  
+
   pricing: {
     basePrice: 300, // Lower base price for TV stands
     perSection: 600,
@@ -232,7 +238,7 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
     premiumGuidesPerSection: 390,
     vatMultiplier: 1.3,
   },
-  
+
   images: {
     heightThresholds: [
       { maxHeight: 45, imageDimension: 300 },
@@ -250,8 +256,8 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
       { maxPlintHeight: Infinity, imageDimension: 60 },
     ],
   },
-  
-  colors: ['Biege', 'White', 'Light Grey', 'Grey'],
+
+  colors: ['White', 'Biege', 'Light Grey', 'Grey'],
 }
 
 // ============================================================================
@@ -287,20 +293,21 @@ export function calculatePrice(
   hasPremiumGuides: boolean = false
 ): number {
   const { pricing } = getConstraints(type)
-  
-  const fittingsPrice = hasPremiumGuides 
-    ? sections * pricing.premiumGuidesPerSection 
+
+  const fittingsPrice = hasPremiumGuides
+    ? sections * pricing.premiumGuidesPerSection
     : 0
-  
+
   return Math.round(
-    (
-      pricing.basePrice +
+    (pricing.basePrice +
       sections * pricing.perSection +
       dimensions.width * pricing.perCmWidth +
-      (dimensions.height - pricing.perCmHeightAbove.threshold) * pricing.perCmHeightAbove.rate +
-      (dimensions.depth - pricing.perCmDepthAbove.threshold) * pricing.perCmDepthAbove.rate +
-      fittingsPrice
-    ) * pricing.vatMultiplier
+      (dimensions.height - pricing.perCmHeightAbove.threshold) *
+        pricing.perCmHeightAbove.rate +
+      (dimensions.depth - pricing.perCmDepthAbove.threshold) *
+        pricing.perCmDepthAbove.rate +
+      fittingsPrice) *
+      pricing.vatMultiplier
   )
 }
 
@@ -312,20 +319,20 @@ export function getAvailableSections(
   dimensions: { width: number; height: number }
 ): number[] {
   const { sections } = getConstraints(type)
-  
+
   if (sections.rule === 'auto') {
     // For auto rule, return the single calculated value
     const calculated = sections.autoCalculate?.(dimensions) ?? sections.default
     return [calculated]
   }
-  
+
   if (sections.getAvailableSections) {
     return sections.getAvailableSections(dimensions)
   }
-  
+
   // Fallback: return all sections from min to max
   return Array.from(
-    { length: sections.max - sections.min + 1 }, 
+    { length: sections.max - sections.min + 1 },
     (_, i) => sections.min + i
   )
 }
@@ -334,14 +341,22 @@ export function getAvailableSections(
  * Get image dimension based on actual dimension
  */
 export function getImageDimension(
-  thresholds: Array<{ maxHeight?: number; maxWidth?: number; maxPlintHeight?: number; imageDimension: number }>,
+  thresholds: Array<{
+    maxHeight?: number
+    maxWidth?: number
+    maxPlintHeight?: number
+    imageDimension: number
+  }>,
   actualValue: number
 ): number {
-  const threshold = thresholds.find(t => {
+  const threshold = thresholds.find((t) => {
     const max = t.maxHeight ?? t.maxWidth ?? t.maxPlintHeight ?? Infinity
     return actualValue < max
   })
-  return threshold?.imageDimension ?? thresholds[thresholds.length - 1].imageDimension
+  return (
+    threshold?.imageDimension ??
+    thresholds[thresholds.length - 1].imageDimension
+  )
 }
 
 /**
@@ -353,21 +368,21 @@ export function validateDimension(
   value: number
 ): { valid: boolean; error?: string } {
   const constraints = getConstraints(type).dimensions[dimension]
-  
+
   if (value < constraints.min) {
     return {
       valid: false,
       error: `${dimension} must be at least ${constraints.min}${constraints.unit}`,
     }
   }
-  
+
   if (value > constraints.max) {
     return {
       valid: false,
       error: `${dimension} must be at most ${constraints.max}${constraints.unit}`,
     }
   }
-  
+
   return { valid: true }
 }
 
@@ -376,20 +391,24 @@ export function validateDimension(
  */
 export function validateAllDimensions(
   type: FurnitureType,
-  dimensions: { width: number; height: number; depth: number; plintHeight: number }
+  dimensions: {
+    width: number
+    height: number
+    depth: number
+    plintHeight: number
+  }
 ): { valid: boolean; errors: string[] } {
   const errors: string[] = []
-  
+
   Object.entries(dimensions).forEach(([key, value]) => {
     const result = validateDimension(type, key as keyof DimensionRanges, value)
     if (!result.valid && result.error) {
       errors.push(result.error)
     }
   })
-  
+
   return {
     valid: errors.length === 0,
     errors,
   }
 }
-

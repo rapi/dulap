@@ -7,10 +7,12 @@ import {
   imageWidthMap,
 } from '~/components/ProductPage/productTypes/wardrobeMap'
 import { colorHexCodes, ColorName } from '~/utils/colorDictionary'
+
 export type MainImageParams = {
   imageWidth: number
   imageSections: number
 }
+
 const SECTION_VALUE: Record<number, number> = {
   1: 150,
   2: 1350,
@@ -42,7 +44,9 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   const [height, setHeight] = useState(260)
   const [depth, setDepth] = useState(50)
   const [plintHeight, setPlintHeight] = useState(2)
-  const [selectedColor, setSelectedColor] = useState(colorHexCodes[ColorName.White])
+  const [selectedColor, setSelectedColor] = useState(
+    colorHexCodes[ColorName.White]
+  )
   const [imageSide, setImageSide] = useState('right')
   const [imageWidth, setImageWidth] = useState(50)
   const [imageHeight, setImageHeight] = useState(2100)
@@ -62,6 +66,14 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     []
   )
   const [doorsNr, setDoorsNr] = useState(3)
+
+  // --- NEW: independent gallery color + who changed last ---
+  const [galleryColor, setGalleryColor] = useState<string>('White')
+  const [galleryImageColor, setGalleryImageColor] = useState<string>('White')
+  const [lastColorChanged, setLastColorChanged] = useState<'main' | 'gallery'>(
+    'main'
+  )
+  // ---------------------------------------------------------
 
   useEffect(() => {
     setSelectedSections((prev) => {
@@ -110,18 +122,8 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
   useEffect(() => {
     setGuides(guides)
   }, [guides])
-  // useEffect(() => {
-  //   if (selectedColor === '#ded9d3') {
-  //     setImageColor('Biege')
-  //   } else if (selectedColor === '#fcfbf5') {
-  //     setImageColor('White')
-  //   } else if (selectedColor === '#d6d6d6') {
-  //     setImageColor('Light Grey')
-  //   } else if (selectedColor === '#9c9c9c') {
-  //     setImageColor('Grey')
-  //   } else setImageColor('White')
-  // }, [selectedColor])
 
+  // Main color -> image folder key
   useEffect(() => {
     if (selectedColor === 'Biege') {
       setImageColor('Biege')
@@ -134,6 +136,27 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     } else setImageColor('White')
   }, [selectedColor])
 
+  // Gallery color -> image folder key (independent)
+  useEffect(() => {
+    if (galleryColor === 'Biege') {
+      setGalleryImageColor('Biege')
+    } else if (galleryColor === 'White') {
+      setGalleryImageColor('White')
+    } else if (galleryColor === 'Light Grey') {
+      setGalleryImageColor('Light Grey')
+    } else if (galleryColor === 'Grey') {
+      setGalleryImageColor('Grey')
+    } else setGalleryImageColor('White')
+  }, [galleryColor])
+
+  // Keep gallery picker visually in sync with main color until user changes gallery explicitly
+  useEffect(() => {
+    if (lastColorChanged === 'main') {
+      setGalleryColor(selectedColor)
+    }
+  }, [selectedColor, lastColorChanged])
+
+  // Build active sections based on current main color
   useEffect(() => {
     for (const map of widthMap) {
       if (width <= map.maxWidth) {
@@ -189,10 +212,10 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
 
   const guidesExtraPrice = useMemo(() => {
     return selectedSections.reduce((sum, { src }) => {
-      const match = src.match(/(\d+)\.\w+$/) // fix: escaped dot and removed extra paren
+      const match = src.match(/(\d+)\.\w+$/)
       const imageNr = match ? parseInt(match[1], 10) : 0
       const guideCount = GUIDES_NR[imageNr] || 0
-      return sum + guideCount * 250 // fix: return the new sum
+      return sum + guideCount * 250
     }, 0)
   }, [selectedSections])
 
@@ -243,6 +266,13 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       setImagePlintHeight(60)
     }
   }, [plintHeight])
+
+  // Choose last changed color for gallery visuals
+  const activeGalleryImageColor = useMemo(
+    () => (lastColorChanged === 'gallery' ? galleryImageColor : imageColor),
+    [lastColorChanged, galleryImageColor, imageColor]
+  )
+
   return [
     {
       type: 'dimensions',
@@ -261,22 +291,12 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
     },
     {
       type: 'colors',
-      // colors: [
-      //   '#ded9d3',
-      //   '#fcfbf5',
-      //   '#d6d6d6',
-      //   '#9c9c9c',
-      //   // '#7a7a7a'
-      // ],
-      colors: [
-        'White',
-        'Biege',
-        'Light Grey',
-        'Grey',
-        // '#7a7a7a'
-      ],
+      colors: ['White', 'Biege', 'Light Grey', 'Grey'],
       selectedColor,
-      setSelectedColor,
+      setSelectedColor: (v: string) => {
+        setSelectedColor(v)
+        setLastColorChanged('main')
+      },
     },
     {
       type: 'sections',
@@ -319,17 +339,27 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
         `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
       ],
     },
+    // Expose independent gallery color control (if your ProductPage renders it)
+    {
+      type: 'galleryColors',
+      colors: ['White', 'Biege', 'Light Grey', 'Grey'],
+      selectedColor: galleryColor,
+      setSelectedColor: (v: string) => {
+        setGalleryColor(v)
+        setLastColorChanged('gallery')
+      },
+    } as unknown as ProductComponent,
     {
       type: 'gallery',
       images: [
-        `/wardrobe/renders/render-wardrobe-1-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-1-${activeGalleryImageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-2-${activeGalleryImageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-1-${activeGalleryImageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-2-${activeGalleryImageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-1-${activeGalleryImageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-2-${activeGalleryImageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-1-${activeGalleryImageColor}.png`,
+        `/wardrobe/renders/render-wardrobe-2-${activeGalleryImageColor}.png`,
       ],
     },
   ]
