@@ -280,6 +280,7 @@ export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
       heightRange: [200, 270],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
+      heightStep: 1,
       width,
       setWidth,
       height,

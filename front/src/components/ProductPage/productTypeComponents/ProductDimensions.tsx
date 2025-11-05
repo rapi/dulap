@@ -19,6 +19,7 @@ export type ProductDimensionsComponent = {
   setWidth: (value: number) => void
   height: number
   setHeight: (value: number) => void
+  heightStep: number
   depth: number
   setDepth: (value: number) => void
   plintHeight: number
@@ -84,7 +85,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             <Slider
               min={configuration.heightRange[0]}
               max={configuration.heightRange[1]}
-              step={1}
+              step={configuration.heightStep}
               value={configuration.height}
               onChange={configuration.setHeight}
             />

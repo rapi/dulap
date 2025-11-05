@@ -25,6 +25,12 @@ export interface DimensionRanges {
   plintHeight: DimensionConstraints
 }
 
+export interface DimensionSteps {
+  widthStep?: number
+  heightStep?: number
+  depthStep?: number
+}
+
 export interface SectionConstraints {
   rule: 'height-based' | 'width-based' | 'auto' | 'fixed'
   min: number
@@ -67,6 +73,7 @@ export interface ImageConstraints {
 
 export interface ProductConstraints {
   dimensions: DimensionRanges
+  steps?: DimensionSteps
   sections: SectionConstraints
   columns: ColumnConstraints
   pricing: PricingFormula
@@ -84,6 +91,10 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
     height: { min: 70, max: 130, default: 70, unit: 'cm' },
     depth: { min: 35, max: 50, default: 40, unit: 'cm' },
     plintHeight: { min: 2, max: 10, default: 2, unit: 'cm' },
+  },
+
+  steps: {
+    heightStep: 5,
   },
 
   sections: {
@@ -147,6 +158,10 @@ export const BEDSIDE_CONSTRAINTS: ProductConstraints = {
     plintHeight: { min: 2, max: 10, default: 2, unit: 'cm' },
   },
 
+  steps: {
+    heightStep: 1,
+  },
+
   sections: {
     rule: 'auto',
     min: 1,
@@ -206,6 +221,10 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
     height: { min: 30, max: 60, default: 45, unit: 'cm' },
     depth: { min: 35, max: 50, default: 40, unit: 'cm' },
     plintHeight: { min: 2, max: 10, default: 2, unit: 'cm' },
+  },
+
+  steps: {
+    heightStep: 1,
   },
 
   sections: {

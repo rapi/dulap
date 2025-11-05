@@ -270,6 +270,7 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
         CONSTRAINTS.dimensions.plintHeight.min,
         CONSTRAINTS.dimensions.plintHeight.max,
       ],
+      heightStep: CONSTRAINTS.steps?.heightStep ?? 1,
       width,
       setWidth,
       height,
