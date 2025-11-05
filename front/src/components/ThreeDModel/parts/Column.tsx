@@ -202,9 +202,9 @@ const ColumnComponent: React.FC<ColumnProps> = ({
       
       // Scale the shelf to fit the width and depth
       shelfPivot.scale.set(
-        doorWidth - panelSpacing,
+        doorWidth - 2 * panelThickness,
         panelThickness,
-        columnDepth - 2 * panelThickness
+        columnDepth - panelThickness
       )
       
       // Position the shelf

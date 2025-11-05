@@ -1,14 +1,17 @@
-import React, { memo, useEffect, useMemo, useRef } from 'react'
+import React, { memo, useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
+import { applyMaterialToObject, disposeObject } from '../furnitureUtils'
+import { setupProfileHandle, setupRoundHandle } from '../handleUtils'
 import {
-  applyColorToObject,
-  applyMaterialToObject,
-  disposeObject,
-  createPanelPivotWithFlag,
-} from '../furnitureUtils'
-import { getHandleColor, HANDLE_CONSTANTS } from '../handleUtils'
-import { useAnimatedPosition } from '~/hooks/useAnimatedPosition'
+  createDrawerGroup,
+  calculateDrawerDimensions,
+  setupDrawerFrontPanel,
+  setupDrawerBottomPanel,
+  setupDrawerLeftPanel,
+  setupDrawerRightPanel,
+} from '../drawerUtils'
+import { useDrawerAnimation } from '~/hooks/useDrawerAnimation'
 
 interface DrawerProps {
   horizontalPanelObject: THREE.Object3D
@@ -43,128 +46,62 @@ const DrawerComponent: React.FC<DrawerProps> = ({
   openingType,
   isHovered = false,
 }) => {
-  const drawerGroupRef = useRef<THREE.Group | null>(null)
-
   // Create the drawer group with all panels
-  const drawerGroup = useMemo(() => {
-    if (!horizontalPanelObject) return null
-
-    const frontPanelPivot = createPanelPivotWithFlag(
-      horizontalPanelObject,
-      'isDrawerFront'
-    )
-    const bottomPanelPivot = createPanelPivotWithFlag(
-      horizontalPanelObject,
-      'isDrawerBottom'
-    )
-    const leftPanelPivot = createPanelPivotWithFlag(
-      horizontalPanelObject,
-      'isDrawerLeft'
-    )
-    const rightPanelPivot = createPanelPivotWithFlag(
-      horizontalPanelObject,
-      'isDrawerRight'
-    )
-    const roundHandlePivot = createPanelPivotWithFlag(roundHandleObject, 'roundHandle')
-    const profileHandlePivot = createPanelPivotWithFlag(profileHandleObject, 'profileHandle', { anchorY: 'center', anchorZ: 'center' })
-
-    const group = new THREE.Group()
-    group.add(
-      frontPanelPivot,
-      bottomPanelPivot,
-      leftPanelPivot,
-      rightPanelPivot,
-      roundHandlePivot,
-      profileHandlePivot
-    )
-    group.userData.isDrawerGroup = true
-    group.userData.drawerIndex = drawerIndex
-
-    return group
-  }, [horizontalPanelObject, roundHandleObject, profileHandleObject, drawerIndex])
-
-  // Store ref for animation
-  useEffect(() => {
-    drawerGroupRef.current = drawerGroup
-  }, [drawerGroup])
+  const drawerGroup = useMemo(
+    () =>
+      createDrawerGroup(
+        horizontalPanelObject,
+        roundHandleObject,
+        profileHandleObject,
+        drawerIndex
+      ),
+    [horizontalPanelObject, roundHandleObject, profileHandleObject, drawerIndex]
+  )
 
   // Scale and position the drawer parts
   useEffect(() => {
     if (!drawerGroup) return
 
-    const {
-      panelThickness,
-      panelSpacing,
-      handleOnTheDrawerTopOffset,
-      drawerInsidePanelsOffset,
-    } = FURNITURE_CONFIG
+    const { handleOnTheDrawerTopOffset } = FURNITURE_CONFIG
 
-    // Dimensions of the interior parts of the drawer (the box inside)
-    const innerHeight = drawerHeight - panelSpacing
-    const innerWidth = drawerWidth - panelThickness * 2
-    const innerDepth = drawerDepth - panelThickness * 2
-    const halfInnerWidth = innerWidth / 2
+    // Calculate drawer dimensions
+    const { innerHeight, innerWidth, innerDepth } = calculateDrawerDimensions(
+      drawerWidth,
+      drawerHeight,
+      drawerDepth
+    )
 
+    // Position drawer group
     const baseZ = 0
     drawerGroup.position.set(positionX, positionY, baseZ)
     drawerGroup.userData.baseZ = baseZ
 
-    // Position and scale all drawer panels
+    // Setup all drawer panels
     drawerGroup.children.forEach((panelPivot) => {
       if (panelPivot.userData.isDrawerFront) {
-        panelPivot.scale.set(
-          drawerWidth,
-          innerHeight,
-          panelThickness
-        )
-        panelPivot.position.set(0, 0, drawerDepth - panelThickness)
+        setupDrawerFrontPanel(panelPivot, drawerWidth, innerHeight, drawerDepth)
       } else if (panelPivot.userData.roundHandle) {
         panelPivot.visible = openingType === OpeningType.RoundHandle
-        if (panelPivot.visible) {
-          panelPivot.position.set(
-            0,
-            innerHeight - handleOnTheDrawerTopOffset,
-            drawerDepth + HANDLE_CONSTANTS.ROUND_HANDLE_DEPTH_OFFSET
-          )
-        }
+
+        setupRoundHandle(
+          panelPivot,
+          selectedColor,
+          innerHeight,
+          drawerDepth,
+          handleOnTheDrawerTopOffset
+        )
       } else if (panelPivot.userData.profileHandle) {
         panelPivot.visible = openingType === OpeningType.ProfileHandle
-        if (panelPivot.visible) {
-          panelPivot.position.set(
-            0,
-            innerHeight - HANDLE_CONSTANTS.PROFILE_HANDLE_Y_OFFSET,
-            drawerDepth - HANDLE_CONSTANTS.PROFILE_HANDLE_DEPTH_OFFSET
-          )
-        }
+
+        setupProfileHandle(panelPivot, selectedColor, innerHeight, drawerDepth, {
+          parentWidth: innerWidth,
+        })
       } else if (panelPivot.userData.isDrawerLeft) {
-        panelPivot.scale.set(
-          panelThickness,
-          (innerHeight - drawerInsidePanelsOffset),
-          innerDepth
-        )
-        panelPivot.position.set(
-          -halfInnerWidth + panelThickness / 2,
-          0,
-          panelThickness
-        )
+        setupDrawerLeftPanel(panelPivot, innerHeight, innerWidth, innerDepth)
       } else if (panelPivot.userData.isDrawerRight) {
-        panelPivot.scale.set(
-          panelThickness,
-          (innerHeight - drawerInsidePanelsOffset),
-          innerDepth
-        )
-        panelPivot.position.set(
-          +halfInnerWidth - panelThickness / 2,
-          0,
-          panelThickness
-        )
+        setupDrawerRightPanel(panelPivot, innerHeight, innerWidth, innerDepth)
       } else if (panelPivot.userData.isDrawerBottom) {
-        panelPivot.scale.set(
-          innerWidth,
-          panelThickness,
-          innerDepth
-        )
-        panelPivot.position.set(0, 0, panelThickness)
+        setupDrawerBottomPanel(panelPivot, innerWidth, innerDepth)
       }
     })
   }, [
@@ -175,36 +112,29 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     positionY,
     positionX,
     openingType,
+    selectedColor,
   ])
 
   // Apply the selected color
   useEffect(() => {
     if (!drawerGroup) return
 
-    const handleColor = getHandleColor(selectedColor)
-
+    // Apply material to drawer panels (handles are colored by setupRoundHandle/setupProfileHandle)
     drawerGroup.children.forEach((child) => {
-      if (child.userData.roundHandle || child.userData.profileHandle) {
-        applyColorToObject(child, handleColor)
-      } else {
+      if (!child.userData.roundHandle && !child.userData.profileHandle) {
         // Apply material with PBR texture support to drawer panels
         applyMaterialToObject(child, selectedColor)
       }
     })
   }, [drawerGroup, selectedColor])
 
-  // Opening animation using the hook
-  const baseZ = drawerGroup?.userData.baseZ || 0
-  
-  // Memoize animation config to prevent creating new object on every render
-  const animationConfig = useMemo(() => ({
-    axis: 'z' as const,
-    baseValue: baseZ,
-    activeOffset: drawerOffsetZ,
-    lerpSpeed: lerpSpeed,
-  }), [baseZ, drawerOffsetZ, lerpSpeed])
-  
-  useAnimatedPosition(drawerGroup, isHovered, animationConfig)
+  // Opening animation
+  useDrawerAnimation({
+    drawerGroup,
+    isHovered,
+    drawerOffsetZ,
+    lerpSpeed,
+  })
 
   // Cleanup
   useEffect(() => {
