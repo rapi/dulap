@@ -104,7 +104,7 @@ export const ProductPage: FC<ProductPageProps> = ({
   const { addItem } = useCart()
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const deselectColumnRef = useRef<(() => void) | null>(null)
-  
+
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
@@ -143,7 +143,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         ) : null
       case 'individualColumns':
         return isStand3D ? (
-          <ProductIndividualColumns 
+          <ProductIndividualColumns
             configuration={component}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
@@ -213,12 +213,12 @@ export const ProductPage: FC<ProductPageProps> = ({
     values,
     DEFAULT_STAND
   )
-  
+
   // Handle column click from 3D viewer to update active tab
   const handleColumnClick = useCallback((index: number) => {
     setActiveColumnTab(index)
   }, [])
-  
+
   // Store the deselect function from FurnitureViewer
   const handleDeselectFunctionReady = useCallback((deselectFn: () => void) => {
     deselectColumnRef.current = deselectFn
@@ -230,8 +230,8 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
           {isStand3D ? (
-            <FurnitureViewer 
-              {...furniture3DProps} 
+            <FurnitureViewer
+              {...furniture3DProps}
               onColumnClick={handleColumnClick}
               onDeselectFunctionReady={handleDeselectFunctionReady}
             />
@@ -260,21 +260,23 @@ export const ProductPage: FC<ProductPageProps> = ({
             <FormattedMessage id={name} />
           </h2>
 
+          <div className={styles.priceCont}>
+            {priceComponent && (
+              <ProductPrice
+                onAddItem={() => {
+                  addItem('stand', currentComponents, values ?? {})
+                }}
+                configuration={priceComponent}
+                predefinedValue={values?.price ?? undefined}
+              />
+            )}
+          </div>
+
           {currentComponents.map((component, index) => (
             <div key={index + component.type}>{getComponent(component)}</div>
           ))}
         </div>
-
         <div>
-          {priceComponent && !isStand3D && (
-            <ProductPrice
-              onAddItem={() => {
-                addItem('stand', currentComponents, values ?? {})
-              }}
-              configuration={priceComponent}
-              predefinedValue={values?.price ?? undefined}
-            />
-          )}
           {values != null && !isStand3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}

@@ -25,26 +25,25 @@ export const ProductPrice: FC<ProductPriceProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const price = predefinedValue ?? configuration.price
-  const titleId = predefinedValue
-    ? 'homepage.configurator.price.title'
-    : 'homepage.configurator.priceFlexible.title'
+
+  const round10 = (n: number): number => Math.round(n / 10) * 10
+
+  const roundedCrossedPrice = round10(price * 1.1)
   return (
     <div>
-      <div className={styles.priceContainer}>
-        <div className={styles.priceBlock}>
-          <div className={styles.priceTitle}>
-            <p className={styles.priceTitleText}>
-              <FormattedMessage id={titleId} />:
-            </p>
-          </div>
-          <div className={styles.priceBox}>
-            <p className={styles.price}>{price}</p>
-            <p className={styles.price}>
-              &nbsp;
-              <FormattedMessage id="homepage.configurator.price.currencyLei" />
-            </p>
-          </div>
+      <div className={styles.priceRow}>
+        <div className={styles.priceBox}>
+          <p className={styles.newPrice}>{price}</p>
+          <p className={styles.newPrice}>
+            &nbsp;
+            <FormattedMessage id="homepage.configurator.price.currencyLei" />
+          </p>
+          <p className={styles.crossedPrice}>
+            {roundedCrossedPrice}&nbsp;
+            <FormattedMessage id="homepage.configurator.price.currencyLei" />
+          </p>
         </div>
+
         <div className={styles.addToCartButtonContainer}>
           <CustomButton
             icon={<ShoppingCartIcon />}
@@ -54,9 +53,13 @@ export const ProductPrice: FC<ProductPriceProps> = ({
               setIsModalOpen(true)
               onAddItem()
             }}
+            outlined
           >
             <FormattedMessage id="homepage.button.addToCart" />
           </CustomButton>
+          <p className={styles.underBtnText}>
+            <FormattedMessage id="btn.textBelow.delivery" />
+          </p>
         </div>
       </div>
       <Modal

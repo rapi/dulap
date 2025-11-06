@@ -91,7 +91,7 @@ export const ProductPage: FC<ProductPageProps> = ({
 }) => {
   const { addItem } = useCart()
   const [activeColumnTab, setActiveColumnTab] = useState(0)
-  
+
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'imageSelect':
@@ -172,7 +172,7 @@ export const ProductPage: FC<ProductPageProps> = ({
     true, // isWardrobe = true (enables automatic column layout)
     'wardrobe' // furnitureType
   )
-  
+
   // Handle column click from 3D viewer to update active tab
   const handleColumnClick = useCallback((index: number) => {
     setActiveColumnTab(index)
@@ -184,7 +184,10 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
           {isWardrobe3D ? (
-            <FurnitureViewer {...furniture3DProps} onColumnClick={handleColumnClick} />
+            <FurnitureViewer
+              {...furniture3DProps}
+              onColumnClick={handleColumnClick}
+            />
           ) : (
             imageCarouselComponent && (
               <ProductImageCarousel
@@ -208,14 +211,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           <h2 className={styles.title}>
             <FormattedMessage id={name} />
           </h2>
-          {currentComponents.map((component, index) => {
-            return (
-              <div key={index + component.type}>{getComponent(component)}</div>
-            )
-          })}
-        </div>
-        <div>
-          {priceComponent && !isWardrobe3D && (
+          {priceComponent && (
             <ProductPrice
               onAddItem={() => {
                 addItem('wardrobe', currentComponents, values ?? {})
@@ -224,6 +220,13 @@ export const ProductPage: FC<ProductPageProps> = ({
               predefinedValue={values?.price ?? undefined}
             />
           )}
+          {currentComponents.map((component, index) => {
+            return (
+              <div key={index + component.type}>{getComponent(component)}</div>
+            )
+          })}
+        </div>
+        <div>
           {values != null && !isWardrobe3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}

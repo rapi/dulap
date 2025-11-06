@@ -317,16 +317,20 @@ export function calculatePrice(
     ? sections * pricing.premiumGuidesPerSection
     : 0
 
-  return Math.round(
-    (pricing.basePrice +
-      sections * pricing.perSection +
-      dimensions.width * pricing.perCmWidth +
-      (dimensions.height - pricing.perCmHeightAbove.threshold) *
-        pricing.perCmHeightAbove.rate +
-      (dimensions.depth - pricing.perCmDepthAbove.threshold) *
-        pricing.perCmDepthAbove.rate +
-      fittingsPrice) *
-      pricing.vatMultiplier
+  const round10 = (n: number): number => Math.round(n / 10) * 10
+
+  return round10(
+    Math.round(
+      (pricing.basePrice +
+        sections * pricing.perSection +
+        dimensions.width * pricing.perCmWidth +
+        (dimensions.height - pricing.perCmHeightAbove.threshold) *
+          pricing.perCmHeightAbove.rate +
+        (dimensions.depth - pricing.perCmDepthAbove.threshold) *
+          pricing.perCmDepthAbove.rate +
+        fittingsPrice) *
+        pricing.vatMultiplier
+    )
   )
 }
 

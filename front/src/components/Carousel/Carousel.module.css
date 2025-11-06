@@ -12,7 +12,7 @@
   align-items: center;
   width: 100%;
   /*overflow: hidden;*/
-  max-width: 600px; /* up to 600px wide */
+  /*max-width: 600px; !* up to 600px wide *!*/
   aspect-ratio: 1 / 1; /* always a perfect square */
   overflow: hidden;
 }

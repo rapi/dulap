@@ -60,11 +60,7 @@
 }
 
 /* D I M E N S I O N S */
-.dimensionsTitleLabel {
-  display: flex;
-  align-items: center;
-}
-
+.dimensionsTitleLabel,
 .colorsTitleLabel {
   display: flex;
 }
@@ -305,6 +301,7 @@
 
 .priceBox {
   display: flex;
+  margin-top: 15px;
 }
 
 .price {
@@ -312,6 +309,25 @@
   font-size: 24px;
   font-weight: 600;
   color: #f15e4d;
+}
+
+.newPrice {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #f15e4d;
+}
+
+.crossedPrice {
+  margin: 2px 0 0 15px;
+  color: #555;
+  font-weight: 400;
+  font-size: 16px;
+  text-decoration: line-through;
+}
+
+.priceCont {
+  margin-top: 10px;
 }
 
 .priceTitleText {
@@ -325,6 +341,20 @@
   font-size: 24px;
   font-weight: 600;
   color: #f15e4d;
+}
+
+.priceRow {
+  display: flex;
+  margin-top: 8px;
+  justify-content: space-between;
+}
+
+.underBtnText {
+  font-size: 11px;
+  color: #555;
+  margin: 2px 0 0;
+  display: flex;
+  justify-content: center;
 }
 
 .assemblyNote {

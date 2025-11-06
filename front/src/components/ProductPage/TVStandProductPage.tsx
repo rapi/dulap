@@ -133,7 +133,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         ) : null
       case 'individualColumns':
         return isTVStand3D ? (
-          <ProductIndividualColumns 
+          <ProductIndividualColumns
             configuration={component}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
@@ -194,12 +194,12 @@ export const ProductPage: FC<ProductPageProps> = ({
     values,
     DEFAULT_TV_STAND
   )
-  
+
   // Handle column click from 3D viewer to update active tab
   const handleColumnClick = useCallback((index: number) => {
     setActiveColumnTab(index)
   }, [])
-  
+
   // Store the deselect function from FurnitureViewer
   const handleDeselectFunctionReady = useCallback((deselectFn: () => void) => {
     deselectColumnRef.current = deselectFn
@@ -211,8 +211,8 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
           {isTVStand3D ? (
-            <FurnitureViewer 
-              {...furniture3DProps} 
+            <FurnitureViewer
+              {...furniture3DProps}
               onColumnClick={handleColumnClick}
               onDeselectFunctionReady={handleDeselectFunctionReady}
             />
@@ -239,14 +239,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           <h2 className={styles.title}>
             <FormattedMessage id={name} />
           </h2>
-          {currentComponents.map((component, index) => {
-            return (
-              <div key={index + component.type}>{getComponent(component)}</div>
-            )
-          })}
-        </div>
-        <div>
-          {priceComponent && !isTVStand3D && (
+          {priceComponent && (
             <ProductPrice
               onAddItem={() => {
                 addItem('tv-stand', currentComponents, values ?? {})
@@ -255,6 +248,13 @@ export const ProductPage: FC<ProductPageProps> = ({
               predefinedValue={values?.price ?? undefined}
             />
           )}
+          {currentComponents.map((component, index) => {
+            return (
+              <div key={index + component.type}>{getComponent(component)}</div>
+            )
+          })}
+        </div>
+        <div>
           {values != null && !isTVStand3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}

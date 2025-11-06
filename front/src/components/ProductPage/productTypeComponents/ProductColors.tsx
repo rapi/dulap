@@ -28,9 +28,11 @@ export const ProductColors: FC<ProductColorsProps> = ({
 
     return (
       <label className={styles.colorsLabel}>
-        <p>
-          <FormattedMessage id="homepage.configurator.colors.title" />
-        </p>
+        <div className={styles.colorsTitleLabel}>
+          <p>
+            <FormattedMessage id="homepage.configurator.colors.title" />
+          </p>
+        </div>
         <SelectColorItem
           hexCode={ci?.hexCode}
           name={ci?.name}

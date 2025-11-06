@@ -31,7 +31,6 @@ import {
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductMetadataComponent } from '~/components/ProductPage/productTypeComponents/ProductMetadata'
-import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 import {
   ProductImageCarousel,
   ProductImageCarouselComponent,
@@ -54,6 +53,7 @@ import {
   ProductGalleryColors,
   ProductGalleryColorsConfig,
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
+import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -91,6 +91,7 @@ export const ProductPage: FC<ProductPageProps> = ({
 }) => {
   const { addItem } = useCart()
   const isBedside3D = use3DVersion()
+  const isStand3D = use3DVersion()
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const deselectColumnRef = useRef<(() => void) | null>(null)
 
@@ -127,7 +128,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         ) : null
       case 'individualColumns':
         return isBedside3D ? (
-          <ProductIndividualColumns 
+          <ProductIndividualColumns
             configuration={component}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
@@ -181,12 +182,12 @@ export const ProductPage: FC<ProductPageProps> = ({
     values,
     DEFAULT_BEDSIDE
   )
-  
+
   // Handle column click from 3D viewer to update active tab
   const handleColumnClick = useCallback((index: number) => {
     setActiveColumnTab(index)
   }, [])
-  
+
   // Store the deselect function from FurnitureViewer
   const handleDeselectFunctionReady = useCallback((deselectFn: () => void) => {
     deselectColumnRef.current = deselectFn
@@ -198,8 +199,8 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left Side: Viewer or Image Carousel */}
         <div className={styles.leftContainer}>
           {isBedside3D ? (
-            <FurnitureViewer 
-              {...furniture3DProps} 
+            <FurnitureViewer
+              {...furniture3DProps}
               onColumnClick={handleColumnClick}
               onDeselectFunctionReady={handleDeselectFunctionReady}
             />
@@ -226,6 +227,18 @@ export const ProductPage: FC<ProductPageProps> = ({
           <h2 className={styles.title}>
             <FormattedMessage id={name} />
           </h2>
+          <div className={styles.priceCont}>
+            {priceComponent && (
+              <ProductPrice
+                onAddItem={() => {
+                  addItem('stand', currentComponents, values ?? {})
+                }}
+                configuration={priceComponent}
+                predefinedValue={values?.price ?? undefined}
+              />
+            )}
+          </div>
+
           {currentComponents.map((component, index) => {
             return (
               <div key={index + component.type}>{getComponent(component)}</div>
@@ -233,15 +246,6 @@ export const ProductPage: FC<ProductPageProps> = ({
           })}
         </div>
         <div>
-          {priceComponent && !isBedside3D && (
-            <ProductPrice
-              onAddItem={() => {
-                addItem('bedside', currentComponents, values ?? {})
-              }}
-              configuration={priceComponent}
-              predefinedValue={values?.price ?? undefined}
-            />
-          )}
           {values != null && !isBedside3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}

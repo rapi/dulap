@@ -107,31 +107,31 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
             />
           )}
         </label>
-        <label className={styles.dimensionLabel}>
-          <div className={styles.dimensionTitle}>
-            <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />
-            <div
-              className={styles.tooltipContainer}
-              onClick={() => setIsModalOpen(true)}
-            >
-              <InfoOutlinedIcon color="action" sx={{ fontSize: 20 }} />
-              <span className={styles.tooltipText}>
-                <img src="/wardrobe/base-tooltip.png" alt="base tooltip"></img>
-              </span>
-            </div>
-          </div>
-          {predefinedValue?.plintHeight != null ? (
-            `${predefinedValue.plintHeight} cm`
-          ) : (
-            <Slider
-              min={configuration.plintHeightRange[0]}
-              max={configuration.plintHeightRange[1]}
-              step={1}
-              value={configuration.plintHeight}
-              onChange={configuration.setPlintHeight}
-            />
-          )}
-        </label>
+        {/*<label className={styles.dimensionLabel}>*/}
+        {/*  <div className={styles.dimensionTitle}>*/}
+        {/*    <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />*/}
+        {/*    <div*/}
+        {/*      className={styles.tooltipContainer}*/}
+        {/*      onClick={() => setIsModalOpen(true)}*/}
+        {/*    >*/}
+        {/*      <InfoOutlinedIcon color="action" sx={{ fontSize: 20 }} />*/}
+        {/*      <span className={styles.tooltipText}>*/}
+        {/*        <img src="/wardrobe/base-tooltip.png" alt="base tooltip"></img>*/}
+        {/*      </span>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*  {predefinedValue?.plintHeight != null ? (*/}
+        {/*    `${predefinedValue.plintHeight} cm`*/}
+        {/*  ) : (*/}
+        {/*    <Slider*/}
+        {/*      min={configuration.plintHeightRange[0]}*/}
+        {/*      max={configuration.plintHeightRange[1]}*/}
+        {/*      step={1}*/}
+        {/*      value={configuration.plintHeight}*/}
+        {/*      onChange={configuration.setPlintHeight}*/}
+        {/*    />*/}
+        {/*  )}*/}
+        {/*</label>*/}
         <Modal
           isOpen={isModalOpen}
           onClose={() => {
