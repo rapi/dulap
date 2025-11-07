@@ -1,0 +1,111 @@
+:root {
+  /* Tweak these to fit your theme */
+  --bis-border: #e5e7eb; /* neutral-200 */
+  --bis-border-hover: #cfd2d8; /* neutral-300 */
+  --bis-bg: #ffffff;
+  --bis-bg-selected: #ffffff;
+  --bis-ring: #111827; /* neutral-900 */
+  --bis-text: #111827;
+  --bis-text-muted: #6b7280; /* neutral-500 */
+  --bis-disabled: #9ca3af; /* neutral-400 */
+  --bis-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 2px;
+}
+
+.container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 9999px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  min-height: 110px; /* room for icon + label */
+}
+
+.item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  min-width: 96px;
+  padding: 10px 12px;
+
+  background: var(--bis-bg);
+  border: 1px solid var(--bis-border);
+  border-radius: 12px;
+  box-shadow: var(--bis-shadow);
+
+  color: var(--bis-text);
+  cursor: pointer;
+  outline: none;
+
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 80ms ease;
+}
+
+.item:hover {
+  border-color: var(--bis-border-hover);
+  transform: translateY(-1px);
+}
+
+.item:focus-visible {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px var(--bis-ring);
+}
+
+.selected {
+  border-color: var(--bis-ring);
+  background: var(--bis-bg-selected);
+}
+
+.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.content {
+  display: grid;
+  place-items: center;
+  width: 60px; /* matches your icons */
+  height: 75px; /* matches your icons */
+}
+
+.label {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--bis-text-muted);
+  text-align: center;
+  max-width: 120px;
+}
+
+.checkmark {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: var(--bis-ring);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 2px rgba(17, 24, 39, 0.25);
+}

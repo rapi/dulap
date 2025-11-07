@@ -1,29 +1,62 @@
 .container {
   display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
+  gap: var(--btnselect-gap, 7px);
+  flex-wrap: var(--btnselect-wrap, wrap); /* 👈 now overridable */
   align-items: center;
+
+  /* allow horizontal scrolling when requested via vars */
+  overflow-x: var(--btnselect-ox, visible);
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+
+  min-width: 0; /* prevent flex parent from collapsing our scroll area */
+}
+
+/* SIZE PRESETS (applied on the container) */
+.small {
+  --btnselect-min-width: 32px;
+  --btnselect-height: 26px;
+  --btnselect-padding-x: 10px;
+  --btnselect-radius: 15px;
+  --btnselect-font-size: 12px;
+  --btnselect-font-weight: 450;
+  --btnselect-gap: 7px;
+  --btnselect-image-size: 24px;
+}
+
+.medium {
+  --btnselect-min-width: 40px;
+  --btnselect-height: 34px;
+  --btnselect-padding-x: 14px;
+  --btnselect-radius: 18px;
+  --btnselect-font-size: 13px;
+  --btnselect-font-weight: 450;
+  --btnselect-gap: 8px;
+  --btnselect-image-size: 28px;
 }
 
 .button {
   display: flex;
   align-items: center;
   gap: 5px;
-  min-width: 32px;
-  height: 26px;
-  padding: 0 10px;
+  min-width: var(--btnselect-min-width, 32px);
+  height: var(--btnselect-height, 26px);
+  padding: 0 var(--btnselect-padding-x, 10px);
   justify-content: center;
-  border-radius: 15px;
-  border: 1px solid #E7E7E7;
+  border-radius: var(--btnselect-radius, 15px);
+  border: 1px solid #e7e7e7;
   background-color: #fff;
   color: #333;
-  font-size: 12px;
+  font-size: var(--btnselect-font-size, 12px);
   cursor: pointer;
   transition:
     background-color 0.1s ease-in-out,
     border-color 0.1s ease-in-out;
-  font-weight: 450;
+  font-weight: var(--btnselect-font-weight, 450);
   font-family: 'Onest', sans-serif;
+
+  /* 👇 keep each chip from shrinking so they make one scrollable row */
+  flex: 0 0 auto;
 }
 
 .button:hover {
@@ -41,4 +74,21 @@
 .button.disabled {
   color: #ebebeb;
   pointer-events: none;
+}
+
+/* Optional: image support if you render icons or thumbs inside the button */
+.imagesWrap {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.image {
+  width: var(--btnselect-image-size, 24px);
+  height: var(--btnselect-image-size, 24px);
+  object-fit: contain;
+  pointer-events: none;
+  display: block;
 }

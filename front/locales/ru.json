@@ -53,7 +53,7 @@
   "homepage.button.yourWardrobe": "Твой шкаф",
   "homepage.button.create": "Создать",
   "homepage.button.edit": "Редактировать",
-  "homepage.button.addToCart": "В корзину",
+  "homepage.button.addToCart": "Добавить в корзину",
   "homepage.button.addToCartShort": "В корзину",
   "homepage.button.finalizeOrder": "Завершить заказ",
   "homepage.button.placeOrder": "Оформить заказ",
@@ -64,7 +64,7 @@
   "homepage.button.preorder": "Создай свою мебель",
   "homepage.copyButton.copy": "Скопировать",
   "homepage.copyButton.coppied": "Скопировано !",
-  "btn.textBelow.delivery": "Доставляем в течении 10-15 рабочих дней",
+  "btn.textBelow.delivery": "Доставляем за 15 рабочих дней",
 
 
   "homepage.menu.productsTitle": "Товары",
@@ -162,6 +162,8 @@
   "homepage.configurator.dimensions.plintHeight": "Высота цоколя",
   "homepage.configurator.dimensions.cm": "см",
 
+  "homepage.configurator.dimensions.measurementsHelp": "<a>Как измерить правильно пространство?</a>",
+
   "homepage.configurator.dimensions.hintPlintHeight.1": "Что такое высота цоколя?",
   "homepage.configurator.dimensions.hintPlintHeight.2": "Высота цоколя — это расстояние от пола до фасадов (дверей шкафа).",
   "homepage.configurator.dimensions.hintPlintHeight.3": "Какую высоту выбрать?",
@@ -184,10 +186,10 @@
   "homepage.configurator.sections.nr.6": "6",
 
   "homepage.configurator.sections.title": "Секции",
-  "homepage.configurator.columns.title": "Количество колонн",
+  "homepage.configurator.columns.title": "Колонны",
   "homepage.configurator.options.title": "Опции",
 
-  "homepage.configurator.individualColumns.title": "Настройте отдельные секции",
+  "homepage.configurator.individualColumns.title": "Конфигурация",
   "homepage.configurator.individualColumns.column": "Колонна {number}",
   "homepage.configurator.individualColumns.columnType": "Нажмите на мебель в конфигураторе или на одну из кнопок ниже, чтобы настроить секцию.",
   "homepage.configurator.individualColumns.drawers": "Ящики",

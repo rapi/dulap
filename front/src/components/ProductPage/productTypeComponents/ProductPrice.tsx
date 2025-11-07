@@ -53,7 +53,6 @@ export const ProductPrice: FC<ProductPriceProps> = ({
               setIsModalOpen(true)
               onAddItem()
             }}
-            outlined
           >
             <FormattedMessage id="homepage.button.addToCart" />
           </CustomButton>

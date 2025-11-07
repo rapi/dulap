@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl'
 import { Dimension } from '~/components/ProductListPage/products'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Link from 'next/link'
+import { useMediaQuery } from '@mui/material'
 
 export type ProductDimensionsComponent = {
   predefinedValue?: Dimension
@@ -35,9 +36,10 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   predefinedValue,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
   return (
     <>
-      <br />
       <div className={styles.dimensionsTitleLabel}>
         <h3 className={styles.dimensionsHeaderTitle}>
           <FormattedMessage id="homepage.configurator.dimensions.title" />
@@ -57,7 +59,6 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           </span>
         </Link>
       </div>
-
       <div className={styles.dimensionsGrid}>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}>
@@ -66,13 +67,15 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           {predefinedValue?.width != null ? (
             `${predefinedValue?.width} cm`
           ) : (
-            <Slider
-              min={configuration.widthRange[0]}
-              max={configuration.widthRange[1]}
-              step={1}
-              value={configuration.width}
-              onChange={configuration.setWidth}
-            />
+            <div className={styles.dimensionControl}>
+              <Slider
+                min={configuration.widthRange[0]}
+                max={configuration.widthRange[1]}
+                step={1}
+                value={configuration.width}
+                onChange={configuration.setWidth}
+              />
+            </div>
           )}
         </label>
         <label className={styles.dimensionLabel}>
@@ -82,13 +85,15 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           {predefinedValue?.height != null ? (
             `${predefinedValue.height} cm`
           ) : (
-            <Slider
-              min={configuration.heightRange[0]}
-              max={configuration.heightRange[1]}
-              step={configuration.heightStep}
-              value={configuration.height}
-              onChange={configuration.setHeight}
-            />
+            <div className={styles.dimensionControl}>
+              <Slider
+                min={configuration.heightRange[0]}
+                max={configuration.heightRange[1]}
+                step={configuration.heightStep}
+                value={configuration.height}
+                onChange={configuration.setHeight}
+              />
+            </div>
           )}
         </label>
         <label className={styles.dimensionLabel}>
@@ -98,40 +103,39 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
           {predefinedValue?.depth != null ? (
             `${predefinedValue.depth} cm`
           ) : (
-            <Slider
-              min={configuration.depthRange[0]}
-              max={configuration.depthRange[1]}
-              step={1}
-              value={configuration.depth}
-              onChange={configuration.setDepth}
-            />
+            <div className={styles.dimensionControl}>
+              <Slider
+                min={configuration.depthRange[0]}
+                max={configuration.depthRange[1]}
+                step={1}
+                value={configuration.depth}
+                onChange={configuration.setDepth}
+              />
+            </div>
           )}
         </label>
-        {/*<label className={styles.dimensionLabel}>*/}
-        {/*  <div className={styles.dimensionTitle}>*/}
-        {/*    <FormattedMessage id="homepage.configurator.dimensions.plintHeight" />*/}
-        {/*    <div*/}
-        {/*      className={styles.tooltipContainer}*/}
-        {/*      onClick={() => setIsModalOpen(true)}*/}
-        {/*    >*/}
-        {/*      <InfoOutlinedIcon color="action" sx={{ fontSize: 20 }} />*/}
-        {/*      <span className={styles.tooltipText}>*/}
-        {/*        <img src="/wardrobe/base-tooltip.png" alt="base tooltip"></img>*/}
-        {/*      </span>*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*  {predefinedValue?.plintHeight != null ? (*/}
-        {/*    `${predefinedValue.plintHeight} cm`*/}
-        {/*  ) : (*/}
-        {/*    <Slider*/}
-        {/*      min={configuration.plintHeightRange[0]}*/}
-        {/*      max={configuration.plintHeightRange[1]}*/}
-        {/*      step={1}*/}
-        {/*      value={configuration.plintHeight}*/}
-        {/*      onChange={configuration.setPlintHeight}*/}
-        {/*    />*/}
-        {/*  )}*/}
-        {/*</label>*/}
+        {isMobile && (
+          <div className={styles.dimensionsQuestion}>
+            <HelpOutlineIcon color="action" sx={{ fontSize: 20 }} />
+            &nbsp;
+            <FormattedMessage
+              id="homepage.configurator.dimensions.measurementsHelp"
+              defaultMessage="<a>Cum măsori corect spațiul?</a>"
+              values={{
+                a: (chunks) => (
+                  <Link
+                    href="/blog/measurements"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.dimensionsMobileTooltip}
+                  >
+                    {chunks}
+                  </Link>
+                ),
+              }}
+            />
+          </div>
+        )}
         <Modal
           isOpen={isModalOpen}
           onClose={() => {

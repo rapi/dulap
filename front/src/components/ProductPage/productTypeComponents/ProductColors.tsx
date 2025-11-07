@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl'
 import Link from 'next/link'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import ColorCTA from '~/components/ColorCTA/ColorCTA'
+import { useMediaQuery } from '@mui/material'
 export type ProductColorsComponent = {
   type: 'colors'
   colors: string[]
@@ -19,10 +20,27 @@ interface ProductColorsProps {
   configuration: ProductColorsComponent
   predefinedValue?: string
 }
+const FULL_PALETTE = [
+  'White',
+  'Biege',
+  'Light Grey',
+  'Grey',
+  'Dark Grey',
+  'Grey Cubanit',
+  'Grey Stone',
+  'Green Salvia',
+  'Beige Sand',
+  'Beige Cashmere',
+  'Biege Almond',
+  'Rose Antique',
+  'Natural Acacia',
+  'Natural Walnut',
+]
 export const ProductColors: FC<ProductColorsProps> = ({
   configuration,
   predefinedValue,
 }) => {
+  const isMobile = useMediaQuery('(max-width: 768px)')
   if (predefinedValue) {
     const ci = getColorItemByName(predefinedValue)
 
@@ -65,11 +83,11 @@ export const ProductColors: FC<ProductColorsProps> = ({
         </Link>
       </div>
       <SelectColor
-        colors={configuration.colors}
+        colors={isMobile ? FULL_PALETTE : configuration.colors}
         defaultSelected={configuration.selectedColor}
         onChange={(value) => configuration.setSelectedColor(value)}
-        size="medium"
-        showAdd
+        size={isMobile ? 'small' : 'medium'}
+        showAdd={!isMobile}
         colorCTA={<ColorCTA trackingId="color_cta_configurator" />}
       />
     </label>

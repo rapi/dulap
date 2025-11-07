@@ -5,10 +5,14 @@ import {
   ButtonSelect,
 } from '~/components/ButtonSelect/ButtonSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
-import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
+import {
+  ColumnConfigurationType,
+  getConfigurationMetadata,
+} from '~/types/columnConfigurationTypes'
 import { ColumnConfigurationIcon } from './ColumnConfigurationIcons'
 import { useColumnConfigurationConstraints } from '~/hooks/useColumnConfigurationConstraints'
 import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
+import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSelect'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
@@ -34,18 +38,19 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   onActiveTabChange,
   onColumnDeselect,
 }) => {
-  const { 
-    selectedColumns, 
-    columnConfigurations, 
+  const {
+    selectedColumns,
+    columnConfigurations,
     setColumnConfigurations,
     columnWidth,
     columnHeight,
     columnDepth,
   } = configuration
   const [internalActiveTab, setInternalActiveTab] = useState(0)
-  
+
   // Use external activeTab if provided, otherwise use internal state
-  const activeTab = externalActiveTab !== undefined ? externalActiveTab : internalActiveTab
+  const activeTab =
+    externalActiveTab !== undefined ? externalActiveTab : internalActiveTab
   const setActiveTab = onActiveTabChange || setInternalActiveTab
 
   // Reset active tab to first column when it becomes out of bounds
@@ -54,31 +59,36 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
       setActiveTab(0)
     }
   }, [selectedColumns, activeTab, setActiveTab])
-  
+
   // Sync internal state when external activeTab changes
   useEffect(() => {
-    if (externalActiveTab !== undefined && externalActiveTab !== internalActiveTab) {
+    if (
+      externalActiveTab !== undefined &&
+      externalActiveTab !== internalActiveTab
+    ) {
       setInternalActiveTab(externalActiveTab)
     }
   }, [externalActiveTab, internalActiveTab])
-  
+
   // Track previous configuration for active column to detect changes
-  const prevActiveColumnConfigRef = useRef<ColumnConfigurationType | undefined>(undefined)
+  const prevActiveColumnConfigRef = useRef<ColumnConfigurationType | undefined>(
+    undefined
+  )
   const prevActiveTabRef = useRef<number>(activeTab)
-  
+
   // Deselect column in 3D viewer when active column's configuration changes
   useEffect(() => {
     const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
     const currentColumnIndex = selectedColumns === 1 ? 0 : safeActiveTab
     const currentConfig = columnConfigurations[currentColumnIndex]
-    
+
     // Reset tracking when switching to a different column
     if (prevActiveTabRef.current !== safeActiveTab) {
       prevActiveColumnConfigRef.current = currentConfig
       prevActiveTabRef.current = safeActiveTab
       return
     }
-    
+
     // If the configuration changed for the same column and we have a callback, deselect the column
     if (
       prevActiveColumnConfigRef.current !== undefined &&
@@ -87,7 +97,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     ) {
       onColumnDeselect()
     }
-    
+
     // Update the refs for next comparison
     prevActiveColumnConfigRef.current = currentConfig
     prevActiveTabRef.current = safeActiveTab
@@ -102,11 +112,18 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
 
   // Automatically switch to nearest available configuration when current becomes invalid
   useEffect(() => {
-    const dimensions = { width: columnWidth, height: columnHeight, depth: columnDepth }
-    const updatedConfigurations = columnConfigurations.map(config => {
+    const dimensions = {
+      width: columnWidth,
+      height: columnHeight,
+      depth: columnDepth,
+    }
+    const updatedConfigurations = columnConfigurations.map((config) => {
       if (!isValid(config)) {
-        const nearestConfig = findNearestAvailableConfiguration(config, dimensions)
-        return nearestConfig || config // Keep original if no valid alternative (shouldn't happen)
+        const nearestConfig = findNearestAvailableConfiguration(
+          config,
+          dimensions
+        )
+        return nearestConfig || config // Keep original if no valid alternative
       }
       return config
     })
@@ -115,29 +132,25 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     const hasChanges = updatedConfigurations.some(
       (config, index) => config !== columnConfigurations[index]
     )
-    
+
     if (hasChanges) {
       setColumnConfigurations(updatedConfigurations)
     }
-  }, [columnWidth, columnHeight, columnDepth, isValid]) // Note: not including columnConfigurations to avoid infinite loop
-
-  const handleColumnTypeChange = (columnIndex: number, value: ColumnConfigurationType) => {
-    const newConfigurations = [...columnConfigurations]
-    newConfigurations[columnIndex] = value
-    setColumnConfigurations(newConfigurations)
-  }
+  }, [columnWidth, columnHeight, columnDepth, isValid]) // intentionally not including columnConfigurations
 
   // Get configuration options with metadata - filter out invalid ones
   const configurationOptions = useMemo(() => {
     return allConfigurations
-      .filter(configType => isValid(configType)) // Only show valid configurations
-      .map(configType => ({
+      .filter((configType) => isValid(configType)) // Only show valid configurations
+      .map((configType) => ({
         type: configType,
         metadata: getConfigurationMetadata(configType),
       }))
   }, [allConfigurations, isValid])
 
-  const columnTabOptions: ButtonOptionsType[] = Array.from({ length: selectedColumns }).map((_, index) => ({
+  const columnTabOptions: ButtonOptionsType[] = Array.from({
+    length: selectedColumns,
+  }).map((_, index) => ({
     value: String(index),
     label: (
       <FormattedMessage
@@ -146,6 +159,39 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
       />
     ),
   }))
+
+  // Map configuration options to ButtonImageSelect options
+  const imageSelectOptions = useMemo(
+    () =>
+      configurationOptions.map((option) => ({
+        value: option.type,
+        content: (
+          <ColumnConfigurationIcon type={option.type} width={60} height={75} />
+        ),
+        label: (
+          <FormattedMessage
+            id={option.metadata.label}
+            defaultMessage={option.metadata.description}
+          />
+        ),
+        title: option.metadata.description,
+      })),
+    [configurationOptions]
+  )
+
+  // Ensure we use a valid column index even if activeTab is temporarily out of bounds
+  const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
+  const currentColumnIndex = selectedColumns === 1 ? 0 : safeActiveTab
+  const currentValue = columnConfigurations[currentColumnIndex]
+
+  const handleColumnTypeChange = (
+    columnIndex: number,
+    value: ColumnConfigurationType
+  ) => {
+    const newConfigurations = [...columnConfigurations]
+    newConfigurations[columnIndex] = value
+    setColumnConfigurations(newConfigurations)
+  }
 
   return (
     <div>
@@ -167,42 +213,13 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
       )}
 
       <label className={styles.furnitureLabel}>
-        <div className={styles.columnConfigScrollContainer}>
-          <div className={styles.columnConfigRow}>
-            {configurationOptions.map((option) => {
-              // Ensure we use a valid column index even if activeTab is temporarily out of bounds
-              const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
-              const currentColumnIndex = selectedColumns === 1 ? 0 : safeActiveTab
-              const isSelected = columnConfigurations[currentColumnIndex] === option.type
-
-              return (
-                <div
-                  key={option.type}
-                  className={`${styles.columnConfigOption} ${
-                    isSelected ? styles.columnConfigSelected : ''
-                  }`}
-                  onClick={() => handleColumnTypeChange(currentColumnIndex, option.type)}
-                  title={option.metadata.description}
-                >
-                  <div className={styles.columnConfigIcon}>
-                    <ColumnConfigurationIcon type={option.type} width={60} height={75} />
-                  </div>
-                  <div className={styles.columnConfigLabel}>
-                    <FormattedMessage 
-                      id={option.metadata.label}
-                      defaultMessage={option.metadata.description}
-                    />
-                  </div>
-                  {isSelected && (
-                    <div className={styles.columnConfigCheckmark}>✓</div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
+        <ButtonImageSelect<ColumnConfigurationType>
+          ariaLabel="Column configuration"
+          options={imageSelectOptions}
+          value={currentValue}
+          onChange={(v) => handleColumnTypeChange(currentColumnIndex, v)}
+        />
       </label>
     </div>
   )
 }
-

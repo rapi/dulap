@@ -11,27 +11,25 @@
 /* Mobile styles for larger canvas */
 @media (max-width: 768px) {
   .container {
-    min-height: 60vh;
-    height: 60vh;
+    min-height: 50vh;
+    height: 50vh;
   }
-  
+
   .canvas {
-    min-height: 60vh;
-    height: 60vh;
+    min-height: 50vh;
+    height: 50vh;
     width: 100%;
   }
 }
 
 @media (max-width: 480px) {
   .container {
-    min-height: 55vh;
-    height: 55vh;
+    min-height: 45vh;
+    height: 45vh;
   }
-  
+
   .canvas {
-    min-height: 55vh;
-    height: 55vh;
+    min-height: 45vh;
+    height: 45vh;
   }
 }
-
-

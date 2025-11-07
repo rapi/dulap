@@ -34,29 +34,38 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
   // Use options from configuration if available, otherwise from props, otherwise default
   const options = configuration.options ?? propOptions ?? columnsOptions
   return (
-    <><p className={styles.sectionsTitle}><FormattedMessage id="homepage.configurator.options.title" defaultMessage="Opțiuni" /></p><div>
-      <label className={styles.furnitureLabel}>
-        <p>
-          <FormattedMessage
-            id="homepage.configurator.columns.title"
-            defaultMessage="Numărul de coloane" />
-        </p>
-        {predefinedValue != null ? (
-          predefinedValue
-        ) : (
-          <ButtonSelect
-            options={options}
-            defaultSelected={configuration.selectedColumns.toString()}
-            onChange={(value) => {
-              // ignore clicks on disabled options (for future constraints)
-              const opt = options.find((o) => o.value === value)
-              if (!opt?.disabled) {
-                configuration.setSelectedColumns(parseInt(value))
-              }
-            } } />
-        )}
-      </label>
-    </div></>
+    <>
+      <p className={styles.sectionsTitle}>
+        <FormattedMessage
+          id="homepage.configurator.options.title"
+          defaultMessage="Opțiuni"
+        />
+      </p>
+      <div>
+        <label className={styles.furnitureLabel}>
+          <p>
+            <FormattedMessage
+              id="homepage.configurator.columns.title"
+              defaultMessage="Numărul de coloane"
+            />
+          </p>
+          {predefinedValue != null ? (
+            predefinedValue
+          ) : (
+            <ButtonSelect
+              options={options}
+              defaultSelected={configuration.selectedColumns.toString()}
+              onChange={(value) => {
+                // ignore clicks on disabled options (for future constraints)
+                const opt = options.find((o) => o.value === value)
+                if (!opt?.disabled) {
+                  configuration.setSelectedColumns(parseInt(value))
+                }
+              }}
+            />
+          )}
+        </label>
+      </div>
+    </>
   )
 }
-

@@ -1,6 +1,9 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import React, { FC, useState, useCallback, useRef } from 'react'
-import { useEffect } from 'react'
+import React, { FC, useState, useCallback, useRef, useEffect } from 'react'
+import { FormattedMessage } from 'react-intl'
+import { useMediaQuery } from '@mui/material'
+import { useRouter } from 'next/router'
+
 import {
   ProductDimensions,
   ProductDimensionsComponent,
@@ -26,6 +29,8 @@ import {
   ProductIndividualColumnsComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductIndividualColumns'
 import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
+import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
+
 import {
   ProductFurniture,
   ProductFurnitureComponent,
@@ -49,16 +54,23 @@ import {
   ProductGalleryColors,
   ProductGalleryColorsConfig,
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
+
 import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
 import { use3DVersion } from '~/hooks/use3DVersion'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
-import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
-import { Dimension } from '../ProductListPage/products'
-import { useRouter } from 'next/router'
+import { Dimension } from '~/components/ProductListPage/products'
 import { DEFAULT_STAND } from './productTypes/stand'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
+
+// Mobile section labels & order
+import {
+  NavSection,
+  NAV_ORDER,
+  SECTION_LABELS,
+  isNavSection,
+} from '~/components/ProductPage/productTypeComponents/sectionRegistry'
 
 export type ProductComponent =
   | ProductImageCarouselComponent
@@ -72,7 +84,7 @@ export type ProductComponent =
   | ProductFurnitureComponent
   | ProductPriceComponent
   | ProductMetadataComponent
-  | ProductGalleryColorsConfig // ← include galleryColors in the union
+  | ProductGalleryColorsConfig
 
 export type PredefinedValue = {
   sections?: number
@@ -81,9 +93,7 @@ export type PredefinedValue = {
   imageSelect?: string
   imageCarousel?: string[]
   dimensions?: Dimension
-  /** Preselects/locks the MAIN product color */
   colors?: string
-  /** Preselects/locks the GALLERY color (independent) */
   galleryColors?: string
   select?: string
   furniture?: ProductFurniturePredefinedValue
@@ -96,15 +106,63 @@ interface ProductPageProps {
   values?: PredefinedValue
 }
 
+// Helpers
+const filterNavigable = (components: ProductComponent[]) =>
+  components.filter((c): c is Extract<ProductComponent, { type: NavSection }> =>
+    isNavSection(c.type as string)
+  )
+
 export const ProductPage: FC<ProductPageProps> = ({
   components,
   name,
   values,
 }) => {
   const { addItem } = useCart()
+  const isMobile = useMediaQuery('(max-width: 768px)')
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const deselectColumnRef = useRef<(() => void) | null>(null)
 
+  const currentComponents = components()
+  const isStand3D = use3DVersion()
+  const furniture3DProps = use3DFurnitureProps(
+    currentComponents,
+    values,
+    DEFAULT_STAND
+  )
+
+  const priceComponent = currentComponents.find((c) => c.type === 'price') as
+    | ProductPriceComponent
+    | undefined
+
+  const imageCarouselComponent = currentComponents.find(
+    (c) => c.type === 'imageCarousel'
+  ) as ProductImageCarouselComponent | undefined
+
+  const galleryColorsComp = currentComponents.find(
+    (c) => c.type === 'galleryColors'
+  ) as ProductGalleryColorsConfig | undefined
+
+  const galleryComponent = currentComponents.find(
+    (c) => c.type === 'gallery'
+  ) as ProductGalleryComponent | undefined
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  const router = useRouter()
+  const route =
+    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
+  const configuratorRoute = '/configurator' + route
+
+  const handleColumnClick = useCallback((index: number) => {
+    setActiveColumnTab(index)
+  }, [])
+  const handleDeselectFunctionReady = useCallback((fn: () => void) => {
+    deselectColumnRef.current = fn
+  }, [])
+
+  // ---------- DESKTOP renderer (unchanged stack) ----------
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
@@ -148,9 +206,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
             onColumnDeselect={() => {
-              if (deselectColumnRef.current) {
-                deselectColumnRef.current()
-              }
+              deselectColumnRef.current?.()
             }}
           />
         ) : null
@@ -178,56 +234,99 @@ export const ProductPage: FC<ProductPageProps> = ({
     }
   }
 
-  const currentComponents = components()
+  // ---------- MOBILE: chips + core-only panel ----------
+  // Build available sections (present + valid for current mode)
+  const navComponents = filterNavigable(currentComponents)
+    .filter((c) => {
+      if (
+        (c.type === 'columns' || c.type === 'individualColumns') &&
+        !isStand3D
+      )
+        return false
+      if (c.type === 'sections' && isStand3D) return false
+      return true
+    })
+    .sort(
+      (a, b) =>
+        NAV_ORDER.indexOf(a.type as NavSection) -
+        NAV_ORDER.indexOf(b.type as NavSection)
+    )
 
-  const priceComponent = currentComponents.find((c) => c.type === 'price') as
-    | ProductPriceComponent
-    | undefined
-
-  const imageCarouselComponent = currentComponents.find(
-    (c) => c.type === 'imageCarousel'
-  ) as ProductImageCarouselComponent | undefined
-
-  const galleryColorsComp = currentComponents.find(
-    (c) => c.type === 'galleryColors'
-  ) as ProductGalleryColorsConfig | undefined
-
-  const galleryComponent = currentComponents.find(
-    (c) => c.type === 'gallery'
-  ) as ProductGalleryComponent | undefined
-
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  const router = useRouter()
-  const route =
-    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
-  const configuratorRoute = '/configurator' + route
-
-  const isStand3D = use3DVersion()
-
-  // Extract all 3D props using shared hook
-  const furniture3DProps = use3DFurnitureProps(
-    currentComponents,
-    values,
-    DEFAULT_STAND
+  const [activeSection, setActiveSection] = useState<NavSection | null>(
+    navComponents[0]?.type ?? null
   )
 
-  // Handle column click from 3D viewer to update active tab
-  const handleColumnClick = useCallback((index: number) => {
-    setActiveColumnTab(index)
-  }, [])
+  const renderCore = (type: NavSection) => {
+    const comp = currentComponents.find((c) => c.type === type)
+    if (!comp) return null
 
-  // Store the deselect function from FurnitureViewer
-  const handleDeselectFunctionReady = useCallback((deselectFn: () => void) => {
-    deselectColumnRef.current = deselectFn
-  }, [])
+    switch (type) {
+      case 'dimensions':
+        return (
+          <ProductDimensions
+            configuration={comp as ProductDimensionsComponent}
+            predefinedValue={values?.dimensions ?? undefined}
+          />
+        )
+      case 'colors':
+        return (
+          <ProductColors
+            configuration={comp as ProductColorsComponent}
+            predefinedValue={values?.colors ?? undefined}
+          />
+        )
+      case 'sections':
+        return !isStand3D ? (
+          <ProductSections
+            configuration={comp as ProductSectionsComponent}
+            predefinedValue={values?.sections ?? undefined}
+          />
+        ) : null
+      case 'columns':
+        return isStand3D ? (
+          <ProductColumns
+            configuration={comp as ProductColumnsComponent}
+            predefinedValue={values?.columns ?? undefined}
+            options={(comp as ProductColumnsComponent).options}
+          />
+        ) : null
+      case 'individualColumns':
+        return isStand3D ? (
+          <ProductIndividualColumns
+            configuration={comp as ProductIndividualColumnsComponent}
+            activeTab={activeColumnTab}
+            onActiveTabChange={setActiveColumnTab}
+            onColumnDeselect={() => deselectColumnRef.current?.()}
+          />
+        ) : null
+      case 'select':
+        return (
+          <ProductSelect
+            configuration={comp as ProductSelectComponent}
+            predefinedValue={values?.select ?? undefined}
+          />
+        )
+      case 'furniture': {
+        const furnitureConfig = {
+          ...(comp as ProductFurnitureComponent),
+          is3DEnabled: isStand3D,
+        }
+        return (
+          <ProductFurniture
+            configuration={furnitureConfig}
+            predefinedValue={values?.furniture ?? undefined}
+          />
+        )
+      }
+      default:
+        return null
+    }
+  }
 
   return (
     <>
       <div className={styles.contentContainer}>
-        {/* Left Side: Viewer or Image Carousel */}
+        {/* Left: viewer or image carousel */}
         <div className={styles.leftContainer}>
           {isStand3D ? (
             <FurnitureViewer
@@ -240,10 +339,7 @@ export const ProductPage: FC<ProductPageProps> = ({
               <ProductImageCarousel
                 configuration={
                   values?.imageCarousel
-                    ? {
-                        type: 'imageCarousel',
-                        images: values.imageCarousel,
-                      }
+                    ? { type: 'imageCarousel', images: values.imageCarousel }
                     : imageCarouselComponent
                 }
               />
@@ -251,7 +347,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           )}
         </div>
 
-        {/* Right Side: Product Details */}
+        {/* Right: details */}
         <div className={styles.detailsContainer}>
           <h1 className={styles.visuallyHiddenTitle}>
             <FormattedMessage id="meta.header.configurator.stand" />
@@ -272,10 +368,37 @@ export const ProductPage: FC<ProductPageProps> = ({
             )}
           </div>
 
-          {currentComponents.map((component, index) => (
-            <div key={index + component.type}>{getComponent(component)}</div>
-          ))}
+          {/* MOBILE: chips + core */}
+          {isMobile && activeSection && navComponents.length > 0 ? (
+            <>
+              <div className={styles.mobileNavChips}>
+                <ButtonSelect<NavSection>
+                  options={
+                    navComponents.map((c) => ({
+                      value: c.type as NavSection,
+                      // pass the i18n id; ButtonSelect renders <FormattedMessage id="..." />
+                      label: SECTION_LABELS[c.type as NavSection].id,
+                    })) as ButtonOptionsType<NavSection>[]
+                  }
+                  defaultSelected={activeSection}
+                  size="medium"
+                  className={styles.mobileNavChipsRow}
+                  onChange={(val) => setActiveSection(val as NavSection)}
+                />
+              </div>
+
+              <div className={styles.mobileCorePanel}>
+                {renderCore(activeSection)}
+              </div>
+            </>
+          ) : (
+            // DESKTOP: original stacked layout
+            currentComponents.map((component, index) => (
+              <div key={index + component.type}>{getComponent(component)}</div>
+            ))
+          )}
         </div>
+
         <div>
           {values != null && !isStand3D && (
             <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
@@ -283,6 +406,8 @@ export const ProductPage: FC<ProductPageProps> = ({
         </div>
       </div>
 
+      <br />
+      <br />
       <br />
       <br />
       <br />
@@ -295,7 +420,6 @@ export const ProductPage: FC<ProductPageProps> = ({
         <div className={styles.galleryColorContainer}>
           <ProductGalleryColors
             configuration={galleryColorsComp}
-            // If values.galleryColors is provided, this becomes read-only chip
             predefinedValue={values?.galleryColors ?? undefined}
           />
         </div>
@@ -307,10 +431,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           <ProductGallery
             configuration={
               values?.gallery
-                ? {
-                    type: 'gallery',
-                    images: values.gallery,
-                  }
+                ? { type: 'gallery', images: values.gallery }
                 : galleryComponent
             }
           />
@@ -319,5 +440,3 @@ export const ProductPage: FC<ProductPageProps> = ({
     </>
   )
 }
-
-export default ProductPage

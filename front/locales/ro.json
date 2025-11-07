@@ -69,7 +69,7 @@
   "homepage.button.preorder": "Creează mobila ta",
   "homepage.copyButton.copy": "Copiază",
   "homepage.copyButton.coppied": "Copiat !",
-  "btn.textBelow.delivery": "Livrăm în 10-15 zile lucrătoare",
+  "btn.textBelow.delivery": "Livrăm în 15 zile lucrătoare",
 
 
   "homepage.menu.productsTitle": "Produse",
@@ -167,6 +167,8 @@
   "homepage.configurator.dimensions.plintHeight": "Înălțimea plintei",
   "homepage.configurator.dimensions.cm": "cm",
 
+  "homepage.configurator.dimensions.measurementsHelp": "<a>Cum măsori corect spațiul?</a>",
+
   "homepage.configurator.dimensions.hintPlintHeight.1": "Ce este înălțimea plintei?",
   "homepage.configurator.dimensions.hintPlintHeight.2": "Înălțimea plintei este distanța de la podea până la fațade (ușile dulapului).",
   "homepage.configurator.dimensions.hintPlintHeight.3": "Ce înălțime să alegi?",
@@ -188,10 +190,10 @@
   "homepage.configurator.sections.nr.6": "6",
 
   "homepage.configurator.sections.title": "Secțiuni",
-  "homepage.configurator.columns.title": "Numărul de coloane",
+  "homepage.configurator.columns.title": "Coloane",
   "homepage.configurator.options.title": "Opțiuni",
 
-  "homepage.configurator.individualColumns.title": "Configurează secțiuni individuale",
+  "homepage.configurator.individualColumns.title": "Configurează",
   "homepage.configurator.individualColumns.column": "Coloana {number}",
   "homepage.configurator.individualColumns.columnType": "Apasă pe mobilă în configurator sau pe unul din butoanele de mai jos pentru a ajusta secțiunea.",
   "homepage.configurator.individualColumns.drawers": "Sertare",
@@ -263,7 +265,7 @@
   "configurator.infobox.assembly.2": "Asamblarea poate fi procurată ca serviciu aparte în coș, prețul fiind de 350 lei.",
   "configurator.infobox.delivery.title": "Livrare",
   "configurator.infobox.delivery.1": "Livrarea se efectuează gratuit, în raza mun. Chișinău.",
-  "configurator.infobox.delivery.2": "Termenul de livrare este de 10-15 zile lucrătare de la plasarea comenzii.",
+  "configurator.infobox.delivery.2": "Termenul de livrare este de 15 zile lucrătare de la plasarea comenzii.",
   "configurator.infobox.warranty.title": "Garanție",
   "configurator.infobox.warranty.1": "Toate produsele noastre vin cu o garanție de 5 ani pentru toate componentele și materialele folosite.",
   "configurator.infobox.warranty.2": "Tinem la calitatea produselor noastre și suntem aici să te ajutăm cu orice problemă.",
@@ -278,7 +280,7 @@
   "infoBar.warranty.title": "Garanție",
   "infoBar.warranty.subtitle": "Garanție 5 ani pentru toate componentele și materialele folosite",
   "infoBar.delivery.title": "Livrare",
-  "infoBar.delivery.subtitle": "Livrare gratuită în raza municipiului Chișinău în 10-15 zile lucrătoare",
+  "infoBar.delivery.subtitle": "Livrare gratuită în raza municipiului Chișinău în 15 zile lucrătoare",
   "infoBar.assembly.title": "Montare",
   "infoBar.assembly.subtitle": "Montare ușoară, cu instrucțiuni pas cu pas sau serviciu de montare opțional",
   "infoBar.readMore": "Detalii",
@@ -286,7 +288,7 @@
   "infoBar.design.title": "Design unic",
   "infoBar.design.subtitle": "Mobilierul este proiectat de echipa noastră de designeri de interior - de talie europeană. Mobilă cu gust.",
   "infoBar.fastDelivery.title": "Executare rapidă",
-  "infoBar.fastDelivery.subtitle": "Noi executăm mobilierul în 10-15 zile lucrătoare, spre deosebire de media pieței de 30-45 zile.",
+  "infoBar.fastDelivery.subtitle": "Noi executăm mobilierul în 15 zile lucrătoare, spre deosebire de media pieței de 30-45 zile.",
   "infoBar.color.title": "Paletă largă de culori",
   "infoBar.color.subtitle": "Iti oferim peste 10 culori la alegere, pe care le poți testa chiar la tine acasă înainte de a comanda.",
   "infoBar.choose": "Alege",
