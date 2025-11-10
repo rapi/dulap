@@ -5,6 +5,7 @@ import {
   ColumnConfigurationType,
   getConfigurationMetadata,
 } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { getConstraints } from '~/config/furnitureConstraints'
 import { useFurnitureConstraints } from '~/hooks/useFurnitureConstraints'
 import {
@@ -39,8 +40,11 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     DEFAULT_TV_STAND.columns
   )
   const [columnConfigurations, setColumnConfigurations] = useState<
-    ColumnConfigurationType[]
-  >([ColumnConfigurationType.DRAWERS_2, ColumnConfigurationType.DRAWERS_2])
+    ColumnConfigurationWithOptions[]
+  >([
+    { type: ColumnConfigurationType.DRAWERS_2 },
+    { type: ColumnConfigurationType.DRAWERS_2 },
+  ])
   const [selectedColor, setSelectedColor] = useState(
     DEFAULT_TV_STAND.selectedColor
   )
@@ -64,7 +68,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
   const derivedSections = useMemo(() => {
     const maxSections = Math.max(
       ...columnConfigurations.map((config) => {
-        const metadata = getConfigurationMetadata(config)
+        const metadata = getConfigurationMetadata(config.type)
         return metadata?.drawerCount > 0
           ? metadata?.drawerCount
           : metadata?.shelfCount
@@ -109,29 +113,36 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
           // Always try to preserve existing configuration first
           if (prev[i]) {
             // Check if it's still valid with new dimensions
-            if (isConfigurationValid(prev[i], dimensions)) {
-              return prev[i]
+            if (isConfigurationValid(prev[i].type, dimensions)) {
+              return prev[i] // Preserve both type and doorOpeningSide
             }
-            // If not valid, find nearest alternative
-            const nearestConfig = findNearestAvailableConfiguration(
-              prev[i],
+            // If not valid, find nearest alternative (preserve doorOpeningSide if applicable)
+            const nearestType = findNearestAvailableConfiguration(
+              prev[i].type,
               dimensions
-            )
-            return nearestConfig || prev[i]
+            ) || prev[i].type
+            
+            const metadata = getConfigurationMetadata(nearestType)
+            const doorOpeningSide = metadata?.doorCount === 1 
+              ? (prev[i].doorOpeningSide || 'left')
+              : undefined
+            
+            return { type: nearestType, doorOpeningSide }
           }
 
           // For new columns (when expanding), use default
-          const defaultConfig = ColumnConfigurationType.DRAWERS_2
-          const nearestConfig = findNearestAvailableConfiguration(
-            defaultConfig,
+          const defaultType = ColumnConfigurationType.DRAWERS_2
+          const nearestType = findNearestAvailableConfiguration(
+            defaultType,
             dimensions
-          )
-          return nearestConfig || defaultConfig
+          ) || defaultType
+          
+          return { type: nearestType }
         })
 
-      return newConfigs as ColumnConfigurationType[]
+      return newConfigs
     })
-  }, [selectedColumns]) // Only trigger when column count changes!
+  }, [selectedColumns, width, height, depth, plintHeight]) // Trigger when column count or dimensions change
 
   // Validate existing configurations when dimensions change
   useEffect(() => {
@@ -144,24 +155,30 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     setColumnConfigurations((prev) => {
       // Check if any configuration needs updating
       const needsUpdate = prev.some(
-        (config) => !isConfigurationValid(config, dimensions)
+        (config) => !isConfigurationValid(config.type, dimensions)
       )
 
       if (!needsUpdate) {
         return prev // No changes needed
       }
 
-      // Update only invalid configurations
+      // Update only invalid configurations (preserve doorOpeningSide)
       return prev.map((config) => {
-        if (isConfigurationValid(config, dimensions)) {
+        if (isConfigurationValid(config.type, dimensions)) {
           return config // Keep valid ones
         }
-        // Replace invalid with nearest available
-        const nearestConfig = findNearestAvailableConfiguration(
-          config,
+        // Replace invalid with nearest available (preserve doorOpeningSide if applicable)
+        const nearestType = findNearestAvailableConfiguration(
+          config.type,
           dimensions
-        )
-        return nearestConfig || config
+        ) || config.type
+        
+        const metadata = getConfigurationMetadata(nearestType)
+        const doorOpeningSide = metadata?.doorCount === 1 
+          ? (config.doorOpeningSide || 'left')
+          : undefined
+        
+        return { type: nearestType, doorOpeningSide }
       })
     })
   }, [width, height, depth, plintHeight, selectedColumns]) // Trigger on dimension changes
