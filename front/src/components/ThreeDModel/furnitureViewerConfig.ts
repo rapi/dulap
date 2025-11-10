@@ -17,16 +17,16 @@ export interface FurnitureViewerConfig {
 
 // Default configuration for most furniture types
 const DEFAULT_CONFIG: FurnitureViewerConfig = {
-  backgroundScale: [100, 45, 45],
+  backgroundScale: [200, 90, 90],
   cameraPosition: [0, 50, 250],
   minDistance: 100,
-  maxDistance: 250,
+  maxDistance: 500,
   minAzimuthAngle: -Math.PI / 2 + 0.5,
   maxAzimuthAngle: Math.PI / 2 - 0.5,
   minPolarAngle: 0.3,
   maxPolarAngle: Math.PI / 2 + 0.2,
   target: [0, 50, 0],
-  getShadowManXPosition: () => -100,
+  getShadowManXPosition: (width: number) => -width / 2 - 50,
 }
 
 // Wardrobe-specific configuration

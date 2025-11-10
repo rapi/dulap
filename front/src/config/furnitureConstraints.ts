@@ -50,6 +50,11 @@ export interface ColumnConstraints {
   max: number
   default: number
   allowCustomConfiguration: boolean
+  // Function that determines available columns based on dimensions
+  getAvailableColumns?: (dimensions: {
+    width: number
+    height: number
+  }) => number[]
 }
 
 export interface PricingFormula {
@@ -87,7 +92,7 @@ export interface ProductConstraints {
 
 export const STAND_CONSTRAINTS: ProductConstraints = {
   dimensions: {
-    width: { min: 50, max: 120, default: 80, unit: 'cm' },
+    width: { min: 50, max: 270, default: 80, unit: 'cm' },
     height: { min: 70, max: 130, default: 70, unit: 'cm' },
     depth: { min: 35, max: 50, default: 40, unit: 'cm' },
     plintHeight: { min: 2, max: 10, default: 2, unit: 'cm' },
@@ -117,6 +122,21 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
     max: 10,
     default: 1,
     allowCustomConfiguration: true,
+    getAvailableColumns: ({ height }) => {
+      // Height-based column limits for комод (stand)
+      // 50-84 cm: 1 column
+      // 85-104 cm: 1-2 columns
+      // 105-149 cm: 2 columns
+      // 150-205 cm: 2-3 columns
+      // 206-270 cm: 3 columns
+      if (height >= 50 && height <= 84) return [1]
+      if (height >= 85 && height <= 104) return [1, 2]
+      if (height >= 105 && height <= 149) return [2]
+      if (height >= 150 && height <= 205) return [2, 3]
+      if (height >= 206 && height <= 270) return [3]
+      // Fallback for heights outside the range
+      return [1]
+    },
   },
 
   pricing: {
@@ -360,6 +380,26 @@ export function getAvailableSections(
   return Array.from(
     { length: sections.max - sections.min + 1 },
     (_, i) => sections.min + i
+  )
+}
+
+/**
+ * Get available columns based on dimensions
+ */
+export function getAvailableColumns(
+  type: FurnitureType,
+  dimensions: { width: number; height: number }
+): number[] {
+  const { columns } = getConstraints(type)
+
+  if (columns.getAvailableColumns) {
+    return columns.getAvailableColumns(dimensions)
+  }
+
+  // Fallback: return all columns from min to max
+  return Array.from(
+    { length: columns.max - columns.min + 1 },
+    (_, i) => columns.min + i
   )
 }
 
