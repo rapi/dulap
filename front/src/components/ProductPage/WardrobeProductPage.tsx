@@ -91,6 +91,7 @@ export const ProductPage: FC<ProductPageProps> = ({
 }) => {
   const { addItem } = useCart()
   const [activeColumnTab, setActiveColumnTab] = useState(0)
+  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
 
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
@@ -174,8 +175,15 @@ export const ProductPage: FC<ProductPageProps> = ({
   )
 
   // Handle column click from 3D viewer to update active tab
-  const handleColumnClick = useCallback((index: number) => {
-    setActiveColumnTab(index)
+  const handleColumnClick = useCallback((index: number | null) => {
+    if (index !== null) {
+      // Column clicked: update both activeTab and selectedColumn
+      setActiveColumnTab(index)
+      setSelectedColumnIndex(index)
+    } else {
+      // Background clicked: only deselect column, keep activeTab
+      setSelectedColumnIndex(null)
+    }
   }, [])
 
   return (
@@ -186,6 +194,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           {isWardrobe3D ? (
             <FurnitureViewer
               {...furniture3DProps}
+              selectedColumnIndex={selectedColumnIndex}
               onColumnClick={handleColumnClick}
             />
           ) : (

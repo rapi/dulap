@@ -63,6 +63,8 @@ const ColumnComponent: React.FC<ColumnProps> = ({
   const [isColumnHovered, setIsColumnHovered] = useState(false)
   
   // Combine hover and selected states - column should be "open" if either is true
+  // When column is clicked, isSelected becomes true, which opens drawers/doors
+  // When column is hovered, isColumnHovered becomes true, which also opens drawers/doors
   const isColumnOpen = isSelected || isColumnHovered
   
   // Refs for bottom and back panels to apply textures
@@ -106,6 +108,8 @@ const ColumnComponent: React.FC<ColumnProps> = ({
   }, [])
 
   // Click handler for column selection
+  // When column is clicked, it becomes selected (isSelected = true)
+  // This causes isColumnOpen to become true, which opens drawers/doors
   const handleClick = useCallback((event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation()
     if (onColumnClick) {

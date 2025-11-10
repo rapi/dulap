@@ -98,6 +98,7 @@ export const ProductPage: FC<ProductPageProps> = ({
   const { addItem } = useCart()
   const isTVStand3D = use3DVersion()
   const [activeColumnTab, setActiveColumnTab] = useState(0)
+  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
   const deselectColumnRef = useRef<(() => void) | null>(null)
 
   const getComponent = (component: ProductComponent): React.ReactNode => {
@@ -137,11 +138,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             configuration={component}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
-            onColumnDeselect={() => {
-              if (deselectColumnRef.current) {
-                deselectColumnRef.current()
-              }
-            }}
+            onActiveColumnChange={setSelectedColumnIndex}
           />
         ) : null
       case 'select':
@@ -196,8 +193,15 @@ export const ProductPage: FC<ProductPageProps> = ({
   )
 
   // Handle column click from 3D viewer to update active tab
-  const handleColumnClick = useCallback((index: number) => {
-    setActiveColumnTab(index)
+  const handleColumnClick = useCallback((index: number | null) => {
+    if (index !== null) {
+      // Column clicked: update both activeTab and selectedColumn
+      setActiveColumnTab(index)
+      setSelectedColumnIndex(index)
+    } else {
+      // Background clicked: only deselect column, keep activeTab
+      setSelectedColumnIndex(null)
+    }
   }, [])
 
   // Store the deselect function from FurnitureViewer
@@ -213,6 +217,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           {isTVStand3D ? (
             <FurnitureViewer
               {...furniture3DProps}
+              selectedColumnIndex={selectedColumnIndex}
               onColumnClick={handleColumnClick}
               onDeselectFunctionReady={handleDeselectFunctionReady}
             />

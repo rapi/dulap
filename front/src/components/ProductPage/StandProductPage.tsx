@@ -120,6 +120,7 @@ export const ProductPage: FC<ProductPageProps> = ({
   const { addItem } = useCart()
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [activeColumnTab, setActiveColumnTab] = useState(0)
+  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
   const deselectColumnRef = useRef<(() => void) | null>(null)
 
   const currentComponents = components()
@@ -155,8 +156,15 @@ export const ProductPage: FC<ProductPageProps> = ({
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
 
-  const handleColumnClick = useCallback((index: number) => {
-    setActiveColumnTab(index)
+  const handleColumnClick = useCallback((index: number | null) => {
+    if (index !== null) {
+      // Column clicked: update both activeTab and selectedColumn
+      setActiveColumnTab(index)
+      setSelectedColumnIndex(index)
+    } else {
+      // Background clicked: only deselect column, keep activeTab
+      setSelectedColumnIndex(null)
+    }
   }, [])
   const handleDeselectFunctionReady = useCallback((fn: () => void) => {
     deselectColumnRef.current = fn
@@ -205,9 +213,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             configuration={component}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
-            onColumnDeselect={() => {
-              deselectColumnRef.current?.()
-            }}
+            onActiveColumnChange={setSelectedColumnIndex}
           />
         ) : null
       case 'select':
@@ -296,7 +302,7 @@ export const ProductPage: FC<ProductPageProps> = ({
             configuration={comp as ProductIndividualColumnsComponent}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
-            onColumnDeselect={() => deselectColumnRef.current?.()}
+            onActiveColumnChange={setSelectedColumnIndex}
           />
         ) : null
       case 'select':
@@ -331,6 +337,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           {isStand3D ? (
             <FurnitureViewer
               {...furniture3DProps}
+              selectedColumnIndex={selectedColumnIndex}
               onColumnClick={handleColumnClick}
               onDeselectFunctionReady={handleDeselectFunctionReady}
             />

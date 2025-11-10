@@ -2,10 +2,8 @@ import { ProductComponent } from '~/components/ProductPage/StandProductPage'
 import { useState, useEffect, useMemo } from 'react'
 import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
-import {
-  ColumnConfigurationType,
-  getConfigurationMetadata,
-} from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { getConstraints } from '~/config/furnitureConstraints'
 import { useFurnitureConstraints } from '~/hooks/useFurnitureConstraints'
 import {
@@ -13,9 +11,12 @@ import {
   getFirstValidColumnCount,
 } from '~/utils/columnValidation'
 import { getValidColumnCountsForStand } from '~/config/columnConstraints'
-import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
-import { isConfigurationValid } from '~/config/columnConstraints'
-import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
+import {
+  createConfigurationForExistingColumn,
+  createConfigurationForNewColumn,
+  validateAndUpdateConfigurations,
+} from '~/utils/columnConfigurationUtils'
+import { mapColorToImageColor } from '~/utils/colorUtils'
 
 // Get stand constraints
 const CONSTRAINTS = getConstraints('stand')
@@ -118,39 +119,15 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       const newConfigs = Array(selectedColumns)
         .fill(null)
         .map((_, i) => {
-          // Always try to preserve existing configuration first
           if (prev[i]) {
-            // Check if it's still valid with new dimensions
-            if (isConfigurationValid(prev[i].type, dimensions)) {
-              return prev[i] // Preserve both type and doorOpeningSide
-            }
-            // If not valid, find nearest alternative (preserve doorOpeningSide if applicable)
-            const nearestType = findNearestAvailableConfiguration(
-              prev[i].type,
-              dimensions
-            ) || prev[i].type
-            
-            const metadata = getConfigurationMetadata(nearestType)
-            const doorOpeningSide = metadata?.doorCount === 1 
-              ? (prev[i].doorOpeningSide || 'left')
-              : undefined
-            
-            return { type: nearestType, doorOpeningSide }
+            return createConfigurationForExistingColumn(prev[i], dimensions)
           }
-
-          // For new columns (when expanding), use default
-          const defaultType = ColumnConfigurationType.DRAWERS_3
-          const nearestType = findNearestAvailableConfiguration(
-            defaultType,
-            dimensions
-          ) || defaultType
-          
-          return { type: nearestType }
+          return createConfigurationForNewColumn(prev, dimensions)
         })
 
       return newConfigs
     })
-  }, [selectedColumns, width, height, depth, plintHeight]) // Trigger when column count or dimensions change
+  }, [selectedColumns, width, height, depth, plintHeight])
 
   // Validate existing configurations when dimensions change
   useEffect(() => {
@@ -160,36 +137,10 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       depth: depth,
     }
 
-    setColumnConfigurations((prev) => {
-      // Check if any configuration needs updating
-      const needsUpdate = prev.some(
-        (config) => !isConfigurationValid(config.type, dimensions)
-      )
-
-      if (!needsUpdate) {
-        return prev // No changes needed
-      }
-
-      // Update only invalid configurations (preserve doorOpeningSide)
-      return prev.map((config) => {
-        if (isConfigurationValid(config.type, dimensions)) {
-          return config // Keep valid ones
-        }
-        // Replace invalid with nearest available (preserve doorOpeningSide if applicable)
-        const nearestType = findNearestAvailableConfiguration(
-          config.type,
-          dimensions
-        ) || config.type
-        
-        const metadata = getConfigurationMetadata(nearestType)
-        const doorOpeningSide = metadata?.doorCount === 1 
-          ? (config.doorOpeningSide || 'left')
-          : undefined
-        
-        return { type: nearestType, doorOpeningSide }
-      })
-    })
-  }, [width, height, depth, plintHeight, selectedColumns]) // Trigger on dimension changes
+    setColumnConfigurations((prev) =>
+      validateAndUpdateConfigurations(prev, dimensions)
+    )
+  }, [width, height, depth, plintHeight, selectedColumns])
 
   // Calculate individual column dimensions for constraint evaluation
   const columnWidth = useMemo(
@@ -255,28 +206,12 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
 
   // Map color names for image paths (MAIN)
   useEffect(() => {
-    if (selectedColor === 'Biege') {
-      setImageColor('Biege')
-    } else if (selectedColor === 'White') {
-      setImageColor('White')
-    } else if (selectedColor === 'Light Grey') {
-      setImageColor('Light Grey')
-    } else if (selectedColor === 'Grey') {
-      setImageColor('Grey')
-    } else setImageColor('White')
+    setImageColor(mapColorToImageColor(selectedColor))
   }, [selectedColor])
 
   // Map color names for image paths (GALLERY)
   useEffect(() => {
-    if (galleryColor === 'Biege') {
-      setGalleryImageColor('Biege')
-    } else if (galleryColor === 'White') {
-      setGalleryImageColor('White')
-    } else if (galleryColor === 'Light Grey') {
-      setGalleryImageColor('Light Grey')
-    } else if (galleryColor === 'Grey') {
-      setGalleryImageColor('Grey')
-    } else setGalleryImageColor('White')
+    setGalleryImageColor(mapColorToImageColor(galleryColor))
   }, [galleryColor])
 
   // Choose last changed color for gallery visuals

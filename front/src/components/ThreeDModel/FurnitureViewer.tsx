@@ -37,26 +37,36 @@ const FurnitureScene = memo(function FurnitureScene({
   columnWidths,
   columnPositions,
   furnitureType,
+  selectedColumnIndex: externalSelectedColumnIndex,
   onColumnClick,
   onDeselectFunctionReady,
 }: Furniture3DProps) {
   const config = getViewerConfig(furnitureType)
   const { gl } = useThree()
-  const [selectedColumnIndex, setSelectedColumnIndex] = React.useState<number | null>(null)
+  const [internalSelectedColumnIndex, setInternalSelectedColumnIndex] = React.useState<number | null>(null)
+  
+  // Use external selectedColumnIndex if provided, otherwise use internal state
+  const selectedColumnIndex = externalSelectedColumnIndex !== undefined ? externalSelectedColumnIndex : internalSelectedColumnIndex
   
   // Handle column selection - combine internal state with external callback
   const handleColumnSelectionChange = useCallback((index: number | null) => {
-    setSelectedColumnIndex(index)
-    // Call external callback if provided
-    if (index !== null && onColumnClick) {
+    // If using internal state, update it
+    if (externalSelectedColumnIndex === undefined) {
+      setInternalSelectedColumnIndex(index)
+    }
+    // Always call external callback if provided (parent may update external state)
+    if (onColumnClick) {
       onColumnClick(index)
     }
-  }, [onColumnClick])
+  }, [externalSelectedColumnIndex, onColumnClick])
   
   // Expose deselection function to parent
   const deselectColumn = useCallback(() => {
-    setSelectedColumnIndex(null)
-  }, [])
+    if (externalSelectedColumnIndex === undefined) {
+      setInternalSelectedColumnIndex(null)
+    }
+    // Note: If using external state, parent should handle deselection through their state
+  }, [externalSelectedColumnIndex])
   
   // Provide the deselect function to parent when ready
   React.useEffect(() => {
@@ -67,8 +77,14 @@ const FurnitureScene = memo(function FurnitureScene({
   
   // Handle deselecting column when clicking on background or shadow man
   const handleBackgroundClick = useCallback(() => {
-    setSelectedColumnIndex(null)
-  }, [])
+    if (externalSelectedColumnIndex === undefined) {
+      setInternalSelectedColumnIndex(null)
+    }
+    // Notify parent about deselection
+    if (onColumnClick) {
+      onColumnClick(null)
+    }
+  }, [externalSelectedColumnIndex, onColumnClick])
   
   // Trigger shadow update when furniture dimensions or configuration changes
   // Note: Shadow updates during animations are handled automatically by useAnimatedPosition hook
@@ -175,6 +191,7 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
   columnWidths,
   columnPositions,
   furnitureType,
+  selectedColumnIndex,
   onColumnClick,
   onDeselectFunctionReady,
 }) => {
@@ -250,6 +267,7 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           columnWidths={columnWidths}
           columnPositions={columnPositions}
           furnitureType={furnitureType}
+          selectedColumnIndex={selectedColumnIndex}
           onColumnClick={onColumnClick}
           onDeselectFunctionReady={onDeselectFunctionReady}
         />
