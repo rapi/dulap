@@ -33,6 +33,7 @@ const FurnitureScene = memo(function FurnitureScene({
   openingType,
   columns,
   columnConfigurations,
+  columnConfigurationsWithOptions,
   columnWidths,
   columnPositions,
   furnitureType,
@@ -147,6 +148,7 @@ const FurnitureScene = memo(function FurnitureScene({
             openingType={openingType}
             columns={columns}
             columnConfigurations={columnConfigurations}
+            columnConfigurationsWithOptions={columnConfigurationsWithOptions}
             columnWidths={columnWidths}
             columnPositions={columnPositions}
             selectedColumnIndex={selectedColumnIndex}
@@ -169,6 +171,7 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
   openingType,
   columns,
   columnConfigurations,
+  columnConfigurationsWithOptions,
   columnWidths,
   columnPositions,
   furnitureType,
@@ -237,6 +240,7 @@ const FurnitureViewerComponent: React.FC<Furniture3DProps> = ({
           depth={depth}
           height={height}
           width={width}
+          columnConfigurationsWithOptions={columnConfigurationsWithOptions}
           selectedColor={selectedColor}
           currentPlintHeight={currentPlintHeight}
           sections={sections}

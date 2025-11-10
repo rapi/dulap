@@ -66,9 +66,9 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
     const maxSections = Math.max(
       ...columnConfigurations.map((config) => {
         const metadata = getConfigurationMetadata(config)
-        return metadata.drawerCount > 0
-          ? metadata.drawerCount
-          : metadata.shelfCount
+        return metadata?.drawerCount > 0
+          ? metadata?.drawerCount
+          : metadata?.shelfCount
       })
     )
     return maxSections > 0 ? maxSections : 2

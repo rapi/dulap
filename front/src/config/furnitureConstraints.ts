@@ -103,9 +103,12 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
     max: 5,
     default: 4,
     getAvailableSections: ({ height }) => {
-      // Height >= 110cm: only 5 sections allowed
-      // Height < 110cm: 3-4 sections allowed
-      return height >= 110 ? [5] : [3, 4]
+      // Height >= 130cm: only 5 sections allowed
+      // Height 105-130cm: 4-5 sections allowed
+      // Height < 105cm: 3-4 sections allowed
+      if (height >= 130) return [5]
+      if (height >= 105) return [4, 5]
+      return [3, 4]
     },
   },
 

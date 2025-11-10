@@ -126,7 +126,13 @@ const DoorComponent: React.FC<DoorProps> = ({
 
     // Calculate door positions
     const { hingeX, doorOffsetX, zPosition, isRightOpening } =
-      calculateDoorPositions(doorWidth, doorDepth, positionX, positionY, openingSide)
+      calculateDoorPositions(
+        doorWidth,
+        doorDepth,
+        positionX,
+        positionY,
+        openingSide
+      )
 
     // Position groups
     hingeGroup.position.set(hingeX, positionY, zPosition)
@@ -140,32 +146,37 @@ const DoorComponent: React.FC<DoorProps> = ({
       } else if (panelPivot.userData.roundHandle) {
         // Round handle
         panelPivot.visible = openingType === OpeningType.RoundHandle
-        
-        setupRoundHandle(
-          panelPivot,
-          selectedColor,
-          innerHeight,
-          doorDepth,
-          handleOnTheDrawerTopOffset,
-          {
-            doorOffsetX,
-            isRightOpening,
-            handleHeightFromBottom,
-          }
-        )
+
+        if (panelPivot.visible) {
+          setupRoundHandle(
+            panelPivot,
+            selectedColor,
+            innerHeight,
+            doorDepth,
+            handleOnTheDrawerTopOffset,
+            {
+              doorOffsetX,
+              isRightOpening,
+              handleHeightFromBottom,
+            }
+          )
+        }
+       
       } else if (panelPivot.userData.profileHandle) {
         panelPivot.visible = openingType === OpeningType.ProfileHandle
-        
-        setupProfileHandle(
-          panelPivot,
-          selectedColor,
-          innerHeight,
-          doorDepth,
-          {
-            parentWidth: doorWidth,
-            isRightOpening: isRightOpening,
-          }
-        )
+
+        if (panelPivot.visible) {
+          setupProfileHandle(
+            panelPivot,
+            selectedColor,
+            innerHeight,
+            doorDepth,
+            {
+              parentWidth: doorWidth,
+              isRightOpening: isRightOpening,
+            }
+          )
+        }
       }
     })
 
@@ -195,7 +206,12 @@ const DoorComponent: React.FC<DoorProps> = ({
           hingePositionRule
         )
 
-        setupHingeAnchor(child, hingeY, FURNITURE_CONFIG.panelThickness, isRightOpening)
+        setupHingeAnchor(
+          child,
+          hingeY,
+          FURNITURE_CONFIG.panelThickness,
+          isRightOpening
+        )
       }
     })
   }, [

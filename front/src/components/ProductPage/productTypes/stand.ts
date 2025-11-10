@@ -12,8 +12,10 @@ import {
   getValidColumnCounts,
   getFirstValidColumnCount,
 } from '~/utils/columnValidation'
+import { getValidColumnCountsForStand } from '~/config/columnConstraints'
 import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
 import { isConfigurationValid } from '~/config/columnConstraints'
+import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 
 // Get stand constraints
 const CONSTRAINTS = getConstraints('stand')
@@ -37,9 +39,9 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [selectedColumns, setSelectedColumns] = useState(
     CONSTRAINTS.columns.default
   )
-  const [columnConfigurations, setColumnConfigurations] = useState<
-    ColumnConfigurationType[]
-  >([ColumnConfigurationType.DRAWERS_3])
+  const [columnConfigurations, setColumnConfigurations] = useState<ColumnConfigurationWithOptions[]>([
+    { type: ColumnConfigurationType.DRAWERS_3 }
+  ])
   const [selectedColor, setSelectedColor] = useState(
     DEFAULT_STAND.selectedColor
   )
@@ -63,10 +65,10 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const derivedSections = useMemo(() => {
     const maxSections = Math.max(
       ...columnConfigurations.map((config) => {
-        const metadata = getConfigurationMetadata(config)
-        return metadata.drawerCount > 0
-          ? metadata.drawerCount
-          : metadata.shelfCount
+        const metadata = getConfigurationMetadata(config.type)
+        return metadata?.drawerCount > 0
+          ? metadata?.drawerCount
+          : metadata?.shelfCount
       })
     )
     return maxSections > 0 ? maxSections : 3
@@ -119,29 +121,36 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
           // Always try to preserve existing configuration first
           if (prev[i]) {
             // Check if it's still valid with new dimensions
-            if (isConfigurationValid(prev[i], dimensions)) {
-              return prev[i]
+            if (isConfigurationValid(prev[i].type, dimensions)) {
+              return prev[i] // Preserve both type and doorOpeningSide
             }
-            // If not valid, find nearest alternative
-            const nearestConfig = findNearestAvailableConfiguration(
-              prev[i],
+            // If not valid, find nearest alternative (preserve doorOpeningSide if applicable)
+            const nearestType = findNearestAvailableConfiguration(
+              prev[i].type,
               dimensions
-            )
-            return nearestConfig || prev[i]
+            ) || prev[i].type
+            
+            const metadata = getConfigurationMetadata(nearestType)
+            const doorOpeningSide = metadata?.doorCount === 1 
+              ? (prev[i].doorOpeningSide || 'left')
+              : undefined
+            
+            return { type: nearestType, doorOpeningSide }
           }
 
           // For new columns (when expanding), use default
-          const defaultConfig = ColumnConfigurationType.DRAWERS_3
-          const nearestConfig = findNearestAvailableConfiguration(
-            defaultConfig,
+          const defaultType = ColumnConfigurationType.DRAWERS_3
+          const nearestType = findNearestAvailableConfiguration(
+            defaultType,
             dimensions
-          )
-          return nearestConfig || defaultConfig
+          ) || defaultType
+          
+          return { type: nearestType }
         })
 
-      return newConfigs as ColumnConfigurationType[]
+      return newConfigs
     })
-  }, [selectedColumns]) // Only trigger when column count changes!
+  }, [selectedColumns, width, height, depth, plintHeight]) // Trigger when column count or dimensions change
 
   // Validate existing configurations when dimensions change
   useEffect(() => {
@@ -154,24 +163,30 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     setColumnConfigurations((prev) => {
       // Check if any configuration needs updating
       const needsUpdate = prev.some(
-        (config) => !isConfigurationValid(config, dimensions)
+        (config) => !isConfigurationValid(config.type, dimensions)
       )
 
       if (!needsUpdate) {
         return prev // No changes needed
       }
 
-      // Update only invalid configurations
+      // Update only invalid configurations (preserve doorOpeningSide)
       return prev.map((config) => {
-        if (isConfigurationValid(config, dimensions)) {
+        if (isConfigurationValid(config.type, dimensions)) {
           return config // Keep valid ones
         }
-        // Replace invalid with nearest available
-        const nearestConfig = findNearestAvailableConfiguration(
-          config,
+        // Replace invalid with nearest available (preserve doorOpeningSide if applicable)
+        const nearestType = findNearestAvailableConfiguration(
+          config.type,
           dimensions
-        )
-        return nearestConfig || config
+        ) || config.type
+        
+        const metadata = getConfigurationMetadata(nearestType)
+        const doorOpeningSide = metadata?.doorCount === 1 
+          ? (config.doorOpeningSide || 'left')
+          : undefined
+        
+        return { type: nearestType, doorOpeningSide }
       })
     })
   }, [width, height, depth, plintHeight, selectedColumns]) // Trigger on dimension changes
@@ -187,11 +202,24 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   )
   const columnDepth = depth
 
-  // Check which column counts are valid based on dimensions
-  const validColumnCounts = useMemo(
-    () => getValidColumnCounts(width, height, depth, plintHeight),
-    [width, height, depth, plintHeight]
-  )
+  // Check which column counts are valid based on dimensions AND stand-specific width rules
+  const validColumnCounts = useMemo(() => {
+    // Get valid counts based on column dimensions (width, height, depth)
+    const dimensionBasedCounts = getValidColumnCounts(width, height, depth, plintHeight)
+    
+    // Get valid counts based on stand width rules
+    const standWidthBasedCounts = getValidColumnCountsForStand(width)
+    
+    // Combine both: a count is valid only if it passes BOTH checks
+    const combined: Record<number, boolean> = {
+      1: dimensionBasedCounts[1] && standWidthBasedCounts[1],
+      2: dimensionBasedCounts[2] && standWidthBasedCounts[2],
+      3: dimensionBasedCounts[3] && standWidthBasedCounts[3],
+      4: dimensionBasedCounts[4] && standWidthBasedCounts[4],
+    }
+    
+    return combined
+  }, [width, height, depth, plintHeight])
 
   // Create column options with disabled states
   const columnOptions = useMemo(

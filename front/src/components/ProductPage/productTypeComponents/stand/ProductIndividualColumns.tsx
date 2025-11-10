@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo, useEffect, useRef } from 'react'
+import React, { FC, useState, useMemo, useEffect, useRef, useCallback } from 'react'
 import { FormattedMessage } from 'react-intl'
 import {
   ButtonOptionsType,
@@ -9,18 +9,18 @@ import {
   ColumnConfigurationType,
   getConfigurationMetadata,
 } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { ColumnConfigurationIcon } from './ColumnConfigurationIcons'
 import { useColumnConfigurationConstraints } from '~/hooks/useColumnConfigurationConstraints'
 import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
 import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSelect'
-import { use3DVersion } from '~/hooks/use3DVersion'
 import { useMediaQuery } from '@mui/material'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
   selectedColumns: number
-  columnConfigurations: ColumnConfigurationType[]
-  setColumnConfigurations: (configurations: ColumnConfigurationType[]) => void
+  columnConfigurations: ColumnConfigurationWithOptions[]
+  setColumnConfigurations: (configurations: ColumnConfigurationWithOptions[] | ((prev: ColumnConfigurationWithOptions[]) => ColumnConfigurationWithOptions[])) => void
   // Column dimensions for constraint evaluation
   columnWidth: number
   columnHeight: number
@@ -82,7 +82,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   useEffect(() => {
     const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
     const currentColumnIndex = selectedColumns === 1 ? 0 : safeActiveTab
-    const currentConfig = columnConfigurations[currentColumnIndex]
+    const currentConfig = columnConfigurations[currentColumnIndex]?.type
 
     // Reset tracking when switching to a different column
     if (prevActiveTabRef.current !== safeActiveTab) {
@@ -114,31 +114,72 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
 
   // Automatically switch to nearest available configuration when current becomes invalid
   useEffect(() => {
-    const dimensions = {
-      width: columnWidth,
-      height: columnHeight,
-      depth: columnDepth,
-    }
-    const updatedConfigurations = columnConfigurations.map((config) => {
-      if (!isValid(config)) {
-        const nearestConfig = findNearestAvailableConfiguration(
-          config,
-          dimensions
-        )
-        return nearestConfig || config // Keep original if no valid alternative
+    // Use a ref to track if we're in the middle of an update to prevent infinite loops
+    const dimensions = { width: columnWidth, height: columnHeight, depth: columnDepth }
+    
+    // Only validate and update if configurations exist and have types
+    const updatedConfigurations = columnConfigurations.map(config => {
+      // Skip if config is missing or doesn't have a type
+      if (!config || !config.type) {
+        return config
+      }
+      
+      if (!isValid(config.type)) {
+        const nearestType = findNearestAvailableConfiguration(config.type, dimensions)
+        if (nearestType && nearestType !== config.type) {
+          const metadata = getConfigurationMetadata(nearestType)
+          const doorOpeningSide = metadata.doorCount === 1 
+            ? (config.doorOpeningSide || 'left')
+            : undefined
+          return { type: nearestType, doorOpeningSide }
+        }
       }
       return config
     })
 
-    // Only update if there were changes
-    const hasChanges = updatedConfigurations.some(
-      (config, index) => config !== columnConfigurations[index]
+    // Only update if there were actual type changes (not just doorOpeningSide changes)
+    const hasTypeChanges = updatedConfigurations.some(
+      (config, index) => {
+        const currentConfig = columnConfigurations[index]
+        return currentConfig && config.type !== currentConfig.type
+      }
     )
 
-    if (hasChanges) {
+    if (hasTypeChanges) {
       setColumnConfigurations(updatedConfigurations)
     }
-  }, [columnWidth, columnHeight, columnDepth, isValid]) // intentionally not including columnConfigurations
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columnWidth, columnHeight, columnDepth, isValid]) // Note: not including columnConfigurations to avoid infinite loop
+
+  const handleColumnTypeChange = (columnIndex: number, value: ColumnConfigurationType) => {
+    const newConfigurations = [...columnConfigurations]
+    const metadata = getConfigurationMetadata(value)
+    const doorOpeningSide = metadata.doorCount === 1 
+      ? (newConfigurations[columnIndex]?.doorOpeningSide || 'left')
+      : undefined
+    newConfigurations[columnIndex] = { type: value, doorOpeningSide }
+    setColumnConfigurations(newConfigurations)
+  }
+
+  const handleDoorOpeningSideChange = useCallback((columnIndex: number, side: 'left' | 'right') => {
+    setColumnConfigurations((prev) => {
+      const newConfigurations = [...prev]
+      const currentConfig = newConfigurations[columnIndex]
+      
+      // Ensure we have a valid configuration with a type
+      if (!currentConfig || !currentConfig.type) {
+        console.warn('Cannot update door opening side: configuration missing type', { columnIndex, currentConfig })
+        return prev
+      }
+      
+      // Only update doorOpeningSide, preserve the type
+      newConfigurations[columnIndex] = {
+        type: currentConfig.type,
+        doorOpeningSide: side
+      }
+      return newConfigurations
+    })
+  }, [setColumnConfigurations])
 
   // Get configuration options with metadata - filter out invalid ones
   const configurationOptions = useMemo(() => {
@@ -149,6 +190,12 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
         metadata: getConfigurationMetadata(configType),
       }))
   }, [allConfigurations, isValid])
+
+  // Memoize door opening side options
+  const doorOpeningSideOptions: ButtonOptionsType<'left' | 'right'>[] = useMemo(() => [
+    { value: 'left' as const, label: 'homepage.configurator.individualColumns.doorOpeningSide.left' },
+    { value: 'right' as const, label: 'homepage.configurator.individualColumns.doorOpeningSide.right' },
+  ], [])
 
   const columnTabOptions: ButtonOptionsType[] = Array.from({
     length: selectedColumns,
@@ -184,17 +231,9 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   // Ensure we use a valid column index even if activeTab is temporarily out of bounds
   const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
   const currentColumnIndex = selectedColumns === 1 ? 0 : safeActiveTab
-  const currentValue = columnConfigurations[currentColumnIndex]
+  const currentConfig = columnConfigurations[currentColumnIndex]
+  const currentValue = currentConfig?.type
 
-  const handleColumnTypeChange = (
-    columnIndex: number,
-    value: ColumnConfigurationType
-  ) => {
-    const newConfigurations = [...columnConfigurations]
-    newConfigurations[columnIndex] = value
-    setColumnConfigurations(newConfigurations)
-  }
-  const is3DVersion = use3DVersion()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
@@ -226,6 +265,41 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
             onChange={(v) => handleColumnTypeChange(currentColumnIndex, v)}
           />
         </label>
+
+        {/* Door opening side toggle - only show for single door configurations */}
+        {useMemo(() => {
+          const safeActiveTab = activeTab >= selectedColumns ? 0 : activeTab
+          const colIndex = selectedColumns === 1 ? 0 : safeActiveTab
+          const config = columnConfigurations[colIndex]
+          
+          if (!config) return null
+          
+          const metadata = getConfigurationMetadata(config.type)
+          const isSingleDoor = metadata?.doorCount === 1
+
+          if (!isSingleDoor) return null
+          
+          const currentSide = config.doorOpeningSide || 'left'
+          
+          return (
+            <label className={styles.furnitureLabel}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ fontSize: '14px', fontWeight: 500 }}>
+                  <FormattedMessage
+                    id="homepage.configurator.individualColumns.doorOpeningSide"
+                    defaultMessage="Door opening side"
+                  />:
+                </span>
+                <ButtonSelect
+                  key={`door-side-${colIndex}`}
+                  options={doorOpeningSideOptions}
+                  defaultSelected={currentSide}
+                  onChange={(value) => handleDoorOpeningSideChange(colIndex, value as 'left' | 'right')}
+                />
+              </div>
+            </label>
+          )
+        }, [activeTab, selectedColumns, columnConfigurations, doorOpeningSideOptions, handleDoorOpeningSideChange])}
       </div>
     </label>
   )

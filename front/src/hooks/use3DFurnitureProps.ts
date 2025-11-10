@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { Furniture3DProps, FurnitureDefaults } from '~/types/furniture3D'
+import { Furniture3DProps, FurnitureDefaults, ColumnConfigurationWithOptions } from '~/types/furniture3D'
+import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { getColorItemByName } from '~/utils/colorDictionary'
 import { convertToOpeningType } from '~/utils/openingTypeConverter'
 import { calculateWardrobeColumnLayout } from '~/utils/wardrobeColumnLayout'
@@ -79,8 +80,26 @@ export function use3DFurnitureProps(
     const individualColumnsComponent = currentComponents.find(
       (c) => c.type === 'individualColumns'
     )
-    const columnConfigurations =
-      individualColumnsComponent?.columnConfigurations
+    const columnConfigs = individualColumnsComponent?.columnConfigurations
+    
+    // Check if we have extended config (with doorOpeningSide) or simple config
+    // Extended config is an array of objects with 'type' property (ColumnConfigurationWithOptions[])
+    // Simple config is an array of ColumnConfigurationType enum values
+    const hasExtendedConfig = columnConfigs && 
+      columnConfigs.length > 0 && 
+      typeof columnConfigs[0] === 'object' && 
+      'type' in columnConfigs[0]
+    
+    // Extract column configuration types for backward compatibility
+    const columnConfigurations = hasExtendedConfig 
+      ? (columnConfigs as ColumnConfigurationWithOptions[])?.map((config) => config.type)
+      : (columnConfigs as ColumnConfigurationType[] | undefined)
+    
+    // Extract extended config if available (for stand)
+    // Create a new array with new objects to ensure reference changes when content changes
+    const columnConfigurationsWithOptions = hasExtendedConfig 
+      ? (columnConfigs as ColumnConfigurationWithOptions[]).map(config => ({ ...config }))
+      : undefined
 
     // Extract metadata component (contains derivedSections for new 3D system)
     const metadataComponent = currentComponents.find(
@@ -105,6 +124,7 @@ export function use3DFurnitureProps(
       openingType,
       columns: wardrobeLayout?.columnCount ?? columns,
       columnConfigurations: wardrobeLayout?.columnConfigurations ?? columnConfigurations,
+      columnConfigurationsWithOptions,
       columnWidths: wardrobeLayout?.columnWidths,
       columnPositions: wardrobeLayout?.columnPositions,
       furnitureType,

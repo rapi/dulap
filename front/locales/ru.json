@@ -194,6 +194,9 @@
   "homepage.configurator.individualColumns.columnType": "Нажмите на мебель в конфигураторе или на одну из кнопок ниже, чтобы настроить секцию.",
   "homepage.configurator.individualColumns.drawers": "Ящики",
   "homepage.configurator.individualColumns.door": "Дверца",
+  "homepage.configurator.individualColumns.doorOpeningSide": "Сторона открытия двери",
+  "homepage.configurator.individualColumns.doorOpeningSide.left": "Слева",
+  "homepage.configurator.individualColumns.doorOpeningSide.right": "Справа",
   
   "homepage.configurator.columnConfig.drawers1": "1 Ящик",
   "homepage.configurator.columnConfig.drawers2": "2 Ящика",

@@ -36,7 +36,7 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
     configurationType: ColumnConfigurationType.DRAWERS_4,
     minWidth: 40,
     minHeight: 80,
-    maxHeight: 120,
+    maxHeight: 130,
     minDepth: 25,
   },
   {
@@ -74,6 +74,7 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
     minWidth: 40,
     maxWidth: 60,
     minHeight: 85,
+    maxHeight: 130,
     minDepth: 25,
   },
   {
@@ -112,6 +113,7 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
     minWidth: 61,
     maxWidth: 100,
     minHeight: 85,
+    maxHeight: 130,
     minDepth: 25,
   },
   {
@@ -184,5 +186,48 @@ export function getValidConfigurations(dimensions: {
   return Object.values(ColumnConfigurationType).filter((type) =>
     isConfigurationValid(type, dimensions)
   )
+}
+
+/**
+ * Get valid column counts for stand (chest of drawers) based on total width
+ * 
+ * Rules:
+ * - 50-84 cm: 1 column
+ * - 85-104 cm: 1-2 columns
+ * - 105-149 cm: 2 columns
+ * - 150-205 cm: 2-3 columns
+ * - 206-270 cm: 3 columns
+ * 
+ * @param totalWidth Total width of the stand in cm
+ * @returns Object with column counts as keys and validity as boolean values
+ */
+export function getValidColumnCountsForStand(totalWidth: number): Record<number, boolean> {
+  const validityMap: Record<number, boolean> = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+  }
+
+  if (totalWidth >= 50 && totalWidth <= 84) {
+    // 50-84 cm: only 1 column
+    validityMap[1] = true
+  } else if (totalWidth >= 85 && totalWidth <= 104) {
+    // 85-104 cm: 1-2 columns
+    validityMap[1] = true
+    validityMap[2] = true
+  } else if (totalWidth >= 105 && totalWidth <= 149) {
+    // 105-149 cm: 2 columns
+    validityMap[2] = true
+  } else if (totalWidth >= 150 && totalWidth <= 205) {
+    // 150-205 cm: 2-3 columns
+    validityMap[2] = true
+    validityMap[3] = true
+  } else if (totalWidth >= 206 && totalWidth <= 270) {
+    // 206-270 cm: 3 columns
+    validityMap[3] = true
+  }
+
+  return validityMap
 }
 

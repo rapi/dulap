@@ -29,6 +29,7 @@ interface ColumnProps {
   positionX: number
   selectedColor: string
   columnType?: ColumnConfigurationType
+  doorOpeningSide?: 'left' | 'right'
   drawerOffsetZ?: number
   lerpSpeed?: number
   columnIndex?: number
@@ -51,6 +52,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
   positionX,
   selectedColor,
   columnType = ColumnConfigurationType.DRAWERS_3,
+  doorOpeningSide = 'left',
   drawerOffsetZ = 15,
   lerpSpeed = 0.15,
   columnIndex = 0,
@@ -72,7 +74,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     const metadata = getConfigurationMetadata(columnType)
     
     // Determine sections count from configuration type
-    const actualSections = metadata.drawerCount > 0 ? metadata.drawerCount : (metadata.shelfCount + 1)
+    const actualSections = metadata?.drawerCount > 0 ? metadata?.drawerCount : (metadata?.shelfCount + 1)
     const usableSectionsCount = actualSections > 0 ? actualSections : sectionsCount
 
     // Calculate drawer/shelf dimensions based on column configuration
@@ -114,24 +116,6 @@ const ColumnComponent: React.FC<ColumnProps> = ({
   // Memoize panel geometry to prevent recreation
   const panels = useMemo(() => (
     <>
-      {/* Left side panel */}
-      <mesh
-        position={[-columnWidth / 2 + 0.1, columnHeight / 2, columnDepth / 2]}
-        rotation={[0, Math.PI / 2, 0]}
-      >
-        <planeGeometry args={[columnDepth - 2 * panelThickness, columnHeight]} />
-        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
-      </mesh>
-
-      {/* Right side panel */}
-      <mesh
-        position={[columnWidth / 2 - 0.1, columnHeight / 2, columnDepth / 2]}
-        rotation={[0, Math.PI / 2, 0]}
-      >
-        <planeGeometry args={[columnDepth - 2 * panelThickness, columnHeight]} />
-        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
-      </mesh>
-
       {/* Back panel */}
       <mesh
         position={[0, columnHeight / 2, panelThickness]}
@@ -175,7 +159,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
 
   // Create shelf objects (horizontal panels) using the same pattern as doors/top/plinth
   const shelfPivots = useMemo(() => {
-    const shelfCount = columnConfig.metadata.shelfCount
+    const shelfCount = columnConfig.metadata?.shelfCount
     if (shelfCount === 0 || !horizontalPanelObject) return []
     
     return Array.from({ length: shelfCount }, (_, index) => {
@@ -186,13 +170,13 @@ const ColumnComponent: React.FC<ColumnProps> = ({
       shelfPivot.userData.shelfIndex = index
       return shelfPivot
     })
-  }, [horizontalPanelObject, columnConfig.metadata.shelfCount])
+  }, [horizontalPanelObject, columnConfig.metadata?.shelfCount])
 
   // Scale and position shelves
   useEffect(() => {
     if (shelfPivots.length === 0) return
 
-    const doorWidth = columnConfig.metadata.doorCount === 2 
+    const doorWidth = columnConfig.metadata?.doorCount === 2 
       ? columnWidth 
       : columnWidth - panelSpacing
 
@@ -202,7 +186,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
       
       // Scale the shelf to fit the width and depth
       shelfPivot.scale.set(
-        doorWidth - 2 * panelThickness,
+        doorWidth - panelThickness,
         panelThickness,
         columnDepth - panelThickness
       )
@@ -216,7 +200,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     columnDepth,
     plintHeight,
     columnConfig.singleSectionTotalHeight,
-    columnConfig.metadata.doorCount,
+    columnConfig.metadata?.doorCount,
     panelSpacing,
     panelThickness,
   ])
@@ -271,7 +255,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     const { metadata, usableSectionsCount, singleSectionTotalHeight, sectionHeight, sectionWidth } = columnConfig
     
     // DRAWERS CONFIGURATIONS (1-5 drawers)
-    if (metadata.hasDrawers) {
+    if (metadata?.hasDrawers) {
       const drawers = Array.from({ length: usableSectionsCount }, (_, index) => {
         const positionY = plintHeight + panelSpacing + singleSectionTotalHeight * index
         return {
@@ -307,14 +291,14 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     }
 
     // DOOR CONFIGURATIONS (single door or split doors with shelves)
-    if (metadata.hasDoors) {
+    if (metadata?.hasDoors) {
       const doorHeight = columnHeight - plintHeight - panelThickness
       const doorPositionY = plintHeight
-      const hingeCount = metadata.hingeCount
-      const hingePositionRule = metadata.hingePositionRule
+      const hingeCount = metadata?.hingeCount
+      const hingePositionRule = metadata?.hingePositionRule
 
       // SPLIT DOORS (left and right doors)
-      if (metadata.doorCount === 2) {
+      if (metadata?.doorCount === 2) {
         const halfWidth = columnWidth / 2
         const doorWidth = halfWidth - panelSpacing / 2
 
@@ -387,6 +371,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
             positionY={doorPositionY}
             positionX={0}
             isHovered={isColumnOpen}
+            openingSide={doorOpeningSide}
             hingeCount={hingeCount}
             hingePositionRule={hingePositionRule}
           />
@@ -408,6 +393,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({
     hingeWingObject,
     hingeAnchorObject,
     openingType,
+    doorOpeningSide,
     columnDepth,
     selectedColor,
     isColumnOpen,

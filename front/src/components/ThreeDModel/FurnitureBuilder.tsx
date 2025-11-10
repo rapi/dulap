@@ -3,8 +3,10 @@ import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { TopAndPlinth } from './parts/TopAndPlinth'
 import { Column } from './parts/Column'
+import { ColumnDivider } from './parts/ColumnDivider'
 import { OpeningType } from './furnitureConfig'
 import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 
 interface FurnitureBuilderProps {
   selectedColor: string
@@ -18,6 +20,7 @@ interface FurnitureBuilderProps {
   openingType: OpeningType
   columns: number
   columnConfigurations?: ColumnConfigurationType[]
+  columnConfigurationsWithOptions?: ColumnConfigurationWithOptions[] // Extended config with door opening side
   columnWidths?: number[] // Optional: variable column widths (for wardrobe)
   columnPositions?: number[] // Optional: custom column X positions
   selectedColumnIndex?: number | null
@@ -51,6 +54,7 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
   openingType,
   columns,
   columnConfigurations,
+  columnConfigurationsWithOptions,
   columnWidths,
   columnPositions,
   selectedColumnIndex: externalSelectedColumnIndex,
@@ -98,27 +102,34 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
   
   const defaultColumnWidth = desiredWidth / columns
 
-  // Memoize column generation to prevent unnecessary recreation on every render
-  // This is critical for performance - prevents unmounting/remounting of Column components
-  const columnComponents = useMemo(() => {
+  // Calculate column data (widths and positions) for divider calculation
+  const columnData = useMemo(() => {
     return Array.from({ length: columns }, (_, index) => {
-      // Get column width (variable or equal)
       const columnWidth = useVariableWidths ? columnWidths![index] : defaultColumnWidth
-      
-      // Get column position (custom or calculated)
       let columnPositionX: number
       if (useCustomPositions) {
         columnPositionX = columnPositions![index]
       } else {
-        // Default equal distribution
         columnPositionX = -desiredWidth / 2 + defaultColumnWidth * index + defaultColumnWidth / 2
       }
+      return { width: columnWidth, positionX: columnPositionX }
+    })
+  }, [columns, useVariableWidths, columnWidths, useCustomPositions, columnPositions, defaultColumnWidth, desiredWidth])
+
+  // Memoize column generation to prevent unnecessary recreation on every render
+  // This is critical for performance - prevents unmounting/remounting of Column components
+  const columnComponents = useMemo(() => {
+    return Array.from({ length: columns }, (_, index) => {
+      const { width: columnWidth, positionX: columnPositionX } = columnData[index]
       
-      const columnType = columnConfigurations?.[index] || ColumnConfigurationType.DRAWERS_3
+      // Use extended config if available (for stand), otherwise fall back to simple config
+      const columnConfig = columnConfigurationsWithOptions?.[index]
+      const columnType = columnConfig?.type || columnConfigurations?.[index] || ColumnConfigurationType.DRAWERS_3
+      const doorOpeningSide = columnConfig?.doorOpeningSide || 'left'
 
       return (
         <Column
-          key={`column-${index}`}
+          key={`column-${index}-${doorOpeningSide}`}
           horizontalPanelObject={scenes.horizontal}
           roundHandleObject={scenes.roundHandle}
           profileHandleObject={scenes.profileHandle}
@@ -133,6 +144,7 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
           positionX={columnPositionX}
           selectedColor={selectedColor}
           columnType={columnType}
+          doorOpeningSide={doorOpeningSide}
           drawerOffsetZ={drawerOffsetZ}
           lerpSpeed={lerpSpeed}
           columnIndex={index}
@@ -143,12 +155,7 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
     })
   }, [
     columns,
-    useVariableWidths,
-    useCustomPositions,
-    columnWidths,
-    columnPositions,
-    defaultColumnWidth,
-    desiredWidth,
+    columnData,
     desiredHeight,
     desiredDepth,
     desiredPlintHeight,
@@ -156,6 +163,7 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
     selectedColor,
     openingType,
     columnConfigurations,
+    columnConfigurationsWithOptions,
     drawerOffsetZ,
     lerpSpeed,
     scenes.horizontal,
@@ -166,6 +174,32 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
     selectedColumnIndex,
     handleColumnClick,
   ])
+
+  // Create dividers between columns (not before first or after last)
+  const columnDividers = useMemo(() => {
+    if (columns < 2) return null
+
+    return Array.from({ length: columns - 1 }, (_, index) => {
+      const leftColumn = columnData[index]
+      const rightColumn = columnData[index + 1]
+      
+      // Calculate divider position: between right edge of left column and left edge of right column
+      const leftColumnRightEdge = leftColumn.positionX + leftColumn.width / 2
+      const rightColumnLeftEdge = rightColumn.positionX - rightColumn.width / 2
+      const dividerPositionX = (leftColumnRightEdge + rightColumnLeftEdge) / 2
+
+      return (
+        <ColumnDivider
+          key={`divider-${index}`}
+          positionX={dividerPositionX}
+          columnHeight={desiredHeight}
+          columnDepth={desiredDepth}
+          plintHeight={desiredPlintHeight}
+          selectedColor={selectedColor}
+        />
+      )
+    })
+  }, [columns, columnData, desiredHeight, desiredDepth, desiredPlintHeight, selectedColor])
 
   // Don't render until models are loaded
   if (!scenes.vertical || !scenes.horizontal) {
@@ -194,6 +228,7 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
         />
 
         {columnComponents}
+        {columnDividers}
       </group>
     </Suspense>
   )

@@ -198,6 +198,9 @@
   "homepage.configurator.individualColumns.columnType": "Apasă pe mobilă în configurator sau pe unul din butoanele de mai jos pentru a ajusta secțiunea.",
   "homepage.configurator.individualColumns.drawers": "Sertare",
   "homepage.configurator.individualColumns.door": "Ușă",
+  "homepage.configurator.individualColumns.doorOpeningSide": "Latura de deschidere a ușii",
+  "homepage.configurator.individualColumns.doorOpeningSide.left": "Stânga",
+  "homepage.configurator.individualColumns.doorOpeningSide.right": "Dreapta",
   
   "homepage.configurator.columnConfig.drawers1": "1 Sertar",
   "homepage.configurator.columnConfig.drawers2": "2 Sertare",

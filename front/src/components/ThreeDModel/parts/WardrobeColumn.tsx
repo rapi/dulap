@@ -105,24 +105,6 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
   // Memoize panel geometry to prevent recreation
   const panels = useMemo(() => (
     <>
-      {/* Left side panel */}
-      <mesh
-        position={[-columnWidth / 2 + 0.1, columnHeight / 2, columnDepth / 2]}
-        rotation={[0, Math.PI / 2, 0]}
-      >
-        <planeGeometry args={[columnDepth - 2 * panelThickness, columnHeight]} />
-        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
-      </mesh>
-
-      {/* Right side panel */}
-      <mesh
-        position={[columnWidth / 2 - 0.1, columnHeight / 2, columnDepth / 2]}
-        rotation={[0, Math.PI / 2, 0]}
-      >
-        <planeGeometry args={[columnDepth - 2 * panelThickness, columnHeight]} />
-        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
-      </mesh>
-
       {/* Back panel (white interior) */}
       <mesh
         position={[0, columnHeight / 2, 2 * panelThickness]}

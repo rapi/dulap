@@ -120,7 +120,7 @@ const positionProfileHandle = (
     isRightOpening?: boolean
   }
 ): void => {
-  const { PROFILE_HANDLE_LENGTH, PROFILE_HANDLE_DEPTH, PROFILE_HANDLE_METAL_WIDTH, PROFILE_HANDLE_DOOR_RIGHT_OFFSET } = HANDLE_CONSTANTS
+  const { PROFILE_HANDLE_LENGTH, PROFILE_HANDLE_DEPTH, PROFILE_HANDLE_METAL_WIDTH } = HANDLE_CONSTANTS
   
   let xPosition = 0
   
@@ -131,16 +131,16 @@ const positionProfileHandle = (
     if (options.isRightOpening !== undefined) {
       // For doors: position based on opening side
       if (options.isRightOpening) {
-        xPosition = -options.parentWidth / 2 + PROFILE_HANDLE_LENGTH / 2 + PROFILE_HANDLE_DOOR_RIGHT_OFFSET
+        xPosition = -options.parentWidth / 2  + PROFILE_HANDLE_LENGTH / 1.5
       } else {
-        xPosition = PROFILE_HANDLE_LENGTH / 2
+        xPosition = options.parentWidth / 2  - PROFILE_HANDLE_LENGTH / 1.5
       }
     } else {
       // For drawers: position at left side
-      xPosition = -options.parentWidth / 2 + PROFILE_HANDLE_LENGTH / 2
+      xPosition = 0
     }
   }
-  
+
   handlePivot.position.set(
     xPosition,
     height - PROFILE_HANDLE_DEPTH / 2,

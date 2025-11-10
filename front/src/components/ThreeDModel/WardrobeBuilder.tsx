@@ -3,6 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import { SidePanels } from './parts/SidePanels'
 import { WardrobeTopAndPlinth } from './parts/WardrobeTopAndPlinth'
 import { WardrobeColumn } from './parts/WardrobeColumn'
+import { ColumnDivider } from './parts/ColumnDivider'
 import { OpeningType } from './furnitureConfig'
 
 interface WardrobeBuilderProps {
@@ -93,21 +94,25 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
   
   const defaultColumnWidth = desiredWidth / columns
 
-  // Memoize column generation to prevent unnecessary recreation on every render
-  // This is critical for performance - prevents unmounting/remounting of Door components
-  const columnComponents = useMemo(() => {
+  // Calculate column data (widths and positions) for divider calculation
+  const columnData = useMemo(() => {
     return Array.from({ length: columns }, (_, index) => {
-      // Get column width (variable widths from wardrobeColumnLayout or equal)
       const columnWidth = useVariableWidths ? columnWidths![index] : defaultColumnWidth
-      
-      // Get column position (custom positions from wardrobeColumnLayout or calculated)
       let columnPositionX: number
       if (useCustomPositions) {
         columnPositionX = columnPositions![index]
       } else {
-        // Default equal distribution
         columnPositionX = -desiredWidth / 2 + defaultColumnWidth * index + defaultColumnWidth / 2
       }
+      return { width: columnWidth, positionX: columnPositionX }
+    })
+  }, [columns, useVariableWidths, columnWidths, useCustomPositions, columnPositions, defaultColumnWidth, desiredWidth])
+
+  // Memoize column generation to prevent unnecessary recreation on every render
+  // This is critical for performance - prevents unmounting/remounting of Door components
+  const columnComponents = useMemo(() => {
+    return Array.from({ length: columns }, (_, index) => {
+      const { width: columnWidth, positionX: columnPositionX } = columnData[index]
       
       // Determine door type based on column width (wardrobe-specific logic)
       // Narrow columns (40-60cm): single door
@@ -138,12 +143,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
     })
   }, [
     columns,
-    useVariableWidths,
-    useCustomPositions,
-    columnWidths,
-    columnPositions,
-    defaultColumnWidth,
-    desiredWidth,
+    columnData,
     desiredHeight,
     desiredDepth,
     desiredPlintHeight,
@@ -157,6 +157,32 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
     selectedColumnIndex,
     handleColumnClick,
   ])
+
+  // Create dividers between columns (not before first or after last)
+  const columnDividers = useMemo(() => {
+    if (columns < 2) return null
+
+    return Array.from({ length: columns - 1 }, (_, index) => {
+      const leftColumn = columnData[index]
+      const rightColumn = columnData[index + 1]
+      
+      // Calculate divider position: between right edge of left column and left edge of right column
+      const leftColumnRightEdge = leftColumn.positionX + leftColumn.width / 2
+      const rightColumnLeftEdge = rightColumn.positionX - rightColumn.width / 2
+      const dividerPositionX = (leftColumnRightEdge + rightColumnLeftEdge) / 2
+
+      return (
+        <ColumnDivider
+          key={`divider-${index}`}
+          positionX={dividerPositionX}
+          columnHeight={desiredHeight}
+          columnDepth={desiredDepth}
+          plintHeight={desiredPlintHeight}
+          selectedColor={selectedColor}
+        />
+      )
+    })
+  }, [columns, columnData, desiredHeight, desiredDepth, desiredPlintHeight, selectedColor])
 
   // Don't render until models are loaded
   if (!scenes.vertical || !scenes.horizontal) {
@@ -186,6 +212,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
         />
 
         {columnComponents}
+        {columnDividers}
       </group>
     </Suspense>
   )
