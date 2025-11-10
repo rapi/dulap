@@ -210,7 +210,8 @@
 .mirroringLabel p,
 .sectionArrangementLabel p,
 .shelfArrangement p,
-.furnitureTitle {
+.furnitureTitle,
+.sectionTitle {
   font-size: 13px;
   width: 150px;
   flex-shrink: 0;
@@ -236,9 +237,9 @@
 }
 
 /* C O L O R S */
-.colorsLabel {
+.colorsLabel,
+.individualColumnsLabel {
   display: flex;
-  /*align-items: center;*/
   margin-top: 20px;
 }
 
@@ -246,6 +247,16 @@
 .furnitureLabel {
   display: flex;
   align-items: center;
+}
+
+.furnitureConfig {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.individualColumnsLabel {
+  display: flex;
 }
 
 /* A R A N J A R E   D U L A P   S I   R A F T U R I */
@@ -490,26 +501,17 @@
   .priceCont {
     margin: 0;
   }
-  .furnitureHeaderTitle,
-  .furnitureTitle,
-  .dimensionsHeaderTitle,
-  .dimensionsTooltipContainer,
-  .colorsTitleLabel,
-  .sectionTitle,
-  .sectionsTitle,
-  .furnitureLabel p {
-    display: none;
-  }
 
   .dimensionsGrid {
-    padding: 0 15px;
+    margin-top: 5px;
+    width: 100%;
   }
   .dimensionTitle {
     width: 90px;
   }
 
   .newPrice {
-    font-size: 17px;
+    font-size: 18px;
   }
 
   .crossedPrice {
@@ -528,9 +530,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 0 15px;
+  }
+  .individualColumnsLabel {
+    margin-top: 0;
   }
   .furnitureLabel {
-    margin-top: 10px;
     justify-content: center;
   }
 }

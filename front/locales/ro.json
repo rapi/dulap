@@ -338,7 +338,7 @@
   "checkout.error.required": "Acest câmp este obligatoriu",
   "checkout.error.onSubmit": "Completați toate câmpurile pentru a finaliza comanda.",
 
-  "checkout.message.attentionOrderDetails": "După plasarea comenzii, te vom contacta să confirmăm toate detaliile. Termenul de execuție - 10 zile lucrătoare.",
+  "checkout.message.attentionOrderDetails": "După plasarea comenzii, te vom contacta să confirmăm toate detaliile. Termenul de execuție - 15 zile lucrătoare.",
 
   "checkout.modal.title": "Yay! Comanda a fost plasată",
   "checkout.modal.message": "În scurt timp revenim cu un apel pentru confirmarea detaliilor comenzii!",

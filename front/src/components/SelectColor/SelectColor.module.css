@@ -43,24 +43,21 @@
   left: 50%;
   transform: translateX(-50%) translateY(0);
   opacity: 0;
-  white-space: pre;         /* allow newline */
+  white-space: pre; /* allow newline */
   background-color: #555;
   color: #fff;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 0.8em;
-  text-align: center;       /* center lines */
+  text-align: center; /* center lines */
   pointer-events: none;
-  transition:
-    opacity 0.9s ease;
-    /* transform 0.3s ease; */
+  transition: opacity 0.9s ease;
+  /* transform 0.3s ease; */
 }
 
 /* 2) On hover, inject content & animate in */
 .colorCircle[data-tooltip-name]:hover::after {
-  content:
-    attr(data-tooltip-name) "\A"
-    attr(data-tooltip-code);
+  content: attr(data-tooltip-name) '\A' attr(data-tooltip-code);
   opacity: 1;
   transform: translateX(-50%) translateY(-6px);
 }
@@ -78,4 +75,10 @@
   display: flex;
   justify-content: center;
   margin-top: 25px;
+}
+
+@media (max-width: 767px) {
+  .container {
+    justify-content: center;
+  }
 }

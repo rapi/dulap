@@ -50,6 +50,8 @@ import {
   ButtonSelect,
 } from '~/components/ButtonSelect/ButtonSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
+import { use3DVersion } from '~/hooks/use3DVersion'
+import { useMediaQuery } from '@mui/material'
 export type ProductSectionsComponent = {
   type: 'sections'
   selectedSections: number
@@ -70,12 +72,28 @@ export const ProductSections: FC<ProductSectionsProps> = ({
   predefinedValue,
   options = sectionsOptions,
 }) => {
+  const is3DVersion = use3DVersion()
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
   return (
     <div>
-      <p className={styles.sectionsTitle}><FormattedMessage id="homepage.configurator.options.title" defaultMessage="Opțiuni" /></p>
-
+      {!isMobile && (
+        <p className={styles.sectionsTitle}>
+          <FormattedMessage
+            id="homepage.configurator.options.title"
+            defaultMessage="Opțiuni"
+          />
+        </p>
+      )}
       <label className={styles.furnitureLabel}>
-        <p><FormattedMessage id="homepage.configurator.sections.title" defaultMessage="Secțiuni" /></p>
+        {!isMobile && (
+          <p>
+            <FormattedMessage
+              id="homepage.configurator.sections.title"
+              defaultMessage="Secțiuni"
+            />
+          </p>
+        )}
         {predefinedValue ?? (
           <ButtonSelect
             options={options}
@@ -85,7 +103,7 @@ export const ProductSections: FC<ProductSectionsProps> = ({
             // }}
             onChange={(value) => {
               // ignore clicks on disabled options
-              const opt = options.find(o => o.value === value)
+              const opt = options.find((o) => o.value === value)
               if (!opt?.disabled) {
                 configuration.setSelectedSections(parseInt(value))
               }

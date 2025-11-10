@@ -5,6 +5,8 @@ import {
   ButtonSelect,
 } from '~/components/ButtonSelect/ButtonSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
+import { use3DVersion } from '~/hooks/use3DVersion'
+import { useMediaQuery } from '@mui/material'
 
 export type ProductColumnsComponent = {
   type: 'columns'
@@ -33,22 +35,29 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
 }) => {
   // Use options from configuration if available, otherwise from props, otherwise default
   const options = configuration.options ?? propOptions ?? columnsOptions
+  const is3DVersion = use3DVersion()
+  const isMobile = useMediaQuery('(max-width: 768px)')
+
   return (
     <>
-      <p className={styles.sectionsTitle}>
-        <FormattedMessage
-          id="homepage.configurator.options.title"
-          defaultMessage="Opțiuni"
-        />
-      </p>
+      {!isMobile && (
+        <p className={styles.sectionsTitle}>
+          <FormattedMessage
+            id="homepage.configurator.options.title"
+            defaultMessage="Opțiuni"
+          />
+        </p>
+      )}
       <div>
         <label className={styles.furnitureLabel}>
-          <p>
-            <FormattedMessage
-              id="homepage.configurator.columns.title"
-              defaultMessage="Numărul de coloane"
-            />
-          </p>
+          {!isMobile && (
+            <p>
+              <FormattedMessage
+                id="homepage.configurator.columns.title"
+                defaultMessage="Numărul de coloane"
+              />
+            </p>
+          )}
           {predefinedValue != null ? (
             predefinedValue
           ) : (

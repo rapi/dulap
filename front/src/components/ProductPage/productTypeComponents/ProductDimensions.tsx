@@ -8,6 +8,7 @@ import { Dimension } from '~/components/ProductListPage/products'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Link from 'next/link'
 import { useMediaQuery } from '@mui/material'
+import { use3DVersion } from '~/hooks/use3DVersion'
 
 export type ProductDimensionsComponent = {
   predefinedValue?: Dimension
@@ -36,29 +37,32 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   predefinedValue,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const is3DVersion = use3DVersion()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
     <>
-      <div className={styles.dimensionsTitleLabel}>
-        <h3 className={styles.dimensionsHeaderTitle}>
-          <FormattedMessage id="homepage.configurator.dimensions.title" />
-        </h3>
-        <Link
-          href="/blog/measurements"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.dimensionsTooltipContainer}
-          title="Cum să alegi corect mărimile?"
-          aria-describedby="dims-tooltip"
-          aria-label="Cum să alegi corect mărimile?"
-        >
-          <HelpOutlineIcon color="action" sx={{ fontSize: 20 }} />
-          <span id="dims-tooltip" className={styles.dimensionsTooltipText}>
-            <FormattedMessage id="dimensions.title.tooltip" />
-          </span>
-        </Link>
-      </div>
+      {!isMobile && (
+        <div className={styles.dimensionsTitleLabel}>
+          <h3 className={styles.dimensionsHeaderTitle}>
+            <FormattedMessage id="homepage.configurator.dimensions.title" />
+          </h3>
+          <Link
+            href="/blog/measurements"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.dimensionsTooltipContainer}
+            title="Cum să alegi corect mărimile?"
+            aria-describedby="dims-tooltip"
+            aria-label="Cum să alegi corect mărimile?"
+          >
+            <HelpOutlineIcon color="action" sx={{ fontSize: 20 }} />
+            <span id="dims-tooltip" className={styles.dimensionsTooltipText}>
+              <FormattedMessage id="dimensions.title.tooltip" />
+            </span>
+          </Link>
+        </div>
+      )}
       <div className={styles.dimensionsGrid}>
         <label className={styles.dimensionLabel}>
           <p className={styles.dimensionTitle}>

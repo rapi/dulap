@@ -9,6 +9,7 @@ import Link from 'next/link'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import ColorCTA from '~/components/ColorCTA/ColorCTA'
 import { useMediaQuery } from '@mui/material'
+import { use3DVersion } from '~/hooks/use3DVersion'
 export type ProductColorsComponent = {
   type: 'colors'
   colors: string[]
@@ -41,16 +42,19 @@ export const ProductColors: FC<ProductColorsProps> = ({
   predefinedValue,
 }) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
+  const is3DVersion = use3DVersion()
   if (predefinedValue) {
     const ci = getColorItemByName(predefinedValue)
 
     return (
       <label className={styles.colorsLabel}>
-        <div className={styles.colorsTitleLabel}>
-          <p>
-            <FormattedMessage id="homepage.configurator.colors.title" />
-          </p>
-        </div>
+        {!isMobile && (
+          <div className={styles.colorsTitleLabel}>
+            <p>
+              <FormattedMessage id="homepage.configurator.colors.title" />
+            </p>
+          </div>
+        )}
         <SelectColorItem
           hexCode={ci?.hexCode}
           name={ci?.name}
@@ -63,31 +67,33 @@ export const ProductColors: FC<ProductColorsProps> = ({
   }
   return (
     <label className={styles.colorsLabel}>
-      <div className={styles.colorsTitleLabel}>
-        <h3 className={styles.dimensionsHeaderTitle}>
-          <FormattedMessage id="homepage.configurator.colors.title" />
-        </h3>
-        <Link
-          href="/blog/colors"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.dimensionsTooltipContainer}
-          title="Cum să alegi corect culoarea?"
-          aria-describedby="dims-tooltip"
-          aria-label="Cum să alegi corect culoarea?"
-        >
-          <HelpOutlineIcon color="action" sx={{ fontSize: 20 }} />
-          <span id="dims-tooltip" className={styles.dimensionsTooltipText}>
-            <FormattedMessage id="colors.title.tooltip" />
-          </span>
-        </Link>
-      </div>
+      {!isMobile && (
+        <div className={styles.colorsTitleLabel}>
+          <h3 className={styles.dimensionsHeaderTitle}>
+            <FormattedMessage id="homepage.configurator.colors.title" />
+          </h3>
+          <Link
+            href="/blog/colors"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.dimensionsTooltipContainer}
+            title="Cum să alegi corect culoarea?"
+            aria-describedby="dims-tooltip"
+            aria-label="Cum să alegi corect culoarea?"
+          >
+            <HelpOutlineIcon color="action" sx={{ fontSize: 20 }} />
+            <span id="dims-tooltip" className={styles.dimensionsTooltipText}>
+              <FormattedMessage id="colors.title.tooltip" />
+            </span>
+          </Link>
+        </div>
+      )}
       <SelectColor
-        colors={isMobile ? FULL_PALETTE : configuration.colors}
+        colors={is3DVersion ? FULL_PALETTE : configuration.colors}
         defaultSelected={configuration.selectedColor}
         onChange={(value) => configuration.setSelectedColor(value)}
-        size={isMobile ? 'small' : 'medium'}
-        showAdd={!isMobile}
+        size={isMobile ? 'medium' : 'medium'}
+        showAdd={!is3DVersion}
         colorCTA={<ColorCTA trackingId="color_cta_configurator" />}
       />
     </label>

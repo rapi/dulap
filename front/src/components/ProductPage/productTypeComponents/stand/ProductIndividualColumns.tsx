@@ -13,6 +13,8 @@ import { ColumnConfigurationIcon } from './ColumnConfigurationIcons'
 import { useColumnConfigurationConstraints } from '~/hooks/useColumnConfigurationConstraints'
 import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
 import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSelect'
+import { use3DVersion } from '~/hooks/use3DVersion'
+import { useMediaQuery } from '@mui/material'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
@@ -192,34 +194,39 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     newConfigurations[columnIndex] = value
     setColumnConfigurations(newConfigurations)
   }
+  const is3DVersion = use3DVersion()
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
-    <div>
-      <p className={styles.sectionTitle}>
-        <FormattedMessage
-          id="homepage.configurator.individualColumns.title"
-          defaultMessage="Configure individual sections"
-        />
-      </p>
+    <label className={styles.individualColumnsLabel}>
+      {!isMobile && (
+        <p className={styles.sectionTitle}>
+          <FormattedMessage
+            id="homepage.configurator.individualColumns.title"
+            defaultMessage="Configure individual sections"
+          />
+        </p>
+      )}
+      <div className={styles.furnitureConfig}>
+        {selectedColumns > 1 && (
+          <label className={styles.furnitureLabel}>
+            <ButtonSelect
+              options={columnTabOptions}
+              defaultSelected={String(activeTab)}
+              onChange={(value) => setActiveTab(parseInt(value))}
+            />
+          </label>
+        )}
 
-      {selectedColumns > 1 && (
         <label className={styles.furnitureLabel}>
-          <ButtonSelect
-            options={columnTabOptions}
-            defaultSelected={String(activeTab)}
-            onChange={(value) => setActiveTab(parseInt(value))}
+          <ButtonImageSelect<ColumnConfigurationType>
+            ariaLabel="Column configuration"
+            options={imageSelectOptions}
+            value={currentValue}
+            onChange={(v) => handleColumnTypeChange(currentColumnIndex, v)}
           />
         </label>
-      )}
-
-      <label className={styles.furnitureLabel}>
-        <ButtonImageSelect<ColumnConfigurationType>
-          ariaLabel="Column configuration"
-          options={imageSelectOptions}
-          value={currentValue}
-          onChange={(v) => handleColumnTypeChange(currentColumnIndex, v)}
-        />
-      </label>
-    </div>
+      </div>
+    </label>
   )
 }

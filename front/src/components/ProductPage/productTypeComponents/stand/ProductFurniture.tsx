@@ -7,6 +7,8 @@ import {
   ButtonImageSelect,
   ButtonImageOption,
 } from '~/components/ButtonImageSelect/ButtonImageSelect'
+import { use3DVersion } from '~/hooks/use3DVersion'
+import { useMediaQuery } from '@mui/material'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
@@ -62,6 +64,8 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
 }) => {
   const intl = useIntl()
   const [isModalOpen3, setIsModalOpen3] = useState(false)
+  const is3DVersion = use3DVersion()
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   // Filter opening options based on 3D availability
   const availableOpeningOptions = configuration.is3DEnabled
@@ -72,15 +76,17 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
 
   return (
     <div>
-      <p className={styles.furnitureHeaderTitle}>
-        <FormattedMessage id="homepage.configurator.fittings.title" />
-      </p>
-
+      {!isMobile && (
+        <p className={styles.furnitureHeaderTitle}>
+          <FormattedMessage id="homepage.configurator.fittings.title" />
+        </p>
+      )}
       <label className={styles.furnitureLabel}>
-        <div className={styles.furnitureTitle}>
-          <FormattedMessage id="homepage.configurator.fittings.handleType" />
-        </div>
-
+        {!isMobile && (
+          <div className={styles.furnitureTitle}>
+            <FormattedMessage id="homepage.configurator.fittings.handleType" />
+          </div>
+        )}
         <div className={styles.openingTypeContent}>
           {predefinedValue?.openingType ? (
             intl.formatMessage({ id: predefinedValue.openingType })

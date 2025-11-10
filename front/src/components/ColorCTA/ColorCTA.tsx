@@ -54,7 +54,7 @@ const ColorCTA: React.FC<ColorCTAProps> = ({
   }
 
   return (
-    <p className={className} style={{ fontSize: 14, lineHeight: 1 }}>
+    <p className={className} style={{ fontSize: 13, lineHeight: 1 }}>
       <FormattedMessage id="colorCTA.p1" />{' '}
       <Link
         href={targetHref}
