@@ -13,7 +13,7 @@ import {
   getFirstValidColumnCount,
 } from '~/utils/columnValidation'
 import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
-import { isConfigurationValidForBedside, getValidColumnCountsForBedside } from '~/config/columnConstraints.bedside'
+import { isConfigurationValidForBedside } from '~/config/columnConstraints.bedside'
 
 // Get bedside constraints
 const CONSTRAINTS = getConstraints('bedside')
