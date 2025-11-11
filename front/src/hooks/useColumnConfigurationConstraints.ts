@@ -1,21 +1,26 @@
 import { useMemo } from 'react'
-import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
 import { getValidConfigurations, isConfigurationValid } from '~/config/columnConstraints'
+
+export type FurnitureProductType = 'stand' | 'bedside' | 'tv-stand'
 
 /**
  * Hook to evaluate column configuration constraints
  * 
  * Returns which configurations are valid for given column dimensions
+ * and product type (filters out split doors for TV stands)
  * 
  * @param columnWidth - Width of a single column
  * @param columnHeight - Height of the column
  * @param columnDepth - Depth of the column
+ * @param productType - Type of furniture product (optional, for product-specific filtering)
  * @returns Object containing valid configurations and validation function
  */
 export function useColumnConfigurationConstraints(
   columnWidth: number,
   columnHeight: number,
-  columnDepth: number
+  columnDepth: number,
+  productType?: FurnitureProductType
 ) {
   const dimensions = useMemo(
     () => ({
@@ -39,10 +44,22 @@ export function useColumnConfigurationConstraints(
     [dimensions]
   )
 
-  // Get all configurations (valid and invalid)
+  // Get all configurations (valid and invalid), with product-specific filtering
   const allConfigurations = useMemo(
-    () => Object.values(ColumnConfigurationType),
-    []
+    () => {
+      const allTypes = Object.values(ColumnConfigurationType)
+      
+      // For TV stands, exclude split door configurations (doorCount === 2)
+      if (productType === 'tv-stand') {
+        return allTypes.filter((type) => {
+          const metadata = getConfigurationMetadata(type)
+          return metadata.doorCount !== 2 // Exclude split doors
+        })
+      }
+      
+      return allTypes
+    },
+    [productType]
   )
 
   return {

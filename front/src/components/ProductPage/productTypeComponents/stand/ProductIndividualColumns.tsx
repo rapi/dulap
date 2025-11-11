@@ -13,7 +13,7 @@ import {
 import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { ColumnConfigurationIcon } from './ColumnConfigurationIcons'
 import { DoorOpeningSideSelector } from './DoorOpeningSideSelector'
-import { useColumnConfigurationConstraints } from '~/hooks/useColumnConfigurationConstraints'
+import { useColumnConfigurationConstraints, FurnitureProductType } from '~/hooks/useColumnConfigurationConstraints'
 import { useActiveColumnTab } from '~/hooks/useActiveColumnTab'
 import { useColumnConfigurationSync } from '~/hooks/useColumnConfigurationSync'
 import { synchronizeDrawerCounts } from '~/utils/columnConfigurationUtils'
@@ -31,6 +31,8 @@ export type ProductIndividualColumnsComponent = {
   columnWidth: number
   columnHeight: number
   columnDepth: number
+  // Product type for product-specific filtering (e.g., TV stands don't have split doors)
+  productType?: FurnitureProductType
 }
 
 interface ProductIndividualColumnsProps {
@@ -50,7 +52,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   onActiveTabChange,
   onActiveColumnChange,
 }) => {
-  const { selectedColumns, columnConfigurations, setColumnConfigurations, columnWidth, columnHeight, columnDepth } =
+  const { selectedColumns, columnConfigurations, setColumnConfigurations, columnWidth, columnHeight, columnDepth, productType } =
     configuration
 
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -69,8 +71,8 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     }
   }, [currentColumnIndex, onActiveColumnChange])
 
-  // Get valid configurations based on current dimensions
-  const { allConfigurations, isValid } = useColumnConfigurationConstraints(columnWidth, columnHeight, columnDepth)
+  // Get valid configurations based on current dimensions and product type
+  const { allConfigurations, isValid } = useColumnConfigurationConstraints(columnWidth, columnHeight, columnDepth, productType)
 
   // Auto-sync configurations when dimensions change
   useColumnConfigurationSync(

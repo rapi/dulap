@@ -322,6 +322,7 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
       columnWidth,
       columnHeight,
       columnDepth,
+      productType: 'bedside' as const,
     },
     {
       type: 'furniture',

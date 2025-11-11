@@ -92,7 +92,7 @@ export interface ProductConstraints {
 
 export const STAND_CONSTRAINTS: ProductConstraints = {
   dimensions: {
-    width: { min: 50, max: 270, default: 80, unit: 'cm' },
+    width: { min: 50, max: 240, default: 80, unit: 'cm' },
     height: { min: 70, max: 130, default: 70, unit: 'cm' },
     depth: { min: 35, max: 50, default: 40, unit: 'cm' },
     plintHeight: { min: 2, max: 10, default: 2, unit: 'cm' },
@@ -240,7 +240,7 @@ export const BEDSIDE_CONSTRAINTS: ProductConstraints = {
 
 export const TV_STAND_CONSTRAINTS: ProductConstraints = {
   dimensions: {
-    width: { min: 80, max: 240, default: 160, unit: 'cm' },
+    width: { min: 80, max: 270, default: 160, unit: 'cm' },
     height: { min: 30, max: 60, default: 45, unit: 'cm' },
     depth: { min: 35, max: 50, default: 40, unit: 'cm' },
     plintHeight: { min: 2, max: 10, default: 2, unit: 'cm' },
@@ -266,7 +266,7 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
 
   columns: {
     min: 1,
-    max: 10,
+    max: 4,
     default: 2,
     allowCustomConfiguration: true,
   },

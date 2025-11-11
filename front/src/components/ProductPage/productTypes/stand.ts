@@ -284,6 +284,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       columnWidth,
       columnHeight,
       columnDepth,
+      productType: 'stand' as const,
     },
     {
       type: 'furniture',

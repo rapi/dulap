@@ -9,14 +9,26 @@ import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { getConstraints } from '~/config/furnitureConstraints'
 import { useFurnitureConstraints } from '~/hooks/useFurnitureConstraints'
 import {
-  getValidColumnCounts,
   getFirstValidColumnCount,
 } from '~/utils/columnValidation'
 import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
-import { isConfigurationValid } from '~/config/columnConstraints'
+import { isConfigurationValid, getValidColumnCountsForTVStand } from '~/config/columnConstraints'
 
 // Get TV stand constraints
 const CONSTRAINTS = getConstraints('tv-stand')
+
+// Helper function to check if configuration is valid for TV stand
+// (excludes split doors with doorCount === 2)
+const isValidForTVStand = (
+  type: ColumnConfigurationType,
+  dimensions: { width: number; height: number; depth: number }
+): boolean => {
+  if (!isConfigurationValid(type, dimensions)) {
+    return false
+  }
+  const metadata = getConfigurationMetadata(type)
+  return metadata.doorCount !== 2 // Exclude split doors
+}
 
 export const DEFAULT_TV_STAND = {
   width: CONSTRAINTS.dimensions.width.default,
@@ -113,13 +125,14 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
           // Always try to preserve existing configuration first
           if (prev[i]) {
             // Check if it's still valid with new dimensions
-            if (isConfigurationValid(prev[i].type, dimensions)) {
+            if (isValidForTVStand(prev[i].type, dimensions)) {
               return prev[i] // Preserve both type and doorOpeningSide
             }
             // If not valid, find nearest alternative (preserve doorOpeningSide if applicable)
             const nearestType = findNearestAvailableConfiguration(
               prev[i].type,
-              dimensions
+              dimensions,
+              'tv-stand'
             ) || prev[i].type
             
             const metadata = getConfigurationMetadata(nearestType)
@@ -134,7 +147,8 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
           const defaultType = ColumnConfigurationType.DRAWERS_2
           const nearestType = findNearestAvailableConfiguration(
             defaultType,
-            dimensions
+            dimensions,
+            'tv-stand'
           ) || defaultType
           
           return { type: nearestType }
@@ -155,7 +169,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     setColumnConfigurations((prev) => {
       // Check if any configuration needs updating
       const needsUpdate = prev.some(
-        (config) => !isConfigurationValid(config.type, dimensions)
+        (config) => !isValidForTVStand(config.type, dimensions)
       )
 
       if (!needsUpdate) {
@@ -164,13 +178,14 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
 
       // Update only invalid configurations (preserve doorOpeningSide)
       return prev.map((config) => {
-        if (isConfigurationValid(config.type, dimensions)) {
+        if (isValidForTVStand(config.type, dimensions)) {
           return config // Keep valid ones
         }
         // Replace invalid with nearest available (preserve doorOpeningSide if applicable)
         const nearestType = findNearestAvailableConfiguration(
           config.type,
-          dimensions
+          dimensions,
+          'tv-stand'
         ) || config.type
         
         const metadata = getConfigurationMetadata(nearestType)
@@ -194,10 +209,10 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
   )
   const columnDepth = depth
 
-  // Check which column counts are valid based on dimensions
+  // Check which column counts are valid based on TV stand width rules
   const validColumnCounts = useMemo(
-    () => getValidColumnCounts(width, height, depth, plintHeight),
-    [width, height, depth, plintHeight]
+    () => getValidColumnCountsForTVStand(width),
+    [width]
   )
 
   // Create column options with disabled states
@@ -329,6 +344,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       columnWidth,
       columnHeight,
       columnDepth,
+      productType: 'tv-stand' as const,
     },
     {
       type: 'furniture',
