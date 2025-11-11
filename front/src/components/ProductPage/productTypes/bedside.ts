@@ -13,7 +13,7 @@ import {
   getFirstValidColumnCount,
 } from '~/utils/columnValidation'
 import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
-import { isConfigurationValid } from '~/config/columnConstraints'
+import { isConfigurationValidForBedside, getValidColumnCountsForBedside } from '~/config/columnConstraints.bedside'
 
 // Get bedside constraints
 const CONSTRAINTS = getConstraints('bedside')
@@ -107,13 +107,14 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
           // Always try to preserve existing configuration first
           if (prev[i]) {
             // Check if it's still valid with new dimensions
-            if (isConfigurationValid(prev[i].type, dimensions)) {
+            if (isConfigurationValidForBedside(prev[i].type, dimensions)) {
               return prev[i] // Preserve both type and doorOpeningSide
             }
             // If not valid, find nearest alternative (preserve doorOpeningSide if applicable)
             const nearestType = findNearestAvailableConfiguration(
               prev[i].type,
-              dimensions
+              dimensions,
+              'bedside'
             ) || prev[i].type
             
             const metadata = getConfigurationMetadata(nearestType)
@@ -128,7 +129,8 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
           const defaultType = ColumnConfigurationType.DRAWERS_2
           const nearestType = findNearestAvailableConfiguration(
             defaultType,
-            dimensions
+            dimensions,
+            'bedside'
           ) || defaultType
           
           return { type: nearestType }
@@ -149,7 +151,7 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
     setColumnConfigurations((prev) => {
       // Check if any configuration needs updating
       const needsUpdate = prev.some(
-        (config) => !isConfigurationValid(config.type, dimensions)
+        (config) => !isConfigurationValidForBedside(config.type, dimensions)
       )
 
       if (!needsUpdate) {
@@ -158,13 +160,14 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
 
       // Update only invalid configurations (preserve doorOpeningSide)
       return prev.map((config) => {
-        if (isConfigurationValid(config.type, dimensions)) {
+        if (isConfigurationValidForBedside(config.type, dimensions)) {
           return config // Keep valid ones
         }
         // Replace invalid with nearest available (preserve doorOpeningSide if applicable)
         const nearestType = findNearestAvailableConfiguration(
           config.type,
-          dimensions
+          dimensions,
+          'bedside'
         ) || config.type
         
         const metadata = getConfigurationMetadata(nearestType)

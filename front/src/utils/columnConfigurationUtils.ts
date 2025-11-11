@@ -7,6 +7,26 @@ import {
 import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { findNearestAvailableConfiguration } from './columnConfigurationFallback'
 import { isConfigurationValid } from '~/config/columnConstraints'
+import { isConfigurationValidForStand } from '~/config/columnConstraints.stand'
+import { isConfigurationValidForTVStand } from '~/config/columnConstraints.tvstand'
+import { isConfigurationValidForBedside } from '~/config/columnConstraints.bedside'
+import { FurnitureProductType } from '~/hooks/useColumnConfigurationConstraints'
+
+/**
+ * Get the appropriate validation function based on product type
+ */
+function getValidationFunction(productType?: FurnitureProductType) {
+  switch (productType) {
+    case 'stand':
+      return isConfigurationValidForStand
+    case 'tv-stand':
+      return isConfigurationValidForTVStand
+    case 'bedside':
+      return isConfigurationValidForBedside
+    default:
+      return isConfigurationValid
+  }
+}
 
 /**
  * Maps drawer count to corresponding ColumnConfigurationType
@@ -40,16 +60,19 @@ export function getTargetDrawerCountFromExisting(
  */
 export function createConfigurationForExistingColumn(
   existingConfig: ColumnConfigurationWithOptions,
-  dimensions: { width: number; height: number; depth: number }
+  dimensions: { width: number; height: number; depth: number },
+  productType?: FurnitureProductType
 ): ColumnConfigurationWithOptions {
+  const isValid = getValidationFunction(productType)
+  
   // If still valid, preserve the configuration
-  if (isConfigurationValid(existingConfig.type, dimensions)) {
+  if (isValid(existingConfig.type, dimensions)) {
     return existingConfig
   }
 
   // Find nearest valid alternative
   const nearestType =
-    findNearestAvailableConfiguration(existingConfig.type, dimensions) ||
+    findNearestAvailableConfiguration(existingConfig.type, dimensions, productType) ||
     existingConfig.type
 
   const metadata = getConfigurationMetadata(nearestType)
@@ -65,7 +88,8 @@ export function createConfigurationForExistingColumn(
 export function createConfigurationForNewColumn(
   existingConfigurations: ColumnConfigurationWithOptions[],
   dimensions: { width: number; height: number; depth: number },
-  defaultDrawerCount: number = 3
+  defaultDrawerCount: number = 3,
+  productType?: FurnitureProductType
 ): ColumnConfigurationWithOptions {
   const targetDrawerCount = getTargetDrawerCountFromExisting(
     existingConfigurations,
@@ -74,7 +98,7 @@ export function createConfigurationForNewColumn(
 
   const defaultType = DRAWER_TYPE_MAP[targetDrawerCount] || ColumnConfigurationType.DRAWERS_3
   const nearestType =
-    findNearestAvailableConfiguration(defaultType, dimensions) || defaultType
+    findNearestAvailableConfiguration(defaultType, dimensions, productType) || defaultType
 
   return { type: nearestType }
 }
@@ -84,10 +108,13 @@ export function createConfigurationForNewColumn(
  */
 export function validateAndUpdateConfigurations(
   configurations: ColumnConfigurationWithOptions[],
-  dimensions: { width: number; height: number; depth: number }
+  dimensions: { width: number; height: number; depth: number },
+  productType?: FurnitureProductType
 ): ColumnConfigurationWithOptions[] {
+  const isValid = getValidationFunction(productType)
+  
   const needsUpdate = configurations.some(
-    (config) => !isConfigurationValid(config.type, dimensions)
+    (config) => !isValid(config.type, dimensions)
   )
 
   if (!needsUpdate) {
@@ -95,12 +122,12 @@ export function validateAndUpdateConfigurations(
   }
 
   return configurations.map((config) => {
-    if (isConfigurationValid(config.type, dimensions)) {
+    if (isValid(config.type, dimensions)) {
       return config
     }
 
     const nearestType =
-      findNearestAvailableConfiguration(config.type, dimensions) || config.type
+      findNearestAvailableConfiguration(config.type, dimensions, productType) || config.type
 
     const metadata = getConfigurationMetadata(nearestType)
     const doorOpeningSide =

@@ -1,6 +1,25 @@
-import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { isConfigurationValid } from '~/config/columnConstraints'
+import { isConfigurationValidForStand } from '~/config/columnConstraints.stand'
+import { isConfigurationValidForTVStand } from '~/config/columnConstraints.tvstand'
+import { isConfigurationValidForBedside } from '~/config/columnConstraints.bedside'
 import { FurnitureProductType } from '~/hooks/useColumnConfigurationConstraints'
+
+/**
+ * Get the appropriate validation function based on product type
+ */
+function getValidationFunction(productType?: FurnitureProductType) {
+  switch (productType) {
+    case 'stand':
+      return isConfigurationValidForStand
+    case 'tv-stand':
+      return isConfigurationValidForTVStand
+    case 'bedside':
+      return isConfigurationValidForBedside
+    default:
+      return isConfigurationValid
+  }
+}
 
 /**
  * Find the first available configuration when the current one becomes invalid
@@ -8,7 +27,7 @@ import { FurnitureProductType } from '~/hooks/useColumnConfigurationConstraints'
  * 
  * @param currentType The currently selected configuration that became invalid
  * @param dimensions The column dimensions to validate against
- * @param productType Optional product type for product-specific filtering (e.g., tv-stand excludes split doors)
+ * @param productType Optional product type for product-specific validation (stand, tv-stand, etc.)
  * @returns The first valid configuration, or null if none available
  */
 export function findNearestAvailableConfiguration(
@@ -16,23 +35,16 @@ export function findNearestAvailableConfiguration(
   dimensions: { width: number; height: number; depth: number },
   productType?: FurnitureProductType
 ): ColumnConfigurationType | null {
-  // Filter function for product-specific exclusions
-  const isAllowedForProduct = (type: ColumnConfigurationType): boolean => {
-    if (productType === 'tv-stand') {
-      const metadata = getConfigurationMetadata(type)
-      return metadata.doorCount !== 2 // Exclude split doors for TV stands
-    }
-    return true
-  }
+  const isValid = getValidationFunction(productType)
 
-  // If current is still valid and allowed for product, return it
-  if (isConfigurationValid(currentType, dimensions) && isAllowedForProduct(currentType)) {
+  // If current is still valid, return it
+  if (isValid(currentType, dimensions)) {
     return currentType
   }
 
-  // Find and return the first valid configuration that's allowed for this product
+  // Find and return the first valid configuration
   const firstValid = Object.values(ColumnConfigurationType).find(
-    type => isConfigurationValid(type, dimensions) && isAllowedForProduct(type)
+    type => isValid(type, dimensions)
   )
   
   return firstValid || null

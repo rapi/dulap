@@ -12,23 +12,10 @@ import {
   getFirstValidColumnCount,
 } from '~/utils/columnValidation'
 import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
-import { isConfigurationValid, getValidColumnCountsForTVStand } from '~/config/columnConstraints'
+import { isConfigurationValidForTVStand, getValidColumnCountsForTVStand } from '~/config/columnConstraints.tvstand'
 
 // Get TV stand constraints
 const CONSTRAINTS = getConstraints('tv-stand')
-
-// Helper function to check if configuration is valid for TV stand
-// (excludes split doors with doorCount === 2)
-const isValidForTVStand = (
-  type: ColumnConfigurationType,
-  dimensions: { width: number; height: number; depth: number }
-): boolean => {
-  if (!isConfigurationValid(type, dimensions)) {
-    return false
-  }
-  const metadata = getConfigurationMetadata(type)
-  return metadata.doorCount !== 2 // Exclude split doors
-}
 
 export const DEFAULT_TV_STAND = {
   width: CONSTRAINTS.dimensions.width.default,
@@ -125,7 +112,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
           // Always try to preserve existing configuration first
           if (prev[i]) {
             // Check if it's still valid with new dimensions
-            if (isValidForTVStand(prev[i].type, dimensions)) {
+            if (isConfigurationValidForTVStand(prev[i].type, dimensions)) {
               return prev[i] // Preserve both type and doorOpeningSide
             }
             // If not valid, find nearest alternative (preserve doorOpeningSide if applicable)
@@ -169,7 +156,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     setColumnConfigurations((prev) => {
       // Check if any configuration needs updating
       const needsUpdate = prev.some(
-        (config) => !isValidForTVStand(config.type, dimensions)
+        (config) => !isConfigurationValidForTVStand(config.type, dimensions)
       )
 
       if (!needsUpdate) {
@@ -178,7 +165,7 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
 
       // Update only invalid configurations (preserve doorOpeningSide)
       return prev.map((config) => {
-        if (isValidForTVStand(config.type, dimensions)) {
+        if (isConfigurationValidForTVStand(config.type, dimensions)) {
           return config // Keep valid ones
         }
         // Replace invalid with nearest available (preserve doorOpeningSide if applicable)

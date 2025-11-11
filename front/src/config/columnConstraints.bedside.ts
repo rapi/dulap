@@ -1,15 +1,17 @@
 import { ColumnConfigurationType, ColumnConfigurationConstraint } from '~/types/columnConfigurationTypes'
 
 /**
- * Constraint definitions for column configurations
+ * Constraint definitions for BEDSIDE (nightstand) column configurations
  * 
- * These rules determine which configurations are available based on
- * column dimensions (width, height, depth).
- * 
- * Add or modify constraints here to control configuration availability.
+ * Bedside tables are compact furniture pieces:
+ * - Width: 40-80 cm
+ * - Height: 30-60 cm
+ * - Depth: 35-50 cm
+ * - Usually single column
+ * - Typically 1-2 drawers or small doors
  */
 
-export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] = [
+export const BEDSIDE_COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] = [
   // ============ DRAWER CONSTRAINTS ============
   {
     configurationType: ColumnConfigurationType.DRAWERS_1,
@@ -49,8 +51,8 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
   // ============ SINGLE DOOR CONSTRAINTS ============
   {
     configurationType: ColumnConfigurationType.DOOR_1_SHELF,
-    minWidth: 40, // Doors need more width than drawers
-    maxWidth: 60,
+    minWidth: 40,
+    maxWidth: 80, // Bedside max width
     minHeight: 25,
     maxHeight: 60,
     minDepth: 25,
@@ -58,15 +60,15 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
   {
     configurationType: ColumnConfigurationType.DOOR_2_SHELVES,
     minWidth: 40,
-    maxWidth: 60,
+    maxWidth: 80,
     minHeight: 45,
-    maxHeight: 105,
+    maxHeight: 60, // Limited by bedside max height
     minDepth: 25,
   },
   {
     configurationType: ColumnConfigurationType.DOOR_3_SHELVES,
     minWidth: 40,
-    maxWidth: 60,
+    maxWidth: 80,
     minHeight: 80,
     maxHeight: 130,
     minDepth: 25,
@@ -74,23 +76,25 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
   {
     configurationType: ColumnConfigurationType.DOOR_4_SHELVES,
     minWidth: 40,
-    maxWidth: 60,
+    maxWidth: 80,
     minHeight: 105,
     minDepth: 25,
   },
   {
     configurationType: ColumnConfigurationType.DOOR_5_SHELVES,
     minWidth: 40,
-    maxWidth: 60,
+    maxWidth: 80,
     minHeight: 140,
     minDepth: 25,
   },
 
   // ============ SPLIT DOOR CONSTRAINTS ============
+  // Note: Split doors are generally not practical for bedside tables due to their compact size
+  // But keeping them available with restrictive constraints
   {
     configurationType: ColumnConfigurationType.DOOR_SPLIT_1_SHELF,
     minWidth: 61,
-    maxWidth: 100,
+    maxWidth: 80, // Limited by bedside max width
     minHeight: 25,
     maxHeight: 60,
     minDepth: 25,
@@ -98,15 +102,15 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
   {
     configurationType: ColumnConfigurationType.DOOR_SPLIT_2_SHELVES,
     minWidth: 61,
-    maxWidth: 100,
+    maxWidth: 80,
     minHeight: 45,
-    maxHeight: 105,
+    maxHeight: 60, // Limited by bedside max height
     minDepth: 25,
   },
   {
     configurationType: ColumnConfigurationType.DOOR_SPLIT_3_SHELVES,
     minWidth: 61,
-    maxWidth: 100,
+    maxWidth: 80,
     minHeight: 80,
     maxHeight: 130,
     minDepth: 25,
@@ -114,32 +118,31 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
   {
     configurationType: ColumnConfigurationType.DOOR_SPLIT_4_SHELVES,
     minWidth: 61,
-    maxWidth: 100,
+    maxWidth: 80,
     minHeight: 105,
     minDepth: 25,
   },
   {
     configurationType: ColumnConfigurationType.DOOR_SPLIT_5_SHELVES,
     minWidth: 61,
-    maxWidth: 100,
+    maxWidth: 80,
     minHeight: 140,
     minDepth: 25,
   },
 ]
 
 /**
- * Helper function to check if a configuration meets its constraints
+ * Helper function to check if a configuration meets bedside constraints
  */
-export function isConfigurationValid(
+export function isConfigurationValidForBedside(
   configurationType: ColumnConfigurationType,
   dimensions: { width: number; height: number; depth: number }
 ): boolean {
-  const constraint = COLUMN_CONFIGURATION_CONSTRAINTS.find(
+  const constraint = BEDSIDE_COLUMN_CONFIGURATION_CONSTRAINTS.find(
     (c) => c.configurationType === configurationType
   )
 
   if (!constraint) {
-    // If no constraint defined, allow by default
     return true
   }
 
@@ -178,15 +181,56 @@ export function isConfigurationValid(
 }
 
 /**
- * Get all valid configurations for given dimensions
+ * Get all valid configurations for given dimensions (bedside)
  */
-export function getValidConfigurations(dimensions: {
+export function getValidConfigurationsForBedside(dimensions: {
   width: number
   height: number
   depth: number
 }): ColumnConfigurationType[] {
   return Object.values(ColumnConfigurationType).filter((type) =>
-    isConfigurationValid(type, dimensions)
+    isConfigurationValidForBedside(type, dimensions)
   )
+}
+
+/**
+ * Get valid column counts for bedside based on total width
+ * 
+ * Bedside tables are typically single column units, but can support multiple columns
+ * 
+ * Rules:
+ * - 40-80 cm: 1 column (typical bedside)
+ * - 81-120 cm: 1-2 columns (wider bedside or small dresser)
+ * - 121-180 cm: 2 columns
+ * - 181-240 cm: 2-3 columns
+ * 
+ * @param totalWidth Total width of the bedside in cm
+ * @returns Object with column counts as keys and validity as boolean values
+ */
+export function getValidColumnCountsForBedside(totalWidth: number): Record<number, boolean> {
+  const validityMap: Record<number, boolean> = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+  }
+
+  if (totalWidth >= 40 && totalWidth <= 80) {
+    // 40-80 cm: 1 column (standard bedside)
+    validityMap[1] = true
+  } else if (totalWidth >= 81 && totalWidth <= 120) {
+    // 81-120 cm: 1-2 columns
+    validityMap[1] = true
+    validityMap[2] = true
+  } else if (totalWidth >= 121 && totalWidth <= 180) {
+    // 121-180 cm: 2 columns
+    validityMap[2] = true
+  } else if (totalWidth >= 181 && totalWidth <= 240) {
+    // 181-240 cm: 2-3 columns
+    validityMap[2] = true
+    validityMap[3] = true
+  }
+
+  return validityMap
 }
 

@@ -10,12 +10,12 @@ import {
   getValidColumnCounts,
   getFirstValidColumnCount,
 } from '~/utils/columnValidation'
-import { getValidColumnCountsForStand } from '~/config/columnConstraints'
 import {
   createConfigurationForExistingColumn,
   createConfigurationForNewColumn,
   validateAndUpdateConfigurations,
 } from '~/utils/columnConfigurationUtils'
+import { getValidColumnCountsForStand } from '~/config/columnConstraints.stand'
 import { mapColorToImageColor } from '~/utils/colorUtils'
 
 // Get stand constraints
@@ -120,9 +120,9 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
         .fill(null)
         .map((_, i) => {
           if (prev[i]) {
-            return createConfigurationForExistingColumn(prev[i], dimensions)
+            return createConfigurationForExistingColumn(prev[i], dimensions, 'stand')
           }
-          return createConfigurationForNewColumn(prev, dimensions)
+          return createConfigurationForNewColumn(prev, dimensions, 3, 'stand')
         })
 
       return newConfigs
@@ -138,7 +138,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     }
 
     setColumnConfigurations((prev) =>
-      validateAndUpdateConfigurations(prev, dimensions)
+      validateAndUpdateConfigurations(prev, dimensions, 'stand')
     )
   }, [width, height, depth, plintHeight, selectedColumns])
 
