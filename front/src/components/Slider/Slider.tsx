@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './Slider.module.css'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -22,6 +22,38 @@ export const Slider: React.FC<SliderProps> = ({
 }) => {
   const [sliderValue, setSliderValue] = useState(value.toString())
 
+  // Sync local state when value prop changes
+  useEffect(() => {
+    setSliderValue(value.toString())
+  }, [value])
+
+  // Round value to nearest step
+  const roundToStep = (val: number): number => {
+    return Math.round((val - min) / step) * step + min
+  }
+
+  // Calculate step positions for visual indicators
+  const getStepMarks = () => {
+    if (step <= 1 || step >= (max - min)) {
+      return [] // Don't show marks if step is invalid or too large
+    }
+    
+    const stepCount = Math.floor((max - min) / step)
+    // Limit to reasonable number of marks to avoid clutter
+    if (stepCount > 50) {
+      return [] // Too many steps, don't show marks
+    }
+    
+    const marks: number[] = []
+    for (let i = 0; i <= stepCount; i++) {
+      marks.push(min + i * step)
+    }
+    return marks
+  }
+
+  const stepMarks = getStepMarks()
+  const showMarks = stepMarks.length > 0
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = Number(e.target.value)
     setSliderValue(newValue.toString())
@@ -38,8 +70,14 @@ export const Slider: React.FC<SliderProps> = ({
   const handleBlur = () => {
     const numValue = Number(sliderValue)
     if (!isNaN(numValue) && numValue >= min && numValue <= max) {
+      // Round to nearest step
+      const roundedValue = roundToStep(numValue)
+      // Clamp to min/max after rounding
+      const clampedValue = Math.max(min, Math.min(max, roundedValue))
+      setSliderValue(clampedValue.toString())
+  
       if (onChange) {
-        onChange(numValue)
+        onChange(clampedValue)
       }
     } else {
       setSliderValue(value.toString())
@@ -98,15 +136,31 @@ export const Slider: React.FC<SliderProps> = ({
           }
         }}
       />
-      <input
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={sliderValue}
-        onChange={handleChange}
-        className={styles.slider}
-      />
+      <div className={styles.sliderWrapper}>
+        {showMarks && (
+          <div className={styles.stepMarks}>
+            {stepMarks.map((markValue, index) => {
+              const percentage = ((markValue - min) / (max - min)) * 100
+              return (
+                <span
+                  key={index}
+                  className={styles.stepMark}
+                  style={{ left: `${percentage}%` }}
+                />
+              )
+            })}
+          </div>
+        )}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={Number(sliderValue) || value}
+          onChange={handleChange}
+          className={showMarks ? styles.sliderWithMarks : styles.slider}
+        />
+      </div>
     </div>
   )
 }
