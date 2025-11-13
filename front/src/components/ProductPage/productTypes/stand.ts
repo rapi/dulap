@@ -2,7 +2,10 @@ import { ProductComponent } from '~/components/ProductPage/StandProductPage'
 import { useState, useEffect, useMemo } from 'react'
 import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
-import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
+import {
+  ColumnConfigurationType,
+  getConfigurationMetadata,
+} from '~/types/columnConfigurationTypes'
 import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { getConstraints } from '~/config/furnitureConstraints'
 import { useFurnitureConstraints } from '~/hooks/useFurnitureConstraints'
@@ -40,9 +43,9 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [selectedColumns, setSelectedColumns] = useState(
     CONSTRAINTS.columns.default
   )
-  const [columnConfigurations, setColumnConfigurations] = useState<ColumnConfigurationWithOptions[]>([
-    { type: ColumnConfigurationType.DRAWERS_3 }
-  ])
+  const [columnConfigurations, setColumnConfigurations] = useState<
+    ColumnConfigurationWithOptions[]
+  >([{ type: ColumnConfigurationType.DRAWERS_3 }])
   const [selectedColor, setSelectedColor] = useState(
     DEFAULT_STAND.selectedColor
   )
@@ -156,11 +159,16 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   // Check which column counts are valid based on dimensions AND stand-specific width rules
   const validColumnCounts = useMemo(() => {
     // Get valid counts based on column dimensions (width, height, depth)
-    const dimensionBasedCounts = getValidColumnCounts(width, height, depth, plintHeight)
-    
+    const dimensionBasedCounts = getValidColumnCounts(
+      width,
+      height,
+      depth,
+      plintHeight
+    )
+
     // Get valid counts based on stand width rules
     const standWidthBasedCounts = getValidColumnCountsForStand(width)
-    
+
     // Combine both: a count is valid only if it passes BOTH checks
     const combined: Record<number, boolean> = {
       1: dimensionBasedCounts[1] && standWidthBasedCounts[1],
@@ -168,7 +176,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       3: dimensionBasedCounts[3] && standWidthBasedCounts[3],
       4: dimensionBasedCounts[4] && standWidthBasedCounts[4],
     }
-    
+
     return combined
   }, [width, height, depth, plintHeight])
 
@@ -284,7 +292,6 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       columnWidth,
       columnHeight,
       columnDepth,
-      productType: 'stand' as const,
     },
     {
       type: 'furniture',

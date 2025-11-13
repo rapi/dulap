@@ -39,7 +39,7 @@ export const DEFAULT_WARDROBE = {
   selectedColor: colorHexCodes[ColorName.White], // White (the first one from the list)
 }
 
-export const WardrobeProductConfiguration: () => ProductComponent[] = () => {
+export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(200)
   const [height, setHeight] = useState(260)
   const [depth, setDepth] = useState(50)

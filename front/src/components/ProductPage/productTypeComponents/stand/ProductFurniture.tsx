@@ -27,7 +27,7 @@ export type ProductFurniturePredefinedValue = {
   hinges?:
     | 'homepage.configurator.fittings.hinges.options.1'
     | 'homepage.configurator.fittings.hinges.options.2'
-  guides:
+  guides?:
     | 'homepage.configurator.fittings.guides.options.1'
     | 'homepage.configurator.fittings.guides.options.2'
 }

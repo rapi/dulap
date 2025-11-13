@@ -1,7 +1,10 @@
 import React, { FC, useMemo, useCallback, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useMediaQuery } from '@mui/material'
-import { ButtonOptionsType, ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
+import {
+  ButtonOptionsType,
+  ButtonSelect,
+} from '~/components/ButtonSelect/ButtonSelect'
 import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import {
@@ -13,7 +16,10 @@ import {
 import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { ColumnConfigurationIcon } from './ColumnConfigurationIcons'
 import { DoorOpeningSideSelector } from './DoorOpeningSideSelector'
-import { useColumnConfigurationConstraints, FurnitureProductType } from '~/hooks/useColumnConfigurationConstraints'
+import {
+  useColumnConfigurationConstraints,
+  FurnitureProductType,
+} from '~/hooks/useColumnConfigurationConstraints'
 import { useActiveColumnTab } from '~/hooks/useActiveColumnTab'
 import { useColumnConfigurationSync } from '~/hooks/useColumnConfigurationSync'
 import { synchronizeDrawerCounts } from '~/utils/columnConfigurationUtils'
@@ -25,7 +31,9 @@ export type ProductIndividualColumnsComponent = {
   setColumnConfigurations: (
     configurations:
       | ColumnConfigurationWithOptions[]
-      | ((prev: ColumnConfigurationWithOptions[]) => ColumnConfigurationWithOptions[])
+      | ((
+          prev: ColumnConfigurationWithOptions[]
+        ) => ColumnConfigurationWithOptions[])
   ) => void
   // Column dimensions for constraint evaluation
   columnWidth: number
@@ -52,8 +60,15 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   onActiveTabChange,
   onActiveColumnChange,
 }) => {
-  const { selectedColumns, columnConfigurations, setColumnConfigurations, columnWidth, columnHeight, columnDepth, productType } =
-    configuration
+  const {
+    selectedColumns,
+    columnConfigurations,
+    setColumnConfigurations,
+    columnWidth,
+    columnHeight,
+    columnDepth,
+    productType,
+  } = configuration
 
   const isMobile = useMediaQuery('(max-width: 768px)')
 
@@ -72,7 +87,12 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   }, [currentColumnIndex, onActiveColumnChange])
 
   // Get valid configurations based on current dimensions and product type
-  const { allConfigurations, isValid } = useColumnConfigurationConstraints(columnWidth, columnHeight, columnDepth, productType)
+  const { allConfigurations, isValid } = useColumnConfigurationConstraints(
+    columnWidth,
+    columnHeight,
+    columnDepth,
+    productType
+  )
 
   // Auto-sync configurations when dimensions change
   useColumnConfigurationSync(
@@ -88,7 +108,10 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   const handleColumnTypeChange = useCallback(
     (columnIndex: number, value: ColumnConfigurationType) => {
       const metadata = getConfigurationMetadata(value)
-      const doorOpeningSide = metadata.doorCount === 1 ? columnConfigurations[columnIndex]?.doorOpeningSide || 'left' : undefined
+      const doorOpeningSide =
+        metadata.doorCount === 1
+          ? columnConfigurations[columnIndex]?.doorOpeningSide || 'left'
+          : undefined
 
       let newConfigurations = [...columnConfigurations]
       newConfigurations[columnIndex] = { type: value, doorOpeningSide }
@@ -96,7 +119,12 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
       // Auto-sync drawer counts: synchronize all columns with drawers to match the selected drawer count
       if (hasDrawers(value)) {
         const newDrawerCount = getDrawerCount(value)
-        newConfigurations = synchronizeDrawerCounts(newConfigurations, columnIndex, newDrawerCount, isValid)
+        newConfigurations = synchronizeDrawerCounts(
+          newConfigurations,
+          columnIndex,
+          newDrawerCount,
+          isValid
+        )
       }
 
       setColumnConfigurations(newConfigurations)
@@ -113,7 +141,10 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
 
         // Ensure we have a valid configuration with a type
         if (!currentConfig || !currentConfig.type) {
-          console.warn('Cannot update door opening side: configuration missing type', { columnIndex, currentConfig })
+          console.warn(
+            'Cannot update door opening side: configuration missing type',
+            { columnIndex, currentConfig }
+          )
           return prev
         }
 
@@ -143,7 +174,12 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     () =>
       Array.from({ length: selectedColumns }).map((_, index) => ({
         value: String(index),
-        label: <FormattedMessage id="homepage.configurator.individualColumns.column" values={{ number: index + 1 }} />,
+        label: (
+          <FormattedMessage
+            id="homepage.configurator.individualColumns.column"
+            values={{ number: index + 1 }}
+          />
+        ),
       })),
     [selectedColumns]
   )
@@ -153,8 +189,15 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     () =>
       configurationOptions.map((option) => ({
         value: option.type,
-        content: <ColumnConfigurationIcon type={option.type} width={60} height={75} />,
-        label: <FormattedMessage id={option.metadata.label} defaultMessage={option.metadata.description} />,
+        content: (
+          <ColumnConfigurationIcon type={option.type} width={60} height={75} />
+        ),
+        label: (
+          <FormattedMessage
+            id={option.metadata.label}
+            defaultMessage={option.metadata.description}
+          />
+        ),
         title: option.metadata.description,
       })),
     [configurationOptions]
@@ -168,7 +211,10 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     <label className={styles.individualColumnsLabel}>
       {!isMobile && (
         <p className={styles.sectionTitle}>
-          <FormattedMessage id="homepage.configurator.individualColumns.title" defaultMessage="Configure individual sections" />
+          <FormattedMessage
+            id="homepage.configurator.individualColumns.title"
+            defaultMessage="Configure individual sections"
+          />
         </p>
       )}
 
@@ -176,7 +222,11 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
         {/* Column tabs (only show if multiple columns) */}
         {selectedColumns > 1 && (
           <label className={styles.furnitureLabel}>
-            <ButtonSelect options={columnTabOptions} defaultSelected={String(activeTab)} onChange={(value) => setActiveTab(parseInt(value))} />
+            <ButtonSelect
+              options={columnTabOptions}
+              defaultSelected={String(activeTab)}
+              onChange={(value) => setActiveTab(parseInt(value))}
+            />
           </label>
         )}
 
