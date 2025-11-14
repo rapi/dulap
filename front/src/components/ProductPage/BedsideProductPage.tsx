@@ -10,7 +10,6 @@ import {
   ProductColorsComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductColors'
 import {
-  ProductSections,
   ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
 import {
@@ -91,7 +90,6 @@ export const ProductPage: FC<ProductPageProps> = ({
 }) => {
   const { addItem } = useCart()
   const isBedside3D = use3DVersion()
-  const isStand3D = use3DVersion()
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
   const deselectColumnRef = useRef<(() => void) | null>(null)
@@ -110,13 +108,6 @@ export const ProductPage: FC<ProductPageProps> = ({
           <ProductColors
             configuration={component}
             predefinedValue={values?.colors ?? undefined}
-          />
-        )
-      case 'sections':
-        return isBedside3D ? null : (
-          <ProductSections
-            configuration={component}
-            predefinedValue={values?.sections ?? undefined}
           />
         )
       case 'columns':

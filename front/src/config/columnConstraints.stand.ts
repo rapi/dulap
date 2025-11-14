@@ -1,15 +1,13 @@
 import { ColumnConfigurationType, ColumnConfigurationConstraint } from '~/types/columnConfigurationTypes'
 
 /**
- * Constraint definitions for column configurations
+ * Constraint definitions for STAND (chest of drawers) column configurations
  * 
  * These rules determine which configurations are available based on
- * column dimensions (width, height, depth).
- * 
- * Add or modify constraints here to control configuration availability.
+ * column dimensions (width, height, depth) for regular stands.
  */
 
-export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] = [
+export const STAND_COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] = [
   // ============ DRAWER CONSTRAINTS ============
   {
     configurationType: ColumnConfigurationType.DRAWERS_1,
@@ -49,7 +47,7 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
   // ============ SINGLE DOOR CONSTRAINTS ============
   {
     configurationType: ColumnConfigurationType.DOOR_1_SHELF,
-    minWidth: 40, // Doors need more width than drawers
+    minWidth: 40,
     maxWidth: 60,
     minHeight: 25,
     maxHeight: 60,
@@ -128,18 +126,17 @@ export const COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstraint[] =
 ]
 
 /**
- * Helper function to check if a configuration meets its constraints
+ * Helper function to check if a configuration meets stand constraints
  */
-export function isConfigurationValid(
+export function isConfigurationValidForStand(
   configurationType: ColumnConfigurationType,
   dimensions: { width: number; height: number; depth: number }
 ): boolean {
-  const constraint = COLUMN_CONFIGURATION_CONSTRAINTS.find(
+  const constraint = STAND_COLUMN_CONFIGURATION_CONSTRAINTS.find(
     (c) => c.configurationType === configurationType
   )
 
   if (!constraint) {
-    // If no constraint defined, allow by default
     return true
   }
 
@@ -178,15 +175,59 @@ export function isConfigurationValid(
 }
 
 /**
- * Get all valid configurations for given dimensions
+ * Get all valid configurations for given dimensions (stand)
  */
-export function getValidConfigurations(dimensions: {
+export function getValidConfigurationsForStand(dimensions: {
   width: number
   height: number
   depth: number
 }): ColumnConfigurationType[] {
   return Object.values(ColumnConfigurationType).filter((type) =>
-    isConfigurationValid(type, dimensions)
+    isConfigurationValidForStand(type, dimensions)
   )
+}
+
+/**
+ * Get valid column counts for stand (chest of drawers) based on total width
+ * 
+ * Rules:
+ * - 50-84 cm: 1 column
+ * - 85-104 cm: 1-2 columns
+ * - 105-149 cm: 2 columns
+ * - 150-205 cm: 2-3 columns
+ * - 206-270 cm: 3-4 columns
+ * 
+ * @param totalWidth Total width of the stand in cm
+ * @returns Object with column counts as keys and validity as boolean values
+ */
+export function getValidColumnCountsForStand(totalWidth: number): Record<number, boolean> {
+  const validityMap: Record<number, boolean> = {
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+  }
+
+  if (totalWidth >= 50 && totalWidth <= 84) {
+    // 50-84 cm: only 1 column
+    validityMap[1] = true
+  } else if (totalWidth >= 85 && totalWidth <= 104) {
+    // 85-104 cm: 1-2 columns
+    validityMap[1] = true
+    validityMap[2] = true
+  } else if (totalWidth >= 105 && totalWidth <= 149) {
+    // 105-149 cm: 2 columns
+    validityMap[2] = true
+  } else if (totalWidth >= 150 && totalWidth <= 205) {
+    // 150-205 cm: 2-3 columns
+    validityMap[2] = true
+    validityMap[3] = true
+  } else if (totalWidth >= 206 && totalWidth <= 270) {
+    // 206-270 cm: 3-4 columns
+    validityMap[3] = true
+    validityMap[4] = true
+  }
+
+  return validityMap
 }
 
