@@ -122,7 +122,8 @@ export const ButtonSelect = <T extends string = string>({
             selected === option.value ? styles.selected : '',
             option.disabled ? styles.disabled : '',
           ].join(' ')}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
             if (!option.disabled) handleSelect(option.value)
           }}
         >

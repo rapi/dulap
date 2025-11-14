@@ -81,8 +81,11 @@ export const ButtonImageSelect = <T extends string | number = string>({
               className={`${styles.item} ${isSelected ? styles.selected : ''} ${
                 opt.disabled ? styles.disabled : ''
               }`}
-              onClick={() => {
-                if (!opt.disabled && !isSelected) onChange(opt.value)
+              onClick={(e) => {
+                e.stopPropagation()
+                if (!opt.disabled && !isSelected) {
+                  onChange(opt.value)
+                }
               }}
               onKeyDown={onKeyDown}
             >

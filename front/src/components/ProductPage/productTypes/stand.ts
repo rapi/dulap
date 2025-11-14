@@ -120,9 +120,9 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
         .fill(null)
         .map((_, i) => {
           if (prev[i]) {
-            return createConfigurationForExistingColumn(prev[i], dimensions, 'stand')
+            return createConfigurationForExistingColumn(prev[i], dimensions, 'stand', i, selectedColumns)
           }
-          return createConfigurationForNewColumn(prev, dimensions, 3, 'stand')
+          return createConfigurationForNewColumn(prev, dimensions, 3, 'stand', i, selectedColumns)
         })
 
       return newConfigs

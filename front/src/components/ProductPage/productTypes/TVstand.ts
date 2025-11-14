@@ -11,8 +11,12 @@ import { useFurnitureConstraints } from '~/hooks/useFurnitureConstraints'
 import {
   getFirstValidColumnCount,
 } from '~/utils/columnValidation'
-import { findNearestAvailableConfiguration } from '~/utils/columnConfigurationFallback'
-import { isConfigurationValidForTVStand, getValidColumnCountsForTVStand } from '~/config/columnConstraints.tvstand'
+import {
+  createConfigurationForExistingColumn,
+  createConfigurationForNewColumn,
+  validateAndUpdateConfigurations,
+} from '~/utils/columnConfigurationUtils'
+import { getValidColumnCountsForTVStand } from '~/config/columnConstraints.tvstand'
 
 // Get TV stand constraints
 const CONSTRAINTS = getConstraints('tv-stand')
@@ -109,41 +113,15 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       const newConfigs = Array(selectedColumns)
         .fill(null)
         .map((_, i) => {
-          // Always try to preserve existing configuration first
           if (prev[i]) {
-            // Check if it's still valid with new dimensions
-            if (isConfigurationValidForTVStand(prev[i].type, dimensions)) {
-              return prev[i] // Preserve both type and doorOpeningSide
-            }
-            // If not valid, find nearest alternative (preserve doorOpeningSide if applicable)
-            const nearestType = findNearestAvailableConfiguration(
-              prev[i].type,
-              dimensions,
-              'tv-stand'
-            ) || prev[i].type
-            
-            const metadata = getConfigurationMetadata(nearestType)
-            const doorOpeningSide = metadata?.doorCount === 1 
-              ? (prev[i].doorOpeningSide || 'left')
-              : undefined
-            
-            return { type: nearestType, doorOpeningSide }
+            return createConfigurationForExistingColumn(prev[i], dimensions, 'tv-stand', i, selectedColumns)
           }
-
-          // For new columns (when expanding), use default
-          const defaultType = ColumnConfigurationType.DRAWERS_2
-          const nearestType = findNearestAvailableConfiguration(
-            defaultType,
-            dimensions,
-            'tv-stand'
-          ) || defaultType
-          
-          return { type: nearestType }
+          return createConfigurationForNewColumn(prev, dimensions, 2, 'tv-stand', i, selectedColumns)
         })
 
       return newConfigs
     })
-  }, [selectedColumns, width, height, depth, plintHeight]) // Trigger when column count or dimensions change
+  }, [selectedColumns, width, height, depth, plintHeight])
 
   // Validate existing configurations when dimensions change
   useEffect(() => {
@@ -153,37 +131,10 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       depth: depth,
     }
 
-    setColumnConfigurations((prev) => {
-      // Check if any configuration needs updating
-      const needsUpdate = prev.some(
-        (config) => !isConfigurationValidForTVStand(config.type, dimensions)
-      )
-
-      if (!needsUpdate) {
-        return prev // No changes needed
-      }
-
-      // Update only invalid configurations (preserve doorOpeningSide)
-      return prev.map((config) => {
-        if (isConfigurationValidForTVStand(config.type, dimensions)) {
-          return config // Keep valid ones
-        }
-        // Replace invalid with nearest available (preserve doorOpeningSide if applicable)
-        const nearestType = findNearestAvailableConfiguration(
-          config.type,
-          dimensions,
-          'tv-stand'
-        ) || config.type
-        
-        const metadata = getConfigurationMetadata(nearestType)
-        const doorOpeningSide = metadata?.doorCount === 1 
-          ? (config.doorOpeningSide || 'left')
-          : undefined
-        
-        return { type: nearestType, doorOpeningSide }
-      })
-    })
-  }, [width, height, depth, plintHeight, selectedColumns]) // Trigger on dimension changes
+    setColumnConfigurations((prev) =>
+      validateAndUpdateConfigurations(prev, dimensions, 'tv-stand')
+    )
+  }, [width, height, depth, plintHeight, selectedColumns])
 
   // Calculate individual column dimensions for constraint evaluation
   const columnWidth = useMemo(

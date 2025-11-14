@@ -61,12 +61,23 @@ export function getTargetDrawerCountFromExisting(
 export function createConfigurationForExistingColumn(
   existingConfig: ColumnConfigurationWithOptions,
   dimensions: { width: number; height: number; depth: number },
-  productType?: FurnitureProductType
+  productType?: FurnitureProductType,
+  columnIndex?: number,
+  totalColumns?: number
 ): ColumnConfigurationWithOptions {
   const isValid = getValidationFunction(productType)
   
   // If still valid, preserve the configuration
   if (isValid(existingConfig.type, dimensions)) {
+    const metadata = getConfigurationMetadata(existingConfig.type)
+    // If it's a single door and doorOpeningSide is not set, apply the default based on position
+    if (metadata?.doorCount === 1 && !existingConfig.doorOpeningSide && columnIndex !== undefined && totalColumns !== undefined) {
+    return {
+        ...existingConfig,
+        doorOpeningSide: getDefaultDoorOpeningSide(columnIndex, totalColumns)
+      }
+    }
+    
     return existingConfig
   }
 
@@ -76,8 +87,14 @@ export function createConfigurationForExistingColumn(
     existingConfig.type
 
   const metadata = getConfigurationMetadata(nearestType)
-  const doorOpeningSide =
-    metadata?.doorCount === 1 ? existingConfig.doorOpeningSide || 'left' : undefined
+  
+  // Calculate default door opening side based on column position
+  const doorOpeningSide = metadata?.doorCount === 1
+    ? (existingConfig.doorOpeningSide || 
+       (columnIndex !== undefined && totalColumns !== undefined 
+         ? getDefaultDoorOpeningSide(columnIndex, totalColumns)
+         : 'left'))
+    : undefined
 
   return { type: nearestType, doorOpeningSide }
 }
@@ -89,7 +106,9 @@ export function createConfigurationForNewColumn(
   existingConfigurations: ColumnConfigurationWithOptions[],
   dimensions: { width: number; height: number; depth: number },
   defaultDrawerCount: number = 3,
-  productType?: FurnitureProductType
+  productType?: FurnitureProductType,
+  columnIndex?: number,
+  totalColumns?: number
 ): ColumnConfigurationWithOptions {
   const targetDrawerCount = getTargetDrawerCountFromExisting(
     existingConfigurations,
@@ -100,11 +119,19 @@ export function createConfigurationForNewColumn(
   const nearestType =
     findNearestAvailableConfiguration(defaultType, dimensions, productType) || defaultType
 
-  return { type: nearestType }
+  const metadata = getConfigurationMetadata(nearestType)
+  
+  // Calculate default door opening side based on column position for single door configurations
+  const doorOpeningSide = metadata?.doorCount === 1 && columnIndex !== undefined && totalColumns !== undefined
+    ? getDefaultDoorOpeningSide(columnIndex, totalColumns)
+    : undefined
+
+  return { type: nearestType, doorOpeningSide }
 }
 
 /**
  * Validates and updates invalid configurations when dimensions change
+ * Preserves user's explicit doorOpeningSide choice, or applies position-based default
  */
 export function validateAndUpdateConfigurations(
   configurations: ColumnConfigurationWithOptions[],
@@ -121,7 +148,9 @@ export function validateAndUpdateConfigurations(
     return configurations
   }
 
-  return configurations.map((config) => {
+  const totalColumns = configurations.length
+
+  return configurations.map((config, columnIndex) => {
     if (isValid(config.type, dimensions)) {
       return config
     }
@@ -130,17 +159,44 @@ export function validateAndUpdateConfigurations(
       findNearestAvailableConfiguration(config.type, dimensions, productType) || config.type
 
     const metadata = getConfigurationMetadata(nearestType)
-    const doorOpeningSide =
-      metadata?.doorCount === 1 ? config.doorOpeningSide || 'left' : undefined
+    
+    // Preserve user's choice, or use position-based default if not set
+    const doorOpeningSide = metadata?.doorCount === 1 
+      ? (config.doorOpeningSide || getDefaultDoorOpeningSide(columnIndex, totalColumns))
+      : undefined
 
     return { type: nearestType, doorOpeningSide }
   })
 }
 
 /**
+ * Calculates the default door opening side based on column position
+ * Rules:
+ * - First column (index 0): 'left' opening side (handle on right)
+ * - Last column: 'right' opening side (handle on left)
+ * - All other columns: 'right' opening side (handle on left)
+ */
+export function getDefaultDoorOpeningSide(
+  columnIndex: number,
+  totalColumns: number
+): 'left' | 'right' {
+  if (columnIndex === 0) {
+    // First column: handle on right = 'left' opening side
+    return 'left'
+  } else if (columnIndex === totalColumns - 1) {
+    // Last column: handle on left = 'right' opening side
+    return 'right'
+  }
+  
+  // All middle columns: handle on left = 'right' opening side
+  return 'right'
+}
+
+/**
  * Synchronizes drawer counts across all columns with drawers
  * When a drawer configuration is selected, all other columns with drawers
  * are updated to match the selected drawer count
+ * Preserves user's explicit doorOpeningSide choice, or applies position-based default
  */
 export function synchronizeDrawerCounts(
   configurations: ColumnConfigurationWithOptions[],
@@ -153,6 +209,8 @@ export function synchronizeDrawerCounts(
   if (!targetType) {
     return configurations
   }
+
+  const totalColumns = configurations.length
 
   return configurations.map((config, index) => {
     // Skip the column that was just changed
@@ -171,8 +229,11 @@ export function synchronizeDrawerCounts(
     }
 
     const targetMetadata = getConfigurationMetadata(targetType)
-    const targetDoorOpeningSide =
-      targetMetadata.doorCount === 1 ? config.doorOpeningSide || 'left' : undefined
+    
+    // Preserve user's choice, or use position-based default if not set
+    const targetDoorOpeningSide = targetMetadata.doorCount === 1 
+      ? (config.doorOpeningSide || getDefaultDoorOpeningSide(index, totalColumns))
+      : undefined
 
     return { type: targetType, doorOpeningSide: targetDoorOpeningSide }
   })

@@ -232,10 +232,6 @@ const ColumnComponent: React.FC<ColumnProps> = ({
       // Apply smart material to bottom panel (supports PBR textures)
       applyMaterialToObject(bottomPanelRef.current, selectedColor)
     }
-    // if (backPanelRef.current) {
-    //   // Back panel stays white
-    //   applyMaterialToObject(backPanelRef.current, '#ffffff')
-    // }
   }, [selectedColor])
 
   // Render shelves as primitives

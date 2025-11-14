@@ -16,7 +16,7 @@ import { DoorOpeningSideSelector } from './DoorOpeningSideSelector'
 import { useColumnConfigurationConstraints, FurnitureProductType } from '~/hooks/useColumnConfigurationConstraints'
 import { useActiveColumnTab } from '~/hooks/useActiveColumnTab'
 import { useColumnConfigurationSync } from '~/hooks/useColumnConfigurationSync'
-import { synchronizeDrawerCounts } from '~/utils/columnConfigurationUtils'
+import { synchronizeDrawerCounts, getDefaultDoorOpeningSide } from '~/utils/columnConfigurationUtils'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
@@ -87,21 +87,28 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   // Handle column type change with drawer count synchronization
   const handleColumnTypeChange = useCallback(
     (columnIndex: number, value: ColumnConfigurationType) => {
-      const metadata = getConfigurationMetadata(value)
-      const doorOpeningSide = metadata.doorCount === 1 ? columnConfigurations[columnIndex]?.doorOpeningSide || 'left' : undefined
+      setColumnConfigurations((prev) => {
+        const metadata = getConfigurationMetadata(value)
+        
+        // Use user's explicit choice, or position-based default
+        const defaultSide = getDefaultDoorOpeningSide(columnIndex, selectedColumns)
+        const doorOpeningSide = metadata.doorCount === 1 
+          ? (prev[columnIndex]?.doorOpeningSide || defaultSide)
+          : undefined
 
-      let newConfigurations = [...columnConfigurations]
-      newConfigurations[columnIndex] = { type: value, doorOpeningSide }
+        let newConfigurations = [...prev]
+        newConfigurations[columnIndex] = { type: value, doorOpeningSide }
 
-      // Auto-sync drawer counts: synchronize all columns with drawers to match the selected drawer count
-      if (hasDrawers(value)) {
-        const newDrawerCount = getDrawerCount(value)
-        newConfigurations = synchronizeDrawerCounts(newConfigurations, columnIndex, newDrawerCount, isValid)
-      }
+        // Auto-sync drawer counts: synchronize all columns with drawers to match the selected drawer count
+        if (hasDrawers(value)) {
+          const newDrawerCount = getDrawerCount(value)
+          newConfigurations = synchronizeDrawerCounts(newConfigurations, columnIndex, newDrawerCount, isValid)
+        }
 
-      setColumnConfigurations(newConfigurations)
+        return newConfigurations
+      })
     },
-    [columnConfigurations, setColumnConfigurations, isValid]
+    [setColumnConfigurations, isValid, selectedColumns]
   )
 
   // Handle door opening side change
@@ -113,7 +120,6 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
 
         // Ensure we have a valid configuration with a type
         if (!currentConfig || !currentConfig.type) {
-          console.warn('Cannot update door opening side: configuration missing type', { columnIndex, currentConfig })
           return prev
         }
 
@@ -122,6 +128,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
           type: currentConfig.type,
           doorOpeningSide: side,
         }
+        
         return newConfigurations
       })
     },
@@ -165,7 +172,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   const currentValue = currentConfig?.type
 
   return (
-    <label className={styles.individualColumnsLabel}>
+    <div className={styles.individualColumnsLabel}>
       {!isMobile && (
         <p className={styles.sectionTitle}>
           <FormattedMessage id="homepage.configurator.individualColumns.title" defaultMessage="Configure individual sections" />
@@ -175,30 +182,31 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
       <div className={styles.furnitureConfig}>
         {/* Column tabs (only show if multiple columns) */}
         {selectedColumns > 1 && (
-          <label className={styles.furnitureLabel}>
+          <div className={styles.furnitureLabel}>
             <ButtonSelect options={columnTabOptions} defaultSelected={String(activeTab)} onChange={(value) => setActiveTab(parseInt(value))} />
-          </label>
+          </div>
         )}
 
         {/* Configuration type selector */}
-        <label className={styles.furnitureLabel}>
+        <div className={styles.furnitureLabel}>
           <ButtonImageSelect<ColumnConfigurationType>
             ariaLabel="Column configuration"
             options={imageSelectOptions}
             value={currentValue}
             onChange={(v) => handleColumnTypeChange(currentColumnIndex, v)}
           />
-        </label>
+        </div>
 
         {/* Door opening side selector (only for single door configurations) */}
         {currentConfig && (
           <DoorOpeningSideSelector
             columnIndex={currentColumnIndex}
+            totalColumns={selectedColumns}
             config={currentConfig}
             onDoorOpeningSideChange={handleDoorOpeningSideChange}
           />
         )}
       </div>
-    </label>
+    </div>
   )
 }
