@@ -1,5 +1,6 @@
 // utils/configTypes.ts
 import { getConstraints } from '~/config/furnitureConstraints'
+import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 
 /**
  * Mirror the real constraints shape so casts are not needed.
@@ -26,4 +27,6 @@ export interface BaseConfig {
   columns?: number
   sections?: number[]
   plintHeight?: number // only for stand
+  columnConfigurations?: ColumnConfigurationWithOptions[] // individual column configs + door sides
+  openingType?: 'push' | 'round' | 'profile' // handle type: push, round handle, or profile handle
 }

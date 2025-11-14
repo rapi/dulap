@@ -23,6 +23,7 @@ import {
 import { useActiveColumnTab } from '~/hooks/useActiveColumnTab'
 import { useColumnConfigurationSync } from '~/hooks/useColumnConfigurationSync'
 import { synchronizeDrawerCounts, getDefaultDoorOpeningSide } from '~/utils/columnConfigurationUtils'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
@@ -70,7 +71,15 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     productType,
   } = configuration
 
+  console.log('🔷 [INDIVIDUAL COLUMNS] Component rendered with:', {
+    selectedColumns,
+    columnConfigurations,
+  })
+
   const isMobile = useMediaQuery('(max-width: 768px)')
+
+  // Get URL context for synchronization
+  const urlCtx = useConfiguratorConfigOptional()
 
   // Manage active tab state
   const { activeTab, setActiveTab, currentColumnIndex } = useActiveColumnTab(
@@ -125,10 +134,18 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
           newConfigurations = synchronizeDrawerCounts(newConfigurations, columnIndex, newDrawerCount, isValid)
         }
 
+        // Sync to URL
+        if (urlCtx) {
+          urlCtx.setConfig({ 
+            ...urlCtx.config, 
+            columnConfigurations: newConfigurations 
+          })
+        }
+
         return newConfigurations
       })
     },
-    [setColumnConfigurations, isValid, selectedColumns]
+    [setColumnConfigurations, isValid, selectedColumns, urlCtx]
   )
 
   // Handle door opening side change
@@ -149,10 +166,18 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
           doorOpeningSide: side,
         }
         
+        // Sync to URL
+        if (urlCtx) {
+          urlCtx.setConfig({ 
+            ...urlCtx.config, 
+            columnConfigurations: newConfigurations 
+          })
+        }
+        
         return newConfigurations
       })
     },
-    [setColumnConfigurations]
+    [setColumnConfigurations, urlCtx]
   )
 
   // Get available configuration options (only valid ones)

@@ -17,6 +17,7 @@ import {
   createConfigurationForNewColumn,
   validateAndUpdateConfigurations,
 } from '~/utils/columnConfigurationUtils'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 // Get bedside constraints
 const CONSTRAINTS = getConstraints('bedside')
@@ -65,6 +66,41 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   )
   // ---------------------------------------------------------
 
+  // Get URL context for hydration
+  const urlCtx = useConfiguratorConfigOptional()
+
+  // Hydrate state from URL on mount/refresh (URL is source of truth)
+  useEffect(() => {
+    if (!urlCtx) return
+
+    const { config } = urlCtx
+
+    // Hydrate number of columns from URL (MUST happen before column configurations)
+    if (config.columns !== undefined) {
+      setSelectedColumns(config.columns)
+    }
+
+    // Hydrate column configurations from URL
+    if (config.columnConfigurations && config.columnConfigurations.length > 0) {
+      setColumnConfigurations(config.columnConfigurations)
+    }
+
+    // Hydrate opening type from URL
+    if (config.openingType) {
+      let openingType: OpeningType
+      if (config.openingType === 'profile') {
+        openingType = OpeningType.ProfileHandle
+      } else if (config.openingType === 'round') {
+        openingType = OpeningType.RoundHandle
+      } else {
+        openingType = OpeningType.Push
+      }
+      setOpeningOption(openingType)
+    }
+    // Run only once on mount when URL is ready
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlCtx?.config.columns, urlCtx?.config.columnConfigurations, urlCtx?.config.openingType])
+
   // Derive sections from column configurations (for new 3D system)
   const derivedSections = useMemo(() => {
     const maxSections = Math.max(
@@ -97,6 +133,12 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   // Update column configurations ONLY when number of columns changes
   useEffect(() => {
     setColumnConfigurations((prev) => {
+      // If we already have the correct number of configurations, don't recreate them
+      // This prevents overwriting configurations loaded from URL during hydration
+      if (prev.length === selectedColumns) {
+        return prev
+      }
+
       const dimensions = {
         width: width / selectedColumns,
         height: height - plintHeight,

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { BaseConfig, Constraints } from './configTypes'
+import { decodeColumnConfigs, encodeColumnConfigs } from './columnConfigUrl'
 
 /** Products supported in the dynamic route */
 export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside'
@@ -43,6 +44,8 @@ type StandOut = z.infer<typeof standSchema>
  * Parse raw Next.js query into a config with defaults from constraints.
  * - accepts ?color= and alias ?colors=
  * - lowercases hex color
+ * - parses ?colCfg= for column configurations
+ * - parses ?openingType= for handle type
  */
 export function parseQueryToConfig(
   q: NextQuery,
@@ -73,6 +76,31 @@ export function parseQueryToConfig(
     cfg.plintHeight = sd.plintHeight ?? C.dimensions.plintHeight?.default
   }
 
+  // Parse column configurations from URL
+  const colCfgParam = q['colCfg']
+  const colCfgStr = Array.isArray(colCfgParam) ? colCfgParam[0] : colCfgParam
+  console.log('🟢 [PARSE URL] colCfg parameter:', colCfgStr)
+  if (colCfgStr && typeof colCfgStr === 'string') {
+    const decoded = decodeColumnConfigs(colCfgStr)
+    console.log('🟢 [PARSE URL] Decoded columnConfigurations:', decoded)
+    if (decoded.length > 0) {
+      cfg.columnConfigurations = decoded
+      console.log('🟢 [PARSE URL] Set cfg.columnConfigurations to:', cfg.columnConfigurations)
+    }
+  }
+
+  // Parse opening type from URL
+  const openingTypeParam = q['openingType']
+  const openingTypeStr = Array.isArray(openingTypeParam) ? openingTypeParam[0] : openingTypeParam
+  if (openingTypeStr === 'push' || openingTypeStr === 'round' || openingTypeStr === 'profile') {
+    cfg.openingType = openingTypeStr
+  }
+  // Legacy support: 'handle' → 'round'
+  else if (openingTypeStr === 'handle') {
+    cfg.openingType = 'round'
+  }
+
+  console.log('🟢 [PARSE URL] Final config:', cfg)
   return cfg
 }
 
@@ -142,6 +170,16 @@ export function configToQuery(
   if (typeof cfg.columns === 'number') out.columns = cfg.columns
   if (product === 'stand' && typeof cfg.plintHeight === 'number') {
     out.plintHeight = cfg.plintHeight
+  }
+
+  // Serialize column configurations
+  if (cfg.columnConfigurations && cfg.columnConfigurations.length > 0) {
+    out.colCfg = encodeColumnConfigs(cfg.columnConfigurations)
+  }
+
+  // Serialize opening type (only if not default 'push')
+  if (cfg.openingType && cfg.openingType !== 'push') {
+    out.openingType = cfg.openingType
   }
 
   // Type-safe default comparison

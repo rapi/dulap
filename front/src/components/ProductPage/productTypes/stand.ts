@@ -1,5 +1,5 @@
 import { ProductComponent } from '~/components/ProductPage/StandProductPage'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 import {
@@ -20,6 +20,7 @@ import {
 } from '~/utils/columnConfigurationUtils'
 import { getValidColumnCountsForStand } from '~/config/columnConstraints.stand'
 import { mapColorToImageColor } from '~/utils/colorUtils'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 // Get stand constraints
 const CONSTRAINTS = getConstraints('stand')
@@ -33,6 +34,9 @@ export const DEFAULT_STAND = {
 }
 
 export const StandProductConfigurator: () => ProductComponent[] = () => {
+  // Get URL context
+  const urlCtx = useConfiguratorConfigOptional()
+  
   const [width, setWidth] = useState(DEFAULT_STAND.width)
   const [height, setHeight] = useState(DEFAULT_STAND.height)
   const [depth, setDepth] = useState(DEFAULT_STAND.depth)
@@ -40,9 +44,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [selectedSections, setSelectedSections] = useState(
     CONSTRAINTS.sections.default
   )
-  const [selectedColumns, setSelectedColumns] = useState(
-    CONSTRAINTS.columns.default
-  )
+  const [selectedColumns, setSelectedColumns] = useState(CONSTRAINTS.columns.default)
   const [columnConfigurations, setColumnConfigurations] = useState<
     ColumnConfigurationWithOptions[]
   >([{ type: ColumnConfigurationType.DRAWERS_3 }])
@@ -64,6 +66,61 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     'main'
   )
   // ---------------------------------------------------------
+  
+  // Track if hydration has happened
+  const hasHydratedRef = useRef(false)
+  // Track previous value to detect actual changes - initialized to current value
+  const prevSelectedColumnsRef = useRef<number>(selectedColumns)
+
+  // Update ref after every render (this is the "usePrevious" pattern)
+  useEffect(() => {
+    prevSelectedColumnsRef.current = selectedColumns
+  })
+
+  console.log('🟢 [STAND INIT] Render with:', {
+    selectedColumns,
+    columnConfigurationsLength: columnConfigurations.length,
+    hasHydrated: hasHydratedRef.current,
+    prevInRef: prevSelectedColumnsRef.current,
+  })
+
+  // Hydrate from URL ONCE on mount
+  useEffect(() => {
+    if (!urlCtx || hasHydratedRef.current) return
+    
+    hasHydratedRef.current = true
+    const { config } = urlCtx
+
+    console.log('🔵 [STAND HYDRATION] Hydrating from URL:', {
+      columns: config.columns,
+      columnConfigurations: config.columnConfigurations?.length,
+      openingType: config.openingType,
+    })
+
+    // Batch all state updates together
+    if (config.columns !== undefined) {
+      setSelectedColumns(config.columns)
+    }
+
+    if (config.columnConfigurations && config.columnConfigurations.length > 0) {
+      setColumnConfigurations(config.columnConfigurations)
+    }
+
+    if (config.openingType) {
+      let openingType: OpeningType
+      if (config.openingType === 'profile') {
+        openingType = OpeningType.ProfileHandle
+      } else if (config.openingType === 'round') {
+        openingType = OpeningType.RoundHandle
+      } else {
+        openingType = OpeningType.Push
+      }
+      setOpeningOption(openingType)
+    }
+
+    console.log('🔵 [STAND HYDRATION] Complete')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // Empty deps - run ONCE on mount
 
   // Derive sections from column configurations (for new 3D system)
   const derivedSections = useMemo(() => {
@@ -109,9 +166,32 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     }
   }, [availableSections, selectedSections])
 
-  // Update column configurations ONLY when number of columns changes
+  // Update column configurations ONLY when number of columns ACTUALLY changes (not on mount)
   useEffect(() => {
+    console.log('🟡 [STAND COLUMNS EFFECT] Effect triggered with selectedColumns:', selectedColumns, 'previous:', prevSelectedColumnsRef.current)
+    
+    // Skip if value didn't actually change
+    if (prevSelectedColumnsRef.current === selectedColumns) {
+      console.log('⏭️  [STAND COLUMNS EFFECT] Value unchanged, skipping')
+      return
+    }
+    
+    console.log('🟡 [STAND COLUMNS EFFECT] Value changed from', prevSelectedColumnsRef.current, 'to', selectedColumns)
+    prevSelectedColumnsRef.current = selectedColumns
+    
     setColumnConfigurations((prev) => {
+      console.log('🟡 [STAND COLUMNS EFFECT] Current prev.length:', prev.length, 'prev:', prev)
+      console.log('🟡 [STAND COLUMNS EFFECT] selectedColumns:', selectedColumns)
+      
+      // If we already have the correct number of configurations, don't recreate them
+      // This prevents overwriting configurations loaded from URL during hydration
+      if (prev.length === selectedColumns) {
+        console.log('✅ [STAND COLUMNS EFFECT] Length matches! Keeping existing configurations')
+        return prev
+      }
+
+      console.log('🔴 [STAND COLUMNS EFFECT] Length mismatch! Recreating configurations')
+
       const dimensions = {
         width: width / selectedColumns,
         height: height - plintHeight,
@@ -128,21 +208,42 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
           return createConfigurationForNewColumn(prev, dimensions, 3, 'stand', i, selectedColumns)
         })
 
+      console.log('🔴 [STAND COLUMNS EFFECT] New configs created:', newConfigs)
       return newConfigs
     })
   }, [selectedColumns, width, height, depth, plintHeight])
 
   // Validate existing configurations when dimensions change
   useEffect(() => {
-    const dimensions = {
-      width: width / selectedColumns,
-      height: height - plintHeight,
-      depth: depth,
+    console.log('🟣 [STAND VALIDATION] Validation effect triggered, hasHydrated:', hasHydratedRef.current)
+    
+    // Skip validation until hydration completes
+    if (!hasHydratedRef.current) {
+      console.log('⏭️  [STAND VALIDATION] Skipping - hydration not complete')
+      return
     }
-
-    setColumnConfigurations((prev) =>
-      validateAndUpdateConfigurations(prev, dimensions, 'stand')
-    )
+    
+    // Skip if columns and configs are mismatched (indicates we're mid-update)
+    setColumnConfigurations((prev) => {
+      if (prev.length !== selectedColumns) {
+        console.log('⏭️  [STAND VALIDATION] Skipping - config length mismatch (transitioning)')
+        return prev
+      }
+      
+      const dimensions = {
+        width: width / selectedColumns,
+        height: height - plintHeight,
+        depth: depth,
+      }
+      
+      console.log('🟣 [STAND VALIDATION] Validating with dimensions:', dimensions)
+      console.log('🟣 [STAND VALIDATION] Before validation:', prev)
+      
+      const validated = validateAndUpdateConfigurations(prev, dimensions, 'stand')
+      
+      console.log('🟣 [STAND VALIDATION] After validation:', validated)
+      return validated
+    })
   }, [width, height, depth, plintHeight, selectedColumns])
 
   // Calculate individual column dimensions for constraint evaluation
