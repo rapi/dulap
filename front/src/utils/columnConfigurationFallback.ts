@@ -1,4 +1,4 @@
-import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
 import { isConfigurationValid } from '~/config/columnConstraints'
 import { isConfigurationValidForStand } from '~/config/columnConstraints.stand'
 import { isConfigurationValidForTVStand } from '~/config/columnConstraints.tvstand'
@@ -28,12 +28,14 @@ function getValidationFunction(productType?: FurnitureProductType) {
  * @param currentType The currently selected configuration that became invalid
  * @param dimensions The column dimensions to validate against
  * @param productType Optional product type for product-specific validation (stand, tv-stand, etc.)
+ * @param preferredDrawerCount Optional preferred drawer count to prioritize
  * @returns The first valid configuration, or null if none available
  */
 export function findNearestAvailableConfiguration(
   currentType: ColumnConfigurationType,
   dimensions: { width: number; height: number; depth: number },
-  productType?: FurnitureProductType
+  productType?: FurnitureProductType,
+  preferredDrawerCount?: number
 ): ColumnConfigurationType | null {
   const isValid = getValidationFunction(productType)
 
@@ -42,10 +44,22 @@ export function findNearestAvailableConfiguration(
     return currentType
   }
 
+  const allTypes = Object.values(ColumnConfigurationType)
+
+  // If preferred drawer count is specified, try to find a configuration with that drawer count first
+  if (preferredDrawerCount !== undefined) {
+    const preferredType = allTypes.find(type => {
+      const metadata = getConfigurationMetadata(type)
+      return metadata?.drawerCount === preferredDrawerCount && isValid(type, dimensions)
+    })
+    
+    if (preferredType) {
+      return preferredType
+    }
+  }
+
   // Find and return the first valid configuration
-  const firstValid = Object.values(ColumnConfigurationType).find(
-    type => isValid(type, dimensions)
-  )
+  const firstValid = allTypes.find(type => isValid(type, dimensions))
   
   return firstValid || null
 }

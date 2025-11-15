@@ -117,7 +117,7 @@ export function createConfigurationForNewColumn(
 
   const defaultType = DRAWER_TYPE_MAP[targetDrawerCount] || ColumnConfigurationType.DRAWERS_3
   const nearestType =
-    findNearestAvailableConfiguration(defaultType, dimensions, productType) || defaultType
+    findNearestAvailableConfiguration(defaultType, dimensions, productType, targetDrawerCount) || defaultType
 
   const metadata = getConfigurationMetadata(nearestType)
   
