@@ -1,7 +1,10 @@
 import React, { FC, useMemo, useCallback, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useMediaQuery } from '@mui/material'
-import { ButtonOptionsType, ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
+import {
+  ButtonOptionsType,
+  ButtonSelect,
+} from '~/components/ButtonSelect/ButtonSelect'
 import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import {
@@ -13,10 +16,14 @@ import {
 import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { ColumnConfigurationIcon } from './ColumnConfigurationIcons'
 import { DoorOpeningSideSelector } from './DoorOpeningSideSelector'
-import { useColumnConfigurationConstraints, FurnitureProductType } from '~/hooks/useColumnConfigurationConstraints'
+import {
+  useColumnConfigurationConstraints,
+  FurnitureProductType,
+} from '~/hooks/useColumnConfigurationConstraints'
 import { useActiveColumnTab } from '~/hooks/useActiveColumnTab'
 import { useColumnConfigurationSync } from '~/hooks/useColumnConfigurationSync'
 import { synchronizeDrawerCounts, getDefaultDoorOpeningSide } from '~/utils/columnConfigurationUtils'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
@@ -25,7 +32,9 @@ export type ProductIndividualColumnsComponent = {
   setColumnConfigurations: (
     configurations:
       | ColumnConfigurationWithOptions[]
-      | ((prev: ColumnConfigurationWithOptions[]) => ColumnConfigurationWithOptions[])
+      | ((
+          prev: ColumnConfigurationWithOptions[]
+        ) => ColumnConfigurationWithOptions[])
   ) => void
   // Column dimensions for constraint evaluation
   columnWidth: number
@@ -52,10 +61,25 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   onActiveTabChange,
   onActiveColumnChange,
 }) => {
-  const { selectedColumns, columnConfigurations, setColumnConfigurations, columnWidth, columnHeight, columnDepth, productType } =
-    configuration
+  const {
+    selectedColumns,
+    columnConfigurations,
+    setColumnConfigurations,
+    columnWidth,
+    columnHeight,
+    columnDepth,
+    productType,
+  } = configuration
+
+  console.log('🔷 [INDIVIDUAL COLUMNS] Component rendered with:', {
+    selectedColumns,
+    columnConfigurations,
+  })
 
   const isMobile = useMediaQuery('(max-width: 768px)')
+
+  // Get URL context for synchronization
+  const urlCtx = useConfiguratorConfigOptional()
 
   // Manage active tab state
   const { activeTab, setActiveTab, currentColumnIndex } = useActiveColumnTab(
@@ -72,7 +96,12 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   }, [currentColumnIndex, onActiveColumnChange])
 
   // Get valid configurations based on current dimensions and product type
-  const { allConfigurations, isValid } = useColumnConfigurationConstraints(columnWidth, columnHeight, columnDepth, productType)
+  const { allConfigurations, isValid } = useColumnConfigurationConstraints(
+    columnWidth,
+    columnHeight,
+    columnDepth,
+    productType
+  )
 
   // Auto-sync configurations when dimensions change
   useColumnConfigurationSync(
@@ -105,10 +134,18 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
           newConfigurations = synchronizeDrawerCounts(newConfigurations, columnIndex, newDrawerCount, isValid)
         }
 
+        // Sync to URL
+        if (urlCtx) {
+          urlCtx.setConfig({ 
+            ...urlCtx.config, 
+            columnConfigurations: newConfigurations 
+          })
+        }
+
         return newConfigurations
       })
     },
-    [setColumnConfigurations, isValid, selectedColumns]
+    [setColumnConfigurations, isValid, selectedColumns, urlCtx]
   )
 
   // Handle door opening side change
@@ -129,10 +166,18 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
           doorOpeningSide: side,
         }
         
+        // Sync to URL
+        if (urlCtx) {
+          urlCtx.setConfig({ 
+            ...urlCtx.config, 
+            columnConfigurations: newConfigurations 
+          })
+        }
+        
         return newConfigurations
       })
     },
-    [setColumnConfigurations]
+    [setColumnConfigurations, urlCtx]
   )
 
   // Get available configuration options (only valid ones)
@@ -150,7 +195,12 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     () =>
       Array.from({ length: selectedColumns }).map((_, index) => ({
         value: String(index),
-        label: <FormattedMessage id="homepage.configurator.individualColumns.column" values={{ number: index + 1 }} />,
+        label: (
+          <FormattedMessage
+            id="homepage.configurator.individualColumns.column"
+            values={{ number: index + 1 }}
+          />
+        ),
       })),
     [selectedColumns]
   )
@@ -160,8 +210,15 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     () =>
       configurationOptions.map((option) => ({
         value: option.type,
-        content: <ColumnConfigurationIcon type={option.type} width={60} height={75} />,
-        label: <FormattedMessage id={option.metadata.label} defaultMessage={option.metadata.description} />,
+        content: (
+          <ColumnConfigurationIcon type={option.type} width={60} height={75} />
+        ),
+        label: (
+          <FormattedMessage
+            id={option.metadata.label}
+            defaultMessage={option.metadata.description}
+          />
+        ),
         title: option.metadata.description,
       })),
     [configurationOptions]
@@ -175,7 +232,10 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     <div className={styles.individualColumnsLabel}>
       {!isMobile && (
         <p className={styles.sectionTitle}>
-          <FormattedMessage id="homepage.configurator.individualColumns.title" defaultMessage="Configure individual sections" />
+          <FormattedMessage
+            id="homepage.configurator.individualColumns.title"
+            defaultMessage="Configure individual sections"
+          />
         </p>
       )}
 

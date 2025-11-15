@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { ProductPageLayout } from '~/components/ProductPageLayout/ProductPageLayout'
 import { ProductPage } from '~/components/ProductPage/WardrobeProductPage'
-import { WardrobeProductConfiguration } from '~/components/ProductPage/productTypes/wardrobe'
+import { WardrobeProductConfigurator } from '~/components/ProductPage/productTypes/wardrobe'
 
 export const preview = {
   name: 'products.wardrobe.3.name',
@@ -17,7 +17,7 @@ const Product: FC = () => {
   return (
     <ProductPageLayout>
       <ProductPage
-        components={WardrobeProductConfiguration}
+        components={WardrobeProductConfigurator}
         name={preview.name}
         values={{
           imageCarousel: ['/ready-products/wardrobe/2000-4_2.png'],

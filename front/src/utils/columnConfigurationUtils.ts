@@ -138,25 +138,36 @@ export function validateAndUpdateConfigurations(
   dimensions: { width: number; height: number; depth: number },
   productType?: FurnitureProductType
 ): ColumnConfigurationWithOptions[] {
+  console.log('🟪 [VALIDATE] Input configs:', configurations, 'dimensions:', dimensions)
   const isValid = getValidationFunction(productType)
   
   const needsUpdate = configurations.some(
     (config) => !isValid(config.type, dimensions)
   )
 
+  console.log('🟪 [VALIDATE] needsUpdate:', needsUpdate)
+
   if (!needsUpdate) {
+    console.log('🟪 [VALIDATE] All valid, returning as-is')
     return configurations
   }
+
+  console.log('🟪 [VALIDATE] Some configs invalid, updating...')
 
   const totalColumns = configurations.length
 
   return configurations.map((config, columnIndex) => {
-    if (isValid(config.type, dimensions)) {
+    const valid = isValid(config.type, dimensions)
+    console.log(`🟪 [VALIDATE] Column ${columnIndex}: type=${config.type}, valid=${valid}`)
+    
+    if (valid) {
       return config
     }
 
     const nearestType =
       findNearestAvailableConfiguration(config.type, dimensions, productType) || config.type
+
+    console.log(`🟪 [VALIDATE] Column ${columnIndex}: replacing ${config.type} with ${nearestType}`)
 
     const metadata = getConfigurationMetadata(nearestType)
     

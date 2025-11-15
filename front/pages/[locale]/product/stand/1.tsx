@@ -30,8 +30,6 @@ const Product: FC = () => {
           },
           furniture: {
             openingType: OpeningType.Push,
-            hinges: 'homepage.configurator.fittings.hinges.options.1',
-            guides: 'homepage.configurator.fittings.guides.options.1',
           },
           sections: 4,
           price: preview.price,

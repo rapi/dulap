@@ -23,7 +23,10 @@ export type ProductFurnitureComponent = {
 }
 export const openingOptions: ButtonOptionsType[] = [
   { value: 'maner', label: 'homepage.configurator.fittings.roundHandle' },
-  { value: 'profile-handle', label: 'homepage.configurator.fittings.profileHandle' },
+  {
+    value: 'profile-handle',
+    label: 'homepage.configurator.fittings.profileHandle',
+  },
   { value: 'push', label: 'homepage.configurator.fittings.pushToOpen' },
 ]
 interface ProductSelectProps {
@@ -51,7 +54,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
   // Filter opening options: only show profile-handle for 3D version
   const availableOpeningOptions = is3DVersion
     ? openingOptions
-    : openingOptions.filter(option => option.value !== 'profile-handle')
+    : openingOptions.filter((option) => option.value !== 'profile-handle')
 
   return (
     <div>
@@ -109,100 +112,6 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
           />
         )}
       </label>
-      <label className={styles.furnitureLabel}>
-        <div className={styles.furnitureTitle}>
-          <FormattedMessage id="homepage.configurator.fittings.guides" />
-          <div
-            className={styles.tooltipContainer}
-            onClick={() => setIsModalOpen3(true)}
-          >
-            <InfoOutlinedIcon color="action" sx={{ fontSize: 20 }} />
-            <span className={styles.tooltipText}>
-              <img src="/wardrobe/guides-tooltip.png" alt="base tooltip"></img>
-            </span>
-          </div>
-        </div>
-        {predefinedValue?.guides ? (
-          intl.formatMessage({ id: predefinedValue.guides })
-        ) : (
-          <Select
-            options={[
-              'homepage.configurator.fittings.guides.options.1',
-              'homepage.configurator.fittings.guides.options.2',
-            ]}
-            onChange={(value) => {
-              setGuides(value)
-            }}
-          />
-        )}
-      </label>
-
-      <Modal
-        isOpen={isModalOpen2}
-        onClose={() => {
-          setIsModalOpen2(false)
-        }}
-      >
-        <h4>
-          <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.1" />
-        </h4>
-        <div className={styles.modalChildren}>
-          <img
-            src="/wardrobe/hinges-tooltip-onhover.jpg"
-            alt="base tooltip"
-            className={styles.modalImg}
-          ></img>
-          <p className={styles.modalText}>
-            <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.2" />
-            <br></br>
-            <br></br>
-            <b>
-              <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.3" />
-            </b>
-            <ul>
-              <li>
-                <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.4" />
-              </li>
-              <li>
-                <FormattedMessage id="homepage.configurator.fittings.hinges.tooltip.5" />
-              </li>
-            </ul>
-          </p>
-        </div>
-      </Modal>
-      <Modal
-        isOpen={isModalOpen3}
-        onClose={() => {
-          setIsModalOpen3(false)
-        }}
-      >
-        <h4>
-          <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.1" />
-        </h4>
-        <div className={styles.modalChildren}>
-          <img
-            src="/wardrobe/guides-tooltip.png"
-            alt="base tooltip"
-            className={styles.modalImg}
-          ></img>
-          <p className={styles.modalText}>
-            <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.2" />
-            <br></br>
-            <br></br>
-            <b>
-              <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.3" />
-            </b>
-            <ul>
-              <li>
-                <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.4" />
-              </li>
-              <li>
-                <FormattedMessage id="homepage.configurator.fittings.guides.tooltip.5" />
-              </li>
-            </ul>
-          </p>
-        </div>
-      </Modal>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo, useEffect } from 'react'
 import SelectColor, {
   SelectColorItem,
 } from '~/components/SelectColor/SelectColor'
@@ -10,6 +10,8 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import ColorCTA from '~/components/ColorCTA/ColorCTA'
 import { useMediaQuery } from '@mui/material'
 import { use3DVersion } from '~/hooks/use3DVersion'
+import { useConfiguratorConfig } from '~/context/urlConfigContext'
+
 export type ProductColorsComponent = {
   type: 'colors'
   colors: string[]
@@ -21,6 +23,7 @@ interface ProductColorsProps {
   configuration: ProductColorsComponent
   predefinedValue?: string
 }
+
 const FULL_PALETTE = [
   'White',
   'Biege',
@@ -36,16 +39,68 @@ const FULL_PALETTE = [
   'Rose Antique',
   'Natural Acacia',
   'Natural Walnut',
-]
+] as const
+
+function normHex(hex: string): string {
+  const h = hex.startsWith('#') ? hex : `#${hex}`
+  return h.toLowerCase()
+}
+
+function findNameByHex(
+  hex: string,
+  palette: readonly string[]
+): string | undefined {
+  const target = normHex(hex)
+  for (const name of palette) {
+    const item = getColorItemByName(name)
+    if (item?.hexCode && normHex(item.hexCode) === target) return name
+  }
+  return undefined
+}
+
 export const ProductColors: FC<ProductColorsProps> = ({
   configuration,
   predefinedValue,
 }) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const is3DVersion = use3DVersion()
+  const { config, setConfig } = useConfiguratorConfig()
+
+  const palette = useMemo<readonly string[]>(
+    () =>
+      is3DVersion ? FULL_PALETTE : (configuration.colors as readonly string[]),
+    [is3DVersion, configuration.colors]
+  )
+
+  const selectedColorName = useMemo<string>(() => {
+    if (predefinedValue) return predefinedValue
+    const byHex = findNameByHex(config.color, palette)
+    if (byHex) return byHex
+    if (palette.includes(configuration.selectedColor))
+      return configuration.selectedColor
+    return (palette[0] as string) ?? ''
+  }, [predefinedValue, config.color, palette, configuration.selectedColor])
+
+  // Keep legacy per-page state in sync (so 3D reacts after refresh/deeplink)
+  useEffect(() => {
+    if (predefinedValue) return
+    if (configuration.selectedColor !== selectedColorName) {
+      configuration.setSelectedColor(selectedColorName)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedColorName, predefinedValue])
+
+  const handleChange = (name: string) => {
+    const item = getColorItemByName(name)
+    if (!item?.hexCode) return
+    // Update URL config with a full object (no functional updater)
+    setConfig({ ...config, color: normHex(item.hexCode) })
+    // Update legacy state used by 3D viewer
+    configuration.setSelectedColor(name)
+  }
+
   if (predefinedValue) {
     const ci = getColorItemByName(predefinedValue)
-
     return (
       <label className={styles.colorsLabel}>
         {!isMobile && (
@@ -59,12 +114,13 @@ export const ProductColors: FC<ProductColorsProps> = ({
           hexCode={ci?.hexCode}
           name={ci?.name}
           materialCode={ci?.materialCode}
-          selected={true}
+          selected
           size="medium"
         />
       </label>
     )
   }
+
   return (
     <label className={styles.colorsLabel}>
       {!isMobile && (
@@ -88,11 +144,12 @@ export const ProductColors: FC<ProductColorsProps> = ({
           </Link>
         </div>
       )}
+
       <SelectColor
-        colors={is3DVersion ? FULL_PALETTE : configuration.colors}
-        defaultSelected={configuration.selectedColor}
-        onChange={(value) => configuration.setSelectedColor(value)}
-        size={isMobile ? 'medium' : 'medium'}
+        colors={palette as string[]}
+        value={selectedColorName} // controlled by URL/derived selection
+        onChange={handleChange} // write URL + legacy state
+        size="medium"
         showAdd={!is3DVersion}
         colorCTA={<ColorCTA trackingId="color_cta_configurator" />}
       />

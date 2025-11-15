@@ -303,6 +303,13 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
 }
 
 // ============================================================================
+// WARDROBE CONSTRAINTS (temporary: reuses STAND until tuned)
+// ============================================================================
+export const WARDROBE_CONSTRAINTS: ProductConstraints = {
+  ...STAND_CONSTRAINTS,
+}
+
+// ============================================================================
 // CONSTRAINT REGISTRY
 // ============================================================================
 
@@ -310,6 +317,7 @@ export const FURNITURE_CONSTRAINTS = {
   stand: STAND_CONSTRAINTS,
   bedside: BEDSIDE_CONSTRAINTS,
   'tv-stand': TV_STAND_CONSTRAINTS,
+  wardrobe: WARDROBE_CONSTRAINTS,
 } as const
 
 export type FurnitureType = keyof typeof FURNITURE_CONSTRAINTS
