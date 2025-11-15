@@ -77,25 +77,12 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     prevSelectedColumnsRef.current = selectedColumns
   })
 
-  console.log('🟢 [STAND INIT] Render with:', {
-    selectedColumns,
-    columnConfigurationsLength: columnConfigurations.length,
-    hasHydrated: hasHydratedRef.current,
-    prevInRef: prevSelectedColumnsRef.current,
-  })
-
   // Hydrate from URL ONCE on mount
   useEffect(() => {
     if (!urlCtx || hasHydratedRef.current) return
     
     hasHydratedRef.current = true
     const { config } = urlCtx
-
-    console.log('🔵 [STAND HYDRATION] Hydrating from URL:', {
-      columns: config.columns,
-      columnConfigurations: config.columnConfigurations?.length,
-      openingType: config.openingType,
-    })
 
     // Batch all state updates together
     if (config.columns !== undefined) {
@@ -118,7 +105,6 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       setOpeningOption(openingType)
     }
 
-    console.log('🔵 [STAND HYDRATION] Complete')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // Empty deps - run ONCE on mount
 
@@ -168,29 +154,19 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
 
   // Update column configurations ONLY when number of columns ACTUALLY changes (not on mount)
   useEffect(() => {
-    console.log('🟡 [STAND COLUMNS EFFECT] Effect triggered with selectedColumns:', selectedColumns, 'previous:', prevSelectedColumnsRef.current)
-    
     // Skip if value didn't actually change
     if (prevSelectedColumnsRef.current === selectedColumns) {
-      console.log('⏭️  [STAND COLUMNS EFFECT] Value unchanged, skipping')
       return
     }
     
-    console.log('🟡 [STAND COLUMNS EFFECT] Value changed from', prevSelectedColumnsRef.current, 'to', selectedColumns)
     prevSelectedColumnsRef.current = selectedColumns
     
     setColumnConfigurations((prev) => {
-      console.log('🟡 [STAND COLUMNS EFFECT] Current prev.length:', prev.length, 'prev:', prev)
-      console.log('🟡 [STAND COLUMNS EFFECT] selectedColumns:', selectedColumns)
-      
       // If we already have the correct number of configurations, don't recreate them
       // This prevents overwriting configurations loaded from URL during hydration
       if (prev.length === selectedColumns) {
-        console.log('✅ [STAND COLUMNS EFFECT] Length matches! Keeping existing configurations')
         return prev
       }
-
-      console.log('🔴 [STAND COLUMNS EFFECT] Length mismatch! Recreating configurations')
 
       const dimensions = {
         width: width / selectedColumns,
@@ -208,25 +184,20 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
           return createConfigurationForNewColumn(prev, dimensions, 3, 'stand', i, selectedColumns)
         })
 
-      console.log('🔴 [STAND COLUMNS EFFECT] New configs created:', newConfigs)
       return newConfigs
     })
   }, [selectedColumns, width, height, depth, plintHeight])
 
   // Validate existing configurations when dimensions change
   useEffect(() => {
-    console.log('🟣 [STAND VALIDATION] Validation effect triggered, hasHydrated:', hasHydratedRef.current)
-    
     // Skip validation until hydration completes
     if (!hasHydratedRef.current) {
-      console.log('⏭️  [STAND VALIDATION] Skipping - hydration not complete')
       return
     }
     
     // Skip if columns and configs are mismatched (indicates we're mid-update)
     setColumnConfigurations((prev) => {
       if (prev.length !== selectedColumns) {
-        console.log('⏭️  [STAND VALIDATION] Skipping - config length mismatch (transitioning)')
         return prev
       }
       
@@ -236,12 +207,8 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
         depth: depth,
       }
       
-      console.log('🟣 [STAND VALIDATION] Validating with dimensions:', dimensions)
-      console.log('🟣 [STAND VALIDATION] Before validation:', prev)
-      
       const validated = validateAndUpdateConfigurations(prev, dimensions, 'stand')
       
-      console.log('🟣 [STAND VALIDATION] After validation:', validated)
       return validated
     })
   }, [width, height, depth, plintHeight, selectedColumns])

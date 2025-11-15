@@ -87,18 +87,13 @@ export default function DynamicConfiguratorPage({
         | Partial<BaseConfig>
         | ((prev: Partial<BaseConfig>) => Partial<BaseConfig>)
     ) => {
-      console.log('🔴 [SET CONFIG] Called with:', next)
-      console.trace('🔴 [SET CONFIG] Call stack')
-      
       if (typeof next === 'function') {
         setBaseConfig((prev) => {
           const partial = next(prev)
-          console.log('🔴 [SET CONFIG] Function result:', partial, 'merged into:', prev)
           return { ...prev, ...partial }
         })
       } else {
         setBaseConfig((prev) => {
-          console.log('🔴 [SET CONFIG] Merging:', next, 'into:', prev)
           return { ...prev, ...next }
         })
       }

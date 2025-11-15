@@ -79,13 +79,10 @@ export function parseQueryToConfig(
   // Parse column configurations from URL
   const colCfgParam = q['colCfg']
   const colCfgStr = Array.isArray(colCfgParam) ? colCfgParam[0] : colCfgParam
-  console.log('🟢 [PARSE URL] colCfg parameter:', colCfgStr)
   if (colCfgStr && typeof colCfgStr === 'string') {
     const decoded = decodeColumnConfigs(colCfgStr)
-    console.log('🟢 [PARSE URL] Decoded columnConfigurations:', decoded)
     if (decoded.length > 0) {
       cfg.columnConfigurations = decoded
-      console.log('🟢 [PARSE URL] Set cfg.columnConfigurations to:', cfg.columnConfigurations)
     }
   }
 
@@ -100,7 +97,6 @@ export function parseQueryToConfig(
     cfg.openingType = 'round'
   }
 
-  console.log('🟢 [PARSE URL] Final config:', cfg)
   return cfg
 }
 

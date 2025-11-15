@@ -40,8 +40,6 @@ export function useUrlSync<T>(
   const router = useRouter()
   const [config, setConfig] = useState<T>(initial)
 
-  console.log('🟠 [USE URL SYNC] Hook called, initial config:', initial)
-
   const toQueryRef = useRef(toQuery)
   const prevSerializedRef = useRef<string | null>(null)
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null)

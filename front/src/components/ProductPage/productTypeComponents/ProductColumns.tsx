@@ -64,20 +64,16 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
 
   // recompute a valid preset whenever options change
   const desired = useMemo<number | undefined>(() => {
-    console.log('🔶 [PRODUCT COLUMNS] Computing desired:', { current, isValid: isValid(current, options), options })
     if (isValid(current, options)) return current
     const fallback = firstEnabled(options)
-    console.log('🔶 [PRODUCT COLUMNS] Current invalid, falling back to:', fallback)
     return fallback
   }, [current, options])
 
   // enforce preset into both stores when options change (and on first mount)
   useEffect(() => {
-    console.log('🔶 [PRODUCT COLUMNS] Enforce effect:', { predefinedValue, desired, current, willChange: current !== desired })
     if (predefinedValue != null) return
     if (desired == null) return
     if (current !== desired) {
-      console.log('🔴 [PRODUCT COLUMNS] Forcing columns from', current, 'to', desired)
       // URL
       setConfig({ ...config, columns: desired })
       // legacy (3D)

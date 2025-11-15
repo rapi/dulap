@@ -71,11 +71,6 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     productType,
   } = configuration
 
-  console.log('🔷 [INDIVIDUAL COLUMNS] Component rendered with:', {
-    selectedColumns,
-    columnConfigurations,
-  })
-
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   // Get URL context for synchronization
