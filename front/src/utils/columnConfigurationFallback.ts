@@ -78,7 +78,11 @@ export function updateInvalidConfigurations(
   productType?: FurnitureProductType
 ): ColumnConfigurationType[] {
   return configurations.map(config => {
-    const validConfig = findNearestAvailableConfiguration(config, dimensions, productType)
+    // Get current drawer count to preserve it if possible
+    const currentMetadata = getConfigurationMetadata(config)
+    const currentDrawerCount = currentMetadata?.drawerCount
+    
+    const validConfig = findNearestAvailableConfiguration(config, dimensions, productType, currentDrawerCount)
     if (!validConfig) {
       console.warn(`No valid configuration found for column with dimensions`, dimensions)
       // Return original if no valid alternative found (shouldn't happen with proper constraints)

@@ -93,9 +93,7 @@ export default function DynamicConfiguratorPage({
           return { ...prev, ...partial }
         })
       } else {
-        setBaseConfig((prev) => {
-          return { ...prev, ...next }
-        })
+        setBaseConfig((prev) => ({ ...prev, ...next }))
       }
     },
     [setBaseConfig]

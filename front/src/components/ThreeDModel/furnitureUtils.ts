@@ -20,7 +20,7 @@ export const preloadPBRTextures = (): void => {
             url,
             // onLoad callback - texture is ready
             (loadedTexture) => {
-              // Configure texture based on type
+          // Configure texture based on type
               if (key === 'diffuse') {
                 loadedTexture.colorSpace = THREE.SRGBColorSpace
               }

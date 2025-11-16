@@ -28,7 +28,11 @@ export function useColumnConfigurationSync(
       }
 
       if (!isValid(config.type)) {
-        const nearestType = findNearestAvailableConfiguration(config.type, dimensions)
+        // Get current drawer count to preserve it if possible
+        const currentMetadata = getConfigurationMetadata(config.type)
+        const currentDrawerCount = currentMetadata?.drawerCount
+        
+        const nearestType = findNearestAvailableConfiguration(config.type, dimensions, undefined, currentDrawerCount)
         if (nearestType && nearestType !== config.type) {
           const metadata = getConfigurationMetadata(nearestType)
           // Preserve user's choice, or use position-based default

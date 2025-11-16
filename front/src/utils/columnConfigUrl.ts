@@ -112,11 +112,11 @@ export function decodeColumnConfigs(
 
     // Only include doorOpeningSide if it's defined (not undefined)
     // This prevents Next.js serialization errors with undefined values
-    if (doorOpeningSide !== undefined) {
-      results.push({ type, doorOpeningSide })
-    } else {
-      results.push({ type })
-    }
+    const config = doorOpeningSide !== undefined 
+      ? { type, doorOpeningSide }
+      : { type }
+    
+    results.push(config)
   }
   
   return results

@@ -81,9 +81,13 @@ export function createConfigurationForExistingColumn(
     return existingConfig
   }
 
-  // Find nearest valid alternative
+  // Get current drawer count to preserve it if possible
+  const currentMetadata = getConfigurationMetadata(existingConfig.type)
+  const currentDrawerCount = currentMetadata?.drawerCount
+
+  // Find nearest valid alternative, preferring same drawer count
   const nearestType =
-    findNearestAvailableConfiguration(existingConfig.type, dimensions, productType) ||
+    findNearestAvailableConfiguration(existingConfig.type, dimensions, productType, currentDrawerCount) ||
     existingConfig.type
 
   const metadata = getConfigurationMetadata(nearestType)
@@ -157,8 +161,12 @@ export function validateAndUpdateConfigurations(
       return config
     }
 
+    // Get current drawer count to preserve it if possible
+    const currentMetadata = getConfigurationMetadata(config.type)
+    const currentDrawerCount = currentMetadata?.drawerCount
+
     const nearestType =
-      findNearestAvailableConfiguration(config.type, dimensions, productType) || config.type
+      findNearestAvailableConfiguration(config.type, dimensions, productType, currentDrawerCount) || config.type
 
     const metadata = getConfigurationMetadata(nearestType)
     
