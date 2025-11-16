@@ -7,7 +7,7 @@ import {
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { use3DVersion } from '~/hooks/use3DVersion'
 import { useMediaQuery } from '@mui/material'
-import { useConfiguratorConfig } from '~/context/urlConfigContext'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductColumnsComponent = {
   type: 'columns'
@@ -49,7 +49,7 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
   const is3DVersion = use3DVersion()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
-  const { config, setConfig } = useConfiguratorConfig()
+  const ctx = useConfiguratorConfigOptional()
 
   // priority: component -> prop -> defaults
   const options = useMemo<ButtonOptionsType[]>(
@@ -59,7 +59,7 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
 
   // current (could come from URL or legacy)
   const currentFromUrl =
-    typeof config.columns === 'number' ? config.columns : undefined
+    ctx && typeof ctx.config.columns === 'number' ? ctx.config.columns : undefined
   const current = currentFromUrl ?? configuration.selectedColumns
 
   // recompute a valid preset whenever options change
@@ -74,8 +74,10 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
     if (predefinedValue != null) return
     if (desired == null) return
     if (current !== desired) {
-      // URL
-      setConfig({ ...config, columns: desired })
+      // URL (only if context exists)
+      if (ctx) {
+        ctx.setConfig({ ...ctx.config, columns: desired })
+      }
       // legacy (3D)
       configuration.setSelectedColumns(desired)
     }
@@ -83,7 +85,8 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
   }, [
     desired,
     predefinedValue,
-    /* config, setConfig, */ configuration.setSelectedColumns,
+    ctx,
+    configuration.setSelectedColumns,
   ])
 
   const handleChange = (value: string) => {
@@ -94,7 +97,9 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
     if (Number.isNaN(next)) return
 
     // URL + legacy (until 3D reads URL directly)
-    setConfig({ ...config, columns: next })
+    if (ctx) {
+      ctx.setConfig({ ...ctx.config, columns: next })
+    }
     configuration.setSelectedColumns(next)
   }
 

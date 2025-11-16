@@ -10,7 +10,7 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import ColorCTA from '~/components/ColorCTA/ColorCTA'
 import { useMediaQuery } from '@mui/material'
 import { use3DVersion } from '~/hooks/use3DVersion'
-import { useConfiguratorConfig } from '~/context/urlConfigContext'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductColorsComponent = {
   type: 'colors'
@@ -64,7 +64,7 @@ export const ProductColors: FC<ProductColorsProps> = ({
 }) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
   const is3DVersion = use3DVersion()
-  const { config, setConfig } = useConfiguratorConfig()
+  const ctx = useConfiguratorConfigOptional()
 
   const palette = useMemo<readonly string[]>(
     () =>
@@ -74,12 +74,12 @@ export const ProductColors: FC<ProductColorsProps> = ({
 
   const selectedColorName = useMemo<string>(() => {
     if (predefinedValue) return predefinedValue
-    const byHex = findNameByHex(config.color, palette)
+    const byHex = ctx ? findNameByHex(ctx.config.color, palette) : undefined
     if (byHex) return byHex
     if (palette.includes(configuration.selectedColor))
       return configuration.selectedColor
     return (palette[0] as string) ?? ''
-  }, [predefinedValue, config.color, palette, configuration.selectedColor])
+  }, [predefinedValue, ctx, palette, configuration.selectedColor])
 
   // Keep legacy per-page state in sync (so 3D reacts after refresh/deeplink)
   useEffect(() => {
@@ -94,7 +94,9 @@ export const ProductColors: FC<ProductColorsProps> = ({
     const item = getColorItemByName(name)
     if (!item?.hexCode) return
     // Update URL config with a full object (no functional updater)
-    setConfig({ ...config, color: normHex(item.hexCode) })
+    if (ctx) {
+      ctx.setConfig({ ...ctx.config, color: normHex(item.hexCode) })
+    }
     // Update legacy state used by 3D viewer
     configuration.setSelectedColor(name)
   }
