@@ -9,6 +9,7 @@ import {
 } from '~/components/ButtonImageSelect/ButtonImageSelect'
 import { use3DVersion } from '~/hooks/use3DVersion'
 import { useMediaQuery } from '@mui/material'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
@@ -27,7 +28,7 @@ export type ProductFurniturePredefinedValue = {
   hinges?:
     | 'homepage.configurator.fittings.hinges.options.1'
     | 'homepage.configurator.fittings.hinges.options.2'
-  guides:
+  guides?:
     | 'homepage.configurator.fittings.guides.options.1'
     | 'homepage.configurator.fittings.guides.options.2'
 }
@@ -64,8 +65,10 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
 }) => {
   const intl = useIntl()
   const [isModalOpen3, setIsModalOpen3] = useState(false)
-  const is3DVersion = use3DVersion()
   const isMobile = useMediaQuery('(max-width: 768px)')
+  
+  // Get URL context for synchronization
+  const urlCtx = useConfiguratorConfigOptional()
 
   // Filter opening options based on 3D availability
   const availableOpeningOptions = configuration.is3DEnabled
@@ -73,6 +76,30 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
     : openingOptions.filter(
         (option) => option.value !== OpeningType.ProfileHandle
       )
+  
+  // Handle opening type change with URL sync
+  const handleOpeningTypeChange = (value: OpeningType) => {
+    // Update local state
+    configuration.setOpeningOption(value)
+    
+    // Sync to URL
+    if (urlCtx) {
+      // Map OpeningType enum to URL format ('push' | 'round' | 'profile')
+      let urlValue: 'push' | 'round' | 'profile'
+      if (value === OpeningType.Push) {
+        urlValue = 'push'
+      } else if (value === OpeningType.ProfileHandle) {
+        urlValue = 'profile'
+      } else {
+        urlValue = 'round' // RoundHandle is default for handles
+      }
+      
+      urlCtx.setConfig({ 
+        ...urlCtx.config, 
+        openingType: urlValue 
+      })
+    }
+  }
 
   return (
     <div>
@@ -97,7 +124,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
               })}
               options={availableOpeningOptions}
               value={configuration.openingOption}
-              onChange={(value) => configuration.setOpeningOption(value)}
+              onChange={handleOpeningTypeChange}
             />
           )}
         </div>

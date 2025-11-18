@@ -17,7 +17,6 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
 
   const strippedPath = router.pathname.replace('/[locale]', '')
   const productType = productTypes.find(({ link }) => link === strippedPath)
-  console.log('test', productType)
 
   return (
     <>

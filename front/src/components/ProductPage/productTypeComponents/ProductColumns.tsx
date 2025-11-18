@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
 import {
   ButtonOptionsType,
@@ -7,6 +7,7 @@ import {
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { use3DVersion } from '~/hooks/use3DVersion'
 import { useMediaQuery } from '@mui/material'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductColumnsComponent = {
   type: 'columns'
@@ -28,15 +29,79 @@ export const columnsOptions: ButtonOptionsType[] = [
   { value: '4', label: 4 },
 ]
 
+// helpers (no change to ButtonSelect needed)
+function isValid(val: number | undefined, opts: ButtonOptionsType[]): boolean {
+  if (val == null) return false
+  const s = String(val)
+  const found = opts.find((o) => o.value === s)
+  return !!found && !found.disabled
+}
+function firstEnabled(opts: ButtonOptionsType[]): number | undefined {
+  const f = opts.find((o) => !o.disabled)
+  return f ? parseInt(String(f.value), 10) : undefined
+}
+
 export const ProductColumns: FC<ProductColumnsProps> = ({
   configuration,
   predefinedValue,
   options: propOptions,
 }) => {
-  // Use options from configuration if available, otherwise from props, otherwise default
-  const options = configuration.options ?? propOptions ?? columnsOptions
   const is3DVersion = use3DVersion()
   const isMobile = useMediaQuery('(max-width: 768px)')
+
+  const ctx = useConfiguratorConfigOptional()
+
+  // priority: component -> prop -> defaults
+  const options = useMemo<ButtonOptionsType[]>(
+    () => configuration.options ?? propOptions ?? columnsOptions,
+    [configuration.options, propOptions]
+  )
+
+  // current (could come from URL or legacy)
+  const currentFromUrl =
+    ctx && typeof ctx.config.columns === 'number' ? ctx.config.columns : undefined
+  const current = currentFromUrl ?? configuration.selectedColumns
+
+  // recompute a valid preset whenever options change
+  const desired = useMemo<number | undefined>(() => {
+    if (isValid(current, options)) return current
+    const fallback = firstEnabled(options)
+    return fallback
+  }, [current, options])
+
+  // enforce preset into both stores when options change (and on first mount)
+  useEffect(() => {
+    if (predefinedValue != null) return
+    if (desired == null) return
+    if (current !== desired) {
+      // URL (only if context exists)
+      if (ctx) {
+        ctx.setConfig({ ...ctx.config, columns: desired })
+      }
+      // legacy (3D)
+      configuration.setSelectedColumns(desired)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    desired,
+    predefinedValue,
+    ctx,
+    configuration.setSelectedColumns,
+  ])
+
+  const handleChange = (value: string) => {
+    // ignore disabled (ButtonSelect already guards clicks, but keep it safe)
+    const opt = options.find((o) => o.value === value)
+    if (opt?.disabled) return
+    const next = parseInt(value, 10)
+    if (Number.isNaN(next)) return
+
+    // URL + legacy (until 3D reads URL directly)
+    if (ctx) {
+      ctx.setConfig({ ...ctx.config, columns: next })
+    }
+    configuration.setSelectedColumns(next)
+  }
 
   return (
     <>
@@ -48,6 +113,7 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
           />
         </p>
       )}
+
       <div>
         <label className={styles.furnitureLabel}>
           {!isMobile && (
@@ -58,19 +124,19 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
               />
             </p>
           )}
+
           {predefinedValue != null ? (
             predefinedValue
           ) : (
             <ButtonSelect
               options={options}
-              defaultSelected={configuration.selectedColumns.toString()}
-              onChange={(value) => {
-                // ignore clicks on disabled options (for future constraints)
-                const opt = options.find((o) => o.value === value)
-                if (!opt?.disabled) {
-                  configuration.setSelectedColumns(parseInt(value))
-                }
-              }}
+              // key makes ButtonSelect re-initialize if the preset changes shape
+              key={options
+                .map((o) => `${o.value}:${o.disabled ? 1 : 0}`)
+                .join('|')}
+              defaultSelected={String(desired ?? current)}
+              onChange={handleChange}
+              size="small"
             />
           )}
         </label>

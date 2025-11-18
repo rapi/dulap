@@ -153,6 +153,8 @@
   "homepage.configurator.title": "Шкаф для одежды",
   "homepage.configurator.stand.title": "Комод",
   "homepage.configurator.bedside.title": "Прикроватная тумба",
+  "homepage.configurator.tv-stand.title": "Тумба ТВ",
+  "homepage.configurator.wardrobe.title": "Шкаф для одежды",
 
   "homepage.configurator.dimensions.title": "Размеры",
   "dimensions.title.tooltip": "Как правильно выбрать размеры?",

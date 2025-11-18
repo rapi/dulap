@@ -1,8 +1,11 @@
 import { ProductComponent } from '~/components/ProductPage/StandProductPage'
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
-import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
+import {
+  ColumnConfigurationType,
+  getConfigurationMetadata,
+} from '~/types/columnConfigurationTypes'
 import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { getConstraints } from '~/config/furnitureConstraints'
 import { useFurnitureConstraints } from '~/hooks/useFurnitureConstraints'
@@ -17,6 +20,7 @@ import {
 } from '~/utils/columnConfigurationUtils'
 import { getValidColumnCountsForStand } from '~/config/columnConstraints.stand'
 import { mapColorToImageColor } from '~/utils/colorUtils'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 // Get stand constraints
 const CONSTRAINTS = getConstraints('stand')
@@ -30,28 +34,48 @@ export const DEFAULT_STAND = {
 }
 
 export const StandProductConfigurator: () => ProductComponent[] = () => {
-  const [width, setWidth] = useState(DEFAULT_STAND.width)
-  const [height, setHeight] = useState(DEFAULT_STAND.height)
-  const [depth, setDepth] = useState(DEFAULT_STAND.depth)
-  const [plintHeight, setPlintHeight] = useState(DEFAULT_STAND.plintHeight)
+  // Get URL context
+  const urlCtx = useConfiguratorConfigOptional()
+  
+  const [width, setWidth] = useState(() => 
+    urlCtx?.config.width ?? DEFAULT_STAND.width
+  )
+  const [height, setHeight] = useState(() => 
+    urlCtx?.config.height ?? DEFAULT_STAND.height
+  )
+  const [depth, setDepth] = useState(() => 
+    urlCtx?.config.depth ?? DEFAULT_STAND.depth
+  )
+  const [plintHeight, setPlintHeight] = useState(() => 
+    urlCtx?.config.plintHeight ?? DEFAULT_STAND.plintHeight
+  )
   const [selectedSections, setSelectedSections] = useState(
     CONSTRAINTS.sections.default
   )
-  const [selectedColumns, setSelectedColumns] = useState(
-    CONSTRAINTS.columns.default
+  
+  // Initialize columns and configurations from URL if available
+  const [selectedColumns, setSelectedColumns] = useState(() => 
+    urlCtx?.config.columns ?? CONSTRAINTS.columns.default
   )
-  const [columnConfigurations, setColumnConfigurations] = useState<ColumnConfigurationWithOptions[]>([
-    { type: ColumnConfigurationType.DRAWERS_3 }
-  ])
-  const [selectedColor, setSelectedColor] = useState(
-    DEFAULT_STAND.selectedColor
+  const [columnConfigurations, setColumnConfigurations] = useState<
+    ColumnConfigurationWithOptions[]
+  >(() => 
+    urlCtx?.config.columnConfigurations && urlCtx.config.columnConfigurations.length > 0
+      ? urlCtx.config.columnConfigurations
+      : [{ type: ColumnConfigurationType.DRAWERS_3 }]
+  )
+  const [selectedColor, setSelectedColor] = useState(() =>
+    urlCtx?.config.color ?? DEFAULT_STAND.selectedColor
   )
   const [guides, setGuides] = useState(
     'homepage.configurator.fittings.guides.options.1'
   )
-  const [openingOption, setOpeningOption] = useState<OpeningType>(
-    OpeningType.Push
-  )
+  const [openingOption, setOpeningOption] = useState<OpeningType>(() => {
+    if (!urlCtx?.config.openingType) return OpeningType.Push
+    if (urlCtx.config.openingType === 'profile') return OpeningType.ProfileHandle
+    if (urlCtx.config.openingType === 'round') return OpeningType.RoundHandle
+    return OpeningType.Push
+  })
   const [imageColor, setImageColor] = useState('White')
 
   // --- NEW: independent gallery color + who changed last ---
@@ -61,6 +85,52 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     'main'
   )
   // ---------------------------------------------------------
+  
+  // Track if initial render has happened (to prevent URL sync during initialization)
+  const hasHydratedRef = useRef(false)
+  // Track previous value to detect actual changes - DO NOT initialize with current value!
+  const prevSelectedColumnsRef = useRef<number | null>(null)
+  // Track previous column configurations to prevent infinite URL sync loops
+  // Initialize with current configs to prevent immediate sync on mount
+  const prevColumnConfigsRef = useRef<string>(
+    JSON.stringify(
+      urlCtx?.config.columnConfigurations && urlCtx.config.columnConfigurations.length > 0
+        ? urlCtx.config.columnConfigurations
+        : [{ type: ColumnConfigurationType.DRAWERS_3 }]
+    )
+  )
+
+  // Mark hydration as complete after first render
+  useEffect(() => {
+    hasHydratedRef.current = true
+  }, [])
+
+  // Sync local state with URL context changes (for dimensions and columns count ONLY)
+  // NOTE: Do NOT sync columnConfigurations here - they are managed by their own effects
+  // and syncing them here creates infinite loops with validation
+  useEffect(() => {
+    if (!urlCtx) return
+    
+    // Sync dimensions
+    if (urlCtx.config.width !== undefined && urlCtx.config.width !== width) {
+      setWidth(urlCtx.config.width)
+    }
+    if (urlCtx.config.height !== undefined && urlCtx.config.height !== height) {
+      setHeight(urlCtx.config.height)
+    }
+    if (urlCtx.config.depth !== undefined && urlCtx.config.depth !== depth) {
+      setDepth(urlCtx.config.depth)
+    }
+    if (urlCtx.config.plintHeight !== undefined && urlCtx.config.plintHeight !== plintHeight) {
+      setPlintHeight(urlCtx.config.plintHeight)
+    }
+    
+    // Sync columns count
+    if (urlCtx.config.columns !== undefined && urlCtx.config.columns !== selectedColumns) {
+      setSelectedColumns(urlCtx.config.columns)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlCtx?.config.width, urlCtx?.config.height, urlCtx?.config.depth, urlCtx?.config.plintHeight, urlCtx?.config.columns])
 
   // Derive sections from column configurations (for new 3D system)
   const derivedSections = useMemo(() => {
@@ -106,9 +176,29 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     }
   }, [availableSections, selectedSections])
 
-  // Update column configurations ONLY when number of columns changes
+  // Update column configurations when number of columns changes OR on first mount if count mismatch
   useEffect(() => {
     setColumnConfigurations((prev) => {
+      // Check if this is first run
+      const isFirstRun = prevSelectedColumnsRef.current === null
+      
+      // If not first run and value didn't change, skip
+      if (!isFirstRun && prevSelectedColumnsRef.current === selectedColumns) {
+        return prev
+      }
+      
+      // If we already have the correct number of configurations, don't recreate them
+      // This prevents overwriting configurations loaded from URL during hydration
+      if (prev.length === selectedColumns) {
+        // Update the ref since we're keeping the config
+        if (isFirstRun || prevSelectedColumnsRef.current !== selectedColumns) {
+          prevSelectedColumnsRef.current = selectedColumns
+        }
+        return prev
+      }
+
+      prevSelectedColumnsRef.current = selectedColumns
+
       const dimensions = {
         width: width / selectedColumns,
         height: height - plintHeight,
@@ -131,15 +221,21 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
 
   // Validate existing configurations when dimensions change
   useEffect(() => {
-    const dimensions = {
-      width: width / selectedColumns,
-      height: height - plintHeight,
-      depth: depth,
-    }
-
-    setColumnConfigurations((prev) =>
-      validateAndUpdateConfigurations(prev, dimensions, 'stand')
-    )
+    // Skip validation until hydration completes
+    if (!hasHydratedRef.current) return
+    
+    // Skip if columns and configs are mismatched (indicates we're mid-update)
+    setColumnConfigurations((prev) => {
+      if (prev.length !== selectedColumns) return prev
+      
+      const dimensions = {
+        width: width / selectedColumns,
+        height: height - plintHeight,
+        depth: depth,
+      }
+      
+      return validateAndUpdateConfigurations(prev, dimensions, 'stand')
+    })
   }, [width, height, depth, plintHeight, selectedColumns])
 
   // Calculate individual column dimensions for constraint evaluation
@@ -156,11 +252,16 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   // Check which column counts are valid based on dimensions AND stand-specific width rules
   const validColumnCounts = useMemo(() => {
     // Get valid counts based on column dimensions (width, height, depth)
-    const dimensionBasedCounts = getValidColumnCounts(width, height, depth, plintHeight)
-    
+    const dimensionBasedCounts = getValidColumnCounts(
+      width,
+      height,
+      depth,
+      plintHeight
+    )
+
     // Get valid counts based on stand width rules
     const standWidthBasedCounts = getValidColumnCountsForStand(width)
-    
+
     // Combine both: a count is valid only if it passes BOTH checks
     const combined: Record<number, boolean> = {
       1: dimensionBasedCounts[1] && standWidthBasedCounts[1],
@@ -168,7 +269,6 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       3: dimensionBasedCounts[3] && standWidthBasedCounts[3],
       4: dimensionBasedCounts[4] && standWidthBasedCounts[4],
     }
-    
     return combined
   }, [width, height, depth, plintHeight])
 
@@ -185,6 +285,9 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
 
   // Auto-select valid column count when current becomes invalid
   useEffect(() => {
+    // Skip auto-adjustment during initial hydration
+    if (!hasHydratedRef.current) return
+    
     if (!validColumnCounts[selectedColumns]) {
       // Try to keep a count close to the current selection
       const preferences = [
@@ -200,9 +303,16 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
         validColumnCounts,
         preferences
       )
+      
+      // Update both local state AND URL context
       setSelectedColumns(validCount)
+      if (urlCtx) {
+        const ctx = urlCtx
+        const setConfig = ctx.setConfig as (config: Partial<typeof ctx.config>) => void
+        setConfig({ columns: validCount })
+      }
     }
-  }, [validColumnCounts, selectedColumns])
+  }, [validColumnCounts, selectedColumns, urlCtx])
 
   // Map color names for image paths (MAIN)
   useEffect(() => {
@@ -213,6 +323,23 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   useEffect(() => {
     setGalleryImageColor(mapColorToImageColor(galleryColor))
   }, [galleryColor])
+
+  // Sync column configurations to URL (only after hydration completes)
+  useEffect(() => {
+    if (!urlCtx || !hasHydratedRef.current) return
+    if (columnConfigurations.length === 0) return
+    
+    // Only sync if the value actually changed (deep comparison via JSON)
+    const currentSerialized = JSON.stringify(columnConfigurations)
+    if (prevColumnConfigsRef.current === currentSerialized) return
+    
+    prevColumnConfigsRef.current = currentSerialized
+    
+    // Type assertion needed because context definition doesn't reflect that setConfig accepts partials
+    const ctx = urlCtx
+    const setConfig = ctx.setConfig as (config: Partial<typeof ctx.config>) => void
+    setConfig({ columnConfigurations })
+  }, [columnConfigurations, urlCtx])
 
   // Choose last changed color for gallery visuals
   const activeGalleryImageColor = useMemo(
@@ -284,7 +411,6 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       columnWidth,
       columnHeight,
       columnDepth,
-      productType: 'stand' as const,
     },
     {
       type: 'furniture',

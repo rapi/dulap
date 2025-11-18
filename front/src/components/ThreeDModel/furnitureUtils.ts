@@ -16,14 +16,34 @@ export const preloadPBRTextures = (): void => {
       // Preload all texture types
       Object.entries(textures).forEach(([key, url]) => {
         if (url && !textureCache.has(url)) {
-          const texture = textureLoader.load(url)
-          
+          const texture = textureLoader.load(
+            url,
+            // onLoad callback - texture is ready
+            (loadedTexture) => {
           // Configure texture based on type
+              if (key === 'diffuse') {
+                loadedTexture.colorSpace = THREE.SRGBColorSpace
+              }
+              
+              // Set wrapping mode (repeat will be calculated per mesh)
+              loadedTexture.wrapS = THREE.RepeatWrapping
+              loadedTexture.wrapT = THREE.RepeatWrapping
+              
+              // Ensure texture updates
+              loadedTexture.needsUpdate = true
+            },
+            // onProgress callback (optional)
+            undefined,
+            // onError callback
+            (error) => {
+              console.warn(`Failed to load texture: ${url}`, error)
+            }
+          )
+          
+          // Configure texture immediately (these settings will persist)
           if (key === 'diffuse') {
             texture.colorSpace = THREE.SRGBColorSpace
           }
-          
-          // Set wrapping mode (repeat will be calculated per mesh)
           texture.wrapS = THREE.RepeatWrapping
           texture.wrapT = THREE.RepeatWrapping
 
@@ -78,10 +98,22 @@ export const applyColorToObject = (obj: THREE.Object3D, color: string): void => 
   obj.traverse((o) => {
     if (o instanceof THREE.Mesh) {
       const mesh = o
-      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+      const oldMaterials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
       
-      materials.forEach((oldMaterial) => {
-        // Dispose old material and its textures completely
+      // Create fresh material with solid color only (no textures)
+      const solidColorMaterial = new THREE.MeshStandardMaterial({
+        color: color,
+        roughness: 0.8,
+        metalness: 0.0,
+      })
+      
+      // Apply new material FIRST, then dispose old ones
+      // This prevents the "white screen" flash
+      mesh.material = solidColorMaterial
+      mesh.material.needsUpdate = true
+      
+      // Now dispose old materials and their textures
+      oldMaterials.forEach((oldMaterial) => {
         if (oldMaterial && oldMaterial instanceof THREE.Material) {
           // Dispose all texture maps if they exist
           if ('map' in oldMaterial && oldMaterial.map instanceof THREE.Texture) oldMaterial.map.dispose()
@@ -93,16 +125,6 @@ export const applyColorToObject = (obj: THREE.Object3D, color: string): void => 
           oldMaterial.dispose()
         }
       })
-      
-      // Create fresh material with solid color only (no textures)
-      const solidColorMaterial = new THREE.MeshStandardMaterial({
-        color: color,
-        roughness: 0.8,
-        metalness: 0.0,
-      })
-      
-      mesh.material = solidColorMaterial
-      mesh.material.needsUpdate = true
     }
   })
 }
@@ -134,19 +156,7 @@ export const applyPBRTexturesToObject = (
   obj.traverse((o) => {
     if (o instanceof THREE.Mesh) {
       const mesh = o
-      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
-      
-      materials.forEach((oldMaterial) => {
-        // Dispose old material and its textures
-        if (oldMaterial && oldMaterial instanceof THREE.Material) {
-          if ('map' in oldMaterial && oldMaterial.map instanceof THREE.Texture) oldMaterial.map.dispose()
-          if ('normalMap' in oldMaterial && oldMaterial.normalMap instanceof THREE.Texture) oldMaterial.normalMap.dispose()
-          if ('roughnessMap' in oldMaterial && oldMaterial.roughnessMap instanceof THREE.Texture) oldMaterial.roughnessMap.dispose()
-          if ('aoMap' in oldMaterial && oldMaterial.aoMap instanceof THREE.Texture) oldMaterial.aoMap.dispose()
-          if ('displacementMap' in oldMaterial && oldMaterial.displacementMap instanceof THREE.Texture) oldMaterial.displacementMap.dispose()
-          oldMaterial.dispose()
-        }
-      })
+      const oldMaterials = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
       
       // Calculate mesh size for proper texture scaling
       mesh.geometry.computeBoundingBox()
@@ -239,7 +249,9 @@ export const applyPBRTexturesToObject = (
           aoMapIntensity: meshAO ? 0.5 : 0,   // Reduce AO intensity
         })
         
+        // Apply new material FIRST, then dispose old ones (prevents white screen flash)
         mesh.material = pbrMaterial
+        mesh.material.needsUpdate = true
       } else {
         // Fallback if no bounding box
         const pbrMaterial = new THREE.MeshStandardMaterial({
@@ -253,10 +265,23 @@ export const applyPBRTexturesToObject = (
           aoMap: aoTexture || undefined,
           aoMapIntensity: aoTexture ? 0.5 : 0,
         })
+        
+        // Apply new material FIRST, then dispose old ones (prevents white screen flash)
         mesh.material = pbrMaterial
+        mesh.material.needsUpdate = true
       }
       
-      mesh.material.needsUpdate = true
+      // Now dispose old materials and their textures (after new material is applied)
+      oldMaterials.forEach((oldMaterial) => {
+        if (oldMaterial && oldMaterial instanceof THREE.Material) {
+          if ('map' in oldMaterial && oldMaterial.map instanceof THREE.Texture) oldMaterial.map.dispose()
+          if ('normalMap' in oldMaterial && oldMaterial.normalMap instanceof THREE.Texture) oldMaterial.normalMap.dispose()
+          if ('roughnessMap' in oldMaterial && oldMaterial.roughnessMap instanceof THREE.Texture) oldMaterial.roughnessMap.dispose()
+          if ('aoMap' in oldMaterial && oldMaterial.aoMap instanceof THREE.Texture) oldMaterial.aoMap.dispose()
+          if ('displacementMap' in oldMaterial && oldMaterial.displacementMap instanceof THREE.Texture) oldMaterial.displacementMap.dispose()
+          oldMaterial.dispose()
+        }
+      })
       
       // Ensure geometry has UV2 attribute for AO map if needed
       if (aoTexture && mesh.geometry && !mesh.geometry.attributes.uv2) {
