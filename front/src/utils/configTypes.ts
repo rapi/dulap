@@ -27,6 +27,7 @@ export interface BaseConfig {
   columns?: number
   sections?: number[]
   plintHeight?: number // only for stand
-  columnConfigurations?: ColumnConfigurationWithOptions[] // individual column configs + door sides
+  columnConfigurations?: ColumnConfigurationWithOptions[] // individual column configs + door sides (for stand)
+  wardrobeCfg?: string // wardrobe column configurations (encoded template IDs)
   openingType?: 'push' | 'round' | 'profile' // handle type: push, round handle, or profile handle
 }

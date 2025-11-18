@@ -1,0 +1,327 @@
+/* Wardrobe Column Configuration Section */
+
+.wardrobeColumnsSection {
+  /* margin: 20px 0; */
+}
+
+/* Section header */
+.sectionHeader {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+/* Column tabs wrapper */
+.columnTabsWrapper {
+  margin-bottom: 20px;
+}
+
+/* Configurations wrapper */
+.configurationsWrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.wardrobeColumnsSection {
+    max-width: 400px;
+}
+
+/* Override the ButtonImageSelect container to prevent horizontal scroll */
+.wardrobeColumnsSection > div {
+    max-width: 400px;
+    overflow-x: scroll;
+}
+
+/* Adjust button size for wrapping layout */
+.wardrobeColumnsSection button {
+    min-width: 85px;
+    max-width: 85px;
+    padding: 10px 6px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.wardrobeColumnsSection button:hover {
+    border-color: #9ca3af;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.wardrobeColumnsSection button[aria-checked="true"] {
+    border-color: #6b7280;
+    background-color: #f9fafb;
+    box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.1);
+}
+
+/* Override ButtonImageSelect styles to match design */
+.configurationsWrapper button {
+  min-width: 120px;
+  padding: 14px 10px;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  transition: all 0.2s ease;
+}
+
+.configurationsWrapper button:hover {
+  border-color: #9ca3af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.checkmarkContainer {
+    color: #ffffff;
+}
+
+.configurationsWrapper button[aria-checked="true"] {
+  border-color: #6b7280;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.1);
+}
+
+/* Icon content area */
+.configurationsWrapper button > div:first-child {
+  margin-bottom: 8px;
+}
+
+/* Label text */
+.configurationsWrapper button > div:last-child {
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+  line-height: 1.3;
+  text-align: center;
+  max-width: 100px;
+}
+
+.columnSelector {
+  margin-bottom: 20px;
+}
+
+.currentConfiguration {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.configLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.configPreview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+}
+
+.templateSelection {
+  margin-top: 20px;
+}
+
+.templateGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.templateCard {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.templateCard:hover {
+  border-color: #999;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.templateCard.selected {
+  border-color: #333;
+  background-color: #f8f8f8;
+}
+
+.templatePreview {
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.templateInfo {
+  text-align: center;
+}
+
+.templateInfo h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.templateDescription {
+  font-size: 12px;
+  color: #666;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.zoneSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.zoneSummary span {
+  font-size: 11px;
+  color: #888;
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.dimensionsInfo {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #f0f0f0;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+.noTemplates {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+  font-size: 14px;
+}
+
+/* Zone Visualizer Styles */
+.zoneVisualizer {
+  width: 60px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  background: white;
+  display: flex;
+  flex-direction: column-reverse; /* Stack from bottom up */
+}
+
+.zone {
+  position: relative;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.zone:first-child {
+  border-top: none;
+}
+
+/* Zone type-specific colors */
+.zoneHanging {
+  background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 100%);
+}
+
+.zoneShelves {
+  background: linear-gradient(180deg, #f3e5f5 0%, #e1bee7 100%);
+}
+
+.zoneDrawers {
+  background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
+}
+
+.zoneShoes {
+  background: linear-gradient(180deg, #fff3e0 0%, #ffe0b2 100%);
+}
+
+.zoneAccessories {
+  background: linear-gradient(180deg, #fce4ec 0%, #f8bbd0 100%);
+}
+
+.zoneEmpty {
+  background: #fafafa;
+}
+
+.zoneLabel {
+  font-size: 10px;
+  color: #333;
+  text-align: center;
+  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.zoneHeight {
+  font-size: 9px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .templateGrid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+  
+  .templateCard {
+    padding: 8px;
+  }
+  
+  .templatePreview {
+    height: 100px;
+  }
+}
+
+/* Icon styles (temporary placeholders) */
+.zoneHanging::before {
+  content: '━';
+  position: absolute;
+  top: 20%;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.zoneShelves::after {
+  content: '≡';
+  position: absolute;
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.3);
+  transform: scaleY(0.7);
+}
+
+.zoneDrawers::after {
+  content: '☰';
+  position: absolute;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.3);
+}
