@@ -97,6 +97,13 @@ export function parseQueryToConfig(
     cfg.openingType = 'round'
   }
 
+  // Parse wardrobe column configurations from URL
+  const wardrobeCfgParam = q['wardrobeCfg']
+  const wardrobeCfgStr = Array.isArray(wardrobeCfgParam) ? wardrobeCfgParam[0] : wardrobeCfgParam
+  if (wardrobeCfgStr && typeof wardrobeCfgStr === 'string') {
+    cfg.wardrobeCfg = wardrobeCfgStr
+  }
+
   return cfg
 }
 
@@ -168,9 +175,14 @@ export function configToQuery(
     out.plintHeight = cfg.plintHeight
   }
 
-  // Serialize column configurations
+  // Serialize column configurations (for stand)
   if (cfg.columnConfigurations && cfg.columnConfigurations.length > 0) {
     out.colCfg = encodeColumnConfigs(cfg.columnConfigurations)
+  }
+
+  // Serialize wardrobe column configurations
+  if (cfg.wardrobeCfg && cfg.wardrobeCfg.length > 0) {
+    out.wardrobeCfg = cfg.wardrobeCfg
   }
 
   // Serialize opening type (only if not default 'push')
