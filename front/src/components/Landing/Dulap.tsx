@@ -16,6 +16,7 @@ import BlogsList from '~/components/Blog/BlogsList'
 import { FAQcontentLanding } from '~/components/FAQ/FAQcontentLanding'
 import { useScrollAnimation } from '~/hooks/useScrollAnimation'
 import animationStyles from '~/styles/animations.module.css'
+import ReviewsSection from '~/components/Reviews/ReviewsSection'
 
 const galleryList = [
   { src: '/bedside/render/Biege 1.png', alt: 'Bedside render 1' },
@@ -90,6 +91,14 @@ export const Dulap: React.FC = () => {
         <Gallery images={galleryList} />
       </section>
       <br />
+      <br />
+      <br />
+      <section className={classes.reviews}>
+        <h2 className={classes.galleryTitle}>
+          <FormattedMessage id="homepage.dulapLanding.reviewsTitle" />
+        </h2>
+        <ReviewsSection></ReviewsSection>
+      </section>
       <br />
       <br />
       <section className={classes.blog}>

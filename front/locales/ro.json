@@ -97,7 +97,8 @@
   "homepage.dulapLanding.title1": "Alege ce tip de dulap ai nevoie și începe personalizarea!",
   "homepage.dulapLanding.title2": "Alege produse gata din lista noastră",
   "homepage.dulapLanding.title3": "descoperă colecția noastră de dulapuri gata făcute...",
-"homepage.dulapLanding.title4": "Citește mai multe informații utile aici...",
+  "homepage.dulapLanding.title4": "Citește mai multe informații utile aici...",
+  "homepage.dulapLanding.reviewsTitle": "Recenziile spun totul pentru noi...",
 
   "homepage.dulapLanding.aboutUs.title": "Despre noi",
   "homepage.dulapLanding.aboutUs.body.1": "La dulap.md facem mobilier personalizat, la prețuri corecte. Simplu.",
@@ -543,7 +544,42 @@
   "blog.colors.section.finish.li.3": "Pentru camera copiilor, alege nuanțe calde, verdele pal sau roz nisipos: nuanțe mai jucăușe și pline de copilărie.",
 
   "blog.colors.section.final.cta": "Gata de testat? Deschide <conf>configuratorul</conf> pentru o simulare rapidă și, pentru decizia finală, <samples>comandă mostrele</samples> — ajung în 2 zile lucrătoare. {conf} {samples}",
-  "blog.colors.section.final.conf.aria": "Deschide configuratorul dulapului"
+  "blog.colors.section.final.conf.aria": "Deschide configuratorul dulapului",
+
+  "reviews.card.colorLabel": "Culoarea:",
+  "reviews.summary.recommended": "100% din clienții noștri recomandă dulap.md",
+  "reviews.summary.learnMore": "Mai multe recenzii",
+
+  "reviews.title": "Recenzii",
+  "reviews.subtitle": "Ținem la calitate și la experiența clienților noștri.",
+
+  "reviews.list.1.author": "Diana D.",
+  "reviews.list.1.color": "Gri piatră",
+  "reviews.list.1.date": "20 august 2025",
+  "reviews.list.1.title": "Mi-a plăcut și o să recomand tuturor",
+  "reviews.list.1.body": "E fantastic că poți comanda mobilă online, după mărimile tale. Am ezitat câteva zile, dar am zis să comand mostrele cu livrare la domiciliu, și atunci am văzut calitatea materialului. Nu se compară cu mobila gata făcută. Sunt mulțumită! Mersi, băieți!",
+  "reviews.list.1.originalLanguageLabel": "Limba originală: română",
+  "reviews.list.1.showOriginalLabel": "Vezi textul original",
+  "reviews.list.1.imageAlt": "Dulap gri piatră trei secțiuni",
+
+  "reviews.list.2.author": "Anna T.",
+  "reviews.list.2.color": "Bej",
+  "reviews.list.2.date": "2 septembrie 2025",
+  "reviews.list.2.title": "Comodă în camera copiilor",
+  "reviews.list.2.body": "E foarte calitativă comoda, sertarele se deschid ușor, mecanismele se vede că sunt calitative. Recomand cu încredere!",
+  "reviews.list.2.originalLanguageLabel": "Limba originală: română",
+  "reviews.list.2.showOriginalLabel": "Vezi textul original",
+  "reviews.list.2.imageAlt": "Comodă bej 5 secțiuni",
+
+  "reviews.list.3.author": "Felicia S.",
+  "reviews.list.3.color": "Gri sidefat",
+  "reviews.list.3.date": "26 octombrie 2025",
+  "reviews.list.3.title": "100% după așteptări",
+  "reviews.list.3.body": "Mi-a plăcut abordarea. Chiar dacă comanda o plasezi online, cei de la dulap.md te sună, concretizează, mai verifică o dată! Am economisit, cred că, peste 30%. Mersi echipei dulap.md.",
+  "reviews.list.3.originalLanguageLabel": "Limba originală: română",
+  "reviews.list.3.showOriginalLabel": "Vezi textul original",
+  "reviews.list.3.imageAlt": "Dulap pentru haine 2 secțiuni"
+
 
 
 }

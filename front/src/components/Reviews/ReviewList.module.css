@@ -1,0 +1,34 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
+  gap: 44px;
+  align-items: flex-start;
+}
+
+/* left column */
+.summaryColumn {
+  /* optional sticky behaviour, comment if not desired */
+  position: sticky;
+  top: 80px;
+  
+}
+
+/* right column */
+.cardsColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .root {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .summaryColumn {
+    position: static;
+    display: flex;
+    justify-content: center;
+  }
+}

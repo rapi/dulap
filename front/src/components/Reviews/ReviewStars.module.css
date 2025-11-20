@@ -1,0 +1,39 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+}
+
+.base,
+.fill {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 1em;
+}
+
+.base {
+  color: #c7c7c7; /* light grey */
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: #111111; /* almost black */
+}
+
+/* sizes */
+.sizeSm {
+  font-size: 14px;
+}
+
+.sizeMd {
+  font-size: 16px;
+}
+
+.sizeLg {
+  font-size: 20px;
+}

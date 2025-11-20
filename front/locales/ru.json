@@ -93,6 +93,7 @@
   "homepage.dulapLanding.title2": "Выбери готовые товары из нашего списка",
   "homepage.dulapLanding.title3": "открой для себя новый стиль...",
   "homepage.dulapLanding.title4": "Читай больше полезной информации тут...",
+  "homepage.dulapLanding.reviewsTitle": "Отзывы говорят за нас...",
 
   "homepage.dulapLanding.aboutUs.title": "О нас",
   "homepage.dulapLanding.aboutUs.body.1": "На dulap.md мы создаем персональную мебель по честным ценам. Просто.",
@@ -532,7 +533,44 @@
   "blog.colors.section.finish.li.3": "Для детской комнаты подойдут тёплые оттенки, светло-зелёный или песочно-розовый — более игривые и уютные цвета.",
 
   "blog.colors.section.final.cta": "Готов к тесту? Открой <conf>конфигуратор</conf> для быстрой визуализации и, для окончательного решения, <samples>закажи образцы</samples> — они прибудут за 2 рабочих дня. {conf} {samples}",
-  "blog.colors.section.final.conf.aria": "Открыть конфигуратор шкафа"
+  "blog.colors.section.final.conf.aria": "Открыть конфигуратор шкафа",
+
+
+  "reviews.card.colorLabel": "Цвет:",
+  "reviews.summary.recommended": "100% наших клиентов рекомендуют dulap.md",
+  "reviews.summary.learnMore": "Больше отзывов",
+
+  "reviews.title": "Отзывы",
+  "reviews.subtitle": "Мы ценим качество наших услуг и каждого клиента.",
+
+  "reviews.list.1.author": "Diana D.",
+  "reviews.list.1.color": "Серый, цвет камня",
+  "reviews.list.1.date": "20 августа 2025",
+  "reviews.list.1.title": "Мне понравилось, буду рекомендовать всем",
+  "reviews.list.1.body": "Классно, что можно заказать мебель онлайн по своим размерам. Несколько дней сомневалась, но решила заказать образцы с доставкой на дом, и тогда увидела качество материала. Не сравнить с готовой мебелью. Я довольна! Спасибо, ребята!",
+  "reviews.list.1.originalLanguageLabel": "Оригинальный язык: румынский",
+  "reviews.list.1.showOriginalLabel": "Показать оригинальный текст",
+  "reviews.list.1.imageAlt": "Серый шкаф цвета камня, три секции",
+
+  "reviews.list.2.author": "Anna T.",
+  "reviews.list.2.color": "Бежевый",
+  "reviews.list.2.date": "2 сентября 2025",
+  "reviews.list.2.title": "Комод в детской комнате",
+  "reviews.list.2.body": "Комод очень качественный, ящики выдвигаются легко, видно, что фурнитура хорошего качества. Рекомендую с уверенностью!",
+  "reviews.list.2.originalLanguageLabel": "Оригинальный язык: румынский",
+  "reviews.list.2.showOriginalLabel": "Показать оригинальный текст",
+  "reviews.list.2.imageAlt": "Бежевый комод с 5 секциями",
+
+  "reviews.list.3.author": "Felicia S.",
+  "reviews.list.3.color": "Сатиновый серый",
+  "reviews.list.3.date": "26 октября 2025",
+  "reviews.list.3.title": "100% как и ожидала",
+  "reviews.list.3.body": "Мне понравился подход. Даже если оформляешь заказ онлайн, ребята из dulap.md звонят, уточняют детали, ещё раз всё проверяют! Думаю, я сэкономила больше 30%. Спасибо команде dulap.md.",
+  "reviews.list.3.originalLanguageLabel": "Оригинальный язык: румынский",
+  "reviews.list.3.showOriginalLabel": "Показать оригинальный текст",
+  "reviews.list.3.imageAlt": "Шкаф для одежды, две секции"
+
+
 
 
 }
