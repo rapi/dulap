@@ -21,6 +21,35 @@
   border-bottom: 1px solid #333;
 }
 
+.sliderWrapper {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+}
+
+.stepMarks {
+  position: absolute;
+  width: calc(100% - 20px);
+  margin: 10px;
+  height: 3px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.stepMark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #e3e3e3;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  top: 50%;
+  margin-top: -3px;
+}
+
 .slider {
   -webkit-appearance: none;
   flex: 1 1 auto; /* flex item that can shrink and grow */
@@ -33,6 +62,73 @@
   outline: none;
   transition: opacity 0.2s;
   box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+.sliderWithMarks {
+  -webkit-appearance: none;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  height: 3px;
+  background: transparent;
+  border-radius: 5px;
+  outline: none;
+  transition: opacity 0.2s;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+.sliderWithMarks::-webkit-slider-runnable-track {
+  height: 3px;
+  background: #e3e3e3;
+  border-radius: 5px;
+  border: none;
+}
+
+.sliderWithMarks::-moz-range-track {
+  height: 3px;
+  background: #e3e3e3;
+  border-radius: 5px;
+  border: none;
+}
+
+/* Remove any fill/progress coloring on the range slider */
+.sliderWithMarks::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #777777;
+  border-radius: 50%;
+  cursor: grabbing;
+  box-shadow:
+    rgba(0, 0, 0, 0.12) 0px 1px 3px,
+    rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  margin-top: -6.5px;
+}
+
+.sliderWithMarks::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #777777;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow:
+    rgba(0, 0, 0, 0.12) 0px 1px 3px,
+    rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border: none;
+}
+
+/* Ensure no fill coloring on the track */
+.sliderWithMarks::-webkit-slider-container {
+  background: transparent;
+}
+
+.sliderWithMarks::-moz-range-progress {
+  background: transparent;
 }
 
 .slider::-webkit-slider-thumb {
