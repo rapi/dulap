@@ -3,10 +3,12 @@ import { FormattedMessage } from 'react-intl'
 import { ButtonOptionsType, ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
 import { getConfigurationMetadata } from '~/types/columnConfigurationTypes'
 import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
+import { getDefaultDoorOpeningSide } from '~/utils/columnConfigurationUtils'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 
 interface DoorOpeningSideSelectorProps {
   columnIndex: number
+  totalColumns: number
   config: ColumnConfigurationWithOptions
   onDoorOpeningSideChange: (columnIndex: number, side: 'left' | 'right') => void
 }
@@ -22,6 +24,7 @@ const DOOR_OPENING_SIDE_OPTIONS: ButtonOptionsType<'left' | 'right'>[] = [
  */
 export const DoorOpeningSideSelector: FC<DoorOpeningSideSelectorProps> = ({
   columnIndex,
+  totalColumns,
   config,
   onDoorOpeningSideChange,
 }) => {
@@ -32,7 +35,16 @@ export const DoorOpeningSideSelector: FC<DoorOpeningSideSelectorProps> = ({
     return null
   }
 
-  const currentSide = config.doorOpeningSide || 'left'
+  // Use user's explicit choice, or position-based default
+  const defaultSide = useMemo(
+    () => getDefaultDoorOpeningSide(columnIndex, totalColumns),
+    [columnIndex, totalColumns]
+  )
+  const currentSide = config.doorOpeningSide || defaultSide
+
+  const handleChange = (value: 'left' | 'right') => {
+    onDoorOpeningSideChange(columnIndex, value)
+  }
 
   return (
     <label className={styles.furnitureLabel}>
@@ -45,10 +57,10 @@ export const DoorOpeningSideSelector: FC<DoorOpeningSideSelectorProps> = ({
           :
         </span>
         <ButtonSelect
-          key={`door-side-${columnIndex}`}
+          key={`door-side-${columnIndex}-${currentSide}`}
           options={DOOR_OPENING_SIDE_OPTIONS}
           defaultSelected={currentSide}
-          onChange={(value) => onDoorOpeningSideChange(columnIndex, value as 'left' | 'right')}
+          onChange={handleChange}
         />
       </div>
     </label>

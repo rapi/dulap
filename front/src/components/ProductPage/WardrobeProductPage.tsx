@@ -54,6 +54,10 @@ import {
   ProductGalleryColors,
   ProductGalleryColorsConfig,
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
+import {
+  ProductWardrobeColumns,
+  ProductWardrobeColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductWardrobeColumns'
 
 export type ProductComponent =
   | ProductImageSelectComponent
@@ -66,6 +70,7 @@ export type ProductComponent =
   | ProductFurnitureComponent
   | ProductPriceComponent
   | ProductGalleryColorsConfig
+  | ProductWardrobeColumnsComponent
 export type PredefinedValue = {
   sections?: ProductSectionPredefinedValue
   imageSelect?: string
@@ -92,6 +97,12 @@ export const ProductPage: FC<ProductPageProps> = ({
   const { addItem } = useCart()
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
+
+  // Handle tab change from UI to update 3D selection
+  const handleTabChange = useCallback((index: number) => {
+    setActiveColumnTab(index)
+    setSelectedColumnIndex(index)
+  }, [])
 
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
@@ -137,6 +148,14 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.furniture ?? undefined}
           />
         )
+      case 'wardrobeColumns':
+        return isWardrobe3D ? (
+          <ProductWardrobeColumns
+            configuration={component}
+            activeColumnIndex={activeColumnTab}
+            onActiveColumnChange={handleTabChange}
+          />
+        ) : null
     }
   }
 

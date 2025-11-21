@@ -1,0 +1,15 @@
+export interface Review {
+  id: string
+  rating: number
+  author: string // intl id
+  color?: string // intl id
+  dateLabel: string // intl id
+  title: string // intl id
+  body: string // intl id for TRANSLATED body (current locale)
+  originalBody?: string // intl id for ORIGINAL language body
+  originalLanguageLabel?: string // intl id: "Original language: Româna"
+  originalLanguageCode?: string // e.g. "ro", "ru", "en"
+  showOriginalLabel?: string // intl id: "Show original"
+  imageUrl?: string
+  imageAlt?: string // intl id
+}

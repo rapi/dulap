@@ -10,6 +10,7 @@ import { useIntl } from 'react-intl'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Modal } from '~/components/Modal/Modal'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductFurnitureComponent = {
   type: 'furniture'
@@ -46,6 +47,32 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
   const intl = useIntl()
   const [isModalOpen2, setIsModalOpen2] = useState(false)
   const [isModalOpen3, setIsModalOpen3] = useState(false)
+  
+  // Get URL context for synchronization
+  const urlCtx = useConfiguratorConfigOptional()
+  
+  // Handle opening type change with URL sync
+  const handleOpeningTypeChange = (value: string | OpeningType) => {
+    // Update local state
+    configuration.setOpeningOption(value as OpeningType)
+    
+    // Sync to URL
+    if (urlCtx) {
+      // Map to URL format ('push' | 'round' | 'profile')
+      let urlValue: 'push' | 'round' | 'profile'
+      if (value === OpeningType.Push || value === 'push') {
+        urlValue = 'push'
+      } else if (value === OpeningType.ProfileHandle) {
+        urlValue = 'profile'
+      } else {
+        urlValue = 'round'
+      }
+      urlCtx.setConfig({ 
+        ...urlCtx.config, 
+        openingType: urlValue 
+      })
+    }
+  }
 
   return (
     <div>
@@ -63,9 +90,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
             <ButtonSelect
               options={openingOptions}
               defaultSelected={configuration.openingOption}
-              onChange={(value) => {
-                configuration.setOpeningOption(value as OpeningType)
-              }}
+              onChange={handleOpeningTypeChange}
             />
           )}
         </div>

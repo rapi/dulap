@@ -125,7 +125,7 @@ const FurnitureBuilderComponent: React.FC<FurnitureBuilderProps> = ({
       // Use extended config if available (for stand), otherwise fall back to simple config
       const columnConfig = columnConfigurationsWithOptions?.[index]
       const columnType = columnConfig?.type || columnConfigurations?.[index] || ColumnConfigurationType.DRAWERS_3
-      const doorOpeningSide = columnConfig?.doorOpeningSide || 'left'
+      const doorOpeningSide = columnConfig?.doorOpeningSide
 
       return (
         <Column

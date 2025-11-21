@@ -21,7 +21,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const { locale: queryLocale } = router.query
   const currentLocale = (queryLocale as string) ?? 'ro'
   const messages = localeMap[currentLocale] ?? ro
-  console.log(NEXT_GA_ID)
   // Single SPA pageview + custom events
   useEffect(() => {
     // const handleRouteChange = (url: string) => {

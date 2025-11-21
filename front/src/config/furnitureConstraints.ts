@@ -303,6 +303,83 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
 }
 
 // ============================================================================
+// WARDROBE CONSTRAINTS
+// ============================================================================
+export const WARDROBE_CONSTRAINTS: ProductConstraints = {
+  dimensions: {
+    width: { min: 40, max: 250, default: 200, unit: 'cm' },
+    height: { min: 200, max: 270, default: 260, unit: 'cm' },
+    depth: { min: 35, max: 60, default: 50, unit: 'cm' },
+    plintHeight: { min: 2, max: 8, default: 2, unit: 'cm' },
+  },
+
+  steps: {
+    heightStep: 1,
+  },
+
+  sections: {
+    rule: 'width-based',
+    min: 1,
+    max: 5,
+    default: 1,
+    getAvailableSections: ({ width }) => {
+      // Width-based sections for wardrobe
+      if (width <= 60) return [1]
+      if (width <= 100) return [1, 2]
+      if (width <= 150) return [2, 3]
+      if (width <= 200) return [2, 3]
+      return [2, 3]
+    },
+  },
+
+  columns: {
+    min: 1,
+    max: 10,
+    default: 3,
+    allowCustomConfiguration: true,
+    getAvailableColumns: ({ width }) => {
+      // Width-based column limits for wardrobe
+      if (width <= 60) return [1]
+      if (width <= 100) return [2]
+      if (width <= 150) return [2, 3]
+      if (width < 200) return [3, 4]
+      if (width === 200) return [4, 5]
+      return [4, 5]
+    },
+  },
+
+  pricing: {
+    basePrice: 350,
+    perSection: 600,
+    perCmWidth: 29,
+    perCmHeightAbove: { threshold: 190, rate: 4.5 },
+    perCmDepthAbove: { threshold: 30, rate: 8 },
+    premiumGuidesPerSection: 250,
+    vatMultiplier: 1.35,
+  },
+
+  images: {
+    heightThresholds: [
+      { maxHeight: 210, imageDimension: 2100 },
+      { maxHeight: Infinity, imageDimension: 2400 },
+    ],
+    widthThresholds: [
+      { maxWidth: 60, imageDimension: 50 },
+      { maxWidth: 100, imageDimension: 80 },
+      { maxWidth: 150, imageDimension: 120 },
+      { maxWidth: 200, imageDimension: 160 },
+      { maxWidth: Infinity, imageDimension: 200 },
+    ],
+    plintHeightThresholds: [
+      { maxPlintHeight: 5, imageDimension: 20 },
+      { maxPlintHeight: Infinity, imageDimension: 60 },
+    ],
+  },
+
+  colors: ['White', 'Biege', 'Light Grey', 'Grey'],
+}
+
+// ============================================================================
 // CONSTRAINT REGISTRY
 // ============================================================================
 
@@ -310,6 +387,7 @@ export const FURNITURE_CONSTRAINTS = {
   stand: STAND_CONSTRAINTS,
   bedside: BEDSIDE_CONSTRAINTS,
   'tv-stand': TV_STAND_CONSTRAINTS,
+  wardrobe: WARDROBE_CONSTRAINTS,
 } as const
 
 export type FurnitureType = keyof typeof FURNITURE_CONSTRAINTS

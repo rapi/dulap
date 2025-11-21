@@ -1,19 +1,54 @@
 import { useMemo } from 'react'
-import { ColumnConfigurationType, getConfigurationMetadata } from '~/types/columnConfigurationTypes'
+import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { getValidConfigurations, isConfigurationValid } from '~/config/columnConstraints'
+import { getValidConfigurationsForStand, isConfigurationValidForStand } from '~/config/columnConstraints.stand'
+import { getValidConfigurationsForTVStand, isConfigurationValidForTVStand } from '~/config/columnConstraints.tvstand'
+import { getValidConfigurationsForBedside, isConfigurationValidForBedside } from '~/config/columnConstraints.bedside'
 
 export type FurnitureProductType = 'stand' | 'bedside' | 'tv-stand'
+
+/**
+ * Get the appropriate validation function based on product type
+ */
+function getValidationFunction(productType?: FurnitureProductType) {
+  switch (productType) {
+    case 'stand':
+      return isConfigurationValidForStand
+    case 'tv-stand':
+      return isConfigurationValidForTVStand
+    case 'bedside':
+      return isConfigurationValidForBedside
+    default:
+      return isConfigurationValid
+  }
+}
+
+/**
+ * Get the appropriate getValidConfigurations function based on product type
+ */
+function getValidConfigurationsFunction(productType?: FurnitureProductType) {
+  switch (productType) {
+    case 'stand':
+      return getValidConfigurationsForStand
+    case 'tv-stand':
+      return getValidConfigurationsForTVStand
+    case 'bedside':
+      return getValidConfigurationsForBedside
+    default:
+      return getValidConfigurations
+  }
+}
 
 /**
  * Hook to evaluate column configuration constraints
  * 
  * Returns which configurations are valid for given column dimensions
- * and product type (filters out split doors for TV stands)
+ * and product type (uses product-specific validators)
  * 
  * @param columnWidth - Width of a single column
  * @param columnHeight - Height of the column
  * @param columnDepth - Depth of the column
- * @param productType - Type of furniture product (optional, for product-specific filtering)
+ * @param productType - Type of furniture product (optional, for product-specific validation)
  * @returns Object containing valid configurations and validation function
  */
 export function useColumnConfigurationConstraints(
@@ -31,35 +66,29 @@ export function useColumnConfigurationConstraints(
     [columnWidth, columnHeight, columnDepth]
   )
 
-  // Get all valid configurations for these dimensions
+  // Get all valid configurations for these dimensions using product-specific validator
   const validConfigurations = useMemo(
-    () => getValidConfigurations(dimensions),
-    [dimensions]
-  )
-
-  // Function to check if a specific configuration is valid
-  const isValid = useMemo(
-    () => (configurationType: ColumnConfigurationType) =>
-      isConfigurationValid(configurationType, dimensions),
-    [dimensions]
-  )
-
-  // Get all configurations (valid and invalid), with product-specific filtering
-  const allConfigurations = useMemo(
     () => {
-      const allTypes = Object.values(ColumnConfigurationType)
-      
-      // For TV stands, exclude split door configurations (doorCount === 2)
-      if (productType === 'tv-stand') {
-        return allTypes.filter((type) => {
-          const metadata = getConfigurationMetadata(type)
-          return metadata.doorCount !== 2 // Exclude split doors
-        })
-      }
-      
-      return allTypes
+      const getValidConfigs = getValidConfigurationsFunction(productType)
+      return getValidConfigs(dimensions)
     },
-    [productType]
+    [dimensions, productType]
+  )
+
+  // Function to check if a specific configuration is valid using product-specific validator
+  const isValid = useMemo(
+    () => {
+      const validate = getValidationFunction(productType)
+      return (configurationType: ColumnConfigurationType) =>
+        validate(configurationType, dimensions)
+    },
+    [dimensions, productType]
+  )
+
+  // Get all configurations (no filtering needed - validators handle product-specific rules)
+  const allConfigurations = useMemo(
+    () => Object.values(ColumnConfigurationType),
+    []
   )
 
   return {
