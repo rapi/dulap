@@ -1,47 +1,40 @@
-// components/ProductCatalog/ProductCatalog.tsx
-import React from 'react'
-import { CatalogGrid } from '~/components/CatalogGrid/CatalogGrid'
-import { products } from '~/components/ProductListPage/products'
-import { ProductItem } from '~/components/ProductItem/ProductItem'
-import { useCart } from '~/context/cartContext'
-import { WardrobeProductConfigurator } from '~/components/ProductPage/productTypes/wardrobe'
-import { ProductSectionPredefinedValue } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
-import { CartPredefinedValue } from '~/components/ProductPage/productTypeComponents/CartProductComponents'
+import React from "react";
+import { useRouter } from "next/router";
+
+import styles from "./ProductCatalog.module.css";
+
+import { presetIndex, type PresetIndexItem } from "~/presets/index";
+import { CatalogItem } from "~/components/CatalogItem/CatalogItem";
+
+/**
+ * Optional helper to read selected product type from query.
+ * Adjust keys if your ProductTypesList sets a different param name.
+ */
+function getSelectedType(q: Record<string, unknown>): PresetIndexItem["type"] | undefined {
+  const t1 = typeof q["type"] === "string" ? q["type"] : undefined;
+  const t2 = typeof q["productType"] === "string" ? q["productType"] : undefined;
+  const t = t1 ?? t2;
+
+  if (t === "wardrobe" || t === "bedside" || t === "stand" || t === "tv-stand") {
+    return t;
+  }
+  return undefined;
+}
 
 export const ProductCatalog: React.FC = () => {
-  const { addItem } = useCart()
-  const baseConfig = WardrobeProductConfigurator()
+  const router = useRouter();
 
-  const handleAddToCart = (product: (typeof products)[number]) => {
-    addItem(product.name, baseConfig, {
-      imageCarousel: product.imageCarousel,
-      colors: product.color,
-      dimensions: product.dimensions,
-      furniture: product.furniture,
-      sections:
-        typeof product.sections === 'object'
-          ? (product.sections as ProductSectionPredefinedValue)
-          : undefined,
-      price: product.price,
-    } as CartPredefinedValue)
-  }
+  const selectedType = getSelectedType(router.query as Record<string, unknown>);
+
+  const items = [...presetIndex]
+    .filter((p) => (selectedType ? p.type === selectedType : true))
+    .sort((a, b) => (b.meta.sortWeight ?? 0) - (a.meta.sortWeight ?? 0));
 
   return (
-    <CatalogGrid
-      items={products}
-      getKey={(p) => p.id}
-      onAdd={handleAddToCart}
-      renderCard={(product, button) => (
-        <ProductItem
-          name={product.name}
-          image={product.src}
-          link={product.link}
-          dimensions={product.dimensions}
-          color={product.color}
-          price={product.price}
-          button={button}
-        />
-      )}
-    />
-  )
-}
+    <div className={styles.grid}>
+      {items.map((p) => (
+        <CatalogItem key={p.id} item={p} />
+      ))}
+    </div>
+  );
+};

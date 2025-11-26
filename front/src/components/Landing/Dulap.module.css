@@ -1,21 +1,25 @@
 /*Products section*/
 .productTypes,
-.readyProducts,
 .aboutUs,
 .gallery,
 .blog,
 .reviews,
 .faq,
-.infoBar {
+.readyProducts,
+.infoBar, 
+.blogList {
   padding: 2vw 12vw;
 }
-.blogList {
-  padding: clamp(5px, calc(2vw - 20px), 100px)
-    clamp(25px, calc(2vw - 20px), 100px);
+
+
+
+.readyProductsTitle {
+  padding: 0vw 4vw;
 }
 .productTypesTitle,
 .readyProductsTitle,
-.aboutUsTitle {
+.aboutUsTitle,
+.galleryTitle {
   text-align: center;
   margin-bottom: 50px;
   font-size: 22px;
@@ -123,7 +127,9 @@
     align-items: center;
     gap: 40px;
   }
-
+  .readyProducts {
+    padding: 2vw 0vw;
+  }
   .aboutUsDescription {
     width: 90%;
     padding: 20px;

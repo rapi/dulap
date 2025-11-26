@@ -1,9 +1,8 @@
 // components/ProductItem/ProductItem.tsx
-import Image from 'next/image'
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Dimension } from '../ProductListPage/products'
-import { CatalogItem } from '../CatalogItem/CatalogItem'
+import { CatalogItem } from '../CatalogItem/CatalogItem_old'
 
 interface ProductItemProps {
   button: React.ReactNode

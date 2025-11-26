@@ -1,0 +1,24 @@
+{
+  "id": "WR-101",
+  "slug": "dulap-pentru-haine-180",
+  "type": "wardrobe",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Dulap pentru haine 180cm",
+    "shortDescription": "Dulap pentru haine cu lățime de 180 cm.",
+    "tags": ["dulap", "haine", "180cm"],
+    "sortWeight": 100,
+    "previewImage": "/ready-products/wardrobe/1600-3_2.png"
+  },
+  "details": {
+    "width": 180,
+    "height": 240,
+    "depth": 60,
+    "color": "#d9c9be",
+    "columns": 3,
+    "wardrobeCfg": "WARDROBE_180CM",
+    "openingType": "push"
+  },
+  "config": {}
+}

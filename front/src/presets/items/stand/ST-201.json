@@ -1,0 +1,23 @@
+{
+  "id": "ST-201",
+  "slug": "comoda-90",
+  "type": "stand",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Comodă 90cm",
+    "shortDescription": "Comodă de 90 cm pentru dormitor sau living.",
+    "tags": ["comodă", "90cm"],
+    "sortWeight": 80,
+    "previewImage": "/ready-products/stand/800 stand_2.png"
+  },
+  "details": {
+    "width": 90,
+    "height": 90,
+    "depth": 40,
+    "color": "#d6d6d6",
+    "columns": 3,
+    "openingType": "push"
+  },
+  "config": {}
+}

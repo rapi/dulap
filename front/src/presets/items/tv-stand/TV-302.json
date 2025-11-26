@@ -1,0 +1,23 @@
+{
+  "id": "TV-302",
+  "slug": "comoda-tv-150",
+  "type": "tv-stand",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Comodă TV 150cm",
+    "shortDescription": "Comodă TV pentru televizoare de până la 150 cm.",
+    "tags": ["comodă tv", "150cm"],
+    "sortWeight": 90,
+    "previewImage": "/ready-products/tv-stand/1600-2_2.png"
+  },
+  "details": {
+    "width": 150,
+    "height": 45,
+    "depth": 40,
+    "color": "#fcfbf5",
+    "columns": 2,
+    "openingType": "maner"
+  },
+  "config": {}
+}

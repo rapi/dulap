@@ -139,7 +139,7 @@
   "products.comoda5": "Comodă 5",
   "products.comoda6": "Comodă 6",
 
-  "products.wardrobe.1.name": "Dulap pentru haine 150cm",
+  "products.wardrobe.1.name": "Dulap pentru haine 180cm",
   "products.wardrobe.2.name": "Dulap pentru haine 50cm",
   "products.wardrobe.3.name": "Dulap pentru haine 200cm",
   "products.wardrobe.4.name": "Dulap pentru haine 240cm",
@@ -152,6 +152,66 @@
 
   "products.bedside.1.name": "Noptieră 80cm",
   "products.bedside.2.name": "Noptieră 60cm",
+
+
+  
+  "products.presets.WR-101.title": "Dulap pentru haine 180cm",
+  "products.presets.WR-101.shortDescription": "Dulap pentru haine cu lățime de 180 cm.",
+  "products.presets.WR-101.tag.1": "dulap",
+  "products.presets.WR-101.tag.2": "haine",
+  "products.presets.WR-101.tag.3": "180 cm",
+
+  "products.presets.WR-102.title": "Dulap pentru haine 50cm",
+  "products.presets.WR-102.shortDescription": "Dulap îngust pentru haine, lățime 50 cm.",
+  "products.presets.WR-102.tag.1": "dulap",
+  "products.presets.WR-102.tag.2": "haine",
+  "products.presets.WR-102.tag.3": "50 cm",
+
+  "products.presets.WR-103.title": "Dulap pentru haine 200cm",
+  "products.presets.WR-103.shortDescription": "Dulap pentru haine cu lățime de 200 cm.",
+  "products.presets.WR-103.tag.1": "dulap",
+  "products.presets.WR-103.tag.2": "haine",
+  "products.presets.WR-103.tag.3": "200 cm",
+
+  "products.presets.WR-104.title": "Dulap pentru haine 240cm",
+  "products.presets.WR-104.shortDescription": "Dulap pentru haine cu lățime de 240 cm.",
+  "products.presets.WR-104.tag.1": "dulap",
+  "products.presets.WR-104.tag.2": "haine",
+  "products.presets.WR-104.tag.3": "240 cm",
+
+  "products.presets.ST-201.title": "Comodă 90cm",
+  "products.presets.ST-201.shortDescription": "Comodă de 90 cm pentru dormitor sau living.",
+  "products.presets.ST-201.tag.1": "comodă",
+  "products.presets.ST-201.tag.2": "90 cm",
+
+  "products.presets.ST-202.title": "Comodă 50cm",
+  "products.presets.ST-202.shortDescription": "Comodă compactă de 50 cm.",
+  "products.presets.ST-202.tag.1": "comodă",
+  "products.presets.ST-202.tag.2": "50 cm",
+
+  "products.presets.TV-301.title": "Comodă TV 200cm",
+  "products.presets.TV-301.shortDescription": "Comodă TV suspendată, lățime 200 cm.",
+  "products.presets.TV-301.tag.1": "comodă TV",
+  "products.presets.TV-301.tag.2": "200 cm",
+
+  "products.presets.TV-302.title": "Comodă TV 150cm",
+  "products.presets.TV-302.shortDescription": "Comodă TV pentru televizoare de până la 150 cm.",
+  "products.presets.TV-302.tag.1": "comodă TV",
+  "products.presets.TV-302.tag.2": "150 cm",
+
+  "products.presets.BS-401.title": "Noptieră 80cm",
+  "products.presets.BS-401.shortDescription": "Noptieră dublă, lățime 80 cm.",
+  "products.presets.BS-401.tag.1": "noptieră",
+  "products.presets.BS-401.tag.2": "80 cm",
+
+  "products.presets.BS-402.title": "Noptieră 60cm",
+  "products.presets.BS-402.shortDescription": "Noptieră compactă, lățime 60 cm.",
+  "products.presets.BS-402.tag.1": "noptieră",
+  "products.presets.BS-402.tag.2": "60 cm",
+
+
+
+
  
   "homepage.configurator.breadcrumb.1": "Pagina principală",
   "homepage.configurator.breadcrumb.2": "Produse",

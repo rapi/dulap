@@ -1,0 +1,22 @@
+{
+  "id": "BS-401",
+  "slug": "noptiera-80",
+  "type": "bedside",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Noptieră 80cm",
+    "shortDescription": "Noptieră dublă, lățime 80 cm.",
+    "tags": ["noptieră", "80cm"],
+    "sortWeight": 85,
+    "previewImage": "/ready-products/bedside/800 bedside_2.png"
+  },
+  "details": {
+    "width": 80,
+    "height": 30,
+    "depth": 40,
+    "color": "#d6d6d6",
+    "openingType": "push"
+  },
+  "config": {}
+}

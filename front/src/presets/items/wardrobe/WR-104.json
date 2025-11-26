@@ -1,0 +1,24 @@
+{
+  "id": "WR-104",
+  "slug": "dulap-pentru-haine-240",
+  "type": "wardrobe",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Dulap pentru haine 240cm",
+    "shortDescription": "Dulap pentru haine cu lățime de 240 cm.",
+    "tags": ["dulap", "haine", "240cm"],
+    "sortWeight": 120,
+    "previewImage": "/ready-products/wardrobe/2500-5_2.png"
+  },
+  "details": {
+    "width": 240,
+    "height": 240,
+    "depth": 60,
+    "color": "#d6d6d6",
+    "columns": 4,
+    "wardrobeCfg": "WARDROBE_240CM",
+    "openingType": "push"
+  },
+  "config": {}
+}

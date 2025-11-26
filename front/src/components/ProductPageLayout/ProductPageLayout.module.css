@@ -4,10 +4,11 @@
   margin: auto;
 }
 
-.productDescriptionContent {
+.productDescriptionContainer {
   --containerHeight: 1300px;
   max-width: var(--containerHeight);
   margin: auto;
+  padding: 0 10vw;
 }
 
 .contentContainer {
