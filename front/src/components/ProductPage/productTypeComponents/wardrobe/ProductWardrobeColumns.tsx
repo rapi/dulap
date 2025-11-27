@@ -13,6 +13,7 @@ import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSel
 import layoutStyles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import styles from './ProductWardrobeColumns.module.css'
 import { WardrobeConfigurationIcon } from './WardrobeConfigurationIcon'
+import { useMediaQuery } from '@mui/material'
 
 export type ProductWardrobeColumnsComponent = {
   type: 'wardrobeColumns'
@@ -236,18 +237,21 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
     }),
     [validTemplates, intl]
   )
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
     <div className={layoutStyles.individualColumnsLabel}>
       {/* Section title */}
-      <p className={layoutStyles.sectionTitle}>
-        <FormattedMessage 
-          id="homepage.configurator.wardrobe.columnConfiguration"
-          defaultMessage="Interior Configuration"
-        />
-      </p>
+      {!isMobile && (
+        <p className={layoutStyles.sectionTitle}>
+          <FormattedMessage 
+            id="homepage.configurator.wardrobe.columnConfiguration"
+            defaultMessage="Interior Configuration"
+          />
+        </p>
+      )}
 
-      <div className={layoutStyles.furnitureConfig}>
+      <div className={layoutStyles.columnsConfig}>
         {/* Column selector (if multiple columns) */}
         {selectedColumns > 1 && (
           <div className={layoutStyles.furnitureLabel}>

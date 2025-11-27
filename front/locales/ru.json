@@ -285,7 +285,7 @@
   "homepage.configurator.wardrobeArrangement.doorsArrangement": "Расположение дверей",
 
   "homepage.configurator.wardrobe.column": "Колонна {number}",
-  "homepage.configurator.wardrobe.columnConfiguration": "Внутренняя Конфигурация",
+  "homepage.configurator.wardrobe.columnConfiguration": "Конфигурация",
   "homepage.configurator.wardrobe.currentConfig": "Текущая Конфигурация",
   "homepage.configurator.wardrobe.selectTemplate": "Выберите Внутреннюю Планировку",
   "homepage.configurator.wardrobe.columnDimensions": "Колонна: {width}см × {height}см × {depth}см",

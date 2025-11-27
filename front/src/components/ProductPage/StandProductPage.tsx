@@ -35,7 +35,7 @@ import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductFurniture'
+} from '~/components/ProductPage/productTypeComponents/ProductFurniture'
 import {
   ProductPrice,
   ProductPriceComponent,

@@ -292,7 +292,7 @@
   "homepage.configurator.wardrobeArrangement.doorsArrangement": "Aranjare uși",
 
   "homepage.configurator.wardrobe.column": "Coloana {number}",
-  "homepage.configurator.wardrobe.columnConfiguration": "Configurație Interioară",
+  "homepage.configurator.wardrobe.columnConfiguration": "Configurează",
   "homepage.configurator.wardrobe.currentConfig": "Configurație Actuală",
   "homepage.configurator.wardrobe.selectTemplate": "Selectează Aranjament Interior",
   "homepage.configurator.wardrobe.columnDimensions": "Coloană: {width}cm × {height}cm × {depth}cm",

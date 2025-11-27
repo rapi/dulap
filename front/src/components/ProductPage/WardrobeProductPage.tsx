@@ -23,7 +23,7 @@ import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductFurniture'
+} from '~/components/ProductPage/productTypeComponents/ProductFurniture'
 import {
   ProductSectionPredefinedValue,
   ProductSections,
