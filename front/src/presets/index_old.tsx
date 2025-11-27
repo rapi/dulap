@@ -46,7 +46,7 @@ export default function PresetListPage() {
                 >
                   <Image
                     src={p.meta.previewImage}
-                    alt={p.meta.title.ro ?? p.meta.title.ru ?? p.id}
+                    alt={p.meta.title ?? p.id}
                     fill
                     style={{ objectFit: "cover", borderRadius: 8 }}
                     sizes="300px"
@@ -55,7 +55,7 @@ export default function PresetListPage() {
               )}
 
               <div style={{ marginTop: 10, fontWeight: 600 }}>
-                {p.meta.title.ro ?? p.meta.title.ru}
+                {p.meta.title}
               </div>
 
               <div style={{ fontSize: 12, marginTop: 6 }}>{p.type}</div>
