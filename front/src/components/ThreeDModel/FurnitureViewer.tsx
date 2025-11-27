@@ -48,6 +48,8 @@ const FurnitureScene = memo(function FurnitureScene({
 }: Furniture3DProps & { rendererRef?: React.MutableRefObject<THREE.WebGLRenderer | null> }) {
   const config = getViewerConfig(furnitureType)
   const { gl } = useThree()
+  const glRef = useRef(gl)
+  glRef.current = gl
   
   // Expose renderer to parent via ref
   useEffect(() => {
@@ -101,8 +103,8 @@ const FurnitureScene = memo(function FurnitureScene({
   // Trigger shadow update when furniture dimensions or configuration changes
   // Note: Shadow updates during animations are handled automatically by useAnimatedPosition hook
   useEffect(() => {
-    if (gl.shadowMap.enabled && !gl.shadowMap.autoUpdate) {
-      gl.shadowMap.needsUpdate = true
+    if (glRef.current.shadowMap.enabled && !glRef.current.shadowMap.autoUpdate) {
+      glRef.current.shadowMap.needsUpdate = true
     }
   }, [
     width,
@@ -114,7 +116,6 @@ const FurnitureScene = memo(function FurnitureScene({
     columnPositions,
     columnConfigurations,
     openingType,
-    gl,
   ])
   
   return (
