@@ -369,9 +369,6 @@ export const Checkout: FC = () => {
 
                 item.config.forEach((comp) => {
                   switch (comp.type) {
-                    case 'imageCarousel':
-                      imageSrc = comp.predefinedValue ?? comp.images[0] ?? ''
-                      break
                     case 'dimensions':
                       const d = comp.predefinedValue ?? {
                         width: comp.width,

@@ -26,18 +26,11 @@ import {
 } from '~/components/ProductPage/productTypeComponents/ProductFurniture'
 import {
   ProductSectionPredefinedValue,
-  ProductSections,
-  ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
 import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
-import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
-import {
-  ProductImageCarousel,
-  ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
 import {
   ProductGallery,
   ProductGalleryComponent,
@@ -46,7 +39,6 @@ import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
-import { use3DVersion } from '~/hooks/use3DVersion'
 import { DEFAULT_WARDROBE } from './productTypes/wardrobe'
 import { FurnitureViewer } from '../ThreeDModel/FurnitureViewer'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
@@ -70,12 +62,10 @@ import {
 
 export type ProductComponent =
   | ProductImageSelectComponent
-  | ProductImageCarouselComponent
   | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
-  | ProductSectionsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
   | ProductGalleryColorsConfig
@@ -121,7 +111,6 @@ export const ProductPage: FC<ProductPageProps> = ({
   }, [])
 
   const currentComponents = components()
-  const isWardrobe3D = use3DVersion()
 
   // ---------- DESKTOP renderer (unchanged stack) ----------
   const getComponent = (component: ProductComponent): React.ReactNode => {
@@ -154,13 +143,6 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.select ?? undefined}
           />
         )
-      case 'sections':
-        return !isWardrobe3D ? (
-          <ProductSections
-            configuration={component}
-            predefinedValue={values?.sections ?? undefined}
-          />
-        ) : null
       case 'furniture':
         return (
           <ProductFurniture
@@ -169,13 +151,13 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'wardrobeColumns':
-        return isWardrobe3D ? (
+        return (
           <ProductWardrobeColumns
             configuration={component}
             activeColumnIndex={activeColumnTab}
             onActiveColumnChange={handleTabChange}
           />
-        ) : null
+        )
       default:
         return null
     }
@@ -184,15 +166,6 @@ export const ProductPage: FC<ProductPageProps> = ({
   // ---------- MOBILE: chips + core-only panel ----------
   // Build available sections (present + valid for current mode)
   const navComponents = filterNavigable(currentComponents)
-    .filter((c) => {
-      if (
-        (c.type === 'wardrobeColumns') &&
-        !isWardrobe3D
-      )
-        return false
-      if (c.type === 'sections' && isWardrobe3D) return false
-      return true
-    })
     .sort(
       (a, b) =>
         NAV_ORDER.indexOf(a.type as NavSection) -
@@ -217,7 +190,7 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   // Automatically select column (open door) when entering wardrobeColumns tab
   useEffect(() => {
-    if (activeSection === 'wardrobeColumns' && isWardrobe3D) {
+    if (activeSection === 'wardrobeColumns') {
       // Always ensure a column is selected when entering this tab
       // If no column is selected, automatically select the first column (index 0)
       // This opens the door and makes the column active
@@ -232,11 +205,11 @@ export const ProductPage: FC<ProductPageProps> = ({
           return prevIndex
         }
       })
-    } else if (activeSection === 'furniture' && isWardrobe3D) {
+    } else if (activeSection === 'furniture') {
       // When entering furniture tab, close all doors (deselect all columns)
       setSelectedColumnIndex(null)
     }
-  }, [activeSection, isWardrobe3D])
+  }, [activeSection])
 
   const renderCore = (type: NavSection) => {
     const comp = currentComponents.find((c) => c.type === type)
@@ -257,21 +230,14 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.colors ?? undefined}
           />
         )
-      case 'sections':
-        return !isWardrobe3D ? (
-          <ProductSections
-            configuration={comp as ProductSectionsComponent}
-            predefinedValue={values?.sections ?? undefined}
-          />
-        ) : null
       case 'wardrobeColumns':
-        return isWardrobe3D ? (
+        return (
           <ProductWardrobeColumns
             configuration={comp as ProductWardrobeColumnsComponent}
             activeColumnIndex={activeColumnTab}
             onActiveColumnChange={handleTabChange}
           />
-        ) : null
+        )
       case 'select':
         return (
           <ProductSelect
@@ -294,9 +260,6 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   const priceComponent = currentComponents.find(
     (component) => component.type === 'price'
-  )
-  const imageCarouselComponent = currentComponents.find(
-    (component) => component.type === 'imageCarousel'
   )
   const galleryComponent = currentComponents.find(
     (component) => component.type === 'gallery'
@@ -338,28 +301,13 @@ export const ProductPage: FC<ProductPageProps> = ({
   return (
     <>
       <div className={styles.contentContainer}>
-        {/* Left Side: Viewer or Image Carousel */}
+        {/* Left Side: 3D Viewer */}
         <div className={styles.leftContainer}>
-          {isWardrobe3D ? (
-            <FurnitureViewer
-              {...furniture3DProps}
-              selectedColumnIndex={selectedColumnIndex}
-              onColumnClick={handleColumnClick}
-            />
-          ) : (
-            imageCarouselComponent && (
-              <ProductImageCarousel
-                configuration={
-                  values?.imageCarousel
-                    ? {
-                        type: 'imageCarousel',
-                        images: values.imageCarousel,
-                      }
-                    : imageCarouselComponent
-                }
-              />
-            )
-          )}
+          <FurnitureViewer
+            {...furniture3DProps}
+            selectedColumnIndex={selectedColumnIndex}
+            onColumnClick={handleColumnClick}
+          />
         </div>
         {/* Right Side: Product Details */}
         <div className={styles.detailsContainer}>
@@ -422,11 +370,6 @@ export const ProductPage: FC<ProductPageProps> = ({
             currentComponents.map((component, index) => (
               <div key={index + component.type}>{getComponent(component)}</div>
             ))
-          )}
-        </div>
-        <div>
-          {values != null && !isWardrobe3D && (
-            <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
           )}
         </div>
       </div>

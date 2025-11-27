@@ -5,7 +5,6 @@ import {
   ButtonSelect,
 } from '~/components/ButtonSelect/ButtonSelect'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
-import { use3DVersion } from '~/hooks/use3DVersion'
 import { useMediaQuery } from '@mui/material'
 import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
@@ -46,7 +45,6 @@ export const ProductColumns: FC<ProductColumnsProps> = ({
   predefinedValue,
   options: propOptions,
 }) => {
-  const is3DVersion = use3DVersion()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   const ctx = useConfiguratorConfigOptional()
