@@ -181,13 +181,13 @@ export const WARDROBE_TEMPLATES: Record<string, WardrobeTemplate> = {
     zones: [
       {
         type: WardrobeZoneType.HANGING_MEDIUM,
-        height: 90,
-        rodHeight: 91,
+        height: 100,
+        rodHeight: 89,
       },
       {
         type: WardrobeZoneType.HANGING_MEDIUM,
-        height: 98,
-        rodHeight: 90,
+        height: 100,
+        rodHeight: 89,
       },
     ],
     minHeight: 180,

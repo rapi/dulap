@@ -135,7 +135,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
   const hoverPanel = useMemo(() => (
     <>
       {/* HOVER panel 
-      - It becomes transparent red on hover or when selected
+      - It becomes transparent red only on hover
       */}
       <mesh
         position={[0, columnHeight / 2, columnDepth-panelThickness+0.1]}
@@ -143,14 +143,14 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
       >
         <planeGeometry args={[columnWidth, columnHeight]} />
         <meshStandardMaterial 
-          color={isColumnOpen ? '#ff0000' : '#ffffff'} 
+          color={isColumnHovered ? '#ff0000' : '#ffffff'} 
           transparent={true}
-          opacity={isColumnOpen ? 0.3 : 0}
+          opacity={isColumnHovered ? 0.3 : 0}
           side={THREE.DoubleSide} 
         />
       </mesh>
     </>
-  ), [columnWidth, columnHeight, columnDepth, panelThickness, isColumnOpen])
+  ), [columnWidth, columnHeight, columnDepth, panelThickness, isColumnHovered])
 
   
   // Apply color/texture to panels
@@ -167,7 +167,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     const shelves = [
       <Shelf
         key="top-shelf-200"
-        columnWidth={columnWidth}
+        columnWidth={columnWidth-1}
         columnDepth={columnDepth}
         positionY={SHELF_HEIGHT}
         selectedColor={selectedColor}
@@ -181,7 +181,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
       shelves.push(
         <Shelf
           key="top-shelf-middle"
-          columnWidth={columnWidth}
+          columnWidth={columnWidth-1}
           columnDepth={columnDepth}
           positionY={middleShelfHeight}
           selectedColor={selectedColor}

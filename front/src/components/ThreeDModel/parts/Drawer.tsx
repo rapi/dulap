@@ -123,7 +123,9 @@ const DrawerComponent: React.FC<DrawerProps> = ({
     drawerGroup.children.forEach((child) => {
       if (!child.userData.roundHandle && !child.userData.profileHandle) {
         // Apply material with PBR texture support to drawer panels
-        applyMaterialToObject(child, selectedColor)
+        // Rotate texture horizontally for drawer front panel
+        const rotateTexture = child.userData.isDrawerFront === true
+        applyMaterialToObject(child, selectedColor, rotateTexture)
       }
     })
   }, [drawerGroup, selectedColor])

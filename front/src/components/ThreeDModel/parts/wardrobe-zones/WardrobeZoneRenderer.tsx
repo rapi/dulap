@@ -50,7 +50,7 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
     return (
       <Shelf
         key="zone-top-shelf"
-        columnWidth={columnWidth}
+        columnWidth={columnWidth-1}
         columnDepth={columnDepth}
         positionY={topShelfPositionY}
         selectedColor={selectedColor}
@@ -116,7 +116,7 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
           shelves.push(
             <Shelf
               key={`shelf-${i}`}
-              columnWidth={columnWidth}
+              columnWidth={columnWidth-1}
               columnDepth={columnDepth}
               positionY={absoluteShelfY}
               selectedColor={selectedColor}
@@ -136,7 +136,7 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
       // Render drawer fronts using full-featured Drawer component
       if (zone.drawerCount !== undefined && zone.drawerCount > 0) {
         const DRAWER_MARGIN = 3 // 3cm margin below each drawer (except bottom)
-        const BOTTOM_DRAWER_MARGIN = 1 // 1cm margin below the bottom-most drawer
+        const BOTTOM_DRAWER_MARGIN = 5 // 1cm margin below the bottom-most drawer
         const SHELF_HEIGHT = 2 // 2cm shelf thickness
         const SHELF_TOP_MARGIN = 3 // 3cm margin above the shelf (from zone top)
         
