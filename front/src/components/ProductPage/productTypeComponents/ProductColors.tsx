@@ -9,7 +9,6 @@ import Link from 'next/link'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import ColorCTA from '~/components/ColorCTA/ColorCTA'
 import { useMediaQuery } from '@mui/material'
-import { use3DVersion } from '~/hooks/use3DVersion'
 import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductColorsComponent = {
@@ -63,13 +62,11 @@ export const ProductColors: FC<ProductColorsProps> = ({
   predefinedValue,
 }) => {
   const isMobile = useMediaQuery('(max-width: 768px)')
-  const is3DVersion = use3DVersion()
   const ctx = useConfiguratorConfigOptional()
 
   const palette = useMemo<readonly string[]>(
-    () =>
-      is3DVersion ? FULL_PALETTE : (configuration.colors as readonly string[]),
-    [is3DVersion, configuration.colors]
+    () => FULL_PALETTE,
+    []
   )
 
   const selectedColorName = useMemo<string>(() => {
@@ -152,7 +149,7 @@ export const ProductColors: FC<ProductColorsProps> = ({
         value={selectedColorName} // controlled by URL/derived selection
         onChange={handleChange} // write URL + legacy state
         size="medium"
-        showAdd={!is3DVersion}
+        showAdd={false}
         colorCTA={<ColorCTA trackingId="color_cta_configurator" />}
       />
     </label>

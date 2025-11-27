@@ -1,4 +1,5 @@
 import { ProductComponent } from '~/components/ProductPage/WardrobeProductPage'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export const StorageProductConfiguration: () => ProductComponent[] = () => {
   return [
@@ -46,8 +47,9 @@ export const StorageProductConfiguration: () => ProductComponent[] = () => {
     },
     {
       type: 'furniture',
-      selectedOpeningMethod: 'maner',
-      setSelectedOpeningMethod: () => {},
+      openingOption: OpeningType.RoundHandle,
+      setOpeningOption: () => {},
+      selectedOpeningMethod: OpeningType.RoundHandle,
       hinges: '',
       setHinges: () => {},
       guides: '',

@@ -17,10 +17,6 @@ import {
   ProductSelectComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductSelect'
 import {
-  ProductSections,
-  ProductSectionsComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
-import {
   ProductColumns,
   ProductColumnsComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductColumns'
@@ -41,11 +37,6 @@ import {
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductMetadataComponent } from '~/components/ProductPage/productTypeComponents/ProductMetadata'
-import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
-import {
-  ProductImageCarousel,
-  ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
 import {
   ProductGallery,
   ProductGalleryComponent,
@@ -55,8 +46,7 @@ import {
   ProductGalleryColorsConfig,
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
 
-import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
-import { use3DVersion } from '~/hooks/use3DVersion'
+import { FurnitureViewer, FurnitureViewerRef } from '~/components/ThreeDModel/FurnitureViewer'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '~/components/ProductListPage/products'
@@ -73,12 +63,10 @@ import {
 } from '~/components/ProductPage/productTypeComponents/sectionRegistry'
 
 export type ProductComponent =
-  | ProductImageCarouselComponent
   | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
-  | ProductSectionsComponent
   | ProductColumnsComponent
   | ProductIndividualColumnsComponent
   | ProductFurnitureComponent
@@ -98,6 +86,7 @@ export type PredefinedValue = {
   select?: string
   furniture?: ProductFurniturePredefinedValue
   price?: number
+  screenshot?: string
 }
 
 interface ProductPageProps {
@@ -122,22 +111,20 @@ export const ProductPage: FC<ProductPageProps> = ({
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
   const deselectColumnRef = useRef<(() => void) | null>(null)
+  const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
 
   const currentComponents = components()
-  const isStand3D = use3DVersion()
   const furniture3DProps = use3DFurnitureProps(
     currentComponents,
     values,
-    DEFAULT_STAND
+    DEFAULT_STAND,
+    false, // isWardrobe = false
+    'stand' // furnitureType
   )
 
   const priceComponent = currentComponents.find((c) => c.type === 'price') as
     | ProductPriceComponent
     | undefined
-
-  const imageCarouselComponent = currentComponents.find(
-    (c) => c.type === 'imageCarousel'
-  ) as ProductImageCarouselComponent | undefined
 
   const galleryColorsComp = currentComponents.find(
     (c) => c.type === 'galleryColors'
@@ -187,35 +174,23 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.colors ?? undefined}
           />
         )
-      case 'sections': {
-        const compWithOpts = component as ProductSectionsComponent & {
-          options?: ButtonOptionsType[]
-        }
-        return isStand3D ? null : (
-          <ProductSections
-            configuration={compWithOpts}
-            predefinedValue={values?.sections ?? undefined}
-            options={compWithOpts.options}
-          />
-        )
-      }
       case 'columns':
-        return isStand3D ? (
+        return (
           <ProductColumns
             configuration={component}
             predefinedValue={values?.columns ?? undefined}
             options={(component as ProductColumnsComponent).options}
           />
-        ) : null
+        )
       case 'individualColumns':
-        return isStand3D ? (
+        return (
           <ProductIndividualColumns
             configuration={component}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
             onActiveColumnChange={setSelectedColumnIndex}
           />
-        ) : null
+        )
       case 'select':
         return (
           <ProductSelect
@@ -226,7 +201,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture': {
         const furnitureConfig = {
           ...(component as ProductFurnitureComponent),
-          is3DEnabled: isStand3D,
+          is3DEnabled: true,
         }
         return (
           <ProductFurniture
@@ -243,15 +218,6 @@ export const ProductPage: FC<ProductPageProps> = ({
   // ---------- MOBILE: chips + core-only panel ----------
   // Build available sections (present + valid for current mode)
   const navComponents = filterNavigable(currentComponents)
-    .filter((c) => {
-      if (
-        (c.type === 'columns' || c.type === 'individualColumns') &&
-        !isStand3D
-      )
-        return false
-      if (c.type === 'sections' && isStand3D) return false
-      return true
-    })
     .sort(
       (a, b) =>
         NAV_ORDER.indexOf(a.type as NavSection) -
@@ -281,30 +247,23 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.colors ?? undefined}
           />
         )
-      case 'sections':
-        return !isStand3D ? (
-          <ProductSections
-            configuration={comp as ProductSectionsComponent}
-            predefinedValue={values?.sections ?? undefined}
-          />
-        ) : null
       case 'columns':
-        return isStand3D ? (
+        return (
           <ProductColumns
             configuration={comp as ProductColumnsComponent}
             predefinedValue={values?.columns ?? undefined}
             options={(comp as ProductColumnsComponent).options}
           />
-        ) : null
+        )
       case 'individualColumns':
-        return isStand3D ? (
+        return (
           <ProductIndividualColumns
             configuration={comp as ProductIndividualColumnsComponent}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
             onActiveColumnChange={setSelectedColumnIndex}
           />
-        ) : null
+        )
       case 'select':
         return (
           <ProductSelect
@@ -315,7 +274,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture': {
         const furnitureConfig = {
           ...(comp as ProductFurnitureComponent),
-          is3DEnabled: isStand3D,
+          is3DEnabled: true,
         }
         return (
           <ProductFurniture
@@ -332,26 +291,15 @@ export const ProductPage: FC<ProductPageProps> = ({
   return (
     <>
       <div className={styles.contentContainer}>
-        {/* Left: viewer or image carousel */}
+        {/* Left: 3D Viewer */}
         <div className={styles.leftContainer}>
-          {isStand3D ? (
-            <FurnitureViewer
-              {...furniture3DProps}
-              selectedColumnIndex={selectedColumnIndex}
-              onColumnClick={handleColumnClick}
-              onDeselectFunctionReady={handleDeselectFunctionReady}
-            />
-          ) : (
-            imageCarouselComponent && (
-              <ProductImageCarousel
-                configuration={
-                  values?.imageCarousel
-                    ? { type: 'imageCarousel', images: values.imageCarousel }
-                    : imageCarouselComponent
-                }
-              />
-            )
-          )}
+          <FurnitureViewer
+            ref={furnitureViewerRef}
+            {...furniture3DProps}
+            selectedColumnIndex={selectedColumnIndex}
+            onColumnClick={handleColumnClick}
+            onDeselectFunctionReady={handleDeselectFunctionReady}
+          />
         </div>
 
         {/* Right: details */}
@@ -367,7 +315,9 @@ export const ProductPage: FC<ProductPageProps> = ({
             {priceComponent && (
               <ProductPrice
                 onAddItem={() => {
-                  addItem('stand', currentComponents, values ?? {})
+                  // Capture screenshot before adding to cart
+                  const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
+                  addItem('stand', currentComponents, { ...(values ?? {}), screenshot })
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
@@ -419,11 +369,6 @@ export const ProductPage: FC<ProductPageProps> = ({
           )}
         </div>
 
-        <div>
-          {values != null && !isStand3D && (
-            <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
-          )}
-        </div>
       </div>
 
       <br />

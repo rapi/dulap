@@ -7,7 +7,6 @@ import { Dimension } from '~/components/ProductListPage/products'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import Link from 'next/link'
 import { useMediaQuery } from '@mui/material'
-import { use3DVersion } from '~/hooks/use3DVersion'
 import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 export type ProductDimensionsComponent = {
@@ -44,7 +43,6 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   predefinedValue,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const is3DVersion = use3DVersion()
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   // OPTIONAL context (null on product preview pages)

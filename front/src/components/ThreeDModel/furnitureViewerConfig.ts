@@ -13,6 +13,9 @@ export interface FurnitureViewerConfig {
   maxPolarAngle: number
   target: [number, number, number]
   getShadowManXPosition: (width: number) => number
+  fogColor?: string
+  fogNear?: number
+  fogFar?: number
 }
 
 // Default configuration for most furniture types
@@ -27,12 +30,15 @@ const DEFAULT_CONFIG: FurnitureViewerConfig = {
   maxPolarAngle: Math.PI / 2 + 0.2,
   target: [0, 50, 0],
   getShadowManXPosition: (width: number) => -width / 2 - 50,
+  fogColor: '#f5f5f5',
+  fogNear: 500, // Start fog well beyond furniture (camera is at z=350, furniture at ~400 units distance)
+  fogFar: 900, // Extend fog further to fade distant background edges
 }
 
 // Wardrobe-specific configuration
 // Left-side view for wardrobe: camera positioned on the left side
 const WARDROBE_CONFIG: FurnitureViewerConfig = {
-  backgroundScale: [200, 90, 90],
+  backgroundScale: [250, 120, 150], // Larger scale to prevent edge visibility with distant camera
   cameraPosition: [-150, 170, 350], // Left-side view: camera on left (negative X), slightly in front
   minDistance: 200,
   maxDistance: 500,
@@ -42,6 +48,9 @@ const WARDROBE_CONFIG: FurnitureViewerConfig = {
   maxPolarAngle: Math.PI / 2,
   target: [0, 100, 0],
   getShadowManXPosition: (width: number) => -width / 2 - 50,
+  fogColor: '#f5f5f5',
+  fogNear: 500, // Start fog well beyond furniture (camera is at z=350, furniture at ~400 units distance)
+  fogFar: 900, // Extend fog further to fade distant background edges
 }
 
 // Configuration mapping by furniture type

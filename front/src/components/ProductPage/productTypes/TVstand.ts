@@ -361,12 +361,6 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       },
     },
     {
-      type: 'sections',
-      selectedSections,
-      setSelectedSections,
-      activeSections,
-    },
-    {
       type: 'columns',
       selectedColumns,
       setSelectedColumns,
@@ -384,8 +378,8 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     },
     {
       type: 'furniture',
-      openingOption: openingOption as string | OpeningType,
-      selectedOpeningMethod: openingOption as string | OpeningType,
+      openingOption: openingOption,
+      selectedOpeningMethod: openingOption,
       hinges: '',
       setOpeningOption,
       guides,
@@ -394,14 +388,6 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'price',
       price,
-    },
-    {
-      type: 'imageCarousel',
-      images: [
-        `/tv-stand/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}-${selectedSections}.png`,
-        `/tv-stand/render/${imageColor} 1.png`,
-        `/tv-stand/render/${imageColor} 2.png`,
-      ],
     },
     // Expose independent gallery color control (if your ProductPage renders it)
     {

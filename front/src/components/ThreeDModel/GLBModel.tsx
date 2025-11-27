@@ -13,6 +13,7 @@ export const GLBModel = memo(function GLBModel({
   forceFlatColorHex,
   useLambertWhiteMaterial,
   onClick,
+  userData,
 }: {
   modelUrl: string
   modelPosition?: [number, number, number]
@@ -24,8 +25,16 @@ export const GLBModel = memo(function GLBModel({
   forceFlatColorHex?: string
   useLambertWhiteMaterial?: boolean
   onClick?: () => void
+  userData?: Record<string, any>
 }) {
   const { scene: gltfScene } = useGLTF(modelUrl)
+  
+  // Apply userData to the scene root
+  React.useEffect(() => {
+    if (gltfScene && userData) {
+      Object.assign(gltfScene.userData, userData)
+    }
+  }, [gltfScene, userData])
 
   React.useEffect(() => {
     if (!gltfScene) return

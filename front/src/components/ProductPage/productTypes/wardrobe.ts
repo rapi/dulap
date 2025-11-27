@@ -440,26 +440,6 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       },
     },
     {
-      type: 'sections',
-      maxNumber: maxSections,
-      minNumber: minSections,
-      activeOpening,
-      possibleSections: [
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/1.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/2.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/3.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/4.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/5.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/6.png` },
-      ],
-      selectedSections: recoloredSelectedSections,
-      setSelectedSections,
-      selectedMaxSections,
-      setSelectedMaxSections,
-      selectedMirrorOption,
-      setSelectedMirrorOption,
-    },
-    {
       type: 'furniture',
       openingOption,
       selectedOpeningMethod: openingOption, // same API as stand.ts
@@ -481,14 +461,6 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'price',
       price,
-    },
-    {
-      type: 'imageCarousel',
-      images: [
-        `/wardrobe/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageSide}/${imageWidth}-${imageSections}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
-      ],
     },
     // Expose independent gallery color control (if your ProductPage renders it)
     {

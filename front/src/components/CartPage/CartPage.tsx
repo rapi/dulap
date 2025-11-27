@@ -58,11 +58,13 @@ function ItemRow({ item, index }: { item: CartItem; index: number }) {
         vm.displayName = item.name
     }
 
+    // Use screenshot if available
+    if (item.screenshot) {
+      vm.image = item.screenshot
+    }
+
     for (const config of item.config) {
       switch (config.type) {
-        case 'imageCarousel':
-          vm.image = config.predefinedValue ?? config.images[0]
-          break
         case 'dimensions':
           vm.dimensions = {
             width: config.predefinedValue?.width ?? config.width,
