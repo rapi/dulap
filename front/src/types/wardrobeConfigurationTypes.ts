@@ -39,6 +39,7 @@ export interface WardrobeZone {
   rodHeight?: number                        // Distance from zone bottom to hanging rod
   shelfCount?: number                       // Number of shelves in zone
   shelfSpacing?: number                     // Distance between shelves
+  addShelfAtTheTop?: boolean               // Add a shelf at the top of the zone
   drawerCount?: number                      // Number of drawers
   drawerHeights?: number[]                 // Individual drawer heights
   accessories?: string[]                    // Types of accessories (ties, belts, etc.)

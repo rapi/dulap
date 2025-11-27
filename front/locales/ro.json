@@ -321,6 +321,12 @@
   "homepage.configurator.wardrobe.template.shoeStorage.desc": "Optimizat pentru depozitarea pantofilor cu rafturi înclinate",
   "homepage.configurator.wardrobe.template.accessories": "Accesorii",
   "homepage.configurator.wardrobe.template.accessories.desc": "Depozitare specializată pentru accesorii și articole mici",
+  "homepage.configurator.wardrobe.template.fullHangingWith1Shelf": "Bară cu 1 Raft",
+  "homepage.configurator.wardrobe.template.fullHangingWith1Shelf.desc": "Spațiu de agățat pe toată înălțimea pentru rochii lungi și paltoane cu 1 raft în partea de jos",
+  "homepage.configurator.wardrobe.template.fullHangingWith2Drawers": "Bară cu 2 Sertare",
+  "homepage.configurator.wardrobe.template.fullHangingWith2Drawers.desc": "Spațiu de agățat pe toată înălțimea pentru rochii lungi și paltoane cu 2 sertare în partea de jos",
+  "homepage.configurator.wardrobe.template.oneTopShelf": "Un Raft Sus",
+  "homepage.configurator.wardrobe.template.oneTopShelf.desc": "Un raft în partea de sus cu spațiu liber dedesubt",
 
   "homepage.configurator.fittings.title": "Feronerie",
   "homepage.configurator.fittings.handleType": "Mânere",

@@ -5,6 +5,7 @@ import { WardrobeTopAndPlinth } from './parts/WardrobeTopAndPlinth'
 import { WardrobeColumn } from './parts/WardrobeColumn'
 import { ColumnDivider } from './parts/ColumnDivider'
 import { OpeningType } from './furnitureConfig'
+import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
 
 interface WardrobeBuilderProps {
   selectedColor: string
@@ -17,7 +18,7 @@ interface WardrobeBuilderProps {
   sectionsCount: number // Kept for compatibility with FurnitureViewer props but not used
   openingType: OpeningType
   columns: number
-  columnConfigurations?: unknown[] // Kept for compatibility with FurnitureViewer props but not used
+  columnConfigurations?: WardrobeColumnConfiguration[] // Wardrobe interior configurations
   columnWidths?: number[] // Wardrobe-specific: variable column widths
   columnPositions?: number[] // Wardrobe-specific: custom column X positions
   selectedColumnIndex?: number | null
@@ -47,6 +48,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
   desiredPlintHeight,
   openingType,
   columns,
+  columnConfigurations,
   columnWidths,
   columnPositions,
   selectedColumnIndex: externalSelectedColumnIndex,
@@ -119,6 +121,9 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
       // Wide columns (61-100cm): split doors
       const doorType: 'single' | 'split' = columnWidth >= 61 ? 'split' : 'single'
 
+      // Get column configuration for this column
+      const columnConfiguration = columnConfigurations?.[index]
+
       return (
         <WardrobeColumn
           key={`wardrobe-column-${index}`}
@@ -138,6 +143,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
           columnIndex={index}
           isSelected={selectedColumnIndex === index}
           onColumnClick={handleColumnClick}
+          columnConfiguration={columnConfiguration}
         />
       )
     })
@@ -156,6 +162,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
     scenes.hingeAnchor,
     selectedColumnIndex,
     handleColumnClick,
+    columnConfigurations,
   ])
 
   // Create dividers between columns (not before first or after last)

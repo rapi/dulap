@@ -4,6 +4,9 @@ import { ThreeEvent } from '@react-three/fiber'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import { Door } from './Door'
 import { applyMaterialToObject } from '../furnitureUtils'
+import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
+import { WardrobeZoneRenderer } from './wardrobe-zones/WardrobeZoneRenderer'
+import { Shelf } from './wardrobe-zones/Shelf'
 
 interface WardrobeColumnProps {
   horizontalPanelObject: THREE.Object3D
@@ -22,6 +25,7 @@ interface WardrobeColumnProps {
   columnIndex?: number
   isSelected?: boolean
   onColumnClick?: (index: number) => void
+  columnConfiguration?: WardrobeColumnConfiguration // Wardrobe interior configuration
 }
 
 /**
@@ -50,6 +54,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
   columnIndex = 0,
   isSelected = false,
   onColumnClick,
+  columnConfiguration,
 }) => {
   const { panelThickness, panelSpacing } = FURNITURE_CONFIG
   const [isColumnHovered, setIsColumnHovered] = useState(false)
@@ -124,7 +129,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         <meshStandardMaterial color={'#ffffff'} side={THREE.DoubleSide} />
       </mesh>
     </>
-  ), [columnWidth, columnHeight, columnDepth, plintHeight, panelThickness, selectedColor])
+  ), [columnWidth, columnHeight, columnDepth, plintHeight, panelThickness])
 
 
   const hoverPanel = useMemo(() => (
@@ -154,6 +159,83 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
       applyMaterialToObject(bottomPanelRef.current, selectedColor)
     }
   }, [selectedColor])
+
+  // Shelf at height 200 above all column configuration
+  // If column height > 260, also add a shelf in the middle of the top section
+  const topShelf = useMemo(() => {
+    const SHELF_HEIGHT = 200 // 200cm from floor
+    const shelves = [
+      <Shelf
+        key="top-shelf-200"
+        columnWidth={columnWidth}
+        columnDepth={columnDepth}
+        positionY={SHELF_HEIGHT}
+        selectedColor={selectedColor}
+        thickness={2}
+      />
+    ]
+
+    // Add middle shelf if column height > 260
+    if (columnHeight > 260) {
+      const middleShelfHeight = 200 + (columnHeight - 200) / 2
+      shelves.push(
+        <Shelf
+          key="top-shelf-middle"
+          columnWidth={columnWidth}
+          columnDepth={columnDepth}
+          positionY={middleShelfHeight}
+          selectedColor={selectedColor}
+          thickness={2}
+        />
+      )
+    }
+
+    return <>{shelves}</>
+  }, [columnWidth, columnDepth, columnHeight, selectedColor])
+
+  // Render wardrobe interior zones
+  const interiorZones = useMemo(() => {
+    if (!columnConfiguration || !columnConfiguration.zones || columnConfiguration.zones.length === 0) {
+      return null
+    }
+
+    // Calculate total height of all zones
+    const totalZonesHeight = columnConfiguration.zones.reduce((sum, zone) => sum + zone.height, 0)
+
+    // Stack zones from TOP to BOTTOM (zones array is in top-to-bottom order)
+    // Start from the top of the wardrobe and work down
+    let currentTopY = totalZonesHeight // Start at the top
+
+    return columnConfiguration.zones.map((zone, index) => {
+      // Calculate zone bottom: current top minus zone height
+      currentTopY -= zone.height
+      const zoneBottomY = currentTopY
+
+      return (
+        <WardrobeZoneRenderer
+          key={`zone-${index}`}
+          zone={zone}
+          columnWidth={columnWidth}
+          columnDepth={columnDepth}
+          zoneBottomY={zoneBottomY}
+          plintHeight={plintHeight}
+          selectedColor={selectedColor}
+          horizontalPanelObject={horizontalPanelObject}
+          roundHandleObject={roundHandleObject}
+          profileHandleObject={profileHandleObject}
+        />
+      )
+    })
+  }, [
+    columnConfiguration, 
+    columnWidth, 
+    columnDepth, 
+    plintHeight, 
+    selectedColor,
+    horizontalPanelObject,
+    roundHandleObject,
+    profileHandleObject
+  ])
 
   // Memoize door components to prevent recreation when only hover state changes
   const doors = useMemo(() => {
@@ -266,6 +348,8 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     >
       {hoverPanel}
       {panels}
+      {topShelf}
+      {interiorZones}
       {doors}
       </group>
     </>

@@ -8,6 +8,8 @@ import { Furniture3DProps } from '~/types/furniture3D'
 import { FurnitureBuilder } from './FurnitureBuilder'
 import { WardrobeBuilder } from './WardrobeBuilder'
 import { getViewerConfig } from './furnitureViewerConfig'
+import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
+import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import styles from './FurnitureViewer.module.css'
 
 // Preload models
@@ -147,7 +149,7 @@ const FurnitureScene = memo(function FurnitureScene({
             sectionsCount={sections}
             openingType={openingType}
             columns={columns}
-            columnConfigurations={columnConfigurations}
+            columnConfigurations={columnConfigurations as WardrobeColumnConfiguration[] | undefined}
             columnWidths={columnWidths}
             columnPositions={columnPositions}
             selectedColumnIndex={selectedColumnIndex}
@@ -163,7 +165,7 @@ const FurnitureScene = memo(function FurnitureScene({
             sectionsCount={sections}
             openingType={openingType}
             columns={columns}
-            columnConfigurations={columnConfigurations}
+            columnConfigurations={columnConfigurations as ColumnConfigurationType[] | undefined}
             columnConfigurationsWithOptions={columnConfigurationsWithOptions}
             columnWidths={columnWidths}
             columnPositions={columnPositions}

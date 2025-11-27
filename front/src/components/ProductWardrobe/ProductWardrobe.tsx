@@ -25,12 +25,6 @@ export const openingOptions: ButtonOptionsType[] = [
 ]
 
 export const ProductWardrobe = () => {
-  const [furniture1, setFurniture1] = React.useState('')
-
-  const handleChangeFurniture1 = (event: SelectChangeEvent) => {
-    setFurniture1(event.target.value)
-  }
-
   const [furniture2, setFurniture2] = React.useState('')
 
   const handleChangeFurniture2 = (event: SelectChangeEvent) => {
@@ -137,58 +131,6 @@ export const ProductWardrobe = () => {
             />
           </label>
 
-          <label className={styles.furnitureLabel}>
-            <p>Balamale</p>
-            <FormControl
-              sx={{
-                m: 1,
-                minWidth: 120,
-                margin: '0',
-                backgroundColor: '#fff',
-                height: '35px',
-              }}
-              size="small"
-            >
-              <Select
-                value={furniture1}
-                onChange={handleChangeFurniture1}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Without label' }}
-                sx={{
-                  fontSize: '12px',
-                  fontFamily: 'onest',
-                  color: '#333',
-                }}
-              >
-                <MenuItem
-                  value=""
-                  sx={{
-                    fontSize: '12px',
-                    fontFamily: 'onest',
-                  }}
-                >
-                  standard
-                </MenuItem>
-                <MenuItem
-                  value="premium"
-                  sx={{
-                    fontSize: '12px',
-                    fontFamily: 'onest',
-                  }}
-                >
-                  premium
-                </MenuItem>
-                <MenuItem
-                  value="deluxe"
-                  sx={{
-                    fontSize: '13px',
-                  }}
-                >
-                  deluxe
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </label>
           <label className={styles.furnitureLabel}>
             <p>Glisiere</p>
             <FormControl

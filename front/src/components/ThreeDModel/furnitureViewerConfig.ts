@@ -18,7 +18,7 @@ export interface FurnitureViewerConfig {
 // Default configuration for most furniture types
 const DEFAULT_CONFIG: FurnitureViewerConfig = {
   backgroundScale: [200, 90, 90],
-  cameraPosition: [0, 50, 250],
+  cameraPosition: [-100, 100, 150], // Left-side view: camera on left (negative X), slightly in front
   minDistance: 100,
   maxDistance: 500,
   minAzimuthAngle: -Math.PI / 2 + 0.5,
@@ -30,10 +30,11 @@ const DEFAULT_CONFIG: FurnitureViewerConfig = {
 }
 
 // Wardrobe-specific configuration
+// Left-side view for wardrobe: camera positioned on the left side
 const WARDROBE_CONFIG: FurnitureViewerConfig = {
   backgroundScale: [200, 90, 90],
-  cameraPosition: [0, 115, 250],
-  minDistance: 500,
+  cameraPosition: [-150, 170, 350], // Left-side view: camera on left (negative X), slightly in front
+  minDistance: 200,
   maxDistance: 500,
   minAzimuthAngle: -Math.PI / 2 + Math.PI / 5,
   maxAzimuthAngle: Math.PI / 2 - Math.PI / 5,

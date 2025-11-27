@@ -89,7 +89,6 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   const [imageSections, setImageSections] = useState(1)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
   const [imageColor, setImageColor] = useState('White')
-  const [hinges, setHinges] = useState('standart')
   const [guides, setGuides] = useState('standart')
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
   const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
@@ -234,9 +233,6 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     setDepth(depth)
   }, [depth])
   useEffect(() => {
-    setHinges(hinges)
-  }, [hinges])
-  useEffect(() => {
     setGuides(guides)
   }, [guides])
 
@@ -337,22 +333,16 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   }, [selectedSections])
 
   const price = useMemo(() => {
-    const hingesNr = height >= 230 ? doorsNr * 6 : doorsNr * 5
-    let hingesExtraPrice = 0
-    if (hinges === 'homepage.configurator.fittings.hinges.options.2') {
-      hingesExtraPrice = hingesNr * 50
-    }
     return Math.round(
       (width * 29 +
         (height - 190) * 4.5 * doorsNr +
         sectionsPrice +
-        hingesExtraPrice +
         guidesExtraPrice +
         350 * doorsNr +
         350) *
         1.35
     )
-  }, [width, height, doorsNr, sectionsPrice, hinges, guidesExtraPrice])
+  }, [width, height, doorsNr, sectionsPrice, guidesExtraPrice])
 
   useEffect(() => {
     if (selectedMirrorOption === 'standard') {
@@ -394,7 +384,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'dimensions',
       widthRange: [40, 250],
-      heightRange: [200, 270],
+      heightRange: [237, 270],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
       heightStep: 1,
@@ -440,8 +430,8 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       type: 'furniture',
       selectedOpeningMethod,
       setSelectedOpeningMethod,
-      hinges,
-      setHinges,
+      hinges: '',
+      setHinges: () => {},
       guides,
       setGuides,
     },

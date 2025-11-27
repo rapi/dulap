@@ -1,5 +1,6 @@
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 import { ColumnConfigurationType } from './columnConfigurationTypes'
+import { WardrobeColumnConfiguration } from './wardrobeConfigurationTypes'
 
 /**
  * Extended column configuration that includes type and door opening side
@@ -25,6 +26,8 @@ export interface FurnitureDefaults {
 
 /**
  * Props required for 3D furniture rendering
+ * columnConfigurations can be either ColumnConfigurationType[] (for stand/bedside/tv-stand)
+ * or WardrobeColumnConfiguration[] (for wardrobe)
  */
 export interface Furniture3DProps {
   selectedColor: string
@@ -35,7 +38,7 @@ export interface Furniture3DProps {
   sections: number
   openingType: OpeningType
   columns: number
-  columnConfigurations?: ColumnConfigurationType[]
+  columnConfigurations?: ColumnConfigurationType[] | WardrobeColumnConfiguration[]
   columnConfigurationsWithOptions?: ColumnConfigurationWithOptions[] // Extended config with door opening side (for stand)
   columnWidths?: number[] // Optional: variable column widths (for wardrobe)
   columnPositions?: number[] // Optional: custom column X positions (for wardrobe)

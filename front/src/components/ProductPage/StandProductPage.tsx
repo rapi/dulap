@@ -397,6 +397,19 @@ export const ProductPage: FC<ProductPageProps> = ({
               <div className={styles.mobileCorePanel}>
                 {renderCore(activeSection)}
               </div>
+
+              {/* Always render colors component (hidden) so effects run and color changes apply immediately */}
+              {(() => {
+                const colorsComponent = navComponents.find((c) => c.type === 'colors')
+                if (colorsComponent && colorsComponent.type !== activeSection) {
+                  return (
+                    <div key="colors-hidden" style={{ display: 'none' }}>
+                      {renderCore('colors')}
+                    </div>
+                  )
+                }
+                return null
+              })()}
             </>
           ) : (
             // DESKTOP: original stacked layout
