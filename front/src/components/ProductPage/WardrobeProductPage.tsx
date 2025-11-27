@@ -1,5 +1,5 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import React, { FC, useState, useCallback } from 'react'
+import React, { FC, useState, useCallback, useRef } from 'react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useMediaQuery } from '@mui/material'
@@ -40,7 +40,7 @@ import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { DEFAULT_WARDROBE } from './productTypes/wardrobe'
-import { FurnitureViewer } from '../ThreeDModel/FurnitureViewer'
+import { FurnitureViewer, FurnitureViewerRef } from '../ThreeDModel/FurnitureViewer'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
 import {
@@ -81,6 +81,7 @@ export type PredefinedValue = {
   select?: string
   furniture?: ProductFurniturePredefinedValue
   price?: number
+  screenshot?: string
 }
 interface ProductPageProps {
   components: () => ProductComponent[]
@@ -103,6 +104,7 @@ export const ProductPage: FC<ProductPageProps> = ({
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
+  const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
 
   // Handle tab change from UI to update 3D selection
   const handleTabChange = useCallback((index: number) => {
@@ -304,6 +306,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left Side: 3D Viewer */}
         <div className={styles.leftContainer}>
           <FurnitureViewer
+            ref={furnitureViewerRef}
             {...furniture3DProps}
             selectedColumnIndex={selectedColumnIndex}
             onColumnClick={handleColumnClick}
@@ -321,7 +324,9 @@ export const ProductPage: FC<ProductPageProps> = ({
             {priceComponent && (
               <ProductPrice
                 onAddItem={() => {
-                  addItem('wardrobe', currentComponents, values ?? {})
+                  // Capture screenshot before adding to cart
+                  const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
+                  addItem('wardrobe', currentComponents, { ...(values ?? {}), screenshot })
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}

@@ -58,6 +58,11 @@ function ItemRow({ item, index }: { item: CartItem; index: number }) {
         vm.displayName = item.name
     }
 
+    // Use screenshot if available
+    if (item.screenshot) {
+      vm.image = item.screenshot
+    }
+
     for (const config of item.config) {
       switch (config.type) {
         case 'dimensions':

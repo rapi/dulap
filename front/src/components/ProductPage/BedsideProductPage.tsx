@@ -41,7 +41,7 @@ import {
   ProductGallery,
   ProductGalleryComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductGallery'
-import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
+import { FurnitureViewer, FurnitureViewerRef } from '~/components/ThreeDModel/FurnitureViewer'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
@@ -84,6 +84,7 @@ export type PredefinedValue = {
   sections?: number
   furniture?: ProductFurniturePredefinedValue
   price?: number
+  screenshot?: string
 }
 
 interface ProductPageProps {
@@ -110,6 +111,7 @@ export const ProductPage: FC<ProductPageProps> = ({
     null
   )
   const deselectColumnRef = useRef<(() => void) | null>(null)
+  const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
 
   const currentComponents = components()
 
@@ -117,7 +119,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   const furniture3DProps = use3DFurnitureProps(
     currentComponents,
     values,
-    DEFAULT_BEDSIDE
+    DEFAULT_BEDSIDE,
+    false, // isWardrobe = false
+    'bedside' // furnitureType
   )
 
   const priceComponent = currentComponents.find(
@@ -302,6 +306,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left Side: 3D Viewer */}
         <div className={styles.leftContainer}>
           <FurnitureViewer
+            ref={furnitureViewerRef}
             {...furniture3DProps}
             selectedColumnIndex={selectedColumnIndex}
             onColumnClick={handleColumnClick}
@@ -321,8 +326,10 @@ export const ProductPage: FC<ProductPageProps> = ({
             {priceComponent && (
               <ProductPrice
                 onAddItem={() => {
+                  // Capture screenshot before adding to cart
+                  const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
                   // bedside is still treated as 'stand' in cart, same as before
-                  addItem('stand', currentComponents, values ?? {})
+                  addItem('stand', currentComponents, { ...(values ?? {}), screenshot })
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}

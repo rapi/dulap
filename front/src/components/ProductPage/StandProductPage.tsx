@@ -46,7 +46,7 @@ import {
   ProductGalleryColorsConfig,
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
 
-import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
+import { FurnitureViewer, FurnitureViewerRef } from '~/components/ThreeDModel/FurnitureViewer'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '~/components/ProductListPage/products'
@@ -86,6 +86,7 @@ export type PredefinedValue = {
   select?: string
   furniture?: ProductFurniturePredefinedValue
   price?: number
+  screenshot?: string
 }
 
 interface ProductPageProps {
@@ -110,12 +111,15 @@ export const ProductPage: FC<ProductPageProps> = ({
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
   const deselectColumnRef = useRef<(() => void) | null>(null)
+  const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
 
   const currentComponents = components()
   const furniture3DProps = use3DFurnitureProps(
     currentComponents,
     values,
-    DEFAULT_STAND
+    DEFAULT_STAND,
+    false, // isWardrobe = false
+    'stand' // furnitureType
   )
 
   const priceComponent = currentComponents.find((c) => c.type === 'price') as
@@ -290,6 +294,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Left: 3D Viewer */}
         <div className={styles.leftContainer}>
           <FurnitureViewer
+            ref={furnitureViewerRef}
             {...furniture3DProps}
             selectedColumnIndex={selectedColumnIndex}
             onColumnClick={handleColumnClick}
@@ -310,7 +315,9 @@ export const ProductPage: FC<ProductPageProps> = ({
             {priceComponent && (
               <ProductPrice
                 onAddItem={() => {
-                  addItem('stand', currentComponents, values ?? {})
+                  // Capture screenshot before adding to cart
+                  const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
+                  addItem('stand', currentComponents, { ...(values ?? {}), screenshot })
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
