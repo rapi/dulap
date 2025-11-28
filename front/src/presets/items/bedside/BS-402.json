@@ -1,0 +1,22 @@
+{
+  "id": "BS-402",
+  "slug": "noptiera-60",
+  "type": "bedside",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Noptieră 60cm",
+    "shortDescription": "Noptieră compactă, lățime 60 cm.",
+    "tags": ["noptieră", "60cm"],
+    "sortWeight": 75,
+    "previewImage": "/ready-products/bedside/600 bedside_2.png"
+  },
+  "details": {
+    "width": 60,
+    "height": 50,
+    "depth": 40,
+    "color": "#d6d6d6",
+    "openingType": "maner"
+  },
+  "config": {}
+}

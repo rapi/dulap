@@ -80,7 +80,10 @@ export function use3DFurnitureProps(
     const individualColumnsComponent = currentComponents.find(
       (c) => c.type === 'individualColumns'
     )
-    const columnConfigs = individualColumnsComponent?.columnConfigurations
+    const wardrobeColumnsComponent = currentComponents.find(
+      (c) => c.type === 'wardrobeColumns'
+    )
+    const columnConfigs = wardrobeColumnsComponent?.columnConfigurations ?? individualColumnsComponent?.columnConfigurations
     
     // Check if we have extended config (with doorOpeningSide) or simple config
     // Extended config is an array of objects with 'type' property (ColumnConfigurationWithOptions[])
@@ -114,6 +117,10 @@ export function use3DFurnitureProps(
       wardrobeLayout = calculateWardrobeColumnLayout(width)
     }
 
+    // For wardrobes: use zone-based configs if available, otherwise use old string-based configs
+    // wardrobeLayout.columnConfigurations is just for fallback/compatibility
+    const finalColumnConfigurations = columnConfigs ?? wardrobeLayout?.columnConfigurations ?? columnConfigurations
+
     return {
       selectedColor: selectedColorHex,
       width,
@@ -123,7 +130,7 @@ export function use3DFurnitureProps(
       sections: effectiveSections, // Use derived sections for new 3D, old sections for legacy
       openingType,
       columns: wardrobeLayout?.columnCount ?? columns,
-      columnConfigurations: wardrobeLayout?.columnConfigurations ?? columnConfigurations,
+      columnConfigurations: finalColumnConfigurations,
       columnConfigurationsWithOptions,
       columnWidths: wardrobeLayout?.columnWidths,
       columnPositions: wardrobeLayout?.columnPositions,

@@ -1,4 +1,4 @@
-// utils/configTypes.ts
+// src/utils/configTypes.ts
 import { getConstraints } from '~/config/furnitureConstraints'
 import { ColumnConfigurationWithOptions } from '~/types/furniture3D'
 
@@ -26,6 +26,7 @@ export interface BaseConfig {
   color: string
   columns?: number
   sections?: number[]
+  sectionCount?: number
   plintHeight?: number // only for stand
   columnConfigurations?: ColumnConfigurationWithOptions[] // individual column configs + door sides (for stand)
   wardrobeCfg?: string // wardrobe column configurations (encoded template IDs)

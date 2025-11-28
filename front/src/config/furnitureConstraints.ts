@@ -308,7 +308,7 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
 export const WARDROBE_CONSTRAINTS: ProductConstraints = {
   dimensions: {
     width: { min: 40, max: 250, default: 200, unit: 'cm' },
-    height: { min: 200, max: 270, default: 260, unit: 'cm' },
+    height: { min: 237, max: 270, default: 260, unit: 'cm' },
     depth: { min: 35, max: 60, default: 50, unit: 'cm' },
     plintHeight: { min: 2, max: 8, default: 2, unit: 'cm' },
   },
@@ -410,30 +410,52 @@ export function calculatePrice(
   type: FurnitureType,
   dimensions: { width: number; height: number; depth: number },
   sections: number,
-  hasPremiumGuides: boolean = false
+  hasPremiumGuides: boolean = false,
+  columns: number = 1
 ): number {
   const { pricing } = getConstraints(type)
 
-  const fittingsPrice = hasPremiumGuides
+  // 1) Safe columns
+  const safeColumns = Math.max(1, columns)
+
+  // 2) Width per column (only split when > 1 column)
+  const widthPerColumn =
+    safeColumns > 1 ? dimensions.width / safeColumns : dimensions.width
+
+  // 3) Surcharges only when above thresholds (no negative discounts)
+  const extraHeightCm =
+    dimensions.height > pricing.perCmHeightAbove.threshold
+      ? dimensions.height - pricing.perCmHeightAbove.threshold
+      : 0
+
+  const extraDepthCm =
+    dimensions.depth > pricing.perCmDepthAbove.threshold
+      ? dimensions.depth - pricing.perCmDepthAbove.threshold
+      : 0
+
+  // 4) Fittings price per *column* (sections are per column)
+  const perColumnFittingsPrice = hasPremiumGuides
     ? sections * pricing.premiumGuidesPerSection
     : 0
 
+  // 5) Price for a single column/module
+  const perColumnBasePrice =
+    pricing.basePrice +
+    sections * pricing.perSection + // sections PER column
+    widthPerColumn * pricing.perCmWidth +
+    extraHeightCm * pricing.perCmHeightAbove.rate +
+    extraDepthCm * pricing.perCmDepthAbove.rate +
+    perColumnFittingsPrice
+
+  // 6) Multiply whole price by the number of columns
+  const totalBeforeVat = perColumnBasePrice * safeColumns
+
   const round10 = (n: number): number => Math.round(n / 10) * 10
 
-  return round10(
-    Math.round(
-      (pricing.basePrice +
-        sections * pricing.perSection +
-        dimensions.width * pricing.perCmWidth +
-        (dimensions.height - pricing.perCmHeightAbove.threshold) *
-          pricing.perCmHeightAbove.rate +
-        (dimensions.depth - pricing.perCmDepthAbove.threshold) *
-          pricing.perCmDepthAbove.rate +
-        fittingsPrice) *
-        pricing.vatMultiplier
-    )
-  )
+  // 7) Apply VAT and final rounding
+  return round10(Math.round(totalBeforeVat * pricing.vatMultiplier))
 }
+
 
 /**
  * Get available sections based on dimensions

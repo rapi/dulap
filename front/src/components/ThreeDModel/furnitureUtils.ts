@@ -136,8 +136,7 @@ export const applyColorToObject = (obj: THREE.Object3D, color: string): void => 
 export const applyPBRTexturesToObject = (
   obj: THREE.Object3D,
   pbrTextures: PBRTextures,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  fallbackColor?: string
+  rotateTexture: boolean = false
 ): void => {
   // Get textures from cache (already preloaded)
   const diffuseTexture = getCachedTexture(pbrTextures.diffuse)
@@ -208,8 +207,18 @@ export const applyPBRTexturesToObject = (
         // Scale texture: assume texture represents 50cm of real wood
         // Adjust repeat based on actual surface dimensions
         const textureScaleCm = 50 // texture represents 50cm of wood
-        const repeatX = Math.max(0.5, uDimension / textureScaleCm)
-        const repeatY = Math.max(0.5, vDimension / textureScaleCm)
+        
+        // For horizontal texture (drawer front), swap dimensions before calculating repeat
+        let finalUDimension = uDimension
+        let finalVDimension = vDimension
+        if (rotateTexture) {
+          // Swap dimensions for horizontal orientation
+          finalUDimension = vDimension
+          finalVDimension = uDimension
+        }
+        
+        const repeatX = Math.max(0.5, finalUDimension / textureScaleCm)
+        const repeatY = Math.max(0.5, finalVDimension / textureScaleCm)
         
         // Clone textures for this mesh to avoid affecting other meshes
         const meshDiffuse = diffuseTexture.clone()
@@ -225,6 +234,25 @@ export const applyPBRTexturesToObject = (
           meshAO.wrapS = meshAO.wrapT = THREE.RepeatWrapping
         }
         
+        // Rotate texture 90 degrees if requested (for drawer front panels)
+        if (rotateTexture) {
+          // Rotate texture 90 degrees clockwise using rotation property
+          meshDiffuse.rotation = Math.PI / 2
+          meshNormal.rotation = Math.PI / 2
+          meshRoughness.rotation = Math.PI / 2
+          if (meshAO) {
+            meshAO.rotation = Math.PI / 2
+          }
+          
+          // Adjust offset to compensate for rotation (move texture to correct position)
+          meshDiffuse.offset.set(0, 1)
+          meshNormal.offset.set(0, 1)
+          meshRoughness.offset.set(0, 1)
+          if (meshAO) {
+            meshAO.offset.set(0, 1)
+          }
+        }
+        
         // Apply proper repeat for this mesh size
         meshDiffuse.repeat.set(repeatX, repeatY)
         meshNormal.repeat.set(repeatX, repeatY)
@@ -236,10 +264,16 @@ export const applyPBRTexturesToObject = (
         meshRoughness.needsUpdate = true
         if (meshAO) meshAO.needsUpdate = true
         
+        // Dim texture by darkening the color tint
+        // Method: multiply colorTint by a dimming factor (0.5 = 50% brightness)
+        const baseColor = new THREE.Color(pbrTextures.colorTint || '#ffffff')
+        const dimmingFactor = pbrTextures.dimmingFactor ?? 1.0 // Use configured dimming factor or default to full brightness
+        baseColor.multiplyScalar(dimmingFactor)
+        
         // Create new PBR material with properly scaled textures
         const pbrMaterial = new THREE.MeshStandardMaterial({
           map: meshDiffuse,                  // Base color/albedo
-          color: pbrTextures.colorTint || '#ffffff', // Color tint multiplied with texture
+          color: baseColor,                  // Dimmed color tint (reduces texture intensity)
           normalMap: meshNormal,              // Surface detail (fake geometry)
           normalScale: new THREE.Vector2(0.5, 0.5), // Reduce normal map intensity for better appearance
           roughnessMap: meshRoughness,        // Roughness control
@@ -254,9 +288,14 @@ export const applyPBRTexturesToObject = (
         mesh.material.needsUpdate = true
       } else {
         // Fallback if no bounding box
+        // Dim texture by darkening the color tint (same as above)
+        const baseColor = new THREE.Color(pbrTextures.colorTint || '#ffffff')
+        const dimmingFactor = pbrTextures.dimmingFactor ?? 1.0 // Use configured dimming factor or default to full brightness
+        baseColor.multiplyScalar(dimmingFactor)
+        
         const pbrMaterial = new THREE.MeshStandardMaterial({
           map: diffuseTexture,
-          color: pbrTextures.colorTint || '#ffffff',
+          color: baseColor, // Dimmed color tint
           normalMap: normalTexture,
           normalScale: new THREE.Vector2(0.5, 0.5),
           roughnessMap: roughnessTexture,
@@ -297,14 +336,19 @@ export const applyPBRTexturesToObject = (
  * 
  * @param obj - The 3D object to apply material to
  * @param colorNameOrHex - Color name (e.g., "Natural Acacia") or hex code (e.g., "#d4b896")
+ * @param rotateTexture - If true, rotates texture horizontally (swaps repeatX and repeatY)
  */
-export const applyMaterialToObject = (obj: THREE.Object3D, colorNameOrHex: string): void => {
+export const applyMaterialToObject = (
+  obj: THREE.Object3D,
+  colorNameOrHex: string,
+  rotateTexture: boolean = false
+): void => {
   // Try to get color item from dictionary (searches by name AND hex code)
   const colorItem = getColorItem(colorNameOrHex)
   
   // If color item has PBR textures, use them for realistic rendering
   if (colorItem?.pbrTextures) {
-    applyPBRTexturesToObject(obj, colorItem.pbrTextures, colorItem.hexCode)
+    applyPBRTexturesToObject(obj, colorItem.pbrTextures, rotateTexture)
   } else {
     // Fallback to solid color (either from dictionary or direct hex)
     const hexColor = colorItem?.hexCode || colorNameOrHex

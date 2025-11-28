@@ -1,6 +1,9 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import React, { FC, useState, useCallback, useRef } from 'react'
-import { useEffect } from 'react'
+import React, { FC, useState, useCallback, useRef, useEffect } from 'react'
+import { FormattedMessage } from 'react-intl'
+import { useMediaQuery } from '@mui/material'
+import { useRouter } from 'next/router'
+
 import {
   ProductDimensions,
   ProductDimensionsComponent,
@@ -10,8 +13,9 @@ import {
   ProductColorsComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductColors'
 import {
-  ProductSectionsComponent,
-} from '~/components/ProductPage/productTypeComponents/stand/ProductSections'
+  ProductSelect,
+  ProductSelectComponent,
+} from '~/components/ProductPage/productTypeComponents/ProductSelect'
 import {
   ProductColumns,
   ProductColumnsComponent,
@@ -20,31 +24,27 @@ import {
   ProductIndividualColumns,
   ProductIndividualColumnsComponent,
 } from '~/components/ProductPage/productTypeComponents/stand/ProductIndividualColumns'
+import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
+import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
+
 import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/bedside/ProductFurniture'
+} from '~/components/ProductPage/productTypeComponents/ProductFurniture'
 import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
 import { ProductMetadataComponent } from '~/components/ProductPage/productTypeComponents/ProductMetadata'
 import {
-  ProductImageCarousel,
-  ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
-import {
   ProductGallery,
   ProductGalleryComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductGallery'
-import { FurnitureViewer } from '~/components/ThreeDModel/FurnitureViewer'
-import { use3DVersion } from '~/hooks/use3DVersion'
+import { FurnitureViewer, FurnitureViewerRef } from '~/components/ThreeDModel/FurnitureViewer'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
-import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
-import { useRouter } from 'next/router'
 import { DEFAULT_BEDSIDE } from './productTypes/bedside'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
@@ -52,36 +52,52 @@ import {
   ProductGalleryColors,
   ProductGalleryColorsConfig,
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
-import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
+
+// Mobile section labels & order
+import {
+  NavSection,
+  NAV_ORDER,
+  SECTION_LABELS,
+  isNavSection,
+} from '~/components/ProductPage/productTypeComponents/sectionRegistry'
 
 export type ProductComponent =
-  | ProductImageCarouselComponent
   | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
-  | ProductSectionsComponent
+  | ProductSelectComponent
   | ProductColumnsComponent
   | ProductIndividualColumnsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
   | ProductMetadataComponent
   | ProductGalleryColorsConfig
+
 export type PredefinedValue = {
-  sections?: number
   columns?: number
   imageCarousel?: string[]
   gallery?: string[]
   dimensions?: Dimension
   colors?: string
   galleryColors?: string
+  select?: string
+  sections?: number
   furniture?: ProductFurniturePredefinedValue
   price?: number
+  screenshot?: string
 }
+
 interface ProductPageProps {
   components: () => ProductComponent[]
   name: string
   values?: PredefinedValue
 }
+
+// Helpers – same style as stand/tv-stand
+const filterNavigable = (components: ProductComponent[]) =>
+  components.filter((c): c is Extract<ProductComponent, { type: NavSection }> =>
+    isNavSection(c.type as string)
+  )
 
 export const ProductPage: FC<ProductPageProps> = ({
   components,
@@ -89,11 +105,60 @@ export const ProductPage: FC<ProductPageProps> = ({
   values,
 }) => {
   const { addItem } = useCart()
-  const isBedside3D = use3DVersion()
+  const isMobile = useMediaQuery('(max-width: 768px)')
   const [activeColumnTab, setActiveColumnTab] = useState(0)
-  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
+  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(
+    null
+  )
   const deselectColumnRef = useRef<(() => void) | null>(null)
+  const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
 
+  const currentComponents = components()
+
+  // 3D props
+  const furniture3DProps = use3DFurnitureProps(
+    currentComponents,
+    values,
+    DEFAULT_BEDSIDE,
+    false, // isWardrobe = false
+    'bedside' // furnitureType
+  )
+
+  const priceComponent = currentComponents.find(
+    (component) => component.type === 'price'
+  ) as ProductPriceComponent | undefined
+
+  const galleryColorsComp = currentComponents.find(
+    (c) => c.type === 'galleryColors'
+  ) as ProductGalleryColorsConfig | undefined
+
+  const galleryComponent = currentComponents.find(
+    (component) => component.type === 'gallery'
+  ) as ProductGalleryComponent | undefined
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  const router = useRouter()
+  const route =
+    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
+  const configuratorRoute = '/configurator' + route
+
+  const handleColumnClick = useCallback((index: number | null) => {
+    if (index !== null) {
+      setActiveColumnTab(index)
+      setSelectedColumnIndex(index)
+    } else {
+      setSelectedColumnIndex(null)
+    }
+  }, [])
+
+  const handleDeselectFunctionReady = useCallback((deselectFn: () => void) => {
+    deselectColumnRef.current = deselectFn
+  }, [])
+
+  // ---------- DESKTOP renderer ----------
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'dimensions':
@@ -111,26 +176,33 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'columns':
-        return isBedside3D ? (
+        return (
           <ProductColumns
             configuration={component}
             predefinedValue={values?.columns ?? undefined}
-            options={component.options}
+            options={(component as ProductColumnsComponent).options}
           />
-        ) : null
+        )
       case 'individualColumns':
-        return isBedside3D ? (
+        return (
           <ProductIndividualColumns
             configuration={component}
             activeTab={activeColumnTab}
             onActiveTabChange={setActiveColumnTab}
             onActiveColumnChange={setSelectedColumnIndex}
           />
-        ) : null
-      case 'furniture':
+        )
+      case 'select':
+        return (
+          <ProductSelect
+            configuration={component}
+            predefinedValue={values?.select ?? undefined}
+          />
+        )
+      case 'furniture': {
         const furnitureConfig = {
-          ...component,
-          is3DEnabled: isBedside3D,
+          ...(component as ProductFurnitureComponent),
+          is3DEnabled: true,
         }
         return (
           <ProductFurniture
@@ -138,83 +210,110 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.furniture ?? undefined}
           />
         )
+      }
+      default:
+        return null
     }
   }
 
-  const currentComponents = components()
-  const priceComponent = currentComponents.find(
-    (component) => component.type === 'price'
-  )
-  const imageCarouselComponent = currentComponents.find(
-    (component) => component.type === 'imageCarousel'
-  )
-  const galleryColorsComp = currentComponents.find(
-    (c) => c.type === 'galleryColors'
-  ) as ProductGalleryColorsConfig | undefined
+  // ---------- MOBILE: chips + core-only panel ----------
+  const navComponents = filterNavigable(currentComponents)
+    .sort(
+      (a, b) =>
+        NAV_ORDER.indexOf(a.type as NavSection) -
+        NAV_ORDER.indexOf(b.type as NavSection)
+    )
 
-  const galleryComponent = currentComponents.find(
-    (component) => component.type === 'gallery'
+  const [activeSection, setActiveSection] = useState<NavSection | null>(
+    navComponents[0]?.type ?? null
   )
+
+  // keep activeSection valid when navComponents changes
   useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  const router = useRouter()
-  const route =
-    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
-  const configuratorRoute = '/configurator' + route
-
-  // Extract all 3D props using shared hook
-  const furniture3DProps = use3DFurnitureProps(
-    currentComponents,
-    values,
-    DEFAULT_BEDSIDE
-  )
-
-  // Handle column click from 3D viewer to update active tab
-  const handleColumnClick = useCallback((index: number | null) => {
-    if (index !== null) {
-      // Column clicked: update both activeTab and selectedColumn
-      setActiveColumnTab(index)
-      setSelectedColumnIndex(index)
+    if (navComponents.length > 0) {
+      const stillExists = navComponents.find((c) => c.type === activeSection)
+      if (!stillExists) {
+        setActiveSection(navComponents[0]?.type ?? null)
+      }
     } else {
-      // Background clicked: only deselect column, keep activeTab
-      setSelectedColumnIndex(null)
+      setActiveSection(null)
     }
-  }, [])
+  }, [navComponents, activeSection])
 
-  // Store the deselect function from FurnitureViewer
-  const handleDeselectFunctionReady = useCallback((deselectFn: () => void) => {
-    deselectColumnRef.current = deselectFn
-  }, [])
+  const renderCore = (type: NavSection) => {
+    const comp = currentComponents.find((c) => c.type === type)
+    if (!comp) return null
+
+    switch (type) {
+      case 'dimensions':
+        return (
+          <ProductDimensions
+            configuration={comp as ProductDimensionsComponent}
+            predefinedValue={values?.dimensions ?? undefined}
+          />
+        )
+      case 'colors':
+        return (
+          <ProductColors
+            configuration={comp as ProductColorsComponent}
+            predefinedValue={values?.colors ?? undefined}
+          />
+        )
+      case 'columns':
+        return (
+          <ProductColumns
+            configuration={comp as ProductColumnsComponent}
+            predefinedValue={values?.columns ?? undefined}
+            options={(comp as ProductColumnsComponent).options}
+          />
+        )
+      case 'individualColumns':
+        return (
+          <ProductIndividualColumns
+            configuration={comp as ProductIndividualColumnsComponent}
+            activeTab={activeColumnTab}
+            onActiveTabChange={setActiveColumnTab}
+            onActiveColumnChange={setSelectedColumnIndex}
+          />
+        )
+      case 'select':
+        return (
+          <ProductSelect
+            configuration={comp as ProductSelectComponent}
+            predefinedValue={values?.select ?? undefined}
+          />
+        )
+      case 'furniture': {
+        const furnitureConfig = {
+          ...(comp as ProductFurnitureComponent),
+          is3DEnabled: true,
+        }
+        return (
+          <ProductFurniture
+            configuration={furnitureConfig}
+            predefinedValue={values?.furniture ?? undefined}
+          />
+        )
+      }
+      default:
+        return null
+    }
+  }
 
   return (
     <>
       <div className={styles.contentContainer}>
-        {/* Left Side: Viewer or Image Carousel */}
+        {/* Left Side: 3D Viewer */}
         <div className={styles.leftContainer}>
-          {isBedside3D ? (
-            <FurnitureViewer
-              {...furniture3DProps}
-              selectedColumnIndex={selectedColumnIndex}
-              onColumnClick={handleColumnClick}
-              onDeselectFunctionReady={handleDeselectFunctionReady}
-            />
-          ) : (
-            imageCarouselComponent && (
-              <ProductImageCarousel
-                configuration={
-                  values?.imageCarousel
-                    ? {
-                        type: 'imageCarousel',
-                        images: values.imageCarousel,
-                      }
-                    : imageCarouselComponent
-                }
-              />
-            )
-          )}
+          <FurnitureViewer
+            ref={furnitureViewerRef}
+            {...furniture3DProps}
+            selectedColumnIndex={selectedColumnIndex}
+            onColumnClick={handleColumnClick}
+            onDeselectFunctionReady={handleDeselectFunctionReady}
+          />
         </div>
+
         {/* Right Side: Product Details */}
         <div className={styles.detailsContainer}>
           <h1 className={styles.visuallyHiddenTitle}>
@@ -227,7 +326,10 @@ export const ProductPage: FC<ProductPageProps> = ({
             {priceComponent && (
               <ProductPrice
                 onAddItem={() => {
-                  addItem('stand', currentComponents, values ?? {})
+                  // Capture screenshot before adding to cart
+                  const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
+                  // bedside is still treated as 'stand' in cart, same as before
+                  addItem('stand', currentComponents, { ...(values ?? {}), screenshot })
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
@@ -235,17 +337,52 @@ export const ProductPage: FC<ProductPageProps> = ({
             )}
           </div>
 
-          {currentComponents.map((component, index) => {
-            return (
+          {/* MOBILE: chips + core */}
+          {isMobile && activeSection && navComponents.length > 0 ? (
+            <>
+              <div className={styles.mobileNavChips}>
+                <ButtonSelect<NavSection>
+                  options={
+                    navComponents.map((c) => ({
+                      value: c.type as NavSection,
+                      // ButtonSelect renders <FormattedMessage id="..." /> from label
+                      label: SECTION_LABELS[c.type as NavSection].id,
+                    })) as ButtonOptionsType<NavSection>[]
+                  }
+                  defaultSelected={activeSection}
+                  size="medium"
+                  className={styles.mobileNavChipsRow}
+                  onChange={(val) => setActiveSection(val as NavSection)}
+                />
+              </div>
+
+              <div className={styles.mobileCorePanel}>
+                {renderCore(activeSection)}
+              </div>
+
+              {/* Always render colors component (hidden) so effects run immediately */}
+              {(() => {
+                const colorsComponent = navComponents.find(
+                  (c) => c.type === 'colors'
+                )
+                if (colorsComponent && colorsComponent.type !== activeSection) {
+                  return (
+                    <div key="colors-hidden" style={{ display: 'none' }}>
+                      {renderCore('colors')}
+                    </div>
+                  )
+                }
+                return null
+              })()}
+            </>
+          ) : (
+            // DESKTOP: stacked layout
+            currentComponents.map((component, index) => (
               <div key={index + component.type}>{getComponent(component)}</div>
-            )
-          })}
-        </div>
-        <div>
-          {values != null && !isBedside3D && (
-            <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
+            ))
           )}
         </div>
+
       </div>
       <br />
       <br />

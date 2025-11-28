@@ -46,8 +46,21 @@ export const ButtonImageSelect = <T extends string | number = string>({
     }
   }
 
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const el = e.currentTarget
+
+    // Only hijack if there actually *is* horizontal overflow
+    if (el.scrollWidth <= el.clientWidth) return
+
+    // Only convert vertical wheel into horizontal when vertical delta dominates
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return
+
+    e.preventDefault()
+    el.scrollLeft += e.deltaY
+  }
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} onWheel={handleWheel}>
       <div
         className={styles.row}
         role="radiogroup"

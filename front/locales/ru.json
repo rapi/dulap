@@ -134,7 +134,7 @@
   "products.comoda5": "Тумба 5",
   "products.comoda6": "Тумба 6",
 
-  "products.wardrobe.1.name": "Шкаф для вещей 150см",
+  "products.wardrobe.1.name": "Шкаф для вещей 180см",
   "products.wardrobe.2.name": "Шкаф для вещей 50см",
   "products.wardrobe.3.name": "Шкаф для вещей 200см",
   "products.wardrobe.4.name": "Шкаф для вещей 240см",
@@ -147,6 +147,64 @@
 
   "products.bedside.1.name": "Тумбочка 80см",
   "products.bedside.2.name": "Тумбочка 60см",
+
+  
+ 
+  "products.presets.WR-101.title": "Шкаф для одежды 180 см",
+  "products.presets.WR-101.shortDescription": "Шкаф для одежды шириной 180 см.",
+  "products.presets.WR-101.tag.1": "шкаф",
+  "products.presets.WR-101.tag.2": "одежда",
+  "products.presets.WR-101.tag.3": "180 см",
+
+  "products.presets.WR-102.title": "Шкаф для одежды 50 см",
+  "products.presets.WR-102.shortDescription": "Узкий шкаф для одежды, ширина 50 см.",
+  "products.presets.WR-102.tag.1": "шкаф",
+  "products.presets.WR-102.tag.2": "одежда",
+  "products.presets.WR-102.tag.3": "50 см",
+
+  "products.presets.WR-103.title": "Шкаф для одежды 200 см",
+  "products.presets.WR-103.shortDescription": "Шкаф для одежды шириной 200 см.",
+  "products.presets.WR-103.tag.1": "шкаф",
+  "products.presets.WR-103.tag.2": "одежда",
+  "products.presets.WR-103.tag.3": "200 см",
+
+  "products.presets.WR-104.title": "Шкаф для одежды 240 см",
+  "products.presets.WR-104.shortDescription": "Шкаф для одежды шириной 240 см.",
+  "products.presets.WR-104.tag.1": "шкаф",
+  "products.presets.WR-104.tag.2": "одежда",
+  "products.presets.WR-104.tag.3": "240 см",
+
+  "products.presets.ST-201.title": "Комод 90 см",
+  "products.presets.ST-201.shortDescription": "Комод 90 см для спальни или гостиной.",
+  "products.presets.ST-201.tag.1": "комод",
+  "products.presets.ST-201.tag.2": "90 см",
+
+  "products.presets.ST-202.title": "Комод 50 см",
+  "products.presets.ST-202.shortDescription": "Компактный комод 50 см.",
+  "products.presets.ST-202.tag.1": "комод",
+  "products.presets.ST-202.tag.2": "50 см",
+
+  "products.presets.TV-301.title": "ТВ-тумба 200 см",
+  "products.presets.TV-301.shortDescription": "Подвесная ТВ-тумба шириной 200 см.",
+  "products.presets.TV-301.tag.1": "ТВ-тумба",
+  "products.presets.TV-301.tag.2": "200 см",
+
+  "products.presets.TV-302.title": "ТВ-тумба 150 см",
+  "products.presets.TV-302.shortDescription": "ТВ-тумба для телевизоров до 150 см.",
+  "products.presets.TV-302.tag.1": "ТВ-тумба",
+  "products.presets.TV-302.tag.2": "150 см",
+
+  "products.presets.BS-401.title": "Прикроватная тумба 80 см",
+  "products.presets.BS-401.shortDescription": "Двойная прикроватная тумба шириной 80 см.",
+  "products.presets.BS-401.tag.1": "прикроватная тумба",
+  "products.presets.BS-401.tag.2": "80 см",
+
+  "products.presets.BS-402.title": "Прикроватная тумба 60 см",
+  "products.presets.BS-402.shortDescription": "Компактная прикроватная тумба шириной 60 см.",
+  "products.presets.BS-402.tag.1": "прикроватная тумба",
+  "products.presets.BS-402.tag.2": "60 см",
+
+
 
   "homepage.configurator.breadcrumb.1": "Главная страница",
   "homepage.configurator.breadcrumb.2": "Товары",
@@ -227,7 +285,7 @@
   "homepage.configurator.wardrobeArrangement.doorsArrangement": "Расположение дверей",
 
   "homepage.configurator.wardrobe.column": "Колонна {number}",
-  "homepage.configurator.wardrobe.columnConfiguration": "Внутренняя Конфигурация",
+  "homepage.configurator.wardrobe.columnConfiguration": "Конфигурация",
   "homepage.configurator.wardrobe.currentConfig": "Текущая Конфигурация",
   "homepage.configurator.wardrobe.selectTemplate": "Выберите Внутреннюю Планировку",
   "homepage.configurator.wardrobe.columnDimensions": "Колонна: {width}см × {height}см × {depth}см",
@@ -256,6 +314,12 @@
   "homepage.configurator.wardrobe.template.shoeStorage.desc": "Оптимизировано для хранения обуви с наклонными стеллажами",
   "homepage.configurator.wardrobe.template.accessories": "Аксессуары",
   "homepage.configurator.wardrobe.template.accessories.desc": "Специализированное хранение для аксессуаров и мелких предметов",
+  "homepage.configurator.wardrobe.template.fullHangingWith1Shelf": "Штанга с 1 Полкой",
+  "homepage.configurator.wardrobe.template.fullHangingWith1Shelf.desc": "Пространство для подвешивания на всю высоту для длинных платьев и пальто с 1 полкой внизу",
+  "homepage.configurator.wardrobe.template.fullHangingWith2Drawers": "Штанга с 2 Ящиками",
+  "homepage.configurator.wardrobe.template.fullHangingWith2Drawers.desc": "Пространство для подвешивания на всю высоту для длинных платьев и пальто с 2 ящиками внизу",
+  "homepage.configurator.wardrobe.template.oneTopShelf": "Одна Полка Сверху",
+  "homepage.configurator.wardrobe.template.oneTopShelf.desc": "Одна полка вверху с открытым пространством внизу",
 
   "homepage.configurator.fittings.title": "Фурнитура",
   "homepage.configurator.fittings.handleType": "Ручки",

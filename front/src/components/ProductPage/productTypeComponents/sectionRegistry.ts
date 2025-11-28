@@ -6,6 +6,7 @@ export type NavSection =
   | 'sections'
   | 'columns'
   | 'individualColumns'
+  | 'wardrobeColumns'
   | 'furniture'
 
 export const NAV_ORDER = [
@@ -15,6 +16,7 @@ export const NAV_ORDER = [
   'sections',
   'columns',
   'individualColumns',
+  'wardrobeColumns',
   'furniture',
 ] as const // readonly tuple
 
@@ -45,6 +47,10 @@ export const SECTION_LABELS: Record<
   individualColumns: {
     id: 'homepage.configurator.individualColumns.title',
     defaultMessage: 'coloane (individual)',
+  },
+  wardrobeColumns: {
+    id: 'homepage.configurator.wardrobe.columnConfiguration',
+    defaultMessage: 'configurație interioară',
   },
   furniture: {
     id: 'homepage.configurator.fittings.handleType',

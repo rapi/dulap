@@ -26,6 +26,7 @@ export type CartProductItem = {
   type: 'product'
   name: string
   config: CartProductComponent[]
+  screenshot?: string // Base64 encoded screenshot data URL
 }
 
 export type CartSampleItem = {
@@ -44,7 +45,8 @@ export interface CartContextType {
   addItem(
     name: string,
     config: CartProductComponent[],
-    predefinedValues: CartPredefinedValue
+    predefinedValues: CartPredefinedValue,
+    screenshot?: string
   ): void
 
   /** Add a SAMPLE */
@@ -108,7 +110,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
           const pv = predefinedValues?.[component.type]
           return pv ? { ...component, predefinedValue: pv } : component
         })
-        newItem = { type: 'product', name, config: newConfig }
+        // Extract screenshot from predefinedValues if provided
+        const screenshot = (predefinedValues as any)?.screenshot as string | undefined
+        newItem = { type: 'product', name, config: newConfig, screenshot }
       } else {
         // SAMPLE
         newItem = { type: 'sample', name, sample: second }

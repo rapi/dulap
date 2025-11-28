@@ -41,12 +41,10 @@ export const ProductPageLayout: React.FC<ProductPageLayoutProps> = ({
       <br />
       <br />
       <div className={styles.productDescriptionContainer}>
-        <div className={styles.productDescriptionContent}>
-          <ProductDescription
-            sections={ProductDescriptionDetails}
-            heading={'productPage.details.title'}
-          />
-        </div>
+        <ProductDescription
+          sections={ProductDescriptionDetails}
+          heading={'productPage.details.title'}
+        />
       </div>
       <DevStand3DToggle />
     </>

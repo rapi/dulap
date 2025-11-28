@@ -4,10 +4,11 @@
   margin: auto;
 }
 
-.productDescriptionContent {
+.productDescriptionContainer {
   --containerHeight: 1300px;
   max-width: var(--containerHeight);
   margin: auto;
+  padding: 0 10vw;
 }
 
 .contentContainer {
@@ -237,10 +238,26 @@
 }
 
 /* C O L O R S */
-.colorsLabel,
+.colorsLabel {
+  display: flex;
+  margin-top: 20px;
+}
+
+/* C O L U M N S */
 .individualColumnsLabel {
   display: flex;
   margin-top: 20px;
+  width: 100%;
+}
+
+.columnsConfig {
+  /* flex: 1 1 auto;       */
+  min-width: 0;         
+  /* box-sizing: border-box; */
+}
+
+.wardrobeColumnsSection {
+  overflow-x: auto;
 }
 
 /* F U R N I T U R E */
@@ -253,10 +270,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.individualColumnsLabel {
-  display: flex;
 }
 
 /* A R A N J A R E   D U L A P   S I   R A F T U R I */
@@ -531,7 +544,9 @@
     justify-content: center;
     align-items: center;
     padding: 0 15px;
+    box-sizing: border-box;
   }
+
   .individualColumnsLabel {
     margin-top: 0;
   }

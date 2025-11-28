@@ -12,10 +12,11 @@ import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
 import { calculateWardrobeColumnLayout } from '~/utils/wardrobeColumnLayout'
 import { WARDROBE_TEMPLATES } from '~/config/wardrobeTemplates'
 import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
-import { 
-  encodeWardrobeColumnConfigs, 
-  decodeWardrobeColumnConfigs 
+import {
+  encodeWardrobeColumnConfigs,
+  decodeWardrobeColumnConfigs,
 } from '~/utils/wardrobeColumnConfigUrl'
+import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 
 export type MainImageParams = {
   imageWidth: number
@@ -52,7 +53,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   // Get URL context
   const urlCtx = useConfiguratorConfigOptional()
   const router = useRouter()
-  
+
   const [width, setWidth] = useState(200)
   const [height, setHeight] = useState(260)
   const [depth, setDepth] = useState(50)
@@ -60,27 +61,30 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   const [selectedColor, setSelectedColor] = useState(
     colorHexCodes[ColorName.White]
   )
-  
+
   // Column configuration state
-  const columnLayout = useMemo(() => calculateWardrobeColumnLayout(width), [width])
-  // const [selectedColumns] = useState(() => columnLayout.columnCount)
-  
+  const columnLayout = useMemo(
+    () => calculateWardrobeColumnLayout(width),
+    [width]
+  )
+
   // Initialize column configurations
-  const [columnConfigurations, setColumnConfigurations] = useState<WardrobeColumnConfiguration[]>(() => {
-    // Default initialization
-    return columnLayout.columnWidths.map((colWidth) => {
-      const defaultTemplateId = colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING'
-      const template = WARDROBE_TEMPLATES[defaultTemplateId]
-      return {
-        zones: template?.zones || [],
-        totalHeight: height - plintHeight,
-        doorType: colWidth > 60 ? 'split' : 'single',
-        doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
-        templateId: defaultTemplateId
-      }
+  const [columnConfigurations, setColumnConfigurations] =
+    useState<WardrobeColumnConfiguration[]>(() => {
+      // Default initialization
+      return columnLayout.columnWidths.map((colWidth) => {
+        const defaultTemplateId = colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING'
+        const template = WARDROBE_TEMPLATES[defaultTemplateId]
+        return {
+          zones: template?.zones || [],
+          totalHeight: height - plintHeight,
+          doorType: colWidth > 60 ? 'split' : 'single',
+          doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
+          templateId: defaultTemplateId,
+        }
+      })
     })
-  })
-  
+
   // Track if we've initialized from URL
   const [urlInitialized, setUrlInitialized] = useState(false)
   const [imageSide, setImageSide] = useState('right')
@@ -89,47 +93,63 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   const [imageSections, setImageSections] = useState(1)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
   const [imageColor, setImageColor] = useState('White')
-  const [hinges, setHinges] = useState('standart')
   const [guides, setGuides] = useState('standart')
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
-  const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
-  const [selectedOpeningMethod, setSelectedOpeningMethod] = useState('maner')
+  const [selectedMirrorOption, setSelectedMirrorOption] =
+    useState('standard')
+
+  // Opening option should behave like in StandProductConfigurator
+  const [openingOption, setOpeningOption] = useState<OpeningType>(() => {
+    if (!urlCtx?.config.openingType) return OpeningType.Push
+    if (urlCtx.config.openingType === 'profile') {
+      return OpeningType.ProfileHandle
+    }
+    if (urlCtx.config.openingType === 'round') {
+      return OpeningType.RoundHandle
+    }
+    return OpeningType.Push
+  })
+
   const [activeSections, setActiveSections] = useState<ImageOptionProps[]>([])
   const [activeOpening, setActiveOpening] = useState<ImageOptionProps[]>([])
   const [maxSections, setMaxSections] = useState(5)
   const [minSections, setMinSections] = useState(1)
-  const [selectedSections, setSelectedSections] = useState<ImageOptionProps[]>(
-    []
-  )
+  const [selectedSections, setSelectedSections] = useState<
+    ImageOptionProps[]
+  >([])
   const [doorsNr, setDoorsNr] = useState(3)
 
   // --- NEW: independent gallery color + who changed last ---
   const [galleryColor, setGalleryColor] = useState<string>('White')
-  const [galleryImageColor, setGalleryImageColor] = useState<string>('White')
-  const [lastColorChanged, setLastColorChanged] = useState<'main' | 'gallery'>(
-    'main'
-  )
+  const [galleryImageColor, setGalleryImageColor] =
+    useState<string>('White')
+  const [lastColorChanged, setLastColorChanged] = useState<
+    'main' | 'gallery'
+  >('main')
   // ---------------------------------------------------------
 
   // Function to update column configurations with URL sync
-  const updateColumnConfigurations = useCallback((configs: WardrobeColumnConfiguration[]) => {
-    setColumnConfigurations(configs)
-    
-    // Sync to URL via context
-    if (urlCtx) {
-      const encoded = encodeWardrobeColumnConfigs(configs)
-      urlCtx.setConfig({ 
-        ...urlCtx.config, 
-        wardrobeCfg: encoded 
-      })
-    }
-  }, [urlCtx])
+  const updateColumnConfigurations = useCallback(
+    (configs: WardrobeColumnConfiguration[]) => {
+      setColumnConfigurations(configs)
+
+      // Sync to URL via context
+      if (urlCtx) {
+        const encoded = encodeWardrobeColumnConfigs(configs)
+        urlCtx.setConfig({
+          ...urlCtx.config,
+          wardrobeCfg: encoded,
+        })
+      }
+    },
+    [urlCtx]
+  )
 
   // Initialize from URL after component mounts
   useEffect(() => {
     if (!urlInitialized && router.isReady && urlCtx) {
       const wardrobeCfgStr = urlCtx.config.wardrobeCfg
-      
+
       if (wardrobeCfgStr && typeof wardrobeCfgStr === 'string') {
         // Decode configurations from URL
         const templateIds = decodeWardrobeColumnConfigs(wardrobeCfgStr)
@@ -137,18 +157,25 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
           // Calculate layout based on URL width, not current state width
           const urlWidth = urlCtx.config.width
           const urlLayout = calculateWardrobeColumnLayout(urlWidth)
-          
-          const newConfigs = urlLayout.columnWidths.map((colWidth, index) => {
-            const templateId = templateIds[index] || 'SHELVES_ONLY'
-            const template = WARDROBE_TEMPLATES[templateId]
-            return {
-              zones: template?.zones || [],
-              totalHeight: height - plintHeight,
-              doorType: (colWidth > 60 ? 'split' : 'single') as 'split' | 'single',
-              doorOpeningSide: (colWidth <= 60 ? 'right' : undefined) as 'left' | 'right' | undefined,
-              templateId
+
+          const newConfigs = urlLayout.columnWidths.map(
+            (colWidth, index) => {
+              const templateId = templateIds[index] || 'SHELVES_ONLY'
+              const template = WARDROBE_TEMPLATES[templateId]
+              return {
+                zones: template?.zones || [],
+                totalHeight: height - plintHeight,
+                doorType:
+                  (colWidth > 60 ? 'split' : 'single') as
+                    | 'split'
+                    | 'single',
+                doorOpeningSide: (colWidth <= 60
+                  ? 'right'
+                  : undefined) as 'left' | 'right' | undefined,
+                templateId,
+              }
             }
-          })
+          )
           setColumnConfigurations(newConfigs)
         }
       }
@@ -160,10 +187,10 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   useEffect(() => {
     // Skip if we haven't initialized from URL yet
     if (!urlInitialized) return
-    
+
     const newLayout = calculateWardrobeColumnLayout(width)
-    
-    setColumnConfigurations(prev => {
+
+    setColumnConfigurations((prev) => {
       // Preserve configurations if column count hasn't changed
       if (prev.length === newLayout.columnCount) {
         // Keep existing template selections, just update dimensions
@@ -171,22 +198,25 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
           ...config,
           totalHeight: height - plintHeight,
           doorType: newLayout.columnWidths[index] > 60 ? 'split' : 'single',
-          doorOpeningSide: newLayout.columnWidths[index] <= 60 ? 'right' : undefined,
+          doorOpeningSide:
+            newLayout.columnWidths[index] <= 60 ? 'right' : undefined,
         }))
       }
-      
+
       // Reset configurations if column count changed
       return newLayout.columnWidths.map((colWidth, index) => {
         // Try to preserve existing template if index exists
         const existingTemplate = prev[index]?.templateId
-        const defaultTemplateId = existingTemplate || (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING')
+        const defaultTemplateId =
+          existingTemplate ||
+          (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING')
         const template = WARDROBE_TEMPLATES[defaultTemplateId]
         return {
           zones: template?.zones || [],
           totalHeight: height - plintHeight,
           doorType: colWidth > 60 ? 'split' : 'single',
           doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
-          templateId: defaultTemplateId
+          templateId: defaultTemplateId,
         }
       })
     })
@@ -233,9 +263,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   useEffect(() => {
     setDepth(depth)
   }, [depth])
-  useEffect(() => {
-    setHinges(hinges)
-  }, [hinges])
+
   useEffect(() => {
     setGuides(guides)
   }, [guides])
@@ -337,22 +365,16 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   }, [selectedSections])
 
   const price = useMemo(() => {
-    const hingesNr = height >= 230 ? doorsNr * 6 : doorsNr * 5
-    let hingesExtraPrice = 0
-    if (hinges === 'homepage.configurator.fittings.hinges.options.2') {
-      hingesExtraPrice = hingesNr * 50
-    }
     return Math.round(
       (width * 29 +
         (height - 190) * 4.5 * doorsNr +
         sectionsPrice +
-        hingesExtraPrice +
         guidesExtraPrice +
         350 * doorsNr +
         350) *
         1.35
     )
-  }, [width, height, doorsNr, sectionsPrice, hinges, guidesExtraPrice])
+  }, [width, height, doorsNr, sectionsPrice, guidesExtraPrice])
 
   useEffect(() => {
     if (selectedMirrorOption === 'standard') {
@@ -361,18 +383,18 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   }, [selectedMirrorOption])
 
   const recolor = (items: ImageOptionProps[]) =>
-    items.map(({ src, width, height }) => {
+    items.map(({ src, width: w, height: h }) => {
       const suffix = src.substring(src.lastIndexOf('/') + 1)
       return {
         src: `/wardrobe/filling/${imageColor}/${imageHeight}/${suffix}`,
-        width,
-        height,
+        width: w,
+        height: h,
       }
     })
 
   const recoloredSelectedSections = useMemo(
     () => recolor(selectedSections),
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedSections, imageColor, imageHeight]
   )
 
@@ -386,7 +408,8 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
 
   // Choose last changed color for gallery visuals
   const activeGalleryImageColor = useMemo(
-    () => (lastColorChanged === 'gallery' ? galleryImageColor : imageColor),
+    () =>
+      lastColorChanged === 'gallery' ? galleryImageColor : imageColor,
     [lastColorChanged, galleryImageColor, imageColor]
   )
 
@@ -394,7 +417,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'dimensions',
       widthRange: [40, 250],
-      heightRange: [200, 270],
+      heightRange: [237, 270],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
       heightStep: 1,
@@ -417,33 +440,14 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       },
     },
     {
-      type: 'sections',
-      maxNumber: maxSections,
-      minNumber: minSections,
-      activeOpening: activeOpening,
-      possibleSections: [
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/1.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/2.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/3.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/4.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/5.png` },
-        { src: `/wardrobe/filling/${imageColor}/${imageHeight}/6.png` },
-      ],
-      selectedSections: recoloredSelectedSections,
-      setSelectedSections,
-      selectedMaxSections,
-      setSelectedMaxSections,
-      selectedMirrorOption,
-      setSelectedMirrorOption,
-    },
-    {
       type: 'furniture',
-      selectedOpeningMethod,
-      setSelectedOpeningMethod,
-      hinges,
-      setHinges,
+      openingOption,
+      selectedOpeningMethod: openingOption, // same API as stand.ts
+      hinges: '',
+      setOpeningOption,
       guides,
       setGuides,
+      is3DEnabled: true,
     },
     {
       type: 'wardrobeColumns',
@@ -457,14 +461,6 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'price',
       price,
-    },
-    {
-      type: 'imageCarousel',
-      images: [
-        `/wardrobe/${imageColor}/${selectedOpeningMethod}/Base ${imagePlintHeight}/H${imageHeight}/${imageSide}/${imageWidth}-${imageSections}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${imageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${imageColor}.png`,
-      ],
     },
     // Expose independent gallery color control (if your ProductPage renders it)
     {

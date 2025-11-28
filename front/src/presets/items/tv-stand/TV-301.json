@@ -1,0 +1,23 @@
+{
+  "id": "TV-301",
+  "slug": "comoda-tv-200",
+  "type": "tv-stand",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Comodă TV 200cm",
+    "shortDescription": "Comodă TV suspendată, lățime 200 cm.",
+    "tags": ["comodă tv", "200cm"],
+    "sortWeight": 95,
+    "previewImage": "/ready-products/tv-stand/2000-4 tv-stand_2.png"
+  },
+  "details": {
+    "width": 200,
+    "height": 35,
+    "depth": 40,
+    "color": "#9c9c9c",
+    "columns": 4,
+    "openingType": "push"
+  },
+  "config": {}
+}

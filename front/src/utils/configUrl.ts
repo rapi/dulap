@@ -28,6 +28,12 @@ const commonSchema = z.object({
   depth: z.coerce.number().int().positive().optional(),
   color: z.string().regex(HEX).optional(),
   columns: z.coerce.number().int().min(1).max(50).optional(), // loose upper bound; normalized later
+
+  /**
+   * ?sections= in URL – interpreted as a simple count.
+   * It will be mapped to BaseConfig.sectionCount (NOT BaseConfig.sections[]).
+   */
+  sections: z.coerce.number().int().positive().optional(),
 })
 
 /** Stand-specific schema extends common with plintHeight */
@@ -46,6 +52,8 @@ type StandOut = z.infer<typeof standSchema>
  * - lowercases hex color
  * - parses ?colCfg= for column configurations
  * - parses ?openingType= for handle type
+ * - parses ?wardrobeCfg=
+ * - parses ?sections= into BaseConfig.sectionCount
  */
 export function parseQueryToConfig(
   q: NextQuery,
@@ -76,6 +84,11 @@ export function parseQueryToConfig(
     cfg.plintHeight = sd.plintHeight ?? C.dimensions.plintHeight?.default
   }
 
+  // NEW: map ?sections= → BaseConfig.sectionCount
+  if (typeof d.sections === 'number') {
+    cfg.sectionCount = d.sections
+  }
+
   // Parse column configurations from URL
   const colCfgParam = q['colCfg']
   const colCfgStr = Array.isArray(colCfgParam) ? colCfgParam[0] : colCfgParam
@@ -88,7 +101,9 @@ export function parseQueryToConfig(
 
   // Parse opening type from URL
   const openingTypeParam = q['openingType']
-  const openingTypeStr = Array.isArray(openingTypeParam) ? openingTypeParam[0] : openingTypeParam
+  const openingTypeStr = Array.isArray(openingTypeParam)
+    ? openingTypeParam[0]
+    : openingTypeParam
   if (openingTypeStr === 'push' || openingTypeStr === 'round' || openingTypeStr === 'profile') {
     cfg.openingType = openingTypeStr
   }
@@ -99,7 +114,9 @@ export function parseQueryToConfig(
 
   // Parse wardrobe column configurations from URL
   const wardrobeCfgParam = q['wardrobeCfg']
-  const wardrobeCfgStr = Array.isArray(wardrobeCfgParam) ? wardrobeCfgParam[0] : wardrobeCfgParam
+  const wardrobeCfgStr = Array.isArray(wardrobeCfgParam)
+    ? wardrobeCfgParam[0]
+    : wardrobeCfgParam
   if (wardrobeCfgStr && typeof wardrobeCfgStr === 'string') {
     cfg.wardrobeCfg = wardrobeCfgStr
   }
@@ -151,6 +168,8 @@ export function normalizeConfig(
     next.columns = clamp(cfg.columns, C.columns.min, C.columns.max)
   }
 
+  // sectionCount has no constraints in Constraints – leave as is
+
   return next
 }
 
@@ -173,6 +192,11 @@ export function configToQuery(
   if (typeof cfg.columns === 'number') out.columns = cfg.columns
   if (product === 'stand' && typeof cfg.plintHeight === 'number') {
     out.plintHeight = cfg.plintHeight
+  }
+
+  // NEW: serialize sectionCount → ?sections=
+  if (typeof cfg.sectionCount === 'number') {
+    out.sections = cfg.sectionCount
   }
 
   // Serialize column configurations (for stand)

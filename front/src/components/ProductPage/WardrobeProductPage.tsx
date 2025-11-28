@@ -1,7 +1,8 @@
 import styles from '../ProductPageLayout/ProductPageLayout.module.css'
-import React, { FC, useState, useCallback } from 'react'
+import React, { FC, useState, useCallback, useRef } from 'react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { useMediaQuery } from '@mui/material'
 import {
   ProductImageSelect,
   ProductImageSelectComponent,
@@ -22,21 +23,14 @@ import {
   ProductFurniture,
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductFurniture'
+} from '~/components/ProductPage/productTypeComponents/ProductFurniture'
 import {
   ProductSectionPredefinedValue,
-  ProductSections,
-  ProductSectionsComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
 import {
   ProductPrice,
   ProductPriceComponent,
 } from '~/components/ProductPage/productTypeComponents/ProductPrice'
-import { ProductConfiguratorInfo } from '~/components/ProductPage/productTypeComponents/ProductConfiguratorInfo'
-import {
-  ProductImageCarousel,
-  ProductImageCarouselComponent,
-} from '~/components/ProductPage/productTypeComponents/ProductImageCarousel'
 import {
   ProductGallery,
   ProductGalleryComponent,
@@ -45,9 +39,8 @@ import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
-import { use3DVersion } from '~/hooks/use3DVersion'
 import { DEFAULT_WARDROBE } from './productTypes/wardrobe'
-import { FurnitureViewer } from '../ThreeDModel/FurnitureViewer'
+import { FurnitureViewer, FurnitureViewerRef } from '../ThreeDModel/FurnitureViewer'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
 import {
@@ -58,15 +51,21 @@ import {
   ProductWardrobeColumns,
   ProductWardrobeColumnsComponent,
 } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductWardrobeColumns'
+import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
+import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
+import {
+  NavSection,
+  NAV_ORDER,
+  SECTION_LABELS,
+  isNavSection,
+} from '~/components/ProductPage/productTypeComponents/sectionRegistry'
 
 export type ProductComponent =
   | ProductImageSelectComponent
-  | ProductImageCarouselComponent
   | ProductGalleryComponent
   | ProductDimensionsComponent
   | ProductColorsComponent
   | ProductSelectComponent
-  | ProductSectionsComponent
   | ProductFurnitureComponent
   | ProductPriceComponent
   | ProductGalleryColorsConfig
@@ -82,6 +81,7 @@ export type PredefinedValue = {
   select?: string
   furniture?: ProductFurniturePredefinedValue
   price?: number
+  screenshot?: string
 }
 interface ProductPageProps {
   components: () => ProductComponent[]
@@ -89,14 +89,22 @@ interface ProductPageProps {
   values?: PredefinedValue
 }
 
+// Helpers
+const filterNavigable = (components: ProductComponent[]) =>
+  components.filter((c): c is Extract<ProductComponent, { type: NavSection }> =>
+    isNavSection(c.type as string)
+  )
+
 export const ProductPage: FC<ProductPageProps> = ({
   components,
   name,
   values,
 }) => {
   const { addItem } = useCart()
+  const isMobile = useMediaQuery('(max-width: 768px)')
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
+  const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
 
   // Handle tab change from UI to update 3D selection
   const handleTabChange = useCallback((index: number) => {
@@ -104,6 +112,9 @@ export const ProductPage: FC<ProductPageProps> = ({
     setSelectedColumnIndex(index)
   }, [])
 
+  const currentComponents = components()
+
+  // ---------- DESKTOP renderer (unchanged stack) ----------
   const getComponent = (component: ProductComponent): React.ReactNode => {
     switch (component.type) {
       case 'imageSelect':
@@ -134,13 +145,6 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.select ?? undefined}
           />
         )
-      case 'sections':
-        return !isWardrobe3D ? (
-          <ProductSections
-            configuration={component}
-            predefinedValue={values?.sections ?? undefined}
-          />
-        ) : null
       case 'furniture':
         return (
           <ProductFurniture
@@ -149,22 +153,115 @@ export const ProductPage: FC<ProductPageProps> = ({
           />
         )
       case 'wardrobeColumns':
-        return isWardrobe3D ? (
+        return (
           <ProductWardrobeColumns
             configuration={component}
             activeColumnIndex={activeColumnTab}
             onActiveColumnChange={handleTabChange}
           />
-        ) : null
+        )
+      default:
+        return null
     }
   }
 
-  const currentComponents = components()
+  // ---------- MOBILE: chips + core-only panel ----------
+  // Build available sections (present + valid for current mode)
+  const navComponents = filterNavigable(currentComponents)
+    .sort(
+      (a, b) =>
+        NAV_ORDER.indexOf(a.type as NavSection) -
+        NAV_ORDER.indexOf(b.type as NavSection)
+    )
+
+  const [activeSection, setActiveSection] = useState<NavSection | null>(
+    navComponents[0]?.type ?? null
+  )
+
+  // Update activeSection when navComponents changes (e.g., switching between 3D and non-3D)
+  useEffect(() => {
+    if (navComponents.length > 0) {
+      const currentActive = navComponents.find((c) => c.type === activeSection)
+      if (!currentActive) {
+        setActiveSection(navComponents[0]?.type ?? null)
+      }
+    } else {
+      setActiveSection(null)
+    }
+  }, [navComponents, activeSection])
+
+  // Automatically select column (open door) when entering wardrobeColumns tab
+  useEffect(() => {
+    if (activeSection === 'wardrobeColumns') {
+      // Always ensure a column is selected when entering this tab
+      // If no column is selected, automatically select the first column (index 0)
+      // This opens the door and makes the column active
+      setSelectedColumnIndex((prevIndex) => {
+        if (prevIndex === null) {
+          setActiveColumnTab(0)
+          return 0
+        } else {
+          // If a column is already selected, ensure activeColumnTab is in sync
+          // This ensures the door stays open when switching to this tab
+          setActiveColumnTab(prevIndex)
+          return prevIndex
+        }
+      })
+    } else if (activeSection === 'furniture') {
+      // When entering furniture tab, close all doors (deselect all columns)
+      setSelectedColumnIndex(null)
+    }
+  }, [activeSection])
+
+  const renderCore = (type: NavSection) => {
+    const comp = currentComponents.find((c) => c.type === type)
+    if (!comp) return null
+
+    switch (type) {
+      case 'dimensions':
+        return (
+          <ProductDimensions
+            configuration={comp as ProductDimensionsComponent}
+            predefinedValue={values?.dimensions ?? undefined}
+          />
+        )
+      case 'colors':
+        return (
+          <ProductColors
+            configuration={comp as ProductColorsComponent}
+            predefinedValue={values?.colors ?? undefined}
+          />
+        )
+      case 'wardrobeColumns':
+        return (
+          <ProductWardrobeColumns
+            configuration={comp as ProductWardrobeColumnsComponent}
+            activeColumnIndex={activeColumnTab}
+            onActiveColumnChange={handleTabChange}
+          />
+        )
+      case 'select':
+        return (
+          <ProductSelect
+            configuration={comp as ProductSelectComponent}
+            predefinedValue={values?.select ?? undefined}
+          />
+        )
+      case 'furniture': {
+        return (
+          <ProductFurniture
+            configuration={comp as ProductFurnitureComponent}
+            predefinedValue={values?.furniture ?? undefined}
+          />
+        )
+      }
+      default:
+        return null
+    }
+  }
+
   const priceComponent = currentComponents.find(
     (component) => component.type === 'price'
-  )
-  const imageCarouselComponent = currentComponents.find(
-    (component) => component.type === 'imageCarousel'
   )
   const galleryComponent = currentComponents.find(
     (component) => component.type === 'gallery'
@@ -181,8 +278,6 @@ export const ProductPage: FC<ProductPageProps> = ({
   const route =
     router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
   const configuratorRoute = '/configurator' + route
-
-  const isWardrobe3D = use3DVersion()
 
   // Extract all 3D props using shared hook (wardrobe uses automatic column layout)
   const furniture3DProps = use3DFurnitureProps(
@@ -208,28 +303,14 @@ export const ProductPage: FC<ProductPageProps> = ({
   return (
     <>
       <div className={styles.contentContainer}>
-        {/* Left Side: Viewer or Image Carousel */}
+        {/* Left Side: 3D Viewer */}
         <div className={styles.leftContainer}>
-          {isWardrobe3D ? (
-            <FurnitureViewer
-              {...furniture3DProps}
-              selectedColumnIndex={selectedColumnIndex}
-              onColumnClick={handleColumnClick}
-            />
-          ) : (
-            imageCarouselComponent && (
-              <ProductImageCarousel
-                configuration={
-                  values?.imageCarousel
-                    ? {
-                        type: 'imageCarousel',
-                        images: values.imageCarousel,
-                      }
-                    : imageCarouselComponent
-                }
-              />
-            )
-          )}
+          <FurnitureViewer
+            ref={furnitureViewerRef}
+            {...furniture3DProps}
+            selectedColumnIndex={selectedColumnIndex}
+            onColumnClick={handleColumnClick}
+          />
         </div>
         {/* Right Side: Product Details */}
         <div className={styles.detailsContainer}>
@@ -239,24 +320,61 @@ export const ProductPage: FC<ProductPageProps> = ({
           <h2 className={styles.title}>
             <FormattedMessage id={name} />
           </h2>
-          {priceComponent && (
-            <ProductPrice
-              onAddItem={() => {
-                addItem('wardrobe', currentComponents, values ?? {})
-              }}
-              configuration={priceComponent}
-              predefinedValue={values?.price ?? undefined}
-            />
-          )}
-          {currentComponents.map((component, index) => {
-            return (
+          <div className={styles.priceCont}>
+            {priceComponent && (
+              <ProductPrice
+                onAddItem={() => {
+                  // Capture screenshot before adding to cart
+                  const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
+                  addItem('wardrobe', currentComponents, { ...(values ?? {}), screenshot })
+                }}
+                configuration={priceComponent}
+                predefinedValue={values?.price ?? undefined}
+              />
+            )}
+          </div>
+
+          {/* MOBILE: chips + core */}
+          {isMobile && activeSection && navComponents.length > 0 ? (
+            <>
+              <div className={styles.mobileNavChips}>
+                <ButtonSelect<NavSection>
+                  options={
+                    navComponents.map((c) => ({
+                      value: c.type as NavSection,
+                      // pass the i18n id; ButtonSelect renders <FormattedMessage id="..." />
+                      label: SECTION_LABELS[c.type as NavSection].id,
+                    })) as ButtonOptionsType<NavSection>[]
+                  }
+                  defaultSelected={activeSection}
+                  size="medium"
+                  className={styles.mobileNavChipsRow}
+                  onChange={(val) => setActiveSection(val as NavSection)}
+                />
+              </div>
+
+              <div className={styles.mobileCorePanel}>
+                {renderCore(activeSection)}
+              </div>
+
+              {/* Always render colors component (hidden) so effects run and color changes apply immediately */}
+              {(() => {
+                const colorsComponent = navComponents.find((c) => c.type === 'colors')
+                if (colorsComponent && colorsComponent.type !== activeSection) {
+                  return (
+                    <div key="colors-hidden" style={{ display: 'none' }}>
+                      {renderCore('colors')}
+                    </div>
+                  )
+                }
+                return null
+              })()}
+            </>
+          ) : (
+            // DESKTOP: original stacked layout
+            currentComponents.map((component, index) => (
               <div key={index + component.type}>{getComponent(component)}</div>
-            )
-          })}
-        </div>
-        <div>
-          {values != null && !isWardrobe3D && (
-            <ProductConfiguratorInfo linkConfigurator={configuratorRoute} />
+            ))
           )}
         </div>
       </div>

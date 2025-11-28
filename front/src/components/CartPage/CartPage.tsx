@@ -58,11 +58,13 @@ function ItemRow({ item, index }: { item: CartItem; index: number }) {
         vm.displayName = item.name
     }
 
+    // Use screenshot if available
+    if (item.screenshot) {
+      vm.image = item.screenshot
+    }
+
     for (const config of item.config) {
       switch (config.type) {
-        case 'imageCarousel':
-          vm.image = config.predefinedValue ?? config.images[0]
-          break
         case 'dimensions':
           vm.dimensions = {
             width: config.predefinedValue?.width ?? config.width,
@@ -76,8 +78,10 @@ function ItemRow({ item, index }: { item: CartItem; index: number }) {
           vm.color = config.predefinedValue ?? config.selectedColor
           break
         case 'furniture':
+          // Hinges may not exist for all furniture types (e.g., wardrobe doesn't have hinges)
+          const predefinedValue = config.predefinedValue as { hinges?: string; guides?: string; openingType?: string } | undefined
           vm.furniture = {
-            hinges: config.predefinedValue?.hinges ?? config.hinges,
+            hinges: predefinedValue?.hinges ?? config.hinges ?? '',
             guides: config.predefinedValue?.guides ?? config.guides,
             openingType:
               config.predefinedValue?.openingType ??

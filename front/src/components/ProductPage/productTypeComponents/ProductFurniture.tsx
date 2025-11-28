@@ -7,7 +7,6 @@ import {
   ButtonImageSelect,
   ButtonImageOption,
 } from '~/components/ButtonImageSelect/ButtonImageSelect'
-import { use3DVersion } from '~/hooks/use3DVersion'
 import { useMediaQuery } from '@mui/material'
 import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 

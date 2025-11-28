@@ -16,6 +16,9 @@ const TEMPLATE_TO_CODE: Record<string, string> = {
   'THREE_ZONE_COMBO': 'TZ',
   'SHOE_STORAGE': 'SS',
   'ACCESSORIES_ORGANIZER': 'AO',
+  'FULL_HANGING_WITH_1_SHELF': 'F1S',
+  'FULL_HANGING_WITH_2_DRAWERS': 'F2D',
+  'ONE_TOP_SHELF': 'OTS',
 }
 
 const CODE_TO_TEMPLATE: Record<string, string> = Object.fromEntries(

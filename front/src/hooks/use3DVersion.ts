@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-
-export const QUERY_PARAM_KEY_3D_ENABLED = 'use3DVersion';
+import { useState, useEffect } from 'react'
 
 /**
  * Global cache for WebGL availability check.
@@ -54,22 +51,15 @@ function isWebGLAvailable(): boolean {
 
 /**
  * Determines whether the 3D viewer should be enabled.
+ * Always returns true if WebGL is available (no query parameter needed).
  */
 export function use3DVersion(): boolean {
-  const router = useRouter()
   const [isEnabled, setEnabled] = useState<boolean>(false)
-  
-  // Extract the specific query parameter for dependency tracking
-  const use3DFlag = router.query[QUERY_PARAM_KEY_3D_ENABLED]
 
   useEffect(() => {
-    // Only react to changes in the specific use3DVersion parameter
-    if (use3DFlag === 'true') {
-      setEnabled(isWebGLAvailable())
-    } else {
-      setEnabled(false)
-    }
-  }, [use3DFlag]) // Only watch the specific parameter, not entire router.query
+    // Always enable 3D if WebGL is available
+    setEnabled(isWebGLAvailable())
+  }, [])
   
   return isEnabled
 } 

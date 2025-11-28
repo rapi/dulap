@@ -371,11 +371,6 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
       },
     },
     {
-      type: 'sections',
-      selectedSections,
-      setSelectedSections,
-    },
-    {
       type: 'columns',
       selectedColumns,
       setSelectedColumns,
@@ -393,24 +388,16 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
     },
     {
       type: 'furniture',
-      openingOption: openingOption as string | OpeningType,
+      openingOption: openingOption,
       hinges,
       setOpeningOption,
-      selectedOpeningMethod: openingOption as string | OpeningType,
+      selectedOpeningMethod: openingOption,
       guides,
       setGuides,
     },
     {
       type: 'price',
       price,
-    },
-    {
-      type: 'imageCarousel',
-      images: [
-        `/bedside/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/${imageWidth}.png`,
-        `/bedside/render/${imageColor} 1.png`,
-        `/bedside/render/${imageColor} 2.png`,
-      ],
     },
     // Expose independent gallery color control (if your ProductPage renders it)
     {

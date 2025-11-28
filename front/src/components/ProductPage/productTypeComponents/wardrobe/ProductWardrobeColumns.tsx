@@ -13,6 +13,7 @@ import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSel
 import layoutStyles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import styles from './ProductWardrobeColumns.module.css'
 import { WardrobeConfigurationIcon } from './WardrobeConfigurationIcon'
+import { useMediaQuery } from '@mui/material'
 
 export type ProductWardrobeColumnsComponent = {
   type: 'wardrobeColumns'
@@ -92,10 +93,13 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
   // Handle template selection
   const handleTemplateSelect = useCallback((templateId: string) => {
     const template = WARDROBE_TEMPLATES[templateId]
-    if (!template) return
+    if (!template) {
+      return
+    }
 
-    // Adjust template zones to fit column height if needed
-    const adjustedZones = calculateTemplateAdjustment(template, columnHeight)
+    // Zones always total 200cm regardless of column height
+    const FIXED_ZONES_HEIGHT = 200
+    const adjustedZones = calculateTemplateAdjustment(template, FIXED_ZONES_HEIGHT)
     
     // Create new config for the selected column
     const newConfig: WardrobeColumnConfiguration = {
@@ -173,9 +177,45 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
       'ACCESSORIES_ORGANIZER': {
         name: 'homepage.configurator.wardrobe.template.accessories',
         desc: 'homepage.configurator.wardrobe.template.accessories.desc'
+      },
+      'CONFIG_1_HANGING_LONG_BOTTOM': {
+        name: 'homepage.configurator.wardrobe.template.config1',
+        desc: 'homepage.configurator.wardrobe.template.config1.desc'
+      },
+      'CONFIG_2_HANGING_2DRAWERS': {
+        name: 'homepage.configurator.wardrobe.template.config2',
+        desc: 'homepage.configurator.wardrobe.template.config2.desc'
+      },
+      'CONFIG_3_HANGING_SHORT': {
+        name: 'homepage.configurator.wardrobe.template.config3',
+        desc: 'homepage.configurator.wardrobe.template.config3.desc'
+      },
+      'CONFIG_4_SHELVES_2DRAWERS': {
+        name: 'homepage.configurator.wardrobe.template.config4',
+        desc: 'homepage.configurator.wardrobe.template.config4.desc'
+      },
+      'CONFIG_5_HANGING_SHELVES_2DRAWERS': {
+        name: 'homepage.configurator.wardrobe.template.config5',
+        desc: 'homepage.configurator.wardrobe.template.config5.desc'
+      },
+      'CONFIG_6_HANGING_SHELVES_ITEM': {
+        name: 'homepage.configurator.wardrobe.template.config6',
+        desc: 'homepage.configurator.wardrobe.template.config6.desc'
+      },
+      'FULL_HANGING_WITH_1_SHELF': {
+        name: 'homepage.configurator.wardrobe.template.fullHangingWith1Shelf',
+        desc: 'homepage.configurator.wardrobe.template.fullHangingWith1Shelf.desc'
+      },
+      'FULL_HANGING_WITH_2_DRAWERS': {
+        name: 'homepage.configurator.wardrobe.template.fullHangingWith2Drawers',
+        desc: 'homepage.configurator.wardrobe.template.fullHangingWith2Drawers.desc'
+      },
+      'ONE_TOP_SHELF': {
+        name: 'homepage.configurator.wardrobe.template.oneTopShelf',
+        desc: 'homepage.configurator.wardrobe.template.oneTopShelf.desc'
       }
     }
-    return keyMap[templateId] || { name: templateId, desc: '' }
+    return keyMap[templateId] || { name: templateId, desc: templateId }
   }
 
   // Map templates to ButtonImageSelect options
@@ -197,18 +237,21 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
     }),
     [validTemplates, intl]
   )
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
     <div className={layoutStyles.individualColumnsLabel}>
       {/* Section title */}
-      <p className={layoutStyles.sectionTitle}>
-        <FormattedMessage 
-          id="homepage.configurator.wardrobe.columnConfiguration"
-          defaultMessage="Interior Configuration"
-        />
-      </p>
+      {!isMobile && (
+        <p className={layoutStyles.sectionTitle}>
+          <FormattedMessage 
+            id="homepage.configurator.wardrobe.columnConfiguration"
+            defaultMessage="Interior Configuration"
+          />
+        </p>
+      )}
 
-      <div className={layoutStyles.furnitureConfig}>
+      <div className={layoutStyles.columnsConfig}>
         {/* Column selector (if multiple columns) */}
         {selectedColumns > 1 && (
           <div className={layoutStyles.furnitureLabel}>

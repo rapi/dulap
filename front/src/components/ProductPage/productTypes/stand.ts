@@ -392,12 +392,6 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       },
     },
     {
-      type: 'sections',
-      selectedSections,
-      setSelectedSections,
-      options: sectionOptions,
-    },
-    {
       type: 'columns',
       selectedColumns,
       setSelectedColumns,
@@ -424,14 +418,6 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'price',
       price,
-    },
-    {
-      type: 'imageCarousel',
-      images: [
-        `/stand2/${imageColor}/${openingOption}/Base ${imagePlintHeight}/H${imageHeight}/S${selectedSections}/${imageWidth}.png`,
-        `/stand2/render/${imageColor} 1.png`,
-        `/stand2/render/${imageColor} 2.png`,
-      ],
     },
     // Expose independent gallery color control (if your ProductPage renders it)
     {

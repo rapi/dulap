@@ -27,8 +27,7 @@ function pickFromSearch(keys: readonly string[]): Record<string, string> {
 }
 
 /**
- * Keep URL in sync with `config`, while preserving selected query keys
- * (e.g. feature flags like `use3DVersion`).
+ * Keep URL in sync with `config`, while preserving selected query keys.
  */
 export function useUrlSync<T>(
   initial: T,

@@ -116,20 +116,35 @@ const positionProfileHandle = (
     x?: number
     // Width of the parent container (door/drawer) for positioning calculations
     parentWidth?: number
+    // For doors: offset from door edge for X positioning (used for wardrobes)
+    doorOffsetX?: number
     // Whether this is a right-opening door
     isRightOpening?: boolean
+    // For wardrobes: custom height from bottom (overrides default top position)
+    handleHeightFromBottom?: number
   }
 ): void => {
   const { PROFILE_HANDLE_LENGTH, PROFILE_HANDLE_DEPTH, PROFILE_HANDLE_METAL_WIDTH } = HANDLE_CONSTANTS
   
   let xPosition = 0
+  let yPosition = height - PROFILE_HANDLE_DEPTH / 2 // Default: top position (for stands, etc.)
+  
+  // Check if this is a wardrobe (has handleHeightFromBottom)
+  const isWardrobe = options?.handleHeightFromBottom !== undefined
   
   // Calculate X position if custom positioning is needed
   if (options?.x !== undefined) {
     xPosition = options.x
+  } else if (isWardrobe && options?.doorOffsetX !== undefined && options?.isRightOpening !== undefined) {
+    // For wardrobes: use doorOffsetX directly like in the snippet
+    if (options.isRightOpening) {
+      xPosition = options.doorOffsetX - PROFILE_HANDLE_DEPTH
+    } else {
+      xPosition = options.doorOffsetX + PROFILE_HANDLE_DEPTH
+    }
   } else if (options?.parentWidth !== undefined) {
     if (options.isRightOpening !== undefined) {
-      // For doors: position based on opening side
+      // For doors (stands, etc.): position based on opening side (legacy calculation)
       if (options.isRightOpening) {
         xPosition = -options.parentWidth / 2  + PROFILE_HANDLE_LENGTH / 1.5
       } else {
@@ -141,9 +156,15 @@ const positionProfileHandle = (
     }
   }
 
+  // Calculate Y position (handle height)
+  if (isWardrobe) {
+    // For wardrobes: position at same level as round handles
+    yPosition = options.handleHeightFromBottom!
+  }
+
   handlePivot.position.set(
     xPosition,
-    height - PROFILE_HANDLE_DEPTH / 2,
+    yPosition,
     depth - PROFILE_HANDLE_METAL_WIDTH
   )
 }
@@ -174,7 +195,7 @@ export const setupRoundHandle = (
 }
 
 /**
- * Complete setup for profile handle: color and positioning
+ * Complete setup for profile handle: color, rotation, and positioning
  * Note: Visibility should be set before calling this function
  */
 export const setupProfileHandle = (
@@ -187,10 +208,25 @@ export const setupProfileHandle = (
     x?: number
     // Width of the parent container (door/drawer) for positioning calculations
     parentWidth?: number
+    // For doors: offset from door edge for X positioning (used for wardrobes)
+    doorOffsetX?: number
     // Whether this is a right-opening door
     isRightOpening?: boolean
+    // For wardrobes: custom height from bottom (overrides default top position)
+    handleHeightFromBottom?: number
   }
 ): void => {
   applyProfileHandleColor(handlePivot, selectedColor)
+  
+  // Apply rotation only for wardrobes (when handleHeightFromBottom is provided)
+  const isWardrobe = options?.handleHeightFromBottom !== undefined
+  if (isWardrobe && options?.isRightOpening !== undefined) {
+    if (options.isRightOpening) {
+      handlePivot.rotation.set(0, 0, Math.PI / 2)
+    } else {
+      handlePivot.rotation.set(0, 0, -Math.PI / 2)
+    }
+  }
+  
   positionProfileHandle(handlePivot, height, depth, options)
 }

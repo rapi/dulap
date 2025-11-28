@@ -166,15 +166,23 @@ const DoorComponent: React.FC<DoorProps> = ({
         panelPivot.visible = openingType === OpeningType.ProfileHandle
 
         if (panelPivot.visible) {
+          // For wardrobes: use doorOffsetX, for stands: use parentWidth
+          const isWardrobe = handleHeightFromBottom !== undefined
           setupProfileHandle(
             panelPivot,
             selectedColor,
             innerHeight,
             doorDepth,
-            {
-              parentWidth: doorWidth,
-              isRightOpening: isRightOpening,
-            }
+            isWardrobe
+              ? {
+                  doorOffsetX,
+                  isRightOpening: isRightOpening,
+                  handleHeightFromBottom,
+                }
+              : {
+                  parentWidth: doorWidth,
+                  isRightOpening: isRightOpening,
+                }
           )
         }
       }

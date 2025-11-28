@@ -44,6 +44,7 @@ export interface PBRTextures {
   aoRoughMetal?: string // Combined AO/Roughness/Metalness map (optional)
   displacement?: string // Height/displacement map (optional)
   colorTint?: string   // Color tint multiplied with texture (default: white)
+  dimmingFactor?: number // Texture brightness dimming factor (0.0 to 1.0, default: 1.0) - 0.5 = 50% brightness
 }
 
 export interface ColorItem {
@@ -81,6 +82,7 @@ export const colorDictionary: ColorItem[] = [
       aoRoughMetal: '/assets/textures/wood/ao_rough_metal.jpg',
       displacement: '/assets/textures/wood/displacement.jpg',
       colorTint: '#ffffff', // White - shows natural texture color
+      dimmingFactor: 1, // Reduces texture brightness to 50% (0.3 = very dim, 0.7 = slightly dim, 1.0 = full brightness)
     },
   },
   {
@@ -96,6 +98,7 @@ export const colorDictionary: ColorItem[] = [
       aoRoughMetal: '/assets/textures/wood/ao_rough_metal.jpg',
       displacement: '/assets/textures/wood/displacement.jpg',
       colorTint: '#8C837A', // Brown tint for walnut appearance
+      dimmingFactor: 1, // Reduces texture brightness to 50% (0.3 = very dim, 0.7 = slightly dim, 1.0 = full brightness)
     },
   },
 ]

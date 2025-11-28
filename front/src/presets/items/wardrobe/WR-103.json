@@ -1,0 +1,24 @@
+{
+  "id": "WR-103",
+  "slug": "dulap-pentru-haine-200",
+  "type": "wardrobe",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Dulap pentru haine 200cm",
+    "shortDescription": "Dulap pentru haine cu lățime de 200 cm.",
+    "tags": ["dulap", "haine", "200cm"],
+    "sortWeight": 110,
+    "previewImage": "/ready-products/wardrobe/2000-4_2.png"
+  },
+  "details": {
+    "width": 200,
+    "height": 240,
+    "depth": 60,
+    "color": "#d9c9be",
+    "columns": 3,
+    "wardrobeCfg": "WARDROBE_200CM",
+    "openingType": "push"
+  },
+  "config": {}
+}

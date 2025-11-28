@@ -44,3 +44,9 @@
 .card:hover {
   background: #ececec;
 }
+
+@media (max-width: 768px) {
+  .card {
+    padding: 0;
+  }
+}

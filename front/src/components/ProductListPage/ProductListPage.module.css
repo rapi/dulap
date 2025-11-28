@@ -114,5 +114,6 @@
 @media (max-width: 900px) {
   .productListContainer {
     padding: 0;
+    width: 100%;
   }
 }

@@ -1,0 +1,23 @@
+{
+  "id": "ST-202",
+  "slug": "comoda-50",
+  "type": "stand",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Comodă 50cm",
+    "shortDescription": "Comodă compactă de 50 cm.",
+    "tags": ["comodă", "50cm"],
+    "sortWeight": 70,
+    "previewImage": "/ready-products/stand/600 stand_2.png"
+  },
+  "details": {
+    "width": 50,
+    "height": 90,
+    "depth": 40,
+    "color": "#fcfbf5",
+    "columns": 2,
+    "openingType": "push"
+  },
+  "config": {}
+}

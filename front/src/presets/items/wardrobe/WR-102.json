@@ -1,0 +1,24 @@
+{
+  "id": "WR-102",
+  "slug": "dulap-pentru-haine-50",
+  "type": "wardrobe",
+  "schemaVersion": 1,
+  "configuratorVersion": 1,
+  "meta": {
+    "title": "Dulap pentru haine 50cm",
+    "shortDescription": "Dulap îngust pentru haine, lățime 50 cm.",
+    "tags": ["dulap", "haine", "50cm"],
+    "sortWeight": 90,
+    "previewImage": "/ready-products/wardrobe/500-1_2.png"
+  },
+  "details": {
+    "width": 50,
+    "height": 240,
+    "depth": 60,
+    "color": "#fcfbf5",
+    "columns": 1,
+    "wardrobeCfg": "WARDROBE_50CM",
+    "openingType": "push"
+  },
+  "config": {}
+}
