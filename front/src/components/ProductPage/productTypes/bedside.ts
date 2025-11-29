@@ -37,42 +37,44 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   // Get URL context
   const urlCtx = useConfiguratorConfigOptional()
 
-  const [width, setWidth] = useState(() => 
-    urlCtx?.config.width ?? DEFAULT_BEDSIDE.width
+  const [width, setWidth] = useState(
+    () => urlCtx?.config.width ?? DEFAULT_BEDSIDE.width
   )
-  const [height, setHeight] = useState(() => 
-    urlCtx?.config.height ?? DEFAULT_BEDSIDE.height
+  const [height, setHeight] = useState(
+    () => urlCtx?.config.height ?? DEFAULT_BEDSIDE.height
   )
-  const [depth, setDepth] = useState(() => 
-    urlCtx?.config.depth ?? DEFAULT_BEDSIDE.depth
+  const [depth, setDepth] = useState(
+    () => urlCtx?.config.depth ?? DEFAULT_BEDSIDE.depth
   )
-  const [plintHeight, setPlintHeight] = useState(() => 
-    urlCtx?.config.plintHeight ?? DEFAULT_BEDSIDE.plintHeight
+  const [plintHeight, setPlintHeight] = useState(
+    () => urlCtx?.config.plintHeight ?? DEFAULT_BEDSIDE.plintHeight
   )
   const [selectedSections, setSelectedSections] = useState(
     DEFAULT_BEDSIDE.sections
   )
-  
+
   // Initialize columns and configurations from URL if available
-  const [selectedColumns, setSelectedColumns] = useState(() => 
-    urlCtx?.config.columns ?? DEFAULT_BEDSIDE.columns
+  const [selectedColumns, setSelectedColumns] = useState(
+    () => urlCtx?.config.columns ?? DEFAULT_BEDSIDE.columns
   )
   const [columnConfigurations, setColumnConfigurations] = useState<
     ColumnConfigurationWithOptions[]
-  >(() => 
-    urlCtx?.config.columnConfigurations && urlCtx.config.columnConfigurations.length > 0
+  >(() =>
+    urlCtx?.config.columnConfigurations &&
+    urlCtx.config.columnConfigurations.length > 0
       ? urlCtx.config.columnConfigurations
       : [{ type: ColumnConfigurationType.DRAWERS_2 }]
   )
-  const [selectedColor, setSelectedColor] = useState(() =>
-    urlCtx?.config.color ?? DEFAULT_BEDSIDE.selectedColor
+  const [selectedColor, setSelectedColor] = useState(
+    () => urlCtx?.config.color ?? DEFAULT_BEDSIDE.selectedColor
   )
   const [guides, setGuides] = useState(
     'homepage.configurator.fittings.guides.options.1'
   )
   const [openingOption, setOpeningOption] = useState<OpeningType>(() => {
     if (!urlCtx?.config.openingType) return OpeningType.Push
-    if (urlCtx.config.openingType === 'profile') return OpeningType.ProfileHandle
+    if (urlCtx.config.openingType === 'profile')
+      return OpeningType.ProfileHandle
     if (urlCtx.config.openingType === 'round') return OpeningType.RoundHandle
     return OpeningType.Push
   })
@@ -86,13 +88,14 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
     'main'
   )
   // ---------------------------------------------------------
-  
+
   // Track if initial render has happened (to prevent URL sync during initialization)
   const hasHydratedRef = useRef(false)
   // Track previous column configurations to prevent infinite URL sync loops
   const prevColumnConfigsRef = useRef<string>(
     JSON.stringify(
-      urlCtx?.config.columnConfigurations && urlCtx.config.columnConfigurations.length > 0
+      urlCtx?.config.columnConfigurations &&
+        urlCtx.config.columnConfigurations.length > 0
         ? urlCtx.config.columnConfigurations
         : [{ type: ColumnConfigurationType.DRAWERS_2 }]
     )
@@ -106,7 +109,7 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   // Sync local state with URL context changes (for dimensions and columns count ONLY)
   useEffect(() => {
     if (!urlCtx) return
-    
+
     // Sync dimensions
     if (urlCtx.config.width !== undefined && urlCtx.config.width !== width) {
       setWidth(urlCtx.config.width)
@@ -117,16 +120,28 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
     if (urlCtx.config.depth !== undefined && urlCtx.config.depth !== depth) {
       setDepth(urlCtx.config.depth)
     }
-    if (urlCtx.config.plintHeight !== undefined && urlCtx.config.plintHeight !== plintHeight) {
+    if (
+      urlCtx.config.plintHeight !== undefined &&
+      urlCtx.config.plintHeight !== plintHeight
+    ) {
       setPlintHeight(urlCtx.config.plintHeight)
     }
-    
+
     // Sync columns count
-    if (urlCtx.config.columns !== undefined && urlCtx.config.columns !== selectedColumns) {
+    if (
+      urlCtx.config.columns !== undefined &&
+      urlCtx.config.columns !== selectedColumns
+    ) {
       setSelectedColumns(urlCtx.config.columns)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [urlCtx?.config.width, urlCtx?.config.height, urlCtx?.config.depth, urlCtx?.config.plintHeight, urlCtx?.config.columns])
+  }, [
+    urlCtx?.config.width,
+    urlCtx?.config.height,
+    urlCtx?.config.depth,
+    urlCtx?.config.plintHeight,
+    urlCtx?.config.columns,
+  ])
 
   // Derive sections from column configurations (for new 3D system)
   const derivedSections = useMemo(() => {
@@ -142,13 +157,13 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   }, [columnConfigurations])
 
   // Use centralized constraints hook for automatic calculations
-  const { price, imageHeight, imageWidth, imagePlintHeight } =
-    useFurnitureConstraints(
-      'bedside',
-      { width, height, depth, plintHeight },
-      selectedSections, // Old system uses selectedSections
-      guides === 'homepage.configurator.fittings.guides.options.2'
-    )
+  const { price } = useFurnitureConstraints(
+    'bedside',
+    { width, height, depth, plintHeight },
+    selectedColumns,
+    columnConfigurations.map((config) => config.type),
+    openingOption === OpeningType.Push
+  )
 
   // Auto-adjust sections based on height (for old system)
   useEffect(() => {
@@ -177,9 +192,22 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
         .fill(null)
         .map((_, i) => {
           if (prev[i]) {
-            return createConfigurationForExistingColumn(prev[i], dimensions, 'bedside', i, selectedColumns)
+            return createConfigurationForExistingColumn(
+              prev[i],
+              dimensions,
+              'bedside',
+              i,
+              selectedColumns
+            )
           }
-          return createConfigurationForNewColumn(prev, dimensions, 2, 'bedside', i, selectedColumns)
+          return createConfigurationForNewColumn(
+            prev,
+            dimensions,
+            2,
+            'bedside',
+            i,
+            selectedColumns
+          )
         })
 
       return newConfigs
@@ -249,7 +277,7 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   useEffect(() => {
     // Skip auto-adjustment during initial hydration
     if (!hasHydratedRef.current) return
-    
+
     if (!validColumnCounts[selectedColumns]) {
       // Try to keep a count close to the current selection
       const preferences = [
@@ -265,12 +293,14 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
         validColumnCounts,
         preferences
       )
-      
+
       // Update both local state AND URL context
       setSelectedColumns(validCount)
       if (urlCtx) {
         const ctx = urlCtx
-        const setConfig = ctx.setConfig as (config: Partial<typeof ctx.config>) => void
+        const setConfig = ctx.setConfig as (
+          config: Partial<typeof ctx.config>
+        ) => void
         setConfig({ columns: validCount })
       }
     }
@@ -280,16 +310,18 @@ export const BedsideProductConfigurator: () => ProductComponent[] = () => {
   useEffect(() => {
     if (!urlCtx || !hasHydratedRef.current) return
     if (columnConfigurations.length === 0) return
-    
+
     // Only sync if the value actually changed (deep comparison via JSON)
     const currentSerialized = JSON.stringify(columnConfigurations)
     if (prevColumnConfigsRef.current === currentSerialized) return
-    
+
     prevColumnConfigsRef.current = currentSerialized
-    
+
     // Type assertion needed because context definition doesn't reflect that setConfig accepts partials
     const ctx = urlCtx
-    const setConfig = ctx.setConfig as (config: Partial<typeof ctx.config>) => void
+    const setConfig = ctx.setConfig as (
+      config: Partial<typeof ctx.config>
+    ) => void
     setConfig({ columnConfigurations })
   }, [columnConfigurations, urlCtx])
 

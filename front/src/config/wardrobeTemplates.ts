@@ -78,6 +78,7 @@ export const WARDROBE_TEMPLATES: Record<string, WardrobeTemplate> = {
     maxWidth: 100,
     tags: ['dresses', 'coats', 'womens'],
     icon: 'hanging-long',
+    extraCost: 450,
   },
 
   FULL_HANGING_WITH_2_DRAWERS: {
@@ -104,6 +105,7 @@ export const WARDROBE_TEMPLATES: Record<string, WardrobeTemplate> = {
     maxWidth: 100,
     tags: ['dresses', 'coats', 'womens'],
     icon: 'hanging-long',
+    extraCost: 1000,
   },
 
   SHELVES_ONLY: {
@@ -122,6 +124,7 @@ export const WARDROBE_TEMPLATES: Record<string, WardrobeTemplate> = {
     maxWidth: 100,
     tags: ['storage', 'folded', 'organized'],
     icon: 'shelves',
+    extraCost: 600,
   },
 
   MIXED_STORAGE_COMPLEX: {
@@ -147,6 +150,7 @@ export const WARDROBE_TEMPLATES: Record<string, WardrobeTemplate> = {
     maxWidth: 100,
     tags: ['complex', 'custom', 'versatile'],
     icon: 'mixed-complex',
+    extraCost: 2300,
   },
 
   HANGING_WITH_DRAWERS: {
@@ -172,6 +176,7 @@ export const WARDROBE_TEMPLATES: Record<string, WardrobeTemplate> = {
     maxWidth: 100,
     tags: ['mixed', 'versatile'],
     icon: 'hanging-drawers',
+    extraCost: 2300,
   },
 
   DOUBLE_HANGING: {
@@ -195,6 +200,7 @@ export const WARDROBE_TEMPLATES: Record<string, WardrobeTemplate> = {
     maxWidth: 100,
     tags: ['shirts', 'pants', 'mens', 'organized'],
     icon: 'hanging-double',
+    extraCost: 600,
   },
 
   ONE_TOP_SHELF: {
@@ -218,6 +224,7 @@ export const WARDROBE_TEMPLATES: Record<string, WardrobeTemplate> = {
     maxWidth: 100,
     tags: ['shirts', 'pants', 'mens', 'organized'],
     icon: 'hanging-double',
+    extraCost: 0,
   },
 }
 

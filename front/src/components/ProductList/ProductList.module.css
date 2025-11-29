@@ -18,4 +18,9 @@
     margin: 0 auto;
     padding: 0;
   }
+
+  /* extra safety: on mobile productItem is never invisible */
+  .productItem {
+    opacity: 1;
+  }
 }

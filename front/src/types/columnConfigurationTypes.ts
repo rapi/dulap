@@ -1,18 +1,19 @@
 /**
  * Column Configuration Type System
- * 
+ *
  * This file defines all possible column configurations for furniture products.
  * Each configuration specifies what appears inside a vertical column.
  */
 
 /**
  * Enum defining all available column configuration types
- * 
+ *
  * Naming convention:
  * - DRAWERS_X: X number of pullout drawers
  * - DOOR_X_SHELVES: Single door with X fixed shelves inside
  * - DOOR_SPLIT_X_SHELVES: Two side-by-side doors with X fixed shelves inside
  */
+
 export enum ColumnConfigurationType {
   // Drawer configurations (1-5 drawers)
   DRAWERS_1 = 'DRAWERS_1',
@@ -60,7 +61,10 @@ export interface ColumnConfigurationMetadata {
 /**
  * Configuration metadata map for all types
  */
-export const COLUMN_CONFIGURATION_METADATA: Record<ColumnConfigurationType, ColumnConfigurationMetadata> = {
+export const COLUMN_CONFIGURATION_METADATA: Record<
+  ColumnConfigurationType,
+  ColumnConfigurationMetadata
+> = {
   // Drawers
   [ColumnConfigurationType.DRAWERS_1]: {
     type: ColumnConfigurationType.DRAWERS_1,
@@ -241,7 +245,9 @@ export const COLUMN_CONFIGURATION_METADATA: Record<ColumnConfigurationType, Colu
 /**
  * Helper function to get metadata for a configuration type
  */
-export function getConfigurationMetadata(type: ColumnConfigurationType): ColumnConfigurationMetadata {
+export function getConfigurationMetadata(
+  type: ColumnConfigurationType
+): ColumnConfigurationMetadata {
   return COLUMN_CONFIGURATION_METADATA[type]
 }
 
@@ -304,6 +310,9 @@ export interface ColumnConfigurationConstraint {
   maxHeight?: number
   minDepth?: number
   maxDepth?: number
-  customRule?: (dimensions: { width: number; height: number; depth: number }) => boolean
+  customRule?: (dimensions: {
+    width: number
+    height: number
+    depth: number
+  }) => boolean
 }
-

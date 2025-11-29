@@ -1,6 +1,6 @@
 // components/SampleItem/SampleItem.tsx
 import React from 'react'
-import { CatalogItem } from '../CatalogItem/CatalogItem'
+import { CatalogItem } from '../CatalogItem/CatalogItem_old'
 import { FormattedMessage } from 'react-intl'
 
 export type Sample = {

@@ -17,6 +17,7 @@ import {
   decodeWardrobeColumnConfigs,
 } from '~/utils/wardrobeColumnConfigUrl'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
+import { calculateWardrobePrice } from '~/config/furnitureConstraints'
 
 export type MainImageParams = {
   imageWidth: number
@@ -69,21 +70,22 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   )
 
   // Initialize column configurations
-  const [columnConfigurations, setColumnConfigurations] =
-    useState<WardrobeColumnConfiguration[]>(() => {
-      // Default initialization
-      return columnLayout.columnWidths.map((colWidth) => {
-        const defaultTemplateId = colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING'
-        const template = WARDROBE_TEMPLATES[defaultTemplateId]
-        return {
-          zones: template?.zones || [],
-          totalHeight: height - plintHeight,
-          doorType: colWidth > 60 ? 'split' : 'single',
-          doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
-          templateId: defaultTemplateId,
-        }
-      })
+  const [columnConfigurations, setColumnConfigurations] = useState<
+    WardrobeColumnConfiguration[]
+  >(() => {
+    // Default initialization
+    return columnLayout.columnWidths.map((colWidth) => {
+      const defaultTemplateId = colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING'
+      const template = WARDROBE_TEMPLATES[defaultTemplateId]
+      return {
+        zones: template?.zones || [],
+        totalHeight: height - plintHeight,
+        doorType: colWidth > 60 ? 'split' : 'single',
+        doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
+        templateId: defaultTemplateId,
+      }
     })
+  })
 
   // Track if we've initialized from URL
   const [urlInitialized, setUrlInitialized] = useState(false)
@@ -95,8 +97,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   const [imageColor, setImageColor] = useState('White')
   const [guides, setGuides] = useState('standart')
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
-  const [selectedMirrorOption, setSelectedMirrorOption] =
-    useState('standard')
+  const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
 
   // Opening option should behave like in StandProductConfigurator
   const [openingOption, setOpeningOption] = useState<OpeningType>(() => {
@@ -114,18 +115,17 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   const [activeOpening, setActiveOpening] = useState<ImageOptionProps[]>([])
   const [maxSections, setMaxSections] = useState(5)
   const [minSections, setMinSections] = useState(1)
-  const [selectedSections, setSelectedSections] = useState<
-    ImageOptionProps[]
-  >([])
+  const [selectedSections, setSelectedSections] = useState<ImageOptionProps[]>(
+    []
+  )
   const [doorsNr, setDoorsNr] = useState(3)
 
   // --- NEW: independent gallery color + who changed last ---
   const [galleryColor, setGalleryColor] = useState<string>('White')
-  const [galleryImageColor, setGalleryImageColor] =
-    useState<string>('White')
-  const [lastColorChanged, setLastColorChanged] = useState<
-    'main' | 'gallery'
-  >('main')
+  const [galleryImageColor, setGalleryImageColor] = useState<string>('White')
+  const [lastColorChanged, setLastColorChanged] = useState<'main' | 'gallery'>(
+    'main'
+  )
   // ---------------------------------------------------------
 
   // Function to update column configurations with URL sync
@@ -158,24 +158,22 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
           const urlWidth = urlCtx.config.width
           const urlLayout = calculateWardrobeColumnLayout(urlWidth)
 
-          const newConfigs = urlLayout.columnWidths.map(
-            (colWidth, index) => {
-              const templateId = templateIds[index] || 'SHELVES_ONLY'
-              const template = WARDROBE_TEMPLATES[templateId]
-              return {
-                zones: template?.zones || [],
-                totalHeight: height - plintHeight,
-                doorType:
-                  (colWidth > 60 ? 'split' : 'single') as
-                    | 'split'
-                    | 'single',
-                doorOpeningSide: (colWidth <= 60
-                  ? 'right'
-                  : undefined) as 'left' | 'right' | undefined,
-                templateId,
-              }
+          const newConfigs = urlLayout.columnWidths.map((colWidth, index) => {
+            const templateId = templateIds[index] || 'SHELVES_ONLY'
+            const template = WARDROBE_TEMPLATES[templateId]
+            return {
+              zones: template?.zones || [],
+              totalHeight: height - plintHeight,
+              doorType: (colWidth > 60 ? 'split' : 'single') as
+                | 'split'
+                | 'single',
+              doorOpeningSide: (colWidth <= 60 ? 'right' : undefined) as
+                | 'left'
+                | 'right'
+                | undefined,
+              templateId,
             }
-          )
+          })
           setColumnConfigurations(newConfigs)
         }
       }
@@ -208,8 +206,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
         // Try to preserve existing template if index exists
         const existingTemplate = prev[index]?.templateId
         const defaultTemplateId =
-          existingTemplate ||
-          (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING')
+          existingTemplate || (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING')
         const template = WARDROBE_TEMPLATES[defaultTemplateId]
         return {
           zones: template?.zones || [],
@@ -355,26 +352,26 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     }, 0)
   }, [selectedSections])
 
-  const guidesExtraPrice = useMemo(() => {
-    return selectedSections.reduce((sum, { src }) => {
-      const match = src.match(/(\d+)\.\w+$/)
-      const imageNr = match ? parseInt(match[1], 10) : 0
-      const guideCount = GUIDES_NR[imageNr] || 0
-      return sum + guideCount * 250
+  const templatesExtraCost = useMemo(() => {
+    return columnConfigurations.reduce((sum, config) => {
+      const template = WARDROBE_TEMPLATES[config.templateId || '']
+      const extra = template?.extraCost ?? 0
+      return sum + extra
     }, 0)
-  }, [selectedSections])
+  }, [columnConfigurations])
 
-  const price = useMemo(() => {
-    return Math.round(
-      (width * 29 +
-        (height - 190) * 4.5 * doorsNr +
-        sectionsPrice +
-        guidesExtraPrice +
-        350 * doorsNr +
-        350) *
-        1.35
-    )
-  }, [width, height, doorsNr, sectionsPrice, guidesExtraPrice])
+  const price = useMemo(
+    () =>
+      calculateWardrobePrice({
+        width,
+        height,
+        depth,
+        doors: doorsNr,
+        sectionsPrice,
+        templatesExtraCost,
+      }),
+    [width, height, depth, doorsNr, sectionsPrice, templatesExtraCost]
+  )
 
   useEffect(() => {
     if (selectedMirrorOption === 'standard') {
@@ -408,8 +405,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
 
   // Choose last changed color for gallery visuals
   const activeGalleryImageColor = useMemo(
-    () =>
-      lastColorChanged === 'gallery' ? galleryImageColor : imageColor,
+    () => (lastColorChanged === 'gallery' ? galleryImageColor : imageColor),
     [lastColorChanged, galleryImageColor, imageColor]
   )
 

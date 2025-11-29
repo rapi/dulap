@@ -11,6 +11,11 @@
  * - No magic numbers scattered in code
  */
 
+import {
+  ColumnConfigurationType,
+  getDrawerCount,
+} from '~/types/columnConfigurationTypes'
+
 export interface DimensionConstraints {
   min: number
   max: number
@@ -59,11 +64,10 @@ export interface ColumnConstraints {
 
 export interface PricingFormula {
   basePrice: number
-  perSection: number
+  perDrawer: number
   perCmWidth: number
   perCmHeightAbove: { threshold: number; rate: number }
   perCmDepthAbove: { threshold: number; rate: number }
-  premiumGuidesPerSection: number
   vatMultiplier: number
 }
 
@@ -140,12 +144,11 @@ export const STAND_CONSTRAINTS: ProductConstraints = {
   },
 
   pricing: {
-    basePrice: 600,
-    perSection: 600,
+    basePrice: 1500,
+    perDrawer: 600,
     perCmWidth: 20,
-    perCmHeightAbove: { threshold: 190, rate: 4.5 },
+    perCmHeightAbove: { threshold: 70, rate: 4.5 },
     perCmDepthAbove: { threshold: 30, rate: 8 },
-    premiumGuidesPerSection: 390,
     vatMultiplier: 1.3,
   },
 
@@ -206,12 +209,11 @@ export const BEDSIDE_CONSTRAINTS: ProductConstraints = {
   },
 
   pricing: {
-    basePrice: 600,
-    perSection: 600,
+    basePrice: 250,
+    perDrawer: 600,
     perCmWidth: 20,
-    perCmHeightAbove: { threshold: 190, rate: 4.5 },
+    perCmHeightAbove: { threshold: 30, rate: 10 },
     perCmDepthAbove: { threshold: 30, rate: 8 },
-    premiumGuidesPerSection: 390,
     vatMultiplier: 1.3,
   },
 
@@ -273,11 +275,10 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
 
   pricing: {
     basePrice: 300, // Lower base price for TV stands
-    perSection: 600,
+    perDrawer: 600,
     perCmWidth: 20,
     perCmHeightAbove: { threshold: 190, rate: 4.5 },
     perCmDepthAbove: { threshold: 30, rate: 8 },
-    premiumGuidesPerSection: 390,
     vatMultiplier: 1.3,
   },
 
@@ -349,12 +350,11 @@ export const WARDROBE_CONSTRAINTS: ProductConstraints = {
   },
 
   pricing: {
-    basePrice: 350,
-    perSection: 600,
+    basePrice: 1000,
+    perDrawer: 600,
     perCmWidth: 29,
     perCmHeightAbove: { threshold: 190, rate: 4.5 },
     perCmDepthAbove: { threshold: 30, rate: 8 },
-    premiumGuidesPerSection: 250,
     vatMultiplier: 1.35,
   },
 
@@ -377,6 +377,60 @@ export const WARDROBE_CONSTRAINTS: ProductConstraints = {
   },
 
   colors: ['White', 'Biege', 'Light Grey', 'Grey'],
+}
+
+// ============================================================================
+// WARDROBE PRICE CALCULATION
+// ============================================================================
+
+export interface WardrobePriceParams {
+  width: number
+  height: number
+  depth: number
+  doors: number
+  sectionsPrice: number
+  templatesExtraCost: number
+}
+
+/**
+ * Wardrobe-specific price calculation
+ * Mirrors old logic from wardrobe.ts, but centralized
+ */
+export function calculateWardrobePrice(params: WardrobePriceParams): number {
+  const { width, height, doors, sectionsPrice, templatesExtraCost } = params
+  const { pricing } = getConstraints('wardrobe')
+
+  // width * 29
+  // + (height - 190) * 4.5 * doorsNr
+  // + sectionsPrice
+  // + guidesExtraPrice
+  // + 350 * doorsNr
+  // + 350
+  // all * 1.35
+
+  const extraHeightCm =
+    height > pricing.perCmHeightAbove.threshold
+      ? height - pricing.perCmHeightAbove.threshold
+      : 0
+
+  const basePerWidth = width * pricing.perCmWidth
+  const heightDoorsPart = extraHeightCm * pricing.perCmHeightAbove.rate * doors
+
+  // 350 * doorsNr + 350  == pricing.basePrice * doors + pricing.basePrice
+  const doorsBase = pricing.basePrice * doors
+  const wardrobeBase = pricing.basePrice
+
+  const totalBeforeVat =
+    basePerWidth +
+    heightDoorsPart +
+    sectionsPrice +
+    doorsBase +
+    wardrobeBase +
+    templatesExtraCost
+
+  const round10 = (n: number): number => Math.round(n / 10) * 10
+
+  return round10(Math.round(totalBeforeVat * pricing.vatMultiplier))
 }
 
 // ============================================================================
@@ -406,23 +460,25 @@ export function getConstraints(type: FurnitureType): ProductConstraints {
 /**
  * Calculate price based on constraints and dimensions
  */
+
 export function calculatePrice(
   type: FurnitureType,
   dimensions: { width: number; height: number; depth: number },
-  sections: number,
-  hasPremiumGuides: boolean = false,
-  columns: number = 1
+  columns: number,
+  drawers: number = 3,
+  columnConfigTypes?: ColumnConfigurationType[],
+  isPushOpening?: boolean
 ): number {
   const { pricing } = getConstraints(type)
 
   // 1) Safe columns
   const safeColumns = Math.max(1, columns)
 
-  // 2) Width per column (only split when > 1 column)
+  // 2) Width per column (делим ширину только если > 1 колонки)
   const widthPerColumn =
     safeColumns > 1 ? dimensions.width / safeColumns : dimensions.width
 
-  // 3) Surcharges only when above thresholds (no negative discounts)
+  // 3) Surcharges only when above thresholds
   const extraHeightCm =
     dimensions.height > pricing.perCmHeightAbove.threshold
       ? dimensions.height - pricing.perCmHeightAbove.threshold
@@ -433,54 +489,44 @@ export function calculatePrice(
       ? dimensions.depth - pricing.perCmDepthAbove.threshold
       : 0
 
-  // 4) Fittings price per *column* (sections are per column)
-  const perColumnFittingsPrice = hasPremiumGuides
-    ? sections * pricing.premiumGuidesPerSection
-    : 0
-
-  // 5) Price for a single column/module
-  const perColumnBasePrice =
+  // 4) Base price per column (без ящиков)
+  const perColumnBaseWithoutDrawers =
     pricing.basePrice +
-    sections * pricing.perSection + // sections PER column
     widthPerColumn * pricing.perCmWidth +
     extraHeightCm * pricing.perCmHeightAbove.rate +
-    extraDepthCm * pricing.perCmDepthAbove.rate +
-    perColumnFittingsPrice
+    extraDepthCm * pricing.perCmDepthAbove.rate
 
-  // 6) Multiply whole price by the number of columns
-  const totalBeforeVat = perColumnBasePrice * safeColumns
+  // 5) Drawer count:
+  let totalDrawerCount: number
+
+  if (
+    (type === 'stand' || type === 'tv-stand' || type === 'bedside') &&
+    columnConfigTypes &&
+    columnConfigTypes.length > 0
+  ) {
+    totalDrawerCount = columnConfigTypes
+      .slice(0, safeColumns)
+      .reduce((sum, cfgType) => sum + getDrawerCount(cfgType), 0)
+  } else {
+    // backward compatible: как раньше
+    totalDrawerCount = drawers * safeColumns
+  }
+
+  // 6) Drawer pricing (base + push-to-open surcharge)
+  const basePerDrawer = pricing.perDrawer
+  const pushExtraPerDrawer = isPushOpening ? 250 : 0
+  const perDrawerTotal = basePerDrawer + pushExtraPerDrawer
+
+  const totalDrawersPrice = totalDrawerCount * perDrawerTotal
+
+  // 7) Total before VAT
+  const totalBeforeVat =
+    perColumnBaseWithoutDrawers * safeColumns + totalDrawersPrice
 
   const round10 = (n: number): number => Math.round(n / 10) * 10
 
-  // 7) Apply VAT and final rounding
+  // 8) Apply VAT and final rounding
   return round10(Math.round(totalBeforeVat * pricing.vatMultiplier))
-}
-
-
-/**
- * Get available sections based on dimensions
- */
-export function getAvailableSections(
-  type: FurnitureType,
-  dimensions: { width: number; height: number }
-): number[] {
-  const { sections } = getConstraints(type)
-
-  if (sections.rule === 'auto') {
-    // For auto rule, return the single calculated value
-    const calculated = sections.autoCalculate?.(dimensions) ?? sections.default
-    return [calculated]
-  }
-
-  if (sections.getAvailableSections) {
-    return sections.getAvailableSections(dimensions)
-  }
-
-  // Fallback: return all sections from min to max
-  return Array.from(
-    { length: sections.max - sections.min + 1 },
-    (_, i) => sections.min + i
-  )
 }
 
 /**
