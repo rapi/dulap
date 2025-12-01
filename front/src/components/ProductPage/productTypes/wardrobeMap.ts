@@ -1,7 +1,13 @@
 import { ImageOptionProps } from '~/components/ImageSelect/ImageSelect'
-import { MainImageParams } from './wardrobe'
+
 const editSrc = '1.png'
 const defaultSectionSrc = '1.png'
+
+type MainImageParams = {
+  imageWidth: number
+  imageSections: number
+}
+
 type WidthMap = {
   maxWidth: number
   minSections: number

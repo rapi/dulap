@@ -1,12 +1,6 @@
 import { ProductComponent } from '~/components/ProductPage/WardrobeProductPage'
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import { useRouter } from 'next/router'
-import { ImageOptionProps } from '~/components/ImageSelect/ImageSelect'
-import {
-  openingMap,
-  widthMap,
-  imageWidthMap,
-} from '~/components/ProductPage/productTypes/wardrobeMap'
 import { colorHexCodes, ColorName } from '~/utils/colorDictionary'
 import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
 import { calculateWardrobeColumnLayout } from '~/utils/wardrobeColumnLayout'
@@ -18,29 +12,6 @@ import {
 } from '~/utils/wardrobeColumnConfigUrl'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 import { calculateWardrobePrice } from '~/config/furnitureConstraints'
-
-export type MainImageParams = {
-  imageWidth: number
-  imageSections: number
-}
-
-const SECTION_VALUE: Record<number, number> = {
-  1: 150,
-  2: 1350,
-  3: 2550,
-  4: 400,
-  5: 2700,
-  6: 0,
-}
-
-const GUIDES_NR: Record<number, number> = {
-  1: 0,
-  2: 2,
-  3: 4,
-  4: 0,
-  5: 4,
-  6: 0,
-}
 
 export const DEFAULT_WARDROBE = {
   width: 200,
@@ -89,15 +60,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
 
   // Track if we've initialized from URL
   const [urlInitialized, setUrlInitialized] = useState(false)
-  const [imageSide, setImageSide] = useState('right')
-  const [imageWidth, setImageWidth] = useState(50)
-  const [imageHeight, setImageHeight] = useState(2100)
-  const [imageSections, setImageSections] = useState(1)
-  const [imagePlintHeight, setImagePlintHeight] = useState(20)
-  const [imageColor, setImageColor] = useState('Biege Almond')
   const [guides, setGuides] = useState('standart')
-  const [selectedMaxSections, setSelectedMaxSections] = useState(1)
-  const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
 
   // Opening option should behave like in StandProductConfigurator
   const [openingOption, setOpeningOption] = useState<OpeningType>(() => {
@@ -111,22 +74,55 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     return OpeningType.Push
   })
 
-  const [activeSections, setActiveSections] = useState<ImageOptionProps[]>([])
-  const [activeOpening, setActiveOpening] = useState<ImageOptionProps[]>([])
-  const [maxSections, setMaxSections] = useState(5)
-  const [minSections, setMinSections] = useState(1)
-  const [selectedSections, setSelectedSections] = useState<ImageOptionProps[]>(
-    []
-  )
-  const [doorsNr, setDoorsNr] = useState(3)
+  // Calculate doors number based on width (used for pricing)
+  const doorsNr = useMemo(() => {
+    if (width <= 60) return 1
+    if (width <= 100) return 2
+    if (width <= 150) return width < 120 ? 2 : 3
+    if (width < 200) return 3
+    if (width === 200) return 5
+    return 4
+  }, [width])
 
-  // --- NEW: independent gallery color + who changed last ---
-  const [galleryColor, setGalleryColor] = useState<string>('Biege Almond')
-  const [galleryImageColor, setGalleryImageColor] = useState<string>('Biege Almond')
-  const [lastColorChanged, setLastColorChanged] = useState<'main' | 'gallery'>(
-    'main'
-  )
-  // ---------------------------------------------------------
+  // Track if initial render has happened (to prevent URL sync during initialization)
+  const hasHydratedRef = useRef(false)
+  
+  // Track previous values to avoid unnecessary state updates
+  const prevDimensionsRef = useRef({ width: 200, height: 260, plintHeight: 2, columnCount: columnLayout.columnCount })
+
+  // Mark hydration as complete after first render
+  useEffect(() => {
+    hasHydratedRef.current = true
+  }, [])
+
+  // Sync local state with URL context changes (for dimensions ONLY)
+  // This prevents state mismatches during rapid updates
+  useEffect(() => {
+    if (!urlCtx || !hasHydratedRef.current) return
+
+    // Sync dimensions - only update if URL context value differs from local state
+    if (urlCtx.config.width !== undefined && urlCtx.config.width !== width) {
+      setWidth(urlCtx.config.width)
+    }
+    if (urlCtx.config.height !== undefined && urlCtx.config.height !== height) {
+      setHeight(urlCtx.config.height)
+    }
+    if (urlCtx.config.depth !== undefined && urlCtx.config.depth !== depth) {
+      setDepth(urlCtx.config.depth)
+    }
+    if (
+      urlCtx.config.plintHeight !== undefined &&
+      urlCtx.config.plintHeight !== plintHeight
+    ) {
+      setPlintHeight(urlCtx.config.plintHeight)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    urlCtx?.config.width,
+    urlCtx?.config.height,
+    urlCtx?.config.depth,
+    urlCtx?.config.plintHeight,
+  ])
 
   // Function to update column configurations with URL sync
   const updateColumnConfigurations = useCallback(
@@ -159,7 +155,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
           const urlLayout = calculateWardrobeColumnLayout(urlWidth)
 
           const newConfigs = urlLayout.columnWidths.map((colWidth, index) => {
-            const templateId = templateIds[index] || (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING_WITH_1_SHELF')
+            const templateId = templateIds[index] || 'FULL_HANGING_WITH_1_SHELF'
             const template = WARDROBE_TEMPLATES[templateId]
             return {
               zones: template?.zones || [],
@@ -183,178 +179,54 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
 
   // Update column configurations when dimensions change
   useEffect(() => {
-    // Skip if we haven't initialized from URL yet
-    if (!urlInitialized) return
+    // Skip if we haven't initialized from URL yet or haven't hydrated
+    if (!urlInitialized || !hasHydratedRef.current) {
+      return
+    }
 
     const newLayout = calculateWardrobeColumnLayout(width)
+    const prev = prevDimensionsRef.current
+    
+    // Check if we actually need to update (avoid calling setter unnecessarily)
+    const columnCountChanged = prev.columnCount !== newLayout.columnCount
+    const dimensionsChanged = prev.height !== height || prev.plintHeight !== plintHeight
+    
+    if (!columnCountChanged && !dimensionsChanged) {
+      return // Don't even call setColumnConfigurations
+    }
+    
+    // Update ref for next comparison
+    prevDimensionsRef.current = { width, height, plintHeight, columnCount: newLayout.columnCount }
 
-    setColumnConfigurations((prev) => {
-      // Preserve configurations if column count hasn't changed
-      if (prev.length === newLayout.columnCount) {
-        // Keep existing template selections, just update dimensions
-        return prev.map((config, index) => ({
+    if (columnCountChanged) {
+      // Reset configurations if column count changed
+      setColumnConfigurations((prevConfigs) => 
+        newLayout.columnWidths.map((colWidth, index) => {
+          const existingTemplate = prevConfigs[index]?.templateId
+          const defaultTemplateId =
+            existingTemplate || 'FULL_HANGING_WITH_1_SHELF'
+          const template = WARDROBE_TEMPLATES[defaultTemplateId]
+          return {
+            zones: template?.zones || [],
+            totalHeight: height - plintHeight,
+            doorType: colWidth > 60 ? 'split' : 'single',
+            doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
+            templateId: defaultTemplateId,
+          }
+        })
+      )
+    } else {
+      // Just update dimensions, keep existing template selections
+      setColumnConfigurations((prevConfigs) =>
+        prevConfigs.map((config, index) => ({
           ...config,
           totalHeight: height - plintHeight,
           doorType: newLayout.columnWidths[index] > 60 ? 'split' : 'single',
-          doorOpeningSide:
-            newLayout.columnWidths[index] <= 60 ? 'right' : undefined,
+          doorOpeningSide: newLayout.columnWidths[index] <= 60 ? 'right' : undefined,
         }))
-      }
-
-      // Reset configurations if column count changed
-      return newLayout.columnWidths.map((colWidth, index) => {
-        // Try to preserve existing template if index exists
-        const existingTemplate = prev[index]?.templateId
-        const defaultTemplateId =
-          existingTemplate || (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING_WITH_1_SHELF')
-        const template = WARDROBE_TEMPLATES[defaultTemplateId]
-        return {
-          zones: template?.zones || [],
-          totalHeight: height - plintHeight,
-          doorType: colWidth > 60 ? 'split' : 'single',
-          doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
-          templateId: defaultTemplateId,
-        }
-      })
-    })
-  }, [width, height, plintHeight, urlInitialized])
-
-  useEffect(() => {
-    setSelectedSections((prev) => {
-      const newLen = activeSections.length
-      if (newLen > prev.length)
-        return [...prev, ...activeSections.slice(prev.length)]
-      if (newLen < prev.length) return prev.slice(0, newLen)
-      return prev
-    })
-  }, [activeSections])
-
-  useEffect(() => {
-    setSelectedSections((prev) =>
-      prev.map((item, i) => ({
-        ...item,
-        width: activeSections[i]?.width ?? item.width,
-        height: activeSections[i]?.height ?? item.height,
-      }))
-    )
-  }, [activeSections])
-
-  useEffect(() => {
-    for (const map of imageWidthMap) {
-      if (width <= map.maxWidth) {
-        const [{ imageWidth: w, imageSections: s }] =
-          map.imageParams(selectedMaxSections)
-        setImageWidth(w)
-        setImageSections(s)
-        break
-      }
+      )
     }
-  }, [width, selectedMaxSections])
-
-  useEffect(() => {
-    if (height <= 210) {
-      setImageHeight(2100)
-    } else setImageHeight(2400)
-  }, [height])
-
-  useEffect(() => {
-    setDepth(depth)
-  }, [depth])
-
-  useEffect(() => {
-    setGuides(guides)
-  }, [guides])
-
-  // Main color -> image folder key
-  useEffect(() => {
-    if (selectedColor === 'Biege') {
-      setImageColor('Biege')
-    } else if (selectedColor === 'White') {
-      setImageColor('White')
-    } else if (selectedColor === 'Light Grey') {
-      setImageColor('Light Grey')
-    } else if (selectedColor === 'Grey') {
-      setImageColor('Grey')
-    } else if (selectedColor === 'Biege Almond') {
-      setImageColor('Biege Almond')
-    } else setImageColor('Biege Almond')
-  }, [selectedColor])
-
-  // Gallery color -> image folder key (independent)
-  useEffect(() => {
-    if (galleryColor === 'Biege') {
-      setGalleryImageColor('Biege')
-    } else if (galleryColor === 'White') {
-      setGalleryImageColor('White')
-    } else if (galleryColor === 'Light Grey') {
-      setGalleryImageColor('Light Grey')
-    } else if (galleryColor === 'Grey') {
-      setGalleryImageColor('Grey')
-    } else if (galleryColor === 'Biege Almond') {
-      setGalleryImageColor('Biege Almond')
-    } else setGalleryImageColor('Biege Almond')
-  }, [galleryColor])
-
-  // Keep gallery picker visually in sync with main color until user changes gallery explicitly
-  useEffect(() => {
-    if (lastColorChanged === 'main') {
-      setGalleryColor(selectedColor)
-    }
-  }, [selectedColor, lastColorChanged])
-
-  // Build active sections based on current main color
-  useEffect(() => {
-    for (const map of widthMap) {
-      if (width <= map.maxWidth) {
-        setMinSections(map.minSections)
-        setMaxSections(map.maxSections)
-        const newActiveSections = map
-          .activeSections(width, height, selectedMaxSections)
-          .map((section) => ({
-            src: `/wardrobe/filling/${imageColor}/${imageHeight}/${section.src}`,
-            width: section.width,
-            height: section.height,
-          }))
-        setActiveSections(newActiveSections)
-        break
-      }
-    }
-  }, [width, height, selectedMaxSections, imageColor, imageHeight])
-
-  useEffect(() => {
-    for (const map of openingMap) {
-      if (width <= map.maxWidth) {
-        setActiveOpening(map.activeOpening(width, height, selectedMaxSections))
-        break
-      }
-    }
-  }, [width, height, selectedMaxSections])
-
-  useEffect(() => {
-    let newDoors: number
-
-    if (width <= 60) {
-      newDoors = 1
-    } else if (width <= 100) {
-      newDoors = 2
-    } else if (width <= 150) {
-      newDoors = width < 120 ? 2 : 3
-    } else if (width < 200) {
-      newDoors = selectedMaxSections === 2 ? 4 : 3
-    } else if (width === 200) {
-      newDoors = selectedMaxSections === 2 ? 4 : 5
-    } else {
-      newDoors = selectedMaxSections === 3 ? 5 : 4
-    }
-    setDoorsNr(newDoors)
-  }, [width, selectedMaxSections])
-
-  const sectionsPrice = useMemo(() => {
-    return selectedSections.reduce((sum, { src }) => {
-      const m = src.match(/(\d+)(?=\.\w+$)/)
-      return m ? sum + (SECTION_VALUE[Number(m[1])] ?? 0) : sum
-    }, 0)
-  }, [selectedSections])
+  }, [width, height, plintHeight, urlInitialized, columnLayout.columnCount])
 
   const templatesExtraCost = useMemo(() => {
     return columnConfigurations.reduce((sum, config) => {
@@ -371,46 +243,10 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
         height,
         depth,
         doors: doorsNr,
-        sectionsPrice,
+        sectionsPrice: 0, // Gallery sections removed
         templatesExtraCost,
       }),
-    [width, height, depth, doorsNr, sectionsPrice, templatesExtraCost]
-  )
-
-  useEffect(() => {
-    if (selectedMirrorOption === 'standard') {
-      setImageSide('right')
-    } else setImageSide('left')
-  }, [selectedMirrorOption])
-
-  const recolor = (items: ImageOptionProps[]) =>
-    items.map(({ src, width: w, height: h }) => {
-      const suffix = src.substring(src.lastIndexOf('/') + 1)
-      return {
-        src: `/wardrobe/filling/${imageColor}/${imageHeight}/${suffix}`,
-        width: w,
-        height: h,
-      }
-    })
-
-  const recoloredSelectedSections = useMemo(
-    () => recolor(selectedSections),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedSections, imageColor, imageHeight]
-  )
-
-  useEffect(() => {
-    if (plintHeight >= 2 && plintHeight < 5) {
-      setImagePlintHeight(20)
-    } else {
-      setImagePlintHeight(60)
-    }
-  }, [plintHeight])
-
-  // Choose last changed color for gallery visuals
-  const activeGalleryImageColor = useMemo(
-    () => (lastColorChanged === 'gallery' ? galleryImageColor : imageColor),
-    [lastColorChanged, galleryImageColor, imageColor]
+    [width, height, depth, doorsNr, templatesExtraCost]
   )
 
   return [
@@ -434,10 +270,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       type: 'colors',
       colors: ['White', 'Biege', 'Light Grey', 'Grey'],
       selectedColor,
-      setSelectedColor: (v: string) => {
-        setSelectedColor(v)
-        setLastColorChanged('main')
-      },
+      setSelectedColor,
     },
     {
       type: 'furniture',
@@ -461,29 +294,6 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'price',
       price,
-    },
-    // Expose independent gallery color control (if your ProductPage renders it)
-    {
-      type: 'galleryColors',
-      colors: ['White', 'Biege', 'Light Grey', 'Grey'],
-      selectedColor: galleryColor,
-      setSelectedColor: (v: string) => {
-        setGalleryColor(v)
-        setLastColorChanged('gallery')
-      },
-    } as unknown as ProductComponent,
-    {
-      type: 'gallery',
-      images: [
-        `/wardrobe/renders/render-wardrobe-1-${activeGalleryImageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${activeGalleryImageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${activeGalleryImageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${activeGalleryImageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${activeGalleryImageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${activeGalleryImageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-1-${activeGalleryImageColor}.png`,
-        `/wardrobe/renders/render-wardrobe-2-${activeGalleryImageColor}.png`,
-      ],
     },
   ]
 }

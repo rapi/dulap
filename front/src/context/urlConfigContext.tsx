@@ -4,7 +4,11 @@ import type { BaseConfig, Constraints } from '~/utils/configTypes'
 
 interface Ctx {
   config: BaseConfig
-  setConfig: (next: BaseConfig) => void
+  setConfig: (
+    next:
+      | Partial<BaseConfig>
+      | ((prev: Partial<BaseConfig>) => Partial<BaseConfig>)
+  ) => void
   constraints: Constraints
 }
 

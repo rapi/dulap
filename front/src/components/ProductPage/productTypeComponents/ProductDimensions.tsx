@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo, useEffect, useCallback } from 'react'
+import React, { FC, useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { Slider } from '~/components/Slider/Slider'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { Modal } from '~/components/Modal/Modal'
@@ -91,10 +91,13 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   const depthValue: number = ctx?.config.depth ?? configuration.depth
 
   // Dual-write helpers: update URL (when ctx) + legacy setters
+  // Only pass the changed value to setConfig - it will merge properly
   const setWidthBoth = useCallback(
     (val: number) => {
       const next = clamp(snap(val, widthStep), widthRange[0], widthRange[1])
-      if (ctx) ctx.setConfig({ ...ctx.config, width: next })
+      if (ctx) {
+        ctx.setConfig({ width: next }) // Only pass width, setConfigMerged will merge
+      }
       configuration.setWidth(next)
     },
     [ctx, configuration, widthStep, widthRange]
@@ -103,7 +106,7 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   const setHeightBoth = useCallback(
     (val: number) => {
       const next = clamp(snap(val, heightStep), heightRange[0], heightRange[1])
-      if (ctx) ctx.setConfig({ ...ctx.config, height: next })
+      if (ctx) ctx.setConfig({ height: next })
       configuration.setHeight(next)
     },
     [ctx, configuration, heightStep, heightRange]
@@ -112,19 +115,35 @@ export const ProductDimensions: FC<ProductDimensionsProps> = ({
   const setDepthBoth = useCallback(
     (val: number) => {
       const next = clamp(snap(val, depthStep), depthRange[0], depthRange[1])
-      if (ctx) ctx.setConfig({ ...ctx.config, depth: next })
+      if (ctx) ctx.setConfig({ depth: next })
       configuration.setDepth(next)
     },
     [ctx, configuration, depthStep, depthRange]
   )
 
-  // Hydrate legacy state from URL on refresh/deeplink — only when ctx exists
+  // Track if we've already done the initial hydration
+  const hasHydratedRef = useRef(false)
+
+  // Hydrate legacy state from URL on refresh/deeplink — ONCE on mount only
+  // This effect should only run on initial load, not on every value change
   useEffect(() => {
-    if (!ctx || predefinedValue) return
-    if (configuration.width !== widthValue) configuration.setWidth(widthValue)
-    if (configuration.height !== heightValue)
+    // Skip if already hydrated, no context, or has predefined values
+    if (hasHydratedRef.current || !ctx || predefinedValue) {
+      return
+    }
+    
+    // Mark as hydrated BEFORE setting state to prevent re-runs
+    hasHydratedRef.current = true
+    
+    if (configuration.width !== widthValue) {
+      configuration.setWidth(widthValue)
+    }
+    if (configuration.height !== heightValue) {
       configuration.setHeight(heightValue)
-    if (configuration.depth !== depthValue) configuration.setDepth(depthValue)
+    }
+    if (configuration.depth !== depthValue) {
+      configuration.setDepth(depthValue)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctx, widthValue, heightValue, depthValue, predefinedValue])
 

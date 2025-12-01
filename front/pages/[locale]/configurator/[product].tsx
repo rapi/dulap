@@ -83,16 +83,24 @@ export default function DynamicConfiguratorPage({
           return { ...prev, ...partial }
         })
       } else {
-        setBaseConfig((prev) => ({ ...prev, ...next }))
+        setBaseConfig((prev) => {
+          return { ...prev, ...next }
+        })
       }
     },
     [setBaseConfig]
   )
 
+  // Memoize context value to prevent unnecessary re-renders of consumers
+  // This is critical to avoid infinite update loops when child components
+  // have effects that depend on the context value
+  const ctxValue = useMemo(
+    () => ({ config, setConfig: setConfigMerged, constraints: C }),
+    [config, setConfigMerged, C]
+  )
+
   return (
-    <UrlConfigProvider
-      value={{ config, setConfig: setConfigMerged, constraints: C }}
-    >
+    <UrlConfigProvider value={ctxValue}>
       <ProductPageLayout>
         <Shell />
       </ProductPageLayout>
