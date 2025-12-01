@@ -47,7 +47,7 @@ export const DEFAULT_WARDROBE = {
   height: 260,
   depth: 50,
   plintHeight: 2,
-  selectedColor: colorHexCodes[ColorName.White], // White (the first one from the list)
+  selectedColor: 'Biege Almond',
 }
 
 export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
@@ -94,7 +94,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   const [imageHeight, setImageHeight] = useState(2100)
   const [imageSections, setImageSections] = useState(1)
   const [imagePlintHeight, setImagePlintHeight] = useState(20)
-  const [imageColor, setImageColor] = useState('White')
+  const [imageColor, setImageColor] = useState('Biege Almond')
   const [guides, setGuides] = useState('standart')
   const [selectedMaxSections, setSelectedMaxSections] = useState(1)
   const [selectedMirrorOption, setSelectedMirrorOption] = useState('standard')
@@ -121,8 +121,8 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   const [doorsNr, setDoorsNr] = useState(3)
 
   // --- NEW: independent gallery color + who changed last ---
-  const [galleryColor, setGalleryColor] = useState<string>('White')
-  const [galleryImageColor, setGalleryImageColor] = useState<string>('White')
+  const [galleryColor, setGalleryColor] = useState<string>('Biege Almond')
+  const [galleryImageColor, setGalleryImageColor] = useState<string>('Biege Almond')
   const [lastColorChanged, setLastColorChanged] = useState<'main' | 'gallery'>(
     'main'
   )
@@ -275,7 +275,9 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       setImageColor('Light Grey')
     } else if (selectedColor === 'Grey') {
       setImageColor('Grey')
-    } else setImageColor('White')
+    } else if (selectedColor === 'Biege Almond') {
+      setImageColor('Biege Almond')
+    } else setImageColor('Biege Almond')
   }, [selectedColor])
 
   // Gallery color -> image folder key (independent)
@@ -288,7 +290,9 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       setGalleryImageColor('Light Grey')
     } else if (galleryColor === 'Grey') {
       setGalleryImageColor('Grey')
-    } else setGalleryImageColor('White')
+    } else if (galleryColor === 'Biege Almond') {
+      setGalleryImageColor('Biege Almond')
+    } else setGalleryImageColor('Biege Almond')
   }, [galleryColor])
 
   // Keep gallery picker visually in sync with main color until user changes gallery explicitly

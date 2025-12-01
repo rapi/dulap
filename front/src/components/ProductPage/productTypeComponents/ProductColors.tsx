@@ -75,7 +75,7 @@ export const ProductColors: FC<ProductColorsProps> = ({
     if (byHex) return byHex
     if (palette.includes(configuration.selectedColor))
       return configuration.selectedColor
-    return (palette[0] as string) ?? ''
+    return 'Biege Almond'
   }, [predefinedValue, ctx, palette, configuration.selectedColor])
 
   // Keep legacy per-page state in sync (so 3D reacts after refresh/deeplink)

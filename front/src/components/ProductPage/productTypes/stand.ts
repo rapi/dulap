@@ -30,7 +30,7 @@ export const DEFAULT_STAND = {
   height: CONSTRAINTS.dimensions.height.default,
   depth: CONSTRAINTS.dimensions.depth.default,
   plintHeight: CONSTRAINTS.dimensions.plintHeight.default,
-  selectedColor: '#fcfbf5', // White (the first from the list)
+  selectedColor: 'Biege Almond',
 }
 
 export const StandProductConfigurator: () => ProductComponent[] = () => {
@@ -75,11 +75,11 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     if (urlCtx.config.openingType === 'round') return OpeningType.RoundHandle
     return OpeningType.Push
   })
-  const [imageColor, setImageColor] = useState('White')
+  const [imageColor, setImageColor] = useState('Biege Almond')
 
   // --- NEW: independent gallery color + who changed last ---
-  const [galleryColor, setGalleryColor] = useState<string>('White')
-  const [galleryImageColor, setGalleryImageColor] = useState<string>('White')
+  const [galleryColor, setGalleryColor] = useState<string>('Biege Almond')
+  const [galleryImageColor, setGalleryImageColor] = useState<string>('Biege Almond')
   const [lastColorChanged, setLastColorChanged] = useState<'main' | 'gallery'>(
     'main'
   )

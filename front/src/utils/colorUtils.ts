@@ -7,7 +7,8 @@ export function mapColorToImageColor(color: string): string {
     White: 'White',
     'Light Grey': 'Light Grey',
     Grey: 'Grey',
+    'Biege Almond': 'Biege Almond',
   }
-  return colorMap[color] || 'White'
+  return colorMap[color] || 'Biege Almond'
 }
 

@@ -25,7 +25,7 @@ export const DEFAULT_TV_STAND = {
   height: CONSTRAINTS.dimensions.height.default,
   depth: CONSTRAINTS.dimensions.depth.default,
   plintHeight: CONSTRAINTS.dimensions.plintHeight.default,
-  selectedColor: '#fcfbf5', // White
+  selectedColor: 'Biege Almond',
   columns: CONSTRAINTS.columns.default,
   sections: CONSTRAINTS.sections.default,
 }
@@ -78,11 +78,11 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
     if (urlCtx.config.openingType === 'round') return OpeningType.RoundHandle
     return OpeningType.Push
   })
-  const [imageColor, setImageColor] = useState('White')
+  const [imageColor, setImageColor] = useState('Biege Almond')
 
   // --- NEW: independent gallery color + who changed last ---
-  const [galleryColor, setGalleryColor] = useState<string>('White')
-  const [galleryImageColor, setGalleryImageColor] = useState<string>('White')
+  const [galleryColor, setGalleryColor] = useState<string>('Biege Almond')
+  const [galleryImageColor, setGalleryImageColor] = useState<string>('Biege Almond')
   const [lastColorChanged, setLastColorChanged] = useState<'main' | 'gallery'>(
     'main'
   )
@@ -312,7 +312,9 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       setImageColor('Light Grey')
     } else if (selectedColor === 'Grey') {
       setImageColor('Grey')
-    } else setImageColor('White')
+    } else if (selectedColor === 'Biege Almond') {
+      setImageColor('Biege Almond')
+    } else setImageColor('Biege Almond')
   }, [selectedColor])
 
   // Map color names for image paths (GALLERY)
@@ -325,7 +327,9 @@ export const TVStandProductConfigurator: () => ProductComponent[] = () => {
       setGalleryImageColor('Light Grey')
     } else if (galleryColor === 'Grey') {
       setGalleryImageColor('Grey')
-    } else setGalleryImageColor('White')
+    } else if (galleryColor === 'Biege Almond') {
+      setGalleryImageColor('Biege Almond')
+    } else setGalleryImageColor('Biege Almond')
   }, [galleryColor])
 
   // Keep gallery picker in sync with main color until user changes gallery explicitly

@@ -75,7 +75,7 @@ export function parseQueryToConfig(
     width: d.width ?? C.dimensions.width.default,
     height: d.height ?? C.dimensions.height.default,
     depth: d.depth ?? C.dimensions.depth.default,
-    color: (d.color ?? aliasColor ?? '#fcfbf5').toLowerCase(),
+    color: (d.color ?? aliasColor ?? '#baa397').toLowerCase(),
     columns: d.columns ?? C.columns?.default,
   }
 
