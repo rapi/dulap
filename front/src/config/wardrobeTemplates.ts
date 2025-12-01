@@ -5,46 +5,6 @@ import {
 } from '~/types/wardrobeConfigurationTypes'
 
 /**
- * Wardrobe constants
- * Standard wardrobe height: 200 cm total (196 cm internal)
- * Structural panels: 2 cm (top) + 2 cm (bottom) = 4 cm
- *
- * Note: Templates are designed for 196 cm but will scale proportionally
- * to fit any wardrobe height >= 170 cm
- */
-export const WARDROBE_STANDARD_TOTAL_HEIGHT = 200
-export const WARDROBE_STANDARD_INTERNAL_HEIGHT = 196
-export const WARDROBE_MIN_HEIGHT = 170
-
-/**
- * Standardized bottom sections for modular wardrobe composition
- * These can be combined with different top sections for flexibility
- */
-export const STANDARD_BOTTOM_SECTIONS = {
-  // 2 drawers - compact bottom section
-  TWO_DRAWERS: {
-    type: WardrobeZoneType.DRAWERS,
-    height: 38,
-    drawerCount: 2,
-    drawerHeights: [15, 15],
-  } as WardrobeZone,
-
-  // 4 drawers - larger bottom section
-  FOUR_DRAWERS: {
-    type: WardrobeZoneType.DRAWERS,
-    height: 78,
-    drawerCount: 4,
-    drawerHeights: [15, 15, 15, 15],
-  } as WardrobeZone,
-
-  // Empty section - open space
-  EMPTY_38: {
-    type: WardrobeZoneType.EMPTY,
-    height: 38,
-  } as WardrobeZone,
-} as const
-
-/**
  * Predefined wardrobe column templates
  * Based on common wardrobe configurations and user sketches
  *

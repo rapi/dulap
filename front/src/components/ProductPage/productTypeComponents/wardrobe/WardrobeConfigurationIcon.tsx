@@ -224,7 +224,8 @@ export const WardrobeConfigurationMiniIcon: React.FC<{
   // Simplified representations for small icons
   const renderMiniIcon = () => {
     switch (templateId) {
-      case 'FULL_HANGING':
+      case 'FULL_HANGING_WITH_1_SHELF':
+      case 'FULL_HANGING_WITH_2_DRAWERS':
         return (
           <g>
             <rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1" />
@@ -250,19 +251,6 @@ export const WardrobeConfigurationMiniIcon: React.FC<{
             <line x1="6" y1="8" x2="18" y2="8" stroke="currentColor" strokeWidth="1" opacity="0.7" />
             <line x1="6" y1="12" x2="18" y2="12" stroke="currentColor" strokeWidth="1" opacity="0.7" />
             <line x1="6" y1="16" x2="18" y2="16" stroke="currentColor" strokeWidth="1" opacity="0.7" />
-          </g>
-        )
-      
-      case 'DRAWERS_ONLY':
-        return (
-          <g>
-            <rect x="4" y="4" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1" />
-            <line x1="4" y1="8" x2="20" y2="8" stroke="currentColor" strokeWidth="1" />
-            <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" strokeWidth="1" />
-            <line x1="4" y1="16" x2="20" y2="16" stroke="currentColor" strokeWidth="1" />
-            <circle cx="12" cy="6" r="1" fill="currentColor" />
-            <circle cx="12" cy="10" r="1" fill="currentColor" />
-            <circle cx="12" cy="14" r="1" fill="currentColor" />
           </g>
         )
       

@@ -115,12 +115,21 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
       if (i === activeColumnIndex) {
         return newConfig
       }
-      return columnConfigurations[i] || {
-        zones: [],
+      // Use existing config or create default with FULL_HANGING_WITH_1_SHELF template
+      if (columnConfigurations[i]) {
+        return columnConfigurations[i]
+      }
+      
+      const defaultTemplate = WARDROBE_TEMPLATES['FULL_HANGING_WITH_1_SHELF']
+      const FIXED_ZONES_HEIGHT = 200
+      const defaultZones = calculateTemplateAdjustment(defaultTemplate, FIXED_ZONES_HEIGHT)
+      
+      return {
+        zones: defaultZones,
         totalHeight: columnHeight,
         doorType: 'single' as 'single' | 'split',
         doorOpeningSide: 'right' as 'left' | 'right' | undefined,
-        templateId: 'FULL_HANGING'
+        templateId: 'FULL_HANGING_WITH_1_SHELF'
       }
     })
     
@@ -138,70 +147,6 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
   // Map template ID to translation key
   const getTemplateTranslationKey = (templateId: string): { name: string; desc: string } => {
     const keyMap: Record<string, { name: string; desc: string }> = {
-      'FULL_HANGING': { 
-        name: 'homepage.configurator.wardrobe.template.fullHanging',
-        desc: 'homepage.configurator.wardrobe.template.fullHanging.desc'
-      },
-      'DOUBLE_HANGING': {
-        name: 'homepage.configurator.wardrobe.template.doubleHanging',
-        desc: 'homepage.configurator.wardrobe.template.doubleHanging.desc'
-      },
-      'HANGING_WITH_DRAWERS': {
-        name: 'homepage.configurator.wardrobe.template.hangingDrawers',
-        desc: 'homepage.configurator.wardrobe.template.hangingDrawers.desc'
-      },
-      'HANGING_WITH_SHELVES': {
-        name: 'homepage.configurator.wardrobe.template.hangingShelves',
-        desc: 'homepage.configurator.wardrobe.template.hangingShelves.desc'
-      },
-      'SHELVES_ONLY': {
-        name: 'homepage.configurator.wardrobe.template.shelvesOnly',
-        desc: 'homepage.configurator.wardrobe.template.shelvesOnly.desc'
-      },
-      'DRAWERS_ONLY': {
-        name: 'homepage.configurator.wardrobe.template.drawersOnly',
-        desc: 'homepage.configurator.wardrobe.template.drawersOnly.desc'
-      },
-      'MIXED_STORAGE_COMPLEX': {
-        name: 'homepage.configurator.wardrobe.template.mixedStorage',
-        desc: 'homepage.configurator.wardrobe.template.mixedStorage.desc'
-      },
-      'THREE_ZONE_COMBO': {
-        name: 'homepage.configurator.wardrobe.template.threeZone',
-        desc: 'homepage.configurator.wardrobe.template.threeZone.desc'
-      },
-      'SHOE_STORAGE': {
-        name: 'homepage.configurator.wardrobe.template.shoeStorage',
-        desc: 'homepage.configurator.wardrobe.template.shoeStorage.desc'
-      },
-      'ACCESSORIES_ORGANIZER': {
-        name: 'homepage.configurator.wardrobe.template.accessories',
-        desc: 'homepage.configurator.wardrobe.template.accessories.desc'
-      },
-      'CONFIG_1_HANGING_LONG_BOTTOM': {
-        name: 'homepage.configurator.wardrobe.template.config1',
-        desc: 'homepage.configurator.wardrobe.template.config1.desc'
-      },
-      'CONFIG_2_HANGING_2DRAWERS': {
-        name: 'homepage.configurator.wardrobe.template.config2',
-        desc: 'homepage.configurator.wardrobe.template.config2.desc'
-      },
-      'CONFIG_3_HANGING_SHORT': {
-        name: 'homepage.configurator.wardrobe.template.config3',
-        desc: 'homepage.configurator.wardrobe.template.config3.desc'
-      },
-      'CONFIG_4_SHELVES_2DRAWERS': {
-        name: 'homepage.configurator.wardrobe.template.config4',
-        desc: 'homepage.configurator.wardrobe.template.config4.desc'
-      },
-      'CONFIG_5_HANGING_SHELVES_2DRAWERS': {
-        name: 'homepage.configurator.wardrobe.template.config5',
-        desc: 'homepage.configurator.wardrobe.template.config5.desc'
-      },
-      'CONFIG_6_HANGING_SHELVES_ITEM': {
-        name: 'homepage.configurator.wardrobe.template.config6',
-        desc: 'homepage.configurator.wardrobe.template.config6.desc'
-      },
       'FULL_HANGING_WITH_1_SHELF': {
         name: 'homepage.configurator.wardrobe.template.fullHangingWith1Shelf',
         desc: 'homepage.configurator.wardrobe.template.fullHangingWith1Shelf.desc'
@@ -209,6 +154,22 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
       'FULL_HANGING_WITH_2_DRAWERS': {
         name: 'homepage.configurator.wardrobe.template.fullHangingWith2Drawers',
         desc: 'homepage.configurator.wardrobe.template.fullHangingWith2Drawers.desc'
+      },
+      'SHELVES_ONLY': {
+        name: 'homepage.configurator.wardrobe.template.shelvesOnly',
+        desc: 'homepage.configurator.wardrobe.template.shelvesOnly.desc'
+      },
+      'MIXED_STORAGE_COMPLEX': {
+        name: 'homepage.configurator.wardrobe.template.mixedStorage',
+        desc: 'homepage.configurator.wardrobe.template.mixedStorage.desc'
+      },
+      'HANGING_WITH_DRAWERS': {
+        name: 'homepage.configurator.wardrobe.template.hangingDrawers',
+        desc: 'homepage.configurator.wardrobe.template.hangingDrawers.desc'
+      },
+      'DOUBLE_HANGING': {
+        name: 'homepage.configurator.wardrobe.template.doubleHanging',
+        desc: 'homepage.configurator.wardrobe.template.doubleHanging.desc'
       },
       'ONE_TOP_SHELF': {
         name: 'homepage.configurator.wardrobe.template.oneTopShelf',

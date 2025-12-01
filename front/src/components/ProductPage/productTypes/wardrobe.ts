@@ -75,7 +75,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
   >(() => {
     // Default initialization
     return columnLayout.columnWidths.map((colWidth) => {
-      const defaultTemplateId = colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING'
+      const defaultTemplateId = 'FULL_HANGING_WITH_1_SHELF'
       const template = WARDROBE_TEMPLATES[defaultTemplateId]
       return {
         zones: template?.zones || [],
@@ -159,7 +159,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
           const urlLayout = calculateWardrobeColumnLayout(urlWidth)
 
           const newConfigs = urlLayout.columnWidths.map((colWidth, index) => {
-            const templateId = templateIds[index] || 'SHELVES_ONLY'
+            const templateId = templateIds[index] || (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING_WITH_1_SHELF')
             const template = WARDROBE_TEMPLATES[templateId]
             return {
               zones: template?.zones || [],
@@ -206,7 +206,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
         // Try to preserve existing template if index exists
         const existingTemplate = prev[index]?.templateId
         const defaultTemplateId =
-          existingTemplate || (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING')
+          existingTemplate || (colWidth > 60 ? 'SHELVES_ONLY' : 'FULL_HANGING_WITH_1_SHELF')
         const template = WARDROBE_TEMPLATES[defaultTemplateId]
         return {
           zones: template?.zones || [],

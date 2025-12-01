@@ -6,18 +6,12 @@ import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
  * Using short codes to keep URLs manageable
  */
 const TEMPLATE_TO_CODE: Record<string, string> = {
-  'FULL_HANGING': 'FH',
-  'DOUBLE_HANGING': 'DH',
-  'HANGING_WITH_DRAWERS': 'HD',
-  'HANGING_WITH_SHELVES': 'HS',
-  'SHELVES_ONLY': 'SO',
-  'DRAWERS_ONLY': 'DO',
-  'MIXED_STORAGE_COMPLEX': 'MS',
-  'THREE_ZONE_COMBO': 'TZ',
-  'SHOE_STORAGE': 'SS',
-  'ACCESSORIES_ORGANIZER': 'AO',
   'FULL_HANGING_WITH_1_SHELF': 'F1S',
   'FULL_HANGING_WITH_2_DRAWERS': 'F2D',
+  'SHELVES_ONLY': 'SO',
+  'MIXED_STORAGE_COMPLEX': 'MS',
+  'HANGING_WITH_DRAWERS': 'HD',
+  'DOUBLE_HANGING': 'DH',
   'ONE_TOP_SHELF': 'OTS',
 }
 
@@ -25,16 +19,19 @@ const CODE_TO_TEMPLATE: Record<string, string> = Object.fromEntries(
   Object.entries(TEMPLATE_TO_CODE).map(([template, code]) => [code, template])
 )
 
+// Backward compatibility: Map old 'FH' code to new default template
+CODE_TO_TEMPLATE['FH'] = 'FULL_HANGING_WITH_1_SHELF'
+
 /**
  * Encode wardrobe column configurations to URL-friendly string
- * Format: "FH,SO,HD" (comma-separated template codes)
+ * Format: "F1S,SO,HD" (comma-separated template codes)
  * 
  * @example
  * encodeWardrobeColumnConfigs([
- *   { templateId: 'FULL_HANGING', ... },
+ *   { templateId: 'FULL_HANGING_WITH_1_SHELF', ... },
  *   { templateId: 'SHELVES_ONLY', ... }
  * ])
- * // Returns: "FH,SO"
+ * // Returns: "F1S,SO"
  */
 export function encodeWardrobeColumnConfigs(
   configs: WardrobeColumnConfiguration[]
@@ -44,8 +41,8 @@ export function encodeWardrobeColumnConfigs(
       if (config.templateId && TEMPLATE_TO_CODE[config.templateId]) {
         return TEMPLATE_TO_CODE[config.templateId]
       }
-      // Default to SHELVES_ONLY if no template or unknown template
-      return 'SO'
+      // Default to FULL_HANGING_WITH_1_SHELF if no template or unknown template
+      return 'F1S'
     })
     .join(',')
 }
@@ -55,8 +52,8 @@ export function encodeWardrobeColumnConfigs(
  * Returns template IDs only - the component will reconstruct full configs
  * 
  * @example
- * decodeWardrobeColumnConfigs("FH,SO,HD")
- * // Returns: ["FULL_HANGING", "SHELVES_ONLY", "HANGING_WITH_DRAWERS"]
+ * decodeWardrobeColumnConfigs("F1S,SO,HD")
+ * // Returns: ["FULL_HANGING_WITH_1_SHELF", "SHELVES_ONLY", "HANGING_WITH_DRAWERS"]
  */
 export function decodeWardrobeColumnConfigs(
   encoded: string
@@ -74,8 +71,8 @@ export function decodeWardrobeColumnConfigs(
     const templateId = CODE_TO_TEMPLATE[trimmedCode]
     if (!templateId) {
       console.warn(`Unknown wardrobe configuration code: ${trimmedCode}`)
-      // Default to SHELVES_ONLY for unknown codes
-      results.push('SHELVES_ONLY')
+      // Default to FULL_HANGING_WITH_1_SHELF for unknown codes
+      results.push('FULL_HANGING_WITH_1_SHELF')
     } else {
       results.push(templateId)
     }
