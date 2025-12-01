@@ -47,6 +47,7 @@ import {
   ProductGalleryColors,
   ProductGalleryColorsConfig,
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 import {
   ProductWardrobeColumns,
   ProductWardrobeColumnsComponent,
@@ -105,6 +106,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   const [activeColumnTab, setActiveColumnTab] = useState(0)
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
   const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
+  
+  // Get current config for share functionality
+  const urlConfigCtx = useConfiguratorConfigOptional()
 
   // Handle tab change from UI to update 3D selection
   const handleTabChange = useCallback((index: number) => {
@@ -330,6 +334,8 @@ export const ProductPage: FC<ProductPageProps> = ({
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
+                shareConfig={urlConfigCtx?.config}
+                shareProduct="wardrobe"
               />
             )}
           </div>

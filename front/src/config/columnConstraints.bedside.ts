@@ -61,7 +61,7 @@ export const BEDSIDE_COLUMN_CONFIGURATION_CONSTRAINTS: ColumnConfigurationConstr
     configurationType: ColumnConfigurationType.DOOR_2_SHELVES,
     minWidth: 40,
     maxWidth: 80,
-    minHeight: 45,
+    minHeight: 60,
     maxHeight: 60, // Limited by bedside max height
     minDepth: 25,
   },

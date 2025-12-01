@@ -55,6 +55,7 @@
   "homepage.button.edit": "Редактировать",
   "homepage.button.addToCart": "Добавить в корзину",
   "homepage.button.addToCartShort": "В корзину",
+  "homepage.button.share": "Поделиться",
   "homepage.button.finalizeOrder": "Завершить заказ",
   "homepage.button.placeOrder": "Оформить заказ",
   "homepage.button.sendMessage": "Отправить сообщение",
@@ -393,6 +394,10 @@
   "productPage.details.title": "О продукте",
 
   "modal.addedToCart.title": "Шкаф был успешно добавлен в корзину",
+  "modal.shareConfig.title": "Поделиться конфигурацией",
+  "modal.shareConfig.description": "Скопируй эту ссылку, чтобы поделиться текущей конфигурацией:",
+  "modal.shareConfig.copied": "Скопировано!",
+  "modal.shareConfig.copyLink": "Скопировать ссылку",
 
   "cart.title": "Моя корзина",
   "cart.tableHeader.no": "№",

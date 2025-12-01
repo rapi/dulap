@@ -53,6 +53,7 @@ import { Dimension } from '~/components/ProductListPage/products'
 import { DEFAULT_STAND } from './productTypes/stand'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 // Mobile section labels & order
 import {
@@ -112,6 +113,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
   const deselectColumnRef = useRef<(() => void) | null>(null)
   const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
+  
+  // Get current config for share functionality
+  const urlConfigCtx = useConfiguratorConfigOptional()
 
   const currentComponents = components()
   const furniture3DProps = use3DFurnitureProps(
@@ -321,6 +325,8 @@ export const ProductPage: FC<ProductPageProps> = ({
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
+                shareConfig={urlConfigCtx?.config}
+                shareProduct="stand"
               />
             )}
           </div>

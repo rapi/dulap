@@ -9,11 +9,10 @@ import {
   type ProductKey,
 } from '~/components/ProductPage/productTypes/registry'
 import { UrlConfigProvider } from '~/context/urlConfigContext'
-import { useUrlSync } from '~/utils/useUrlSync'
+import { useUrlRead } from '~/utils/useUrlSync'
 import {
   parseQueryToConfig,
   normalizeConfig,
-  configToQuery,
   type ProductKey as PKey,
 } from '~/utils/configUrl'
 import type { BaseConfig, Constraints } from '~/utils/configTypes'
@@ -61,19 +60,10 @@ export default function DynamicConfiguratorPage({
     [product]
   )
 
-  const toQuery = useCallback(
-    (c: BaseConfig) => configToQuery(c, product as PKey, C),
-    [product, C]
-  )
-
-  // useUrlSync manages a full BaseConfig; its setter is Dispatch<SetStateAction<BaseConfig>>
-  const { config, setConfig: setBaseConfig } = useUrlSync<BaseConfig>(
-    initialConfig,
-    toQuery,
-    `/${locale}/configurator/${product}`,
-    250,
-    // preserve feature flags/aux params
-    ['use3DVersion']
+  // Use read-only URL hook - no auto-sync to URL
+  // URL params are only used for initial config loading
+  const { config, setConfig: setBaseConfig } = useUrlRead<BaseConfig>(
+    initialConfig
   )
 
   /**

@@ -60,6 +60,7 @@
   "homepage.button.edit": "Editează",
   "homepage.button.addToCart": "Adaugă în coș",
   "homepage.button.addToCartShort": "în coș",
+  "homepage.button.share": "Distribuie",
   "homepage.button.finalizeOrder": "Finalizează comanda",
   "homepage.button.placeOrder": "Plasează comanda",
   "homepage.button.sendMessage": "Trimite mesajul",
@@ -400,6 +401,10 @@
   "productPage.details.title": "Despre produs",
 
   "modal.addedToCart.title": "Produsul a fost adăgat în coș cu succes",
+  "modal.shareConfig.title": "Distribuie configurația",
+  "modal.shareConfig.description": "Copiază acest link pentru a distribui configurația curentă:",
+  "modal.shareConfig.copied": "Copiat!",
+  "modal.shareConfig.copyLink": "Copiază Link",
 
   "cart.title": "Coșul meu",
   "cart.tableHeader.no": "Nr.",

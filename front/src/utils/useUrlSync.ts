@@ -27,6 +27,16 @@ function pickFromSearch(keys: readonly string[]): Record<string, string> {
 }
 
 /**
+ * Read-only URL config hook. Reads initial config from URL but doesn't sync changes back.
+ * Use this when you want configurations to be shareable via URL but not auto-updated.
+ */
+export function useUrlRead<T>(initial: T) {
+  const [config, setConfig] = useState<T>(initial)
+  // No URL syncing - just state management
+  return { config, setConfig }
+}
+
+/**
  * Keep URL in sync with `config`, while preserving selected query keys.
  */
 export function useUrlSync<T>(

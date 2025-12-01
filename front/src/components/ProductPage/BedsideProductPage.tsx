@@ -52,6 +52,7 @@ import {
   ProductGalleryColors,
   ProductGalleryColorsConfig,
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
+import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 
 // Mobile section labels & order
 import {
@@ -112,6 +113,9 @@ export const ProductPage: FC<ProductPageProps> = ({
   )
   const deselectColumnRef = useRef<(() => void) | null>(null)
   const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
+  
+  // Get current config for share functionality
+  const urlConfigCtx = useConfiguratorConfigOptional()
 
   const currentComponents = components()
 
@@ -333,6 +337,8 @@ export const ProductPage: FC<ProductPageProps> = ({
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
+                shareConfig={urlConfigCtx?.config}
+                shareProduct="bedside"
               />
             )}
           </div>

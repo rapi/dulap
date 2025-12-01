@@ -391,6 +391,16 @@
   justify-content: center;
 }
 
+.addToCartButtonContainer {
+  display: flex;
+  gap: 5px;
+}
+
+.cartButtonWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .assemblyNote {
   color: #666;
   font-size: 12px;
