@@ -134,13 +134,18 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
     })
     
     setColumnConfigurations(newConfigs)
+    
+    // Open doors by selecting the current column when configuration is changed
+    // This ensures doors open on desktop when user selects internal configuration
+    onActiveColumnChange?.(activeColumnIndex)
   }, [
     activeColumnIndex, 
     columnConfigurations, 
     setColumnConfigurations,
     columnHeight,
     columnWidth,
-    selectedColumns
+    selectedColumns,
+    onActiveColumnChange
   ])
 
 

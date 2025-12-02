@@ -116,6 +116,14 @@ export const ProductPage: FC<ProductPageProps> = ({
     setSelectedColumnIndex(index)
   }, [])
 
+  // Close doors when handle type is changed (desktop only)
+  // On mobile, doors are closed automatically via useEffect when switching to 'furniture' section
+  const handleOpeningTypeChange = useCallback(() => {
+    if (!isMobile) {
+      setSelectedColumnIndex(null)
+    }
+  }, [isMobile])
+
   const currentComponents = components()
 
   // ---------- DESKTOP renderer (unchanged stack) ----------
@@ -154,6 +162,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           <ProductFurniture
             configuration={component}
             predefinedValue={values?.furniture ?? undefined}
+            onOpeningTypeChange={handleOpeningTypeChange}
           />
         )
       case 'wardrobeColumns':
@@ -256,6 +265,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           <ProductFurniture
             configuration={comp as ProductFurnitureComponent}
             predefinedValue={values?.furniture ?? undefined}
+            onOpeningTypeChange={handleOpeningTypeChange}
           />
         )
       }

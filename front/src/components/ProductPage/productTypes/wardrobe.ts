@@ -273,6 +273,15 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       setSelectedColor,
     },
     {
+      type: 'wardrobeColumns',
+      selectedColumns: columnLayout.columnCount,
+      columnConfigurations,
+      setColumnConfigurations: updateColumnConfigurations,
+      columnWidth: columnLayout.columnWidths[0], // Will be dynamic per column in future
+      columnHeight: height - plintHeight,
+      columnDepth: depth,
+    } as unknown as ProductComponent,
+    {
       type: 'furniture',
       openingOption,
       selectedOpeningMethod: openingOption, // same API as stand.ts
@@ -282,15 +291,6 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       setGuides,
       is3DEnabled: true,
     },
-    {
-      type: 'wardrobeColumns',
-      selectedColumns: columnLayout.columnCount,
-      columnConfigurations,
-      setColumnConfigurations: updateColumnConfigurations,
-      columnWidth: columnLayout.columnWidths[0], // Will be dynamic per column in future
-      columnHeight: height - plintHeight,
-      columnDepth: depth,
-    } as unknown as ProductComponent,
     {
       type: 'price',
       price,

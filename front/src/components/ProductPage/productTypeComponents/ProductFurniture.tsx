@@ -56,11 +56,13 @@ export const openingOptions: ButtonImageOption<OpeningType>[] = [
 interface ProductSelectProps {
   configuration: ProductFurnitureComponent
   predefinedValue?: ProductFurniturePredefinedValue
+  onOpeningTypeChange?: (value: OpeningType) => void
 }
 
 export const ProductFurniture: FC<ProductSelectProps> = ({
   configuration,
   predefinedValue,
+  onOpeningTypeChange,
 }) => {
   const intl = useIntl()
   const [isModalOpen3, setIsModalOpen3] = useState(false)
@@ -98,6 +100,9 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
         openingType: urlValue 
       })
     }
+    
+    // Call optional callback (e.g., to close doors when handle type changes)
+    onOpeningTypeChange?.(value)
   }
 
   return (
