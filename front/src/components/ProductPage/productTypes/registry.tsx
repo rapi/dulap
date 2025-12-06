@@ -1,7 +1,7 @@
 // components/ProductPage/productTypes/registry.tsx
 import type { ComponentType, FC } from 'react'
 
-export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside'
+export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside' | 'bookcase'
 
 /** No props needed right now; keeps it strictly typed and uniform */
 type ShellProps = Record<string, never>
@@ -55,6 +55,17 @@ const TVStandShell: FC<ShellProps> = () => (
   />
 )
 
+/* ---- Bookcase ---- */
+import { ProductPage as BookcaseProductPage } from '~/components/ProductPage/BookcaseProductPage'
+import { BookcaseProductConfigurator } from '~/components/ProductPage/productTypes/bookcase'
+
+const BookcaseShell: FC<ShellProps> = () => (
+  <BookcaseProductPage
+    components={BookcaseProductConfigurator}
+    name="homepage.configurator.bookcase.title"
+  />
+)
+
 export const PRODUCT_UI: Record<ProductKey, ProductUiEntry> = {
   bedside: {
     titleKey: 'homepage.configurator.bedside.title',
@@ -69,9 +80,13 @@ export const PRODUCT_UI: Record<ProductKey, ProductUiEntry> = {
     titleKey: 'homepage.configurator.tvstand.title',
     Shell: TVStandShell,
   },
+  bookcase: {
+    titleKey: 'homepage.configurator.bookcase.title',
+    Shell: BookcaseShell,
+  },
 }
 
 export const isProductKey = (v: string): v is ProductKey =>
-  (['stand', 'wardrobe', 'tv-stand', 'bedside'] as const).includes(
+  (['stand', 'wardrobe', 'tv-stand', 'bedside', 'bookcase'] as const).includes(
     v as ProductKey
   )

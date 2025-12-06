@@ -3,7 +3,7 @@ import type { BaseConfig, Constraints } from './configTypes'
 import { decodeColumnConfigs, encodeColumnConfigs } from './columnConfigUrl'
 
 /** Products supported in the dynamic route */
-export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside'
+export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside' | 'bookcase'
 
 /** Next.js query bag type */
 type NextQuery = Record<string, string | string[] | undefined>

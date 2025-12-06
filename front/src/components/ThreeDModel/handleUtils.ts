@@ -220,12 +220,17 @@ export const setupProfileHandle = (
   
   // Apply rotation only for wardrobes (when handleHeightFromBottom is provided)
   const isWardrobe = options?.handleHeightFromBottom !== undefined
+  
   if (isWardrobe && options?.isRightOpening !== undefined) {
     if (options.isRightOpening) {
       handlePivot.rotation.set(0, 0, Math.PI / 2)
     } else {
       handlePivot.rotation.set(0, 0, -Math.PI / 2)
     }
+  } else {
+    // IMPORTANT: Reset rotation for non-wardrobe (stand/drawer) mode
+    // This ensures rotation is cleared when switching from wardrobe to stand configuration
+    handlePivot.rotation.set(0, 0, 0)
   }
   
   positionProfileHandle(handlePivot, height, depth, options)

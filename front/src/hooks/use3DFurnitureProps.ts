@@ -4,6 +4,8 @@ import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { getColorItemByName } from '~/utils/colorDictionary'
 import { convertToOpeningType } from '~/utils/openingTypeConverter'
 import { calculateWardrobeColumnLayout } from '~/utils/wardrobeColumnLayout'
+import { calculateBookcaseColumnLayout } from '~/utils/bookcaseColumnLayout'
+import { BookcaseColumnConfiguration } from '~/types/bookcaseConfigurationTypes'
 
 /**
  * Custom hook to extract and compute 3D furniture props from product components
@@ -23,7 +25,7 @@ export function use3DFurnitureProps(
   values: any = {},
   defaults: FurnitureDefaults,
   isWardrobe: boolean = false,
-  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage'
+  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'bookcase'
 ): Furniture3DProps {
   return useMemo(() => {
     // Extract color component and convert name to HEX
@@ -83,7 +85,10 @@ export function use3DFurnitureProps(
     const wardrobeColumnsComponent = currentComponents.find(
       (c) => c.type === 'wardrobeColumns'
     )
-    const columnConfigs = wardrobeColumnsComponent?.columnConfigurations ?? individualColumnsComponent?.columnConfigurations
+    const bookcaseColumnsComponent = currentComponents.find(
+      (c) => c.type === 'bookcaseColumns'
+    )
+    const columnConfigs = wardrobeColumnsComponent?.columnConfigurations ?? bookcaseColumnsComponent?.columnConfigurations ?? individualColumnsComponent?.columnConfigurations
     
     // Check if we have extended config (with doorOpeningSide) or simple config
     // Extended config is an array of objects with 'type' property (ColumnConfigurationWithOptions[])
@@ -111,15 +116,35 @@ export function use3DFurnitureProps(
     // Use derivedSections if available (new 3D system), otherwise use sections (old system)
     const effectiveSections = metadataComponent?.derivedSections ?? sections
 
-    // Calculate wardrobe-specific column layout if applicable
+    // Calculate wardrobe or bookcase-specific column layout if applicable
     let wardrobeLayout
+    let bookcaseLayout
     if (isWardrobe) {
-      wardrobeLayout = calculateWardrobeColumnLayout(width)
+      if (furnitureType === 'bookcase') {
+        bookcaseLayout = calculateBookcaseColumnLayout(width)
+      } else {
+        wardrobeLayout = calculateWardrobeColumnLayout(width)
+      }
     }
 
-    // For wardrobes: use zone-based configs if available, otherwise use old string-based configs
-    // wardrobeLayout.columnConfigurations is just for fallback/compatibility
-    const finalColumnConfigurations = columnConfigs ?? wardrobeLayout?.columnConfigurations ?? columnConfigurations
+    // For wardrobes/bookcases: use zone-based configs if available, otherwise use old string-based configs
+    // wardrobeLayout/bookcaseLayout.columnConfigurations is just for fallback/compatibility
+    const layoutToUse = wardrobeLayout ?? bookcaseLayout
+    
+    // For bookcases: pass bookcase configurations directly (they will be rendered by BookcaseBuilder)
+    // For wardrobes: pass wardrobe configurations directly
+    // For others: use standard column configurations
+    let finalColumnConfigurations
+    if (furnitureType === 'bookcase' && columnConfigs) {
+      // Pass bookcase configurations directly - BookcaseBuilder will handle rendering
+      finalColumnConfigurations = columnConfigs as BookcaseColumnConfiguration[]
+    } else if (furnitureType === 'wardrobe' && columnConfigs) {
+      // Pass wardrobe configurations directly
+      finalColumnConfigurations = columnConfigs
+    } else {
+      // Use standard column configurations
+      finalColumnConfigurations = columnConfigs ?? layoutToUse?.columnConfigurations ?? columnConfigurations
+    }
 
     return {
       selectedColor: selectedColorHex,
@@ -129,11 +154,11 @@ export function use3DFurnitureProps(
       currentPlintHeight,
       sections: effectiveSections, // Use derived sections for new 3D, old sections for legacy
       openingType,
-      columns: wardrobeLayout?.columnCount ?? columns,
+      columns: layoutToUse?.columnCount ?? columns,
       columnConfigurations: finalColumnConfigurations,
       columnConfigurationsWithOptions,
-      columnWidths: wardrobeLayout?.columnWidths,
-      columnPositions: wardrobeLayout?.columnPositions,
+      columnWidths: layoutToUse?.columnWidths,
+      columnPositions: layoutToUse?.columnPositions,
       furnitureType,
     }
   }, [currentComponents, values, defaults, isWardrobe, furnitureType])
