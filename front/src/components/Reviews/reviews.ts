@@ -1,8 +1,6 @@
-import React from 'react'
-import { ReviewList } from './ReviewList'
-import { Review } from './reviewTypes'
+import { Review } from '~/components/Reviews/reviewTypes'
 
-const reviews: Review[] = [
+export const reviews: Review[] = [
   {
     id: '1',
     rating: 5,
@@ -39,20 +37,14 @@ const reviews: Review[] = [
     imageUrl: '/reviews/review_03.jpg',
     imageAlt: 'reviews.list.3.imageAlt',
   },
+  {
+    id: '4',
+    rating: 5,
+    author: 'reviews.list.4.author',
+    color: 'reviews.list.4.color',
+    dateLabel: 'reviews.list.4.date',
+    title: 'reviews.list.4.title',
+    body: 'reviews.list.4.body',
+    originalLanguageLabel: 'ru',
+  },
 ]
-
-const ReviewsSection: React.FC = () => {
-  return (
-    <ReviewList
-      summary={{
-        averageRating: 5.0,
-        recommendedPercentage: 96,
-        totalReviews: 2285,
-        sourceLabel: 'collected at dulap.md',
-      }}
-      reviews={reviews}
-    />
-  )
-}
-
-export default ReviewsSection
