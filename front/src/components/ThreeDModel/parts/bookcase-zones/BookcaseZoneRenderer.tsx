@@ -18,6 +18,9 @@ interface BookcaseZoneRendererProps {
   renderTopShelf?: boolean // Whether to render a shelf
   renderShelfAtTop?: boolean // If true, render at top of zone; if false, render at bottom
   isLastZone?: boolean // Whether this is the last (bottom) zone
+  masterShelfPositions?: number[] // Master grid positions for symmetric shelves (relative to plint top)
+  useMasterGrid?: boolean // Whether this zone should use master grid for shelf positions
+  isColumnOpen?: boolean // Whether column is hovered or selected (for drawer animation)
 }
 
 /**
@@ -41,6 +44,9 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
   renderTopShelf = false,
   renderShelfAtTop = false,
   isLastZone = false,
+  masterShelfPositions,
+  useMasterGrid = false,
+  isColumnOpen = false,
 }) => {
   // Calculate shelf position based on purpose:
   // - At TOP of zone: for doors (ceiling of closed compartment)
@@ -48,16 +54,6 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
   const shelfY = renderShelfAtTop 
     ? plintHeight + zoneBottomY + zone.height  // Top of zone
     : plintHeight + zoneBottomY                 // Bottom of zone
-  
-  console.log('BookcaseZoneRenderer:', {
-    zoneType: zone.type,
-    renderTopShelf,
-    renderShelfAtTop,
-    shelfY,
-    zoneBottomY,
-    zoneHeight: zone.height,
-    plintHeight
-  })
   
   const topShelf = renderTopShelf ? (
     <Shelf
@@ -75,10 +71,36 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
   switch (zone.type) {
     case BookcaseZoneType.SHELVES:
     case BookcaseZoneType.SHELVES_FIXED:
-      // Render shelves with calculated spacing
-      if (zone.shelfCount && zone.shelfCount > 0) {
+      // Render shelves - either using master grid (for symmetric alignment) or zone-local calculation
+      if (useMasterGrid && masterShelfPositions && masterShelfPositions.length > 0) {
+        // USE MASTER GRID: Filter master positions that fall within this zone's bounds
+        const zoneTop = zoneBottomY + zone.height
+        const SHELF_MARGIN = 5 // Minimum margin from zone edges to place a shelf
+        
+        // Filter master positions to those within this zone (with margin)
+        const shelvesInZone = masterShelfPositions.filter(pos => 
+          pos > (zoneBottomY + SHELF_MARGIN) && pos < (zoneTop - SHELF_MARGIN)
+        )
+        
+        const shelves = shelvesInZone.map((shelfPos, i) => {
+          const absoluteShelfY = plintHeight + shelfPos
+          
+          return (
+            <Shelf
+              key={`shelf-master-${i}`}
+              columnWidth={columnWidth - 1}
+              columnDepth={columnDepth}
+              positionY={absoluteShelfY}
+              selectedColor={selectedColor}
+              thickness={2}
+            />
+          )
+        })
+        
+        zoneContent = <>{shelves}</>
+      } else if (zone.shelfCount && zone.shelfCount > 0) {
+        // ZONE-LOCAL CALCULATION: Distribute shelves evenly within zone
         const shelves = []
-        // Always calculate spacing to evenly distribute shelves within the zone
         // shelfCount + 1 creates equal spaces: bottom | shelf | shelf | ... | top
         const shelfSpacing = zone.height / (zone.shelfCount + 1)
         
@@ -107,10 +129,17 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
       break
 
     case BookcaseZoneType.DRAWERS:
-      // Render drawers with calculated heights
+      // Render drawers with calculated heights and staggered opening animation
+      // Animation pattern:
+      // - Bottom drawer opens most (20cm)
+      // - Each drawer above opens 2cm less than the one below
+      // - Creates cascading "one by one" visual effect
       if (zone.drawerCount && zone.drawerCount > 0 && zone.drawerHeights) {
         const DRAWER_MARGIN = 1 // 1cm margin between drawers
         const BOTTOM_DRAWER_MARGIN = 2 // 2cm margin at bottom
+        const BASE_DRAWER_OFFSET_Z = 20 // Base offset for drawer animation (5cm more than stand)
+        const DRAWER_STAGGER = 3 // Stagger each drawer by 2cm
+        const LERP_SPEED = 0.15 // Smooth animation speed
         
         const elements = []
         
@@ -135,8 +164,9 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
               drawerIndex={i}
               positionY={absoluteDrawerBottomY}
               positionX={0}
-              drawerOffsetZ={0} // No opening animation for closed bookcase drawers
-              isHovered={false} // Never hover (controlled by bookcase door)
+              drawerOffsetZ={BASE_DRAWER_OFFSET_Z - i * DRAWER_STAGGER} // Staggered opening animation
+              lerpSpeed={LERP_SPEED} // Smooth animation interpolation
+              isHovered={isColumnOpen} // Open when column is hovered or selected
             />
           )
           

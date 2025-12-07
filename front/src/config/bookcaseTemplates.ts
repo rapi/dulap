@@ -251,7 +251,7 @@ function calculateOptimalShelfCount(
 /**
  * Calculate optimal drawer configuration for a zone
  */
-function calculateOptimalDrawerConfig(
+export function calculateOptimalDrawerConfig(
   zoneHeight: number,
   minHeight: number,
   maxHeight: number,
@@ -260,10 +260,10 @@ function calculateOptimalDrawerConfig(
   // Account for margins in calculations
   const DRAWER_MARGIN = 1 // 1cm between drawers
   const BOTTOM_DRAWER_MARGIN = 2 // 2cm at bottom
-  const TOP_SHELF_THICKNESS = 2 // 2cm for top shelf (if zone has door)
+  // Note: Top shelf is rendered separately, so we don't need TOP_SHELF_THICKNESS here
   
   // Available height for drawers (excluding margins)
-  const marginOverhead = BOTTOM_DRAWER_MARGIN + TOP_SHELF_THICKNESS
+  const marginOverhead = BOTTOM_DRAWER_MARGIN
   
   // Try optimal height first
   let count = 1
@@ -285,9 +285,18 @@ function calculateOptimalDrawerConfig(
 
   // Check if within bounds
   if (avgHeight >= minHeight && avgHeight <= maxHeight) {
+    // Make the TOP drawer slightly taller to fill any rounding gaps
+    const baseHeight = Math.floor(avgHeight * 10) / 10 // Round down to 0.1cm
+    const heights = Array(count).fill(baseHeight)
+    
+    // Calculate remaining space and add it to the top drawer
+    const usedHeight = baseHeight * count + (count - 1) * DRAWER_MARGIN + marginOverhead
+    const remaining = zoneHeight - usedHeight
+    heights[count - 1] = baseHeight + remaining // Top drawer gets extra space
+    
     return {
       count,
-      heights: Array(count).fill(avgHeight),
+      heights,
     }
   }
 
@@ -296,13 +305,24 @@ function calculateOptimalDrawerConfig(
   if (count === 0) count = 1
   
   availableForDrawers = zoneHeight - marginOverhead - (count - 1) * DRAWER_MARGIN
-  const heights = Array(count).fill(availableForDrawers / count)
+  const baseHeight = Math.floor((availableForDrawers / count) * 10) / 10
+  const heights = Array(count).fill(baseHeight)
+  
+  // Add remaining space to top drawer
+  const usedHeight = baseHeight * count + (count - 1) * DRAWER_MARGIN + marginOverhead
+  const remaining = zoneHeight - usedHeight
+  heights[count - 1] = baseHeight + remaining
   
   return { count, heights }
 }
 
 /**
  * Calculate zones from template with dynamic height calculation
+ * 
+ * KEY CONSTRAINTS:
+ * - Zones with doors must be at least MIN_DOOR_ZONE_HEIGHT (60cm)
+ * - Shelves must have at least MIN_SHELF_SPACING (28cm) between them
+ * - If proportions result in too-small door zones, we redistribute height
  */
 export function calculateZonesFromTemplate(
   template: BookcaseTemplate,
@@ -310,21 +330,101 @@ export function calculateZonesFromTemplate(
 ): BookcaseZone[] {
   // Validate template first
   if (!validateTemplate(template)) {
-    console.warn(`Template ${template.id} has invalid proportions (sum != 100)`)
+    // Template has invalid proportions
   }
 
-  return template.zones.map((zoneTemplate) => {
-    // Calculate zone height from proportion
-    const zoneHeight = Math.round(
-      availableHeight * (zoneTemplate.heightProportion / 100)
-    )
-
-    // Check minimum height constraint
-    if (zoneTemplate.minHeight && zoneHeight < zoneTemplate.minHeight) {
-      console.warn(
-        `Zone height ${zoneHeight}cm is below minimum ${zoneTemplate.minHeight}cm`
-      )
+  // CRITICAL CONSTRAINT: Minimum height for zones with doors
+  const MIN_DOOR_ZONE_HEIGHT = 60
+  const MIN_SHELF_ZONE_HEIGHT = 28 // At least one shelf section
+  
+  // Step 1: Calculate initial zone heights from proportions
+  const initialHeights = template.zones.map((zoneTemplate) => 
+    Math.round(availableHeight * (zoneTemplate.heightProportion / 100))
+  )
+  
+  // Step 2: Identify zones with doors and check if they need height adjustments
+  const doorZoneIndices = new Set<number>()
+  if (template.doors) {
+    for (const door of template.doors) {
+      for (const zoneIndex of door.zoneIndices) {
+        doorZoneIndices.add(zoneIndex)
+      }
     }
+  }
+  
+  // Step 3: Calculate adjusted heights ensuring door zones meet minimum
+  const adjustedHeights = [...initialHeights]
+  let heightDeficit = 0
+  
+  // First pass: Identify how much extra height door zones need
+  for (let i = 0; i < adjustedHeights.length; i++) {
+    if (doorZoneIndices.has(i) && adjustedHeights[i] < MIN_DOOR_ZONE_HEIGHT) {
+      const needed = MIN_DOOR_ZONE_HEIGHT - adjustedHeights[i]
+      heightDeficit += needed
+      adjustedHeights[i] = MIN_DOOR_ZONE_HEIGHT
+    }
+  }
+  
+  // Second pass: Take height from non-door zones to compensate
+  if (heightDeficit > 0) {
+    // Find non-door zones that can give up height
+    const nonDoorZones = template.zones
+      .map((z, i) => ({ index: i, height: adjustedHeights[i], hasMinConstraint: z.minHeight }))
+      .filter(z => !doorZoneIndices.has(z.index))
+    
+    // Calculate how much each non-door zone can give (keeping minimum)
+    const availableToGive: { index: number; canGive: number }[] = []
+    for (const zone of nonDoorZones) {
+      const minRequired = zone.hasMinConstraint || MIN_SHELF_ZONE_HEIGHT
+      const canGive = Math.max(0, zone.height - minRequired)
+      if (canGive > 0) {
+        availableToGive.push({ index: zone.index, canGive })
+      }
+    }
+    
+    // Distribute the deficit proportionally among non-door zones
+    const totalAvailable = availableToGive.reduce((sum, z) => sum + z.canGive, 0)
+    
+    if (totalAvailable >= heightDeficit) {
+      // We can satisfy the deficit
+      for (const zone of availableToGive) {
+        const takeFromThis = Math.round((zone.canGive / totalAvailable) * heightDeficit)
+        adjustedHeights[zone.index] -= takeFromThis
+      }
+    } else {
+      // Not enough to satisfy - continue with best effort
+      for (const zone of availableToGive) {
+        adjustedHeights[zone.index] -= zone.canGive
+      }
+    }
+  }
+  
+  // Ensure total still matches available height (adjust for rounding)
+  const totalAdjusted = adjustedHeights.reduce((sum, h) => sum + h, 0)
+  if (totalAdjusted !== availableHeight) {
+    const diff = availableHeight - totalAdjusted
+    // Add/subtract from the largest non-door zone
+    const nonDoorIndices = template.zones
+      .map((_, i) => i)
+      .filter(i => !doorZoneIndices.has(i))
+    
+    if (nonDoorIndices.length > 0) {
+      const largestNonDoor = nonDoorIndices.reduce((a, b) => 
+        adjustedHeights[a] > adjustedHeights[b] ? a : b
+      )
+      adjustedHeights[largestNonDoor] += diff
+    } else {
+      // All zones have doors - add to largest
+      const largest = adjustedHeights.reduce((maxI, h, i, arr) => 
+        h > arr[maxI] ? i : maxI, 0
+      )
+      adjustedHeights[largest] += diff
+    }
+  }
+
+  // Step 4: Create zone objects with adjusted heights
+  return template.zones.map((zoneTemplate, zoneIndex) => {
+    const zoneHeight = adjustedHeights[zoneIndex]
 
     // For shelves: calculate optimal shelf count and spacing
     if (zoneTemplate.type === BookcaseZoneType.SHELVES) {

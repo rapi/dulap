@@ -385,7 +385,7 @@ export const WARDROBE_CONSTRAINTS: ProductConstraints = {
 export const BOOKCASE_CONSTRAINTS: ProductConstraints = {
   dimensions: {
     width: { min: 40, max: 250, default: 120, unit: 'cm' },
-    height: { min: 80, max: 270, default: 200, unit: 'cm' },
+    height: { min: 90, max: 270, default: 200, unit: 'cm' },
     depth: { min: 25, max: 65, default: 35, unit: 'cm' },
     plintHeight: { min: 2, max: 8, default: 2, unit: 'cm' },
   },

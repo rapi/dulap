@@ -1,11 +1,22 @@
-import React, { memo, useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import React, {
+  memo,
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  useEffect,
+} from 'react'
 import * as THREE from 'three'
 import { ThreeEvent } from '@react-three/fiber'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import { Door } from './Door'
 import { applyMaterialToObject } from '../furnitureUtils'
-import { BookcaseColumnConfiguration, BookcaseZoneType } from '~/types/bookcaseConfigurationTypes'
+import {
+  BookcaseColumnConfiguration,
+  BookcaseZoneType,
+} from '~/types/bookcaseConfigurationTypes'
 import { BookcaseZoneRenderer } from './bookcase-zones/BookcaseZoneRenderer'
+import { calculateOptimalDrawerConfig } from '~/config/bookcaseTemplates'
 
 interface BookcaseColumnProps {
   horizontalPanelObject: THREE.Object3D
@@ -28,7 +39,7 @@ interface BookcaseColumnProps {
 
 /**
  * BookcaseColumn - Specialized column component for bookcases
- * 
+ *
  * Features:
  * - Zone-based rendering (shelves, drawers)
  * - Doors based on template configuration and column width
@@ -54,58 +65,252 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
 }) => {
   const { panelSpacing, panelThickness } = FURNITURE_CONFIG
   const [isColumnHovered, setIsColumnHovered] = useState(false)
-  
+
   // Combine hover and selected states - column should be "open" if either is true
   const isColumnOpen = isSelected || isColumnHovered
-  
+
   // Refs for panels to apply textures
   const bottomPanelRef = useRef<THREE.Mesh>(null)
 
   // Determine door type based on template configuration and column width
   const doorType = useMemo(() => {
     // Check if this column has any doors configured
-    const hasDoors = columnConfiguration?.doors && columnConfiguration.doors.length > 0
-    
+    const hasDoors =
+      columnConfiguration?.doors && columnConfiguration.doors.length > 0
+
     if (!hasDoors) {
       return 'none'
     }
-    
+
     // Get the first door configuration (bookcase columns typically have one door)
     const doorConfig = columnConfiguration?.doors?.[0]
     if (!doorConfig) {
       return 'none'
     }
     const templateDoorType = doorConfig.type
-    
+
     // If template specifies 'single' door, use split doors for wide columns (>=60cm)
     if (templateDoorType === 'single') {
       return columnWidth >= 60 ? 'split' : 'single'
     }
-    
+
     // If template specifies 'split', always use split
     if (templateDoorType === 'split') {
       return 'split'
     }
-    
+
     return 'none'
   }, [columnConfiguration?.doors, columnWidth])
 
-  // Memoize door dimensions and configuration based on zone coverage
+  // Calculate MASTER SHELF GRID for symmetric alignment across columns
+  // IMPORTANT: Use columnHeight (actual furniture height) NOT totalZonesHeight (which varies due to rounding)
+  // This ensures ALL columns use the SAME master grid regardless of their zone configuration
+  const { masterShelfPositions, adjustedZones } = useMemo(() => {
+    if (!columnConfiguration?.zones || columnConfiguration.zones.length === 0) {
+      return { masterShelfPositions: [], adjustedZones: [] }
+    }
+
+    // Use columnHeight for master grid to ensure consistency across all columns
+    const masterGridHeight = columnHeight
+    const totalZonesHeight = columnConfiguration.zones.reduce(
+      (sum, zone) => sum + zone.height,
+      0
+    )
+
+    // SHELF SPACING CONSTRAINTS
+    // - Ideal: 30cm
+    // - Acceptable range: 28-32cm (hard limits for visual quality)
+    // - Use stable calculation to avoid shelf count changes at arbitrary heights
+    const MIN_SHELF_SPACING = 28
+    const MAX_SHELF_SPACING = 32
+    const OPTIMAL_SHELF_SPACING = 30
+
+    // STABLE CALCULATION: Use optimal spacing as baseline, adjust shelf count at predictable intervals
+    // This prevents the grid from jumping when height changes by 1cm
+    // Calculate shelf count based on what gives us closest to optimal spacing
+    let masterShelfCount =
+      Math.round(masterGridHeight / OPTIMAL_SHELF_SPACING) - 1
+    if (masterShelfCount < 1) masterShelfCount = 1
+
+    // Calculate actual spacing with this shelf count
+    let spacing = masterGridHeight / (masterShelfCount + 1)
+
+    // If spacing is too small, reduce shelf count
+    while (spacing < MIN_SHELF_SPACING && masterShelfCount > 1) {
+      masterShelfCount--
+      spacing = masterGridHeight / (masterShelfCount + 1)
+    }
+
+    // If spacing is too large, increase shelf count (if it wouldn't go below minimum)
+    while (spacing > MAX_SHELF_SPACING) {
+      const newSpacing = masterGridHeight / (masterShelfCount + 2)
+      if (newSpacing >= MIN_SHELF_SPACING) {
+        masterShelfCount++
+        spacing = newSpacing
+      } else {
+        break // Can't add more shelves without violating minimum
+      }
+    }
+
+    // Generate evenly-spaced grid positions
+    const positions: number[] = []
+    for (let i = 1; i <= masterShelfCount; i++) {
+      positions.push(spacing * i)
+    }
+
+    // Pre-calculate adjusted zone boundaries
+    const adjusted: Array<{
+      originalZone: (typeof columnConfiguration.zones)[0]
+      adjustedBottomY: number
+      adjustedTopY: number
+      adjustedHeight: number
+    }> = []
+
+    let currentTopY = totalZonesHeight
+    for (const zone of columnConfiguration.zones) {
+      const originalBottomY = currentTopY - zone.height
+      adjusted.push({
+        originalZone: zone,
+        adjustedBottomY: originalBottomY,
+        adjustedTopY: currentTopY,
+        adjustedHeight: zone.height,
+      })
+      currentTopY = originalBottomY
+    }
+
+    // Adjust zone boundaries for zones with doors to snap to master grid
+    // GOAL: Door zone TOP should align with a master grid position for visual symmetry
+    // STRATEGY: Find the CLOSEST grid position to the target (within spacing distance)
+    //           This minimizes visual jumps when height changes by small amounts
+    const MIN_DOOR_ZONE_HEIGHT = 60
+    const MAX_DOOR_ZONE_HEIGHT = 130 // Maximum 130cm for bottom door section
+    const MIN_ADJACENT_ZONE_HEIGHT = 28
+
+    // Helper: find the grid position CLOSEST to target (within constraints)
+    const findBestGridPosition = (
+      targetValue: number,
+      doorBottomY: number,
+      adjacentTopY: number
+    ): number | null => {
+      // Collect all valid positions with their distance from target
+      const validPositions: Array<{ pos: number; distance: number }> = []
+
+      for (const pos of positions) {
+        const doorHeight = pos - doorBottomY
+        const adjacentHeight = adjacentTopY - pos
+
+        // Check constraints: door must be 60-130cm, adjacent zone must be >= 28cm
+        if (
+          doorHeight >= MIN_DOOR_ZONE_HEIGHT &&
+          doorHeight <= MAX_DOOR_ZONE_HEIGHT &&
+          adjacentHeight >= MIN_ADJACENT_ZONE_HEIGHT
+        ) {
+          validPositions.push({ pos, distance: Math.abs(pos - targetValue) })
+        }
+      }
+
+      if (validPositions.length === 0) return null
+
+      // Sort by distance (closest first), then by position (larger first for tie-breaking)
+      validPositions.sort((a, b) => {
+        if (Math.abs(a.distance - b.distance) < 2.0) {
+          // If distances are within 2cm, prefer larger position (larger/more stable door zone)
+          return b.pos - a.pos
+        }
+        return a.distance - b.distance
+      })
+
+      // Only snap if the closest position is within reasonable distance (1.5x spacing)
+      const maxSnapDistance = spacing * 1.5
+      if (validPositions[0].distance <= maxSnapDistance) {
+        return validPositions[0].pos
+      }
+
+      // If no position is close enough, don't snap
+      return null
+    }
+
+    for (let i = 0; i < adjusted.length; i++) {
+      const zone = adjusted[i].originalZone
+      const hasDoorOverZone =
+        columnConfiguration?.doors?.some((door) =>
+          door.zoneIndices.includes(i)
+        ) ?? false
+
+      // Snap to master grid if:
+      // 1. Zone has doors (for visual alignment), OR
+      // 2. Zone is DRAWERS type (to match height with door sections in other columns)
+      const shouldSnapToGrid =
+        (hasDoorOverZone || zone.type === BookcaseZoneType.DRAWERS) && i > 0
+
+      if (shouldSnapToGrid) {
+        const originalTop = adjusted[i].adjustedTopY
+        const bottomY = adjusted[i].adjustedBottomY
+        const adjacentTopY = adjusted[i - 1].adjustedTopY
+
+        // Find the closest grid position that satisfies all constraints
+        const gridCandidate = findBestGridPosition(
+          originalTop,
+          bottomY,
+          adjacentTopY
+        )
+
+        if (gridCandidate !== null) {
+          const newHeight = gridCandidate - bottomY
+          const newAdjacentHeight = adjacentTopY - gridCandidate
+
+          adjusted[i].adjustedTopY = gridCandidate
+          adjusted[i].adjustedHeight = newHeight
+          adjusted[i - 1].adjustedBottomY = gridCandidate
+          adjusted[i - 1].adjustedHeight = newAdjacentHeight
+
+          // If this is a DRAWERS zone, recalculate drawer heights for the new zone height
+          if (
+            zone.type === BookcaseZoneType.DRAWERS &&
+            zone.drawerCount &&
+            zone.drawerCount > 0
+          ) {
+            const minHeight = 15 // Default from template
+            const maxHeight = 25
+            const optimalHeight = 20
+
+            const { count, heights } = calculateOptimalDrawerConfig(
+              newHeight,
+              minHeight,
+              maxHeight,
+              optimalHeight
+            )
+
+            // Update the zone in adjusted array with new drawer count and heights
+            adjusted[i].originalZone = {
+              ...zone,
+              height: newHeight,
+              drawerCount: count,
+              drawerHeights: heights,
+            }
+          }
+        }
+      }
+    }
+
+    return { masterShelfPositions: positions, adjustedZones: adjusted }
+  }, [columnConfiguration, columnHeight])
+
+  // Memoize door dimensions and configuration based on ADJUSTED zone coverage
   const doorConfig = useMemo(() => {
-    // Check if we have door configuration and zones
-    const hasDoors = columnConfiguration?.doors && columnConfiguration.doors.length > 0
-    const hasZones = columnConfiguration?.zones && columnConfiguration.zones.length > 0
-    
+    const hasDoors =
+      columnConfiguration?.doors && columnConfiguration.doors.length > 0
+    const hasZones = adjustedZones.length > 0
+
     if (!hasDoors || !hasZones) {
-      // Default to full height if no specific zone configuration
       const doorHeight = columnHeight - plintHeight
-      // Full-height door: handle at 100cm from floor (like wardrobes)
       const BOOKCASE_HANDLE_HEIGHT_FROM_FLOOR = 100
-      const handleHeightFromBottom = BOOKCASE_HANDLE_HEIGHT_FROM_FLOOR - plintHeight
+      const handleHeightFromBottom =
+        BOOKCASE_HANDLE_HEIGHT_FROM_FLOOR - plintHeight
       const doorPositionY = plintHeight
       const hingeCount = 4
       const hingePositionRule = 'even' as const
-      
+
       return {
         doorHeight,
         handleHeightFromBottom,
@@ -114,21 +319,19 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
         hingePositionRule,
       }
     }
-    
-    // Get the first door configuration
+
     const doorConfigData = columnConfiguration?.doors?.[0]
     const zoneIndices = doorConfigData?.zoneIndices || []
-    
+
     if (zoneIndices.length === 0) {
-      // No zones specified, use full height
       const doorHeight = columnHeight - plintHeight
       const doorPositionY = plintHeight
-      // Full-height door: handle at 100cm from floor (like wardrobes)
       const BOOKCASE_HANDLE_HEIGHT_FROM_FLOOR = 100
-      const handleHeightFromBottom = BOOKCASE_HANDLE_HEIGHT_FROM_FLOOR - plintHeight
+      const handleHeightFromBottom =
+        BOOKCASE_HANDLE_HEIGHT_FROM_FLOOR - plintHeight
       const hingeCount = 4
       const hingePositionRule = 'even' as const
-      
+
       return {
         doorHeight,
         handleHeightFromBottom,
@@ -137,51 +340,32 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
         hingePositionRule,
       }
     }
-    
-    // Calculate total zones height and positions
-    const zones = columnConfiguration.zones
-    const totalZonesHeight = zones.reduce((sum, zone) => sum + zone.height, 0)
-    
-    // Build zone positions array (from top to bottom)
-    const zonePositions: Array<{ bottomY: number; topY: number; height: number }> = []
-    let currentTopY = totalZonesHeight
-    
-    for (const zone of zones) {
-      const bottomY = currentTopY - zone.height
-      zonePositions.push({
-        bottomY,
-        topY: currentTopY,
-        height: zone.height,
-      })
-      currentTopY = bottomY
-    }
-    
-    // Find min and max Y positions for the zones this door covers
+
+    // Use ADJUSTED zone positions for door sizing
+    const totalZonesHeight = adjustedZones.reduce(
+      (sum, z) => sum + z.adjustedHeight,
+      0
+    )
+
+    // Find min and max Y positions for the zones this door covers (using adjusted positions)
     let minBottomY = Infinity
     let maxTopY = -Infinity
-    
+
     for (const zoneIndex of zoneIndices) {
-      if (zoneIndex >= 0 && zoneIndex < zonePositions.length) {
-        const zonePos = zonePositions[zoneIndex]
-        minBottomY = Math.min(minBottomY, zonePos.bottomY)
-        maxTopY = Math.max(maxTopY, zonePos.topY)
+      if (zoneIndex >= 0 && zoneIndex < adjustedZones.length) {
+        const zonePos = adjustedZones[zoneIndex]
+        minBottomY = Math.min(minBottomY, zonePos.adjustedBottomY)
+        maxTopY = Math.max(maxTopY, zonePos.adjustedTopY)
       }
     }
-    
-    // Calculate door dimensions
+
     const doorHeight = maxTopY - minBottomY
     const doorPositionY = plintHeight + minBottomY
-    
-    // Handle position:
-    // - Full-height doors (cover entire bookcase): handle at 100cm from floor
-    // - Partial doors (cover some zones): handle at top of door
+
     let handleHeightFromBottom: number | undefined
-    
-    // Check if this is a full-height door (covers from bottom to top of all zones)
     const isFullHeightDoor = minBottomY === 0 && maxTopY === totalZonesHeight
-    
+
     if (isFullHeightDoor) {
-      // Full-height door: handle at 100cm from floor (like wardrobes)
       const BOOKCASE_HANDLE_HEIGHT_FROM_FLOOR = 100
       const idealHandleHeight = BOOKCASE_HANDLE_HEIGHT_FROM_FLOOR - plintHeight
       if (idealHandleHeight >= minBottomY && idealHandleHeight <= maxTopY) {
@@ -190,14 +374,12 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
         handleHeightFromBottom = doorHeight / 2
       }
     } else {
-      // Partial door: handle at top (like stands)
       handleHeightFromBottom = undefined
     }
-    
-    // Hinge count based on door height
+
     const hingeCount = doorHeight > 150 ? 4 : doorHeight > 80 ? 3 : 2
     const hingePositionRule = 'even' as const
-    
+
     return {
       doorHeight,
       handleHeightFromBottom,
@@ -205,7 +387,7 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
       hingeCount,
       hingePositionRule,
     }
-  }, [columnHeight, plintHeight, columnConfiguration])
+  }, [columnHeight, plintHeight, columnConfiguration, adjustedZones])
 
   // Pointer event handlers
   const handlePointerOver = useCallback((event: ThreeEvent<PointerEvent>) => {
@@ -219,12 +401,15 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
     document.body.style.cursor = 'auto'
   }, [])
 
-  const handleClick = useCallback((event: ThreeEvent<MouseEvent>) => {
-    event.stopPropagation()
-    if (onColumnClick) {
-      onColumnClick(columnIndex)
-    }
-  }, [onColumnClick, columnIndex])
+  const handleClick = useCallback(
+    (event: ThreeEvent<MouseEvent>) => {
+      event.stopPropagation()
+      if (onColumnClick) {
+        onColumnClick(columnIndex)
+      }
+    },
+    [onColumnClick, columnIndex]
+  )
 
   // Apply material to panels
   useEffect(() => {
@@ -236,91 +421,120 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
   // Render hover highlight panel
   // - Shows red color only on hover
   // - Invisible when column is selected (clicked) but not hovered
-  const hoverPanel = useMemo(() => (
-    <mesh
-      position={[0, columnHeight / 2, columnDepth - panelThickness + 0.1]}
-      rotation={[0, Math.PI, 0]}
-    >
-      <planeGeometry args={[columnWidth, columnHeight]} />
-      <meshStandardMaterial 
-        color={isColumnHovered ? '#ff0000' : '#ffffff'} 
-        transparent={true}
-        opacity={isColumnHovered ? 0.3 : 0}
-        side={THREE.DoubleSide} 
-      />
-    </mesh>
-  ), [columnWidth, columnHeight, columnDepth, panelThickness, isColumnHovered])
+  const hoverPanel = useMemo(
+    () => (
+      <mesh
+        position={[0, columnHeight / 2, columnDepth - panelThickness + 0.1]}
+        rotation={[0, Math.PI, 0]}
+      >
+        <planeGeometry args={[columnWidth, columnHeight]} />
+        <meshStandardMaterial
+          color={isColumnHovered ? '#ff0000' : '#ffffff'}
+          transparent={true}
+          opacity={isColumnHovered ? 0.3 : 0}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+    ),
+    [columnWidth, columnHeight, columnDepth, panelThickness, isColumnHovered]
+  )
 
   // Note: No top shelf needed - the bookcase structure already has a top panel
   // from WardrobeTopAndPlinth component
 
   // Render bookcase interior zones
   const interiorZones = useMemo(() => {
-    if (!columnConfiguration || !columnConfiguration.zones || columnConfiguration.zones.length === 0) {
+    if (
+      !columnConfiguration ||
+      !columnConfiguration.zones ||
+      columnConfiguration.zones.length === 0 ||
+      adjustedZones.length === 0
+    ) {
       return null
     }
 
-    // Calculate total height of all zones
-    const totalZonesHeight = columnConfiguration.zones.reduce((sum, zone) => sum + zone.height, 0)
+    return adjustedZones.map(
+      (
+        {
+          originalZone: zone,
+          adjustedBottomY: zoneBottomY,
+          adjustedHeight: zoneHeight,
+        },
+        index
+      ) => {
+        // Check if this zone has a door covering it (zones with doors get top shelf)
+        const hasDoorOverZone =
+          columnConfiguration?.doors?.some((door) =>
+            door.zoneIndices.includes(index)
+          ) ?? false
 
-    // Stack zones from TOP to BOTTOM (zones array is in top-to-bottom order)
-    // Start from the top of the bookcase and work down
-    let currentTopY = totalZonesHeight // Start at the top
+        // ALL SHELVES zones should use master grid for symmetric alignment
+        // This ensures consistent shelf positions across all columns,
+        // even when some have doors and others don't
+        const useMasterGrid =
+          zone.type === BookcaseZoneType.SHELVES ||
+          zone.type === BookcaseZoneType.SHELVES_FIXED
 
-    return columnConfiguration.zones.map((zone, index) => {
-      // Calculate zone bottom: current top minus zone height
-      currentTopY -= zone.height
-      const zoneBottomY = currentTopY
-      
-      // Check if this zone has a door covering it (zones with doors get top shelf)
-      const hasDoorOverZone = columnConfiguration?.doors?.some(door => 
-        door.zoneIndices.includes(index)
-      ) ?? false
-      
-      // Check if this is the top zone (index 0) - top zones don't need a ceiling shelf
-      // because the bookcase structure already has a top panel
-      const isTopZone = index === 0
-      
-      // Check if the next zone below is a different type that needs separation
-      // (e.g., SHELVES zone above DRAWERS zone needs a separating shelf)
-      const nextZone = columnConfiguration.zones[index + 1]
-      const needsSeparatorShelf = !!nextZone && 
-        zone.type !== nextZone.type &&
-        (zone.type === BookcaseZoneType.SHELVES || zone.type === BookcaseZoneType.SHELVES_FIXED)
-      
-      // Determine shelf position:
-      // - Separator shelf: at bottom of current zone (top of next zone)
-      // - Door shelf: at top of current zone (ceiling of closed compartment)
-      //   BUT: skip top shelf for top zone (index 0) as bookcase structure provides it
-      const renderShelfAtTop = hasDoorOverZone && !isTopZone
-      const shouldRenderShelf = (hasDoorOverZone && !isTopZone) || needsSeparatorShelf
+        // Check if this is the top zone (index 0) - top zones don't need a ceiling shelf
+        // because the bookcase structure already has a top panel
+        const isTopZone = index === 0
 
-      return (
-        <BookcaseZoneRenderer
-          key={`zone-${index}`}
-          zone={zone}
-          columnWidth={columnWidth}
-          columnDepth={columnDepth}
-          zoneBottomY={zoneBottomY}
-          plintHeight={plintHeight}
-          selectedColor={selectedColor}
-          horizontalPanelObject={horizontalPanelObject}
-          roundHandleObject={roundHandleObject}
-          profileHandleObject={profileHandleObject}
-          renderTopShelf={shouldRenderShelf}
-          renderShelfAtTop={renderShelfAtTop}
-        />
-      )
-    })
+        // Check if the next zone below is a different type that needs separation
+        // (e.g., SHELVES zone above DRAWERS zone needs a separating shelf)
+        const nextZone = columnConfiguration.zones[index + 1]
+        const needsSeparatorShelf =
+          !!nextZone &&
+          zone.type !== nextZone.type &&
+          (zone.type === BookcaseZoneType.SHELVES ||
+            zone.type === BookcaseZoneType.SHELVES_FIXED)
+
+        // Determine shelf position:
+        // - Separator shelf: at bottom of current zone (top of next zone)
+        // - Door shelf: at top of current zone (ceiling of closed compartment)
+        //   BUT: skip top shelf for top zone (index 0) as bookcase structure provides it
+        const renderShelfAtTop = hasDoorOverZone && !isTopZone
+        const shouldRenderShelf =
+          (hasDoorOverZone && !isTopZone) || needsSeparatorShelf
+
+        // Create adjusted zone with modified height for renderer
+        const adjustedZone = {
+          ...zone,
+          height: zoneHeight, // Use adjusted height
+        }
+
+        return (
+          <BookcaseZoneRenderer
+            key={`zone-${index}`}
+            zone={adjustedZone}
+            columnWidth={columnWidth}
+            columnDepth={columnDepth}
+            zoneBottomY={zoneBottomY}
+            plintHeight={plintHeight}
+            selectedColor={selectedColor}
+            horizontalPanelObject={horizontalPanelObject}
+            roundHandleObject={roundHandleObject}
+            profileHandleObject={profileHandleObject}
+            renderTopShelf={shouldRenderShelf}
+            renderShelfAtTop={renderShelfAtTop}
+            masterShelfPositions={masterShelfPositions}
+            useMasterGrid={useMasterGrid}
+            isColumnOpen={isColumnOpen}
+          />
+        )
+      }
+    )
   }, [
-    columnConfiguration, 
-    columnWidth, 
-    columnDepth, 
-    plintHeight, 
+    columnConfiguration,
+    columnWidth,
+    columnDepth,
+    plintHeight,
     selectedColor,
     horizontalPanelObject,
     roundHandleObject,
-    profileHandleObject
+    profileHandleObject,
+    adjustedZones,
+    masterShelfPositions,
+    isColumnOpen,
   ])
 
   // Object on the front of the entire column to help hover effect be triggered
@@ -342,7 +556,13 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
       return null
     }
 
-    const { doorHeight, handleHeightFromBottom, doorPositionY, hingeCount, hingePositionRule } = doorConfig
+    const {
+      doorHeight,
+      handleHeightFromBottom,
+      doorPositionY,
+      hingeCount,
+      hingePositionRule,
+    } = doorConfig
 
     if (doorType === 'split') {
       // Split doors (left and right)
@@ -402,7 +622,6 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
     // Single door
     const doorWidth = columnWidth - panelSpacing
 
-
     return (
       <Door
         key="door"
@@ -444,14 +663,15 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
 
   return (
     <>
-      <group 
-        position={[positionX, 0, 0]}
-        onPointerOver={handlePointerOver}
-        onPointerOut={handlePointerOut}
-        onClick={handleClick}
-      >
+      <group position={[positionX, 0, 0]}>
         {hoverPanel}
-        {hoverFrontPanelObject}
+        <group
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
+          onClick={handleClick}
+        >
+          {hoverFrontPanelObject}
+        </group>
         {interiorZones}
         {doors}
       </group>
@@ -460,4 +680,3 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
 }
 
 export const BookcaseColumn = memo(BookcaseColumnComponent)
-

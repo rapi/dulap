@@ -270,7 +270,7 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'dimensions',
       widthRange: [40, 250],
-      heightRange: [80, 270],
+      heightRange: [90, 270],
       depthRange: [25, 65],
       plintHeightRange: [2, 8],
       heightStep: 1,
