@@ -1,27 +1,27 @@
-import { ProductComponent } from '~/components/ProductPage/BookcaseProductPage'
+import { ProductComponent } from '~/components/ProductPage/RackProductPage'
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import { useRouter } from 'next/router'
 import { colorHexCodes, ColorName } from '~/utils/colorDictionary'
-import { BookcaseColumnConfiguration } from '~/types/bookcaseConfigurationTypes'
-import { calculateBookcaseColumnLayout } from '~/utils/bookcaseColumnLayout'
-import { BOOKCASE_TEMPLATES, calculateZonesFromTemplate } from '~/config/bookcaseTemplates'
+import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
+import { calculateRackColumnLayout } from '~/utils/rackColumnLayout'
+import { RACK_TEMPLATES, calculateZonesFromTemplate } from '~/config/rackTemplates'
 import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 import {
-  encodeBookcaseColumnConfigs,
-  decodeBookcaseColumnConfigs,
-} from '~/utils/bookcaseColumnConfigUrl'
+  encodeRackColumnConfigs,
+  decodeRackColumnConfigs,
+} from '~/utils/rackColumnConfigUrl'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
-import { calculateBookcasePrice } from '~/config/furnitureConstraints'
+import { calculateRackPrice } from '~/config/furnitureConstraints'
 
-export const DEFAULT_BOOKCASE = {
+export const DEFAULT_RACK = {
   width: 120,
   height: 200,
   depth: 35,
-  plintHeight: 0, // Bookcases have no plinth
+  plintHeight: 0, // Racks have no plinth
   selectedColor: 'Biege Almond',
 }
 
-export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
+export const RackProductConfigurator: () => ProductComponent[] = () => {
   // Get URL context
   const urlCtx = useConfiguratorConfigOptional()
   const router = useRouter()
@@ -29,25 +29,25 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
   const [width, setWidth] = useState(120)
   const [height, setHeight] = useState(200)
   const [depth, setDepth] = useState(35)
-  const [plintHeight, setPlintHeight] = useState(0) // Bookcases have no plinth
+  const [plintHeight, setPlintHeight] = useState(0) // Racks have no plinth
   const [selectedColor, setSelectedColor] = useState(
     colorHexCodes[ColorName.White]
   )
 
   // Column configuration state
   const columnLayout = useMemo(
-    () => calculateBookcaseColumnLayout(width),
+    () => calculateRackColumnLayout(width),
     [width]
   )
 
   // Initialize column configurations
   const [columnConfigurations, setColumnConfigurations] = useState<
-    BookcaseColumnConfiguration[]
+    RackColumnConfiguration[]
   >(() => {
     // Default initialization with dynamic zone calculation
     return columnLayout.columnWidths.map(() => {
       const defaultTemplateId = 'OPEN_SHELVES_ONLY'
-      const template = BOOKCASE_TEMPLATES[defaultTemplateId]
+      const template = RACK_TEMPLATES[defaultTemplateId]
       const calculatedZones = calculateZonesFromTemplate(
         template, 
         height - plintHeight
@@ -119,15 +119,15 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
 
   // Function to update column configurations with URL sync
   const updateColumnConfigurations = useCallback(
-    (configs: BookcaseColumnConfiguration[]) => {
+    (configs: RackColumnConfiguration[]) => {
       setColumnConfigurations(configs)
 
       // Sync to URL via context
       if (urlCtx) {
-        const encoded = encodeBookcaseColumnConfigs(configs)
+        const encoded = encodeRackColumnConfigs(configs)
         urlCtx.setConfig({
           ...urlCtx.config,
-          bookcaseCfg: encoded,
+          rackCfg: encoded,
         })
       }
     },
@@ -137,19 +137,19 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
   // Initialize from URL after component mounts
   useEffect(() => {
     if (!urlInitialized && router.isReady && urlCtx) {
-      const bookcaseCfgStr = urlCtx.config.bookcaseCfg
+      const rackCfgStr = urlCtx.config.rackCfg
 
-      if (bookcaseCfgStr && typeof bookcaseCfgStr === 'string') {
+      if (rackCfgStr && typeof rackCfgStr === 'string') {
         // Decode configurations from URL
-        const templateIds = decodeBookcaseColumnConfigs(bookcaseCfgStr)
+        const templateIds = decodeRackColumnConfigs(rackCfgStr)
         if (templateIds.length > 0) {
           // Calculate layout based on URL width, not current state width
           const urlWidth = urlCtx.config.width
-          const urlLayout = calculateBookcaseColumnLayout(urlWidth)
+          const urlLayout = calculateRackColumnLayout(urlWidth)
 
           const newConfigs = urlLayout.columnWidths.map((colWidth, index) => {
             const templateId = templateIds[index] || 'OPEN_SHELVES_ONLY'
-            const template = BOOKCASE_TEMPLATES[templateId]
+            const template = RACK_TEMPLATES[templateId]
             const calculatedZones = calculateZonesFromTemplate(
               template,
               height - plintHeight
@@ -182,7 +182,7 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
       prevConfigs.map((config) => {
         if (!config.templateId) return config
         
-        const template = BOOKCASE_TEMPLATES[config.templateId]
+        const template = RACK_TEMPLATES[config.templateId]
         if (!template) return config
         
         const newZones = calculateZonesFromTemplate(
@@ -209,7 +209,7 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
       return
     }
 
-    const newLayout = calculateBookcaseColumnLayout(width)
+    const newLayout = calculateRackColumnLayout(width)
     const prev = prevDimensionsRef.current
     
     // Check if we actually need to update (avoid calling setter unnecessarily)
@@ -229,7 +229,7 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
           const existingTemplate = prevConfigs[index]?.templateId
           const defaultTemplateId =
             existingTemplate || 'OPEN_SHELVES_ONLY'
-          const template = BOOKCASE_TEMPLATES[defaultTemplateId]
+          const template = RACK_TEMPLATES[defaultTemplateId]
           const calculatedZones = calculateZonesFromTemplate(
             template,
             height - plintHeight
@@ -248,7 +248,7 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
 
   const templatesExtraCost = useMemo(() => {
     return columnConfigurations.reduce((sum, config) => {
-      const template = BOOKCASE_TEMPLATES[config.templateId || '']
+      const template = RACK_TEMPLATES[config.templateId || '']
       const extra = template?.extraCost ?? 0
       return sum + extra
     }, 0)
@@ -256,7 +256,7 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
 
   const price = useMemo(
     () =>
-      calculateBookcasePrice({
+      calculateRackPrice({
         width,
         height,
         depth,
@@ -291,7 +291,7 @@ export const BookcaseProductConfigurator: () => ProductComponent[] = () => {
       setSelectedColor,
     },
     {
-      type: 'bookcaseColumns',
+      type: 'rackColumns',
       selectedColumns: columnLayout.columnCount,
       columnConfigurations,
       setColumnConfigurations: updateColumnConfigurations,

@@ -1,6 +1,6 @@
-/* Bookcase Column Configuration Section */
+/* Rack Column Configuration Section */
 
-.bookcaseColumnsSection {
+.rackColumnsSection {
   /* margin: 20px 0; */
 }
 
@@ -28,18 +28,18 @@
   overflow: hidden;
 }
 
-.bookcaseColumnsSection {
+.rackColumnsSection {
     max-width: 400px;
 }
 
 /* Override the ButtonImageSelect container to prevent horizontal scroll */
-.bookcaseColumnsSection > div {
+.rackColumnsSection > div {
     max-width: 400px;
     overflow-x: scroll;
 }
 
 /* Adjust button size for wrapping layout */
-.bookcaseColumnsSection button {
+.rackColumnsSection button {
     min-width: 85px;
     max-width: 85px;
     padding: 10px 6px;
@@ -49,13 +49,13 @@
     transition: all 0.2s ease;
 }
 
-.bookcaseColumnsSection button:hover {
+.rackColumnsSection button:hover {
     border-color: #9ca3af;
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.bookcaseColumnsSection button[aria-checked="true"] {
+.rackColumnsSection button[aria-checked="true"] {
     border-color: #6b7280;
     background-color: #f9fafb;
     box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.1);
@@ -104,7 +104,7 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .bookcaseColumnsSection button {
+  .rackColumnsSection button {
     min-width: 75px;
     max-width: 75px;
   }

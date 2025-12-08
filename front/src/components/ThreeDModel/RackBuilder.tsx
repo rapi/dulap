@@ -5,11 +5,11 @@ import { WardrobeTopAndPlinth } from './parts/WardrobeTopAndPlinth'
 import { ColumnDivider } from './parts/ColumnDivider'
 import { Shelf } from './parts/wardrobe-zones/Shelf'
 import { BackPanel } from './parts/BackPanel'
-import { BookcaseColumn } from './parts/BookcaseColumn'
+import { RackColumn } from './parts/RackColumn'
 import { OpeningType } from './furnitureConfig'
-import { BookcaseColumnConfiguration } from '~/types/bookcaseConfigurationTypes'
+import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
 
-interface BookcaseBuilderProps {
+interface RackBuilderProps {
   selectedColor: string
   desiredWidth: number
   desiredHeight: number
@@ -20,7 +20,7 @@ interface BookcaseBuilderProps {
   sectionsCount: number
   openingType: OpeningType
   columns: number
-  columnConfigurations?: BookcaseColumnConfiguration[]
+  columnConfigurations?: RackColumnConfiguration[]
   columnWidths?: number[]
   columnPositions?: number[]
   selectedColumnIndex?: number | null
@@ -42,7 +42,7 @@ useGLTF.preload(PROFILE_HANDLE_URL)
 useGLTF.preload(HINGE_WING_URL)
 useGLTF.preload(HINGE_ANCHOR_URL)
 
-const BookcaseBuilderComponent: React.FC<BookcaseBuilderProps> = ({
+const RackBuilderComponent: React.FC<RackBuilderProps> = ({
   selectedColor,
   desiredWidth,
   desiredHeight,
@@ -120,8 +120,8 @@ const BookcaseBuilderComponent: React.FC<BookcaseBuilderProps> = ({
       const columnConfiguration = columnConfigurations?.[index]
 
       return (
-        <BookcaseColumn
-          key={`bookcase-column-${index}`}
+        <RackColumn
+          key={`rack-column-${index}`}
           horizontalPanelObject={scenes.horizontal}
           roundHandleObject={scenes.roundHandle}
           profileHandleObject={scenes.profileHandle}
@@ -201,7 +201,7 @@ const BookcaseBuilderComponent: React.FC<BookcaseBuilderProps> = ({
           selectedColor={selectedColor}
         />
 
-        {/* Bookcase uses WardrobeTopAndPlinth component */}
+        {/* Rack uses WardrobeTopAndPlinth component */}
         <WardrobeTopAndPlinth
           verticalPanelObject={scenes.vertical}
           horizontalPanelObject={scenes.horizontal}
@@ -212,14 +212,14 @@ const BookcaseBuilderComponent: React.FC<BookcaseBuilderProps> = ({
           selectedColor={selectedColor}
         />
 
-        {/* Back panel spanning entire bookcase width */}
+        {/* Back panel spanning entire rack width */}
         <BackPanel
           width={desiredWidth}
           height={desiredHeight}
           color={selectedColor}
         />
 
-        {/* Bottom shelf spanning entire bookcase width */}
+        {/* Bottom shelf spanning entire rack width */}
         <Shelf
           columnWidth={desiredWidth - 1}
           columnDepth={desiredDepth}
@@ -235,4 +235,4 @@ const BookcaseBuilderComponent: React.FC<BookcaseBuilderProps> = ({
   )
 }
 
-export const BookcaseBuilder = memo(BookcaseBuilderComponent)
+export const RackBuilder = memo(RackBuilderComponent)

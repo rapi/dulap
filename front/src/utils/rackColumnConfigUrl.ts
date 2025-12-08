@@ -1,8 +1,8 @@
-// utils/bookcaseColumnConfigUrl.ts
-import { BookcaseColumnConfiguration } from '~/types/bookcaseConfigurationTypes'
+// utils/rackColumnConfigUrl.ts
+import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
 
 /**
- * Mapping between bookcase template IDs and compact URL codes
+ * Mapping between rack template IDs and compact URL codes
  * Using short codes to keep URLs manageable
  */
 const TEMPLATE_TO_CODE: Record<string, string> = {
@@ -18,18 +18,18 @@ const CODE_TO_TEMPLATE: Record<string, string> = Object.fromEntries(
 )
 
 /**
- * Encode bookcase column configurations to URL-friendly string
+ * Encode rack column configurations to URL-friendly string
  * Format: "OS,FD,HC" (comma-separated template codes)
  * 
  * @example
- * encodeBookcaseColumnConfigs([
+ * encodeRackColumnConfigs([
  *   { templateId: 'OPEN_SHELVES_ONLY', ... },
  *   { templateId: 'SHELVES_WITH_FULL_DOOR', ... }
  * ])
  * // Returns: "OS,FD"
  */
-export function encodeBookcaseColumnConfigs(
-  configs: BookcaseColumnConfiguration[]
+export function encodeRackColumnConfigs(
+  configs: RackColumnConfiguration[]
 ): string {
   return configs
     .map((config) => {
@@ -43,14 +43,14 @@ export function encodeBookcaseColumnConfigs(
 }
 
 /**
- * Decode URL string to bookcase column configurations
+ * Decode URL string to rack column configurations
  * Returns template IDs only - the component will reconstruct full configs
  * 
  * @example
- * decodeBookcaseColumnConfigs("OS,FD,HC")
+ * decodeRackColumnConfigs("OS,FD,HC")
  * // Returns: ["OPEN_SHELVES_ONLY", "SHELVES_WITH_FULL_DOOR", "HALF_OPEN_HALF_CLOSED"]
  */
-export function decodeBookcaseColumnConfigs(
+export function decodeRackColumnConfigs(
   encoded: string
 ): string[] {
   if (!encoded || typeof encoded !== 'string') {
@@ -65,7 +65,7 @@ export function decodeBookcaseColumnConfigs(
 
     const templateId = CODE_TO_TEMPLATE[trimmedCode]
     if (!templateId) {
-      console.warn(`Unknown bookcase configuration code: ${trimmedCode}`)
+      console.warn(`Unknown rack configuration code: ${trimmedCode}`)
       // Default to OPEN_SHELVES_ONLY for unknown codes
       results.push('OPEN_SHELVES_ONLY')
     } else {
@@ -77,9 +77,9 @@ export function decodeBookcaseColumnConfigs(
 }
 
 /**
- * Validate if a bookcase configuration code is valid
+ * Validate if a rack configuration code is valid
  */
-export function isValidBookcaseConfigCode(code: string): boolean {
+export function isValidRackConfigCode(code: string): boolean {
   if (!code || typeof code !== 'string') return false
   return code in CODE_TO_TEMPLATE
 }

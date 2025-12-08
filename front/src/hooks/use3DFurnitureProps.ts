@@ -4,8 +4,8 @@ import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { getColorItemByName } from '~/utils/colorDictionary'
 import { convertToOpeningType } from '~/utils/openingTypeConverter'
 import { calculateWardrobeColumnLayout } from '~/utils/wardrobeColumnLayout'
-import { calculateBookcaseColumnLayout } from '~/utils/bookcaseColumnLayout'
-import { BookcaseColumnConfiguration } from '~/types/bookcaseConfigurationTypes'
+import { calculateRackColumnLayout } from '~/utils/rackColumnLayout'
+import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
 
 /**
  * Custom hook to extract and compute 3D furniture props from product components
@@ -25,7 +25,7 @@ export function use3DFurnitureProps(
   values: any = {},
   defaults: FurnitureDefaults,
   isWardrobe: boolean = false,
-  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'bookcase'
+  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'rack'
 ): Furniture3DProps {
   return useMemo(() => {
     // Extract color component and convert name to HEX
@@ -85,10 +85,10 @@ export function use3DFurnitureProps(
     const wardrobeColumnsComponent = currentComponents.find(
       (c) => c.type === 'wardrobeColumns'
     )
-    const bookcaseColumnsComponent = currentComponents.find(
-      (c) => c.type === 'bookcaseColumns'
+    const rackColumnsComponent = currentComponents.find(
+      (c) => c.type === 'rackColumns'
     )
-    const columnConfigs = wardrobeColumnsComponent?.columnConfigurations ?? bookcaseColumnsComponent?.columnConfigurations ?? individualColumnsComponent?.columnConfigurations
+    const columnConfigs = wardrobeColumnsComponent?.columnConfigurations ?? rackColumnsComponent?.columnConfigurations ?? individualColumnsComponent?.columnConfigurations
     
     // Check if we have extended config (with doorOpeningSide) or simple config
     // Extended config is an array of objects with 'type' property (ColumnConfigurationWithOptions[])
@@ -116,28 +116,28 @@ export function use3DFurnitureProps(
     // Use derivedSections if available (new 3D system), otherwise use sections (old system)
     const effectiveSections = metadataComponent?.derivedSections ?? sections
 
-    // Calculate wardrobe or bookcase-specific column layout if applicable
+    // Calculate wardrobe or rack-specific column layout if applicable
     let wardrobeLayout
-    let bookcaseLayout
+    let rackLayout
     if (isWardrobe) {
-      if (furnitureType === 'bookcase') {
-        bookcaseLayout = calculateBookcaseColumnLayout(width)
+      if (furnitureType === 'rack') {
+        rackLayout = calculateRackColumnLayout(width)
       } else {
         wardrobeLayout = calculateWardrobeColumnLayout(width)
       }
     }
 
-    // For wardrobes/bookcases: use zone-based configs if available, otherwise use old string-based configs
-    // wardrobeLayout/bookcaseLayout.columnConfigurations is just for fallback/compatibility
-    const layoutToUse = wardrobeLayout ?? bookcaseLayout
+    // For wardrobes/racks: use zone-based configs if available, otherwise use old string-based configs
+    // wardrobeLayout/rackLayout.columnConfigurations is just for fallback/compatibility
+    const layoutToUse = wardrobeLayout ?? rackLayout
     
-    // For bookcases: pass bookcase configurations directly (they will be rendered by BookcaseBuilder)
+    // For racks: pass rack configurations directly (they will be rendered by RackBuilder)
     // For wardrobes: pass wardrobe configurations directly
     // For others: use standard column configurations
     let finalColumnConfigurations
-    if (furnitureType === 'bookcase' && columnConfigs) {
-      // Pass bookcase configurations directly - BookcaseBuilder will handle rendering
-      finalColumnConfigurations = columnConfigs as BookcaseColumnConfiguration[]
+    if (furnitureType === 'rack' && columnConfigs) {
+      // Pass rack configurations directly - RackBuilder will handle rendering
+      finalColumnConfigurations = columnConfigs as RackColumnConfiguration[]
     } else if (furnitureType === 'wardrobe' && columnConfigs) {
       // Pass wardrobe configurations directly
       finalColumnConfigurations = columnConfigs

@@ -1,14 +1,14 @@
 /**
- * Bookcase Configuration Type System
+ * Rack Configuration Type System
  *
- * Zone-based configuration system specifically designed for bookcases.
- * Bookcases focus on shelving with optional doors and drawers for versatile storage.
+ * Zone-based configuration system specifically designed for racks.
+ * Racks focus on shelving with optional doors and drawers for versatile storage.
  */
 
 /**
- * Types of zones available in a bookcase column
+ * Types of zones available in a rack column
  */
-export enum BookcaseZoneType {
+export enum RackZoneType {
   // Open shelving
   SHELVES = 'SHELVES', // Open adjustable shelves
   SHELVES_FIXED = 'SHELVES_FIXED', // Fixed shelves
@@ -24,8 +24,8 @@ export enum BookcaseZoneType {
  * Template definition for a zone (before calculation)
  * Uses proportions instead of fixed heights
  */
-export interface BookcaseZoneTemplate {
-  type: BookcaseZoneType
+export interface RackZoneTemplate {
+  type: RackZoneType
   heightProportion: number // 0-100, sum of all zones should be 100
   minHeight?: number // Minimum height in cm for this zone
 
@@ -43,8 +43,8 @@ export interface BookcaseZoneTemplate {
 /**
  * Calculated zone configuration (after applying template to specific height)
  */
-export interface BookcaseZone {
-  type: BookcaseZoneType
+export interface RackZone {
+  type: RackZoneType
   height: number // Calculated height in cm
 
   // Calculated properties for shelves
@@ -59,19 +59,19 @@ export interface BookcaseZone {
 /**
  * Door configuration for zones
  */
-export interface BookcaseDoorConfig {
+export interface RackDoorConfig {
   zoneIndices: number[] // Which zones this door covers (0-based)
   type: 'single' | 'split' // Door type
   openingSide?: 'left' | 'right' // For single doors
 }
 
 /**
- * Complete configuration for a bookcase column
+ * Complete configuration for a rack column
  */
-export interface BookcaseColumnConfiguration {
-  zones: BookcaseZone[]
+export interface RackColumnConfiguration {
+  zones: RackZone[]
   totalHeight: number // Internal height (excluding plinth)
-  doors?: BookcaseDoorConfig[] // Door configurations
+  doors?: RackDoorConfig[] // Door configurations
 
   // Metadata
   templateId?: string // If based on a template
@@ -81,12 +81,12 @@ export interface BookcaseColumnConfiguration {
 /**
  * Template definition for quick configuration
  */
-export interface BookcaseTemplate {
+export interface RackTemplate {
   id: string
   name: string // Display name
   description: string // Detailed description
-  zones: BookcaseZoneTemplate[] // Zone templates with proportions
-  doors?: BookcaseDoorConfig[] // Optional door configurations
+  zones: RackZoneTemplate[] // Zone templates with proportions
+  doors?: RackDoorConfig[] // Optional door configurations
   minHeight: number // Minimum column height required
   maxHeight?: number // Maximum column height (optional)
   minWidth: number // Minimum column width required
@@ -99,7 +99,7 @@ export interface BookcaseTemplate {
 /**
  * Validation result for configurations
  */
-export interface BookcaseConfigValidation {
+export interface RackConfigValidation {
   valid: boolean
   errors: string[]
   warnings: string[]
@@ -118,9 +118,9 @@ export interface ZonePosition {
 /**
  * Extended configuration with calculated properties
  */
-export interface BookcaseColumnConfigurationExtended
-  extends BookcaseColumnConfiguration {
+export interface RackColumnConfigurationExtended
+  extends RackColumnConfiguration {
   zonePositions: ZonePosition[]
   isValid: boolean
-  validationResult: BookcaseConfigValidation
+  validationResult: RackConfigValidation
 }

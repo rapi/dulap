@@ -8,10 +8,10 @@ import * as THREE from 'three'
 import { Furniture3DProps } from '~/types/furniture3D'
 import { FurnitureBuilder } from './FurnitureBuilder'
 import { WardrobeBuilder } from './WardrobeBuilder'
-import { BookcaseBuilder } from './BookcaseBuilder'
+import { RackBuilder } from './RackBuilder'
 import { getViewerConfig } from './furnitureViewerConfig'
 import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
-import { BookcaseColumnConfiguration } from '~/types/bookcaseConfigurationTypes'
+import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
 import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { captureScreenshot } from '~/utils/screenshotUtils'
 import styles from './FurnitureViewer.module.css'
@@ -188,8 +188,8 @@ const FurnitureScene = memo(function FurnitureScene({
             selectedColumnIndex={selectedColumnIndex}
             onColumnSelectionChange={handleColumnSelectionChange}
           />
-        ) : furnitureType === 'bookcase' ? (
-          <BookcaseBuilder
+        ) : furnitureType === 'rack' ? (
+          <RackBuilder
             selectedColor={selectedColor}
             desiredWidth={width}
             desiredHeight={height}
@@ -198,7 +198,7 @@ const FurnitureScene = memo(function FurnitureScene({
             sectionsCount={sections}
             openingType={openingType}
             columns={columns}
-            columnConfigurations={columnConfigurations as BookcaseColumnConfiguration[] | undefined}
+            columnConfigurations={columnConfigurations as RackColumnConfiguration[] | undefined}
             columnWidths={columnWidths}
             columnPositions={columnPositions}
             selectedColumnIndex={selectedColumnIndex}

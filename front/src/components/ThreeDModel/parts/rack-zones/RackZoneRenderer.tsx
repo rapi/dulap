@@ -1,12 +1,12 @@
 import React, { memo } from 'react'
 import * as THREE from 'three'
-import { BookcaseZone, BookcaseZoneType } from '~/types/bookcaseConfigurationTypes'
+import { RackZone, RackZoneType } from '~/types/rackConfigurationTypes'
 import { Shelf } from '../wardrobe-zones/Shelf'
 import { Drawer } from '../Drawer'
 import { OpeningType } from '../../furnitureConfig'
 
-interface BookcaseZoneRendererProps {
-  zone: BookcaseZone
+interface RackZoneRendererProps {
+  zone: RackZone
   columnWidth: number
   columnDepth: number
   zoneBottomY: number // Y position of the bottom of this zone (from bottom of column, after plint)
@@ -24,14 +24,14 @@ interface BookcaseZoneRendererProps {
 }
 
 /**
- * BookcaseZoneRenderer - Renders a single bookcase zone based on its type
+ * RackZoneRenderer - Renders a single rack zone based on its type
  * 
  * This component determines which interior elements to render based on the zone type:
  * - SHELVES zones: render multiple shelves with calculated spacing
  * - DRAWERS zones: render drawer fronts with calculated heights
  * - EMPTY zones: render nothing (open space)
  */
-const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
+const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
   zone,
   columnWidth,
   columnDepth,
@@ -69,8 +69,8 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
   let zoneContent: React.ReactElement | null = null
 
   switch (zone.type) {
-    case BookcaseZoneType.SHELVES:
-    case BookcaseZoneType.SHELVES_FIXED:
+    case RackZoneType.SHELVES:
+    case RackZoneType.SHELVES_FIXED:
       // Render shelves - either using master grid (for symmetric alignment) or zone-local calculation
       if (useMasterGrid && masterShelfPositions && masterShelfPositions.length > 0) {
         // USE MASTER GRID: Filter master positions that fall within this zone's bounds
@@ -128,7 +128,7 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
       }
       break
 
-    case BookcaseZoneType.DRAWERS:
+    case RackZoneType.DRAWERS:
       // Render drawers with calculated heights and staggered opening animation
       // Animation pattern:
       // - Bottom drawer opens most (20cm)
@@ -156,7 +156,7 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
               horizontalPanelObject={horizontalPanelObject}
               roundHandleObject={roundHandleObject}
               profileHandleObject={profileHandleObject}
-              openingType={OpeningType.Push} // Bookcases use push-to-open
+              openingType={OpeningType.Push} // Racks use push-to-open
               drawerWidth={columnWidth - 8}
               drawerHeight={drawerHeight}
               drawerDepth={columnDepth - 5}
@@ -180,7 +180,7 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
       }
       break
 
-    case BookcaseZoneType.EMPTY:
+    case RackZoneType.EMPTY:
       // Empty space - render nothing
       zoneContent = null
       break
@@ -197,5 +197,5 @@ const BookcaseZoneRendererComponent: React.FC<BookcaseZoneRendererProps> = ({
   )
 }
 
-export const BookcaseZoneRenderer = memo(BookcaseZoneRendererComponent)
+export const RackZoneRenderer = memo(RackZoneRendererComponent)
 

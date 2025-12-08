@@ -380,9 +380,9 @@ export const WARDROBE_CONSTRAINTS: ProductConstraints = {
 }
 
 // ============================================================================
-// BOOKCASE CONSTRAINTS
+// RACK CONSTRAINTS
 // ============================================================================
-export const BOOKCASE_CONSTRAINTS: ProductConstraints = {
+export const RACK_CONSTRAINTS: ProductConstraints = {
   dimensions: {
     width: { min: 40, max: 250, default: 120, unit: 'cm' },
     height: { min: 90, max: 270, default: 200, unit: 'cm' },
@@ -401,7 +401,7 @@ export const BOOKCASE_CONSTRAINTS: ProductConstraints = {
     max: 3,
     default: 1,
     getAvailableSections: ({ width }) => {
-      // Width-based sections for bookcase
+      // Width-based sections for rack
       if (width <= 80) return [1]
       if (width <= 160) return [1, 2]
       return [1, 2, 3]
@@ -414,7 +414,7 @@ export const BOOKCASE_CONSTRAINTS: ProductConstraints = {
     default: 2,
     allowCustomConfiguration: true,
     getAvailableColumns: ({ width }) => {
-      // Width-based column limits for bookcase
+      // Width-based column limits for rack
       // 40-80cm: 1 column
       // 81-160cm: 2 columns
       // 161-250cm: 3 columns
@@ -508,10 +508,10 @@ export function calculateWardrobePrice(params: WardrobePriceParams): number {
 }
 
 // ============================================================================
-// BOOKCASE PRICE CALCULATION
+// RACK PRICE CALCULATION
 // ============================================================================
 
-export interface BookcasePriceParams {
+export interface RackPriceParams {
   width: number
   height: number
   depth: number
@@ -520,12 +520,12 @@ export interface BookcasePriceParams {
 }
 
 /**
- * Bookcase-specific price calculation
- * Similar to wardrobe but adjusted for bookcase specifics
+ * Rack-specific price calculation
+ * Similar to wardrobe but adjusted for rack specifics
  */
-export function calculateBookcasePrice(params: BookcasePriceParams): number {
+export function calculateRackPrice(params: RackPriceParams): number {
   const { width, height, depth, columns, templatesExtraCost } = params
-  const { pricing } = getConstraints('bookcase')
+  const { pricing } = getConstraints('rack')
 
   const extraHeightCm =
     height > pricing.perCmHeightAbove.threshold
@@ -564,7 +564,7 @@ export const FURNITURE_CONSTRAINTS = {
   bedside: BEDSIDE_CONSTRAINTS,
   'tv-stand': TV_STAND_CONSTRAINTS,
   wardrobe: WARDROBE_CONSTRAINTS,
-  bookcase: BOOKCASE_CONSTRAINTS,
+  rack: RACK_CONSTRAINTS,
 } as const
 
 export type FurnitureType = keyof typeof FURNITURE_CONSTRAINTS

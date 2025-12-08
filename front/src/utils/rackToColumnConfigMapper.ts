@@ -1,17 +1,17 @@
-import { BookcaseColumnConfiguration, BookcaseZoneType } from '~/types/bookcaseConfigurationTypes'
+import { RackColumnConfiguration, RackZoneType } from '~/types/rackConfigurationTypes'
 import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 
 /**
- * Maps bookcase zone-based configurations to standard ColumnConfigurationType
- * for 3D visualization until bookcase-specific rendering is implemented.
+ * Maps rack zone-based configurations to standard ColumnConfigurationType
+ * for 3D visualization until rack-specific rendering is implemented.
  * 
- * This is a temporary bridge to make bookcases visible in the 3D viewer.
+ * This is a temporary bridge to make racks visible in the 3D viewer.
  */
-export function mapBookcaseConfigToColumnConfig(
-  bookcaseConfig: BookcaseColumnConfiguration,
+export function mapRackConfigToColumnConfig(
+  rackConfig: RackColumnConfiguration,
   columnWidth: number
 ): ColumnConfigurationType {
-  const templateId = bookcaseConfig.templateId
+  const templateId = rackConfig.templateId
   
   // Map based on template ID for more accurate representation
   switch (templateId) {
@@ -43,7 +43,7 @@ export function mapBookcaseConfigToColumnConfig(
     
     default:
       // Fallback: analyze zones to determine best representation
-      return inferConfigFromZones(bookcaseConfig, columnWidth)
+      return inferConfigFromZones(rackConfig, columnWidth)
   }
 }
 
@@ -51,22 +51,20 @@ export function mapBookcaseConfigToColumnConfig(
  * Infer appropriate column configuration by analyzing zones
  */
 function inferConfigFromZones(
-  config: BookcaseColumnConfiguration,
+  config: RackColumnConfiguration,
   columnWidth: number
 ): ColumnConfigurationType {
-  const hasDrawers = config.zones.some(z => z.type === BookcaseZoneType.DRAWERS)
-  const hasDoors = config.zones.some(z => 
-    z.type === BookcaseZoneType.SHELVES_WITH_DOOR || 
-    z.hasDoor === true
-  )
+  const hasDrawers = config.zones.some(z => z.type === RackZoneType.DRAWERS)
+  
+  // Count shelf zones (with or without doors)
   const shelfCount = config.zones.filter(z => 
-    z.type === BookcaseZoneType.SHELVES || 
-    z.type === BookcaseZoneType.SHELVES_WITH_DOOR
+    z.type === RackZoneType.SHELVES || 
+    z.type === RackZoneType.SHELVES_FIXED
   ).length
   
   // If has drawers, use drawer configuration
   if (hasDrawers) {
-    const drawerZone = config.zones.find(z => z.type === BookcaseZoneType.DRAWERS)
+    const drawerZone = config.zones.find(z => z.type === RackZoneType.DRAWERS)
     const drawerCount = drawerZone?.drawerCount || 3
     
     if (drawerCount >= 5) return ColumnConfigurationType.DRAWERS_5

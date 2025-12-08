@@ -1,18 +1,18 @@
 import React from 'react'
-import { BookcaseTemplate, BookcaseZoneType } from '~/types/bookcaseConfigurationTypes'
+import { RackTemplate, RackZoneType } from '~/types/rackConfigurationTypes'
 
-interface BookcaseConfigurationIconProps {
-  template: BookcaseTemplate
+interface RackConfigurationIconProps {
+  template: RackTemplate
   width?: number
   height?: number
-  availableHeight?: number // Optional: actual bookcase height for better shelf/drawer estimates
+  availableHeight?: number // Optional: actual rack height for better shelf/drawer estimates
 }
 
 /**
- * Visual representation of bookcase template configuration
+ * Visual representation of rack template configuration
  * Displays zones as simplified icons using heightProportion
  */
-export const BookcaseConfigurationIcon: React.FC<BookcaseConfigurationIconProps> = ({
+export const RackConfigurationIcon: React.FC<RackConfigurationIconProps> = ({
   template,
   width = 45,
   height = 60,
@@ -56,24 +56,25 @@ export const BookcaseConfigurationIcon: React.FC<BookcaseConfigurationIconProps>
         const w = width - 6
         const h = zonePixelHeight
         
+        // Check if this zone has a door covering it
+        const hasDoor = template.doors?.some(door => door.zoneIndices.includes(index)) ?? false
+        
         // Determine fill color and pattern based on zone type
         let fill = '#f0f0f0'
         let strokeColor = '#ccc'
         
         switch (zone.type) {
-          case BookcaseZoneType.SHELVES:
-            fill = '#e3f2fd'
-            strokeColor = '#90caf9'
+          case RackZoneType.SHELVES:
+          case RackZoneType.SHELVES_FIXED:
+            // Use different color if zone has a door
+            fill = hasDoor ? '#fff3e0' : '#e3f2fd'
+            strokeColor = hasDoor ? '#ffb74d' : '#90caf9'
             break
-          case BookcaseZoneType.SHELVES_WITH_DOOR:
-            fill = '#fff3e0'
-            strokeColor = '#ffb74d'
-            break
-          case BookcaseZoneType.DRAWERS:
+          case RackZoneType.DRAWERS:
             fill = '#e8f5e9'
             strokeColor = '#81c784'
             break
-          case BookcaseZoneType.EMPTY:
+          case RackZoneType.EMPTY:
             fill = '#fafafa'
             strokeColor = '#e0e0e0'
             break
@@ -96,7 +97,7 @@ export const BookcaseConfigurationIcon: React.FC<BookcaseConfigurationIconProps>
             />
             
             {/* Zone-specific icons/patterns */}
-            {zone.type === BookcaseZoneType.SHELVES && (
+            {(zone.type === RackZoneType.SHELVES || zone.type === RackZoneType.SHELVES_FIXED) && (
               // Draw shelf lines - estimate count from height
               <>
                 {(() => {
@@ -124,7 +125,7 @@ export const BookcaseConfigurationIcon: React.FC<BookcaseConfigurationIconProps>
               </>
             )}
             
-            {zone.type === BookcaseZoneType.DRAWERS && (
+            {zone.type === RackZoneType.DRAWERS && (
               // Draw drawer lines - estimate count
               <>
                 {(() => {

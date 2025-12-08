@@ -38,7 +38,7 @@ import { FormattedMessage } from 'react-intl'
 import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
-import { DEFAULT_BOOKCASE } from './productTypes/bookcase'
+import { DEFAULT_RACK } from './productTypes/rack'
 import { FurnitureViewer, FurnitureViewerRef } from '../ThreeDModel/FurnitureViewer'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
@@ -48,9 +48,9 @@ import {
 } from '~/components/ProductPage/productTypeComponents/ProductGalleryColors'
 import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 import {
-  ProductBookcaseColumns,
-  ProductBookcaseColumnsComponent,
-} from '~/components/ProductPage/productTypeComponents/bookcase/ProductBookcaseColumns'
+  ProductRackColumns,
+  ProductRackColumnsComponent,
+} from '~/components/ProductPage/productTypeComponents/rack/ProductRackColumns'
 import type { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { ButtonSelect } from '~/components/ButtonSelect/ButtonSelect'
 import {
@@ -69,7 +69,7 @@ export type ProductComponent =
   | ProductFurnitureComponent
   | ProductPriceComponent
   | ProductGalleryColorsConfig
-  | ProductBookcaseColumnsComponent
+  | ProductRackColumnsComponent
 export type PredefinedValue = {
   sections?: ProductSectionPredefinedValue
   imageSelect?: string
@@ -155,9 +155,9 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.furniture ?? undefined}
           />
         )
-      case 'bookcaseColumns':
+      case 'rackColumns':
         return (
-          <ProductBookcaseColumns
+          <ProductRackColumns
             configuration={component}
             activeColumnIndex={activeColumnTab}
             onActiveColumnChange={handleTabChange}
@@ -193,9 +193,9 @@ export const ProductPage: FC<ProductPageProps> = ({
     }
   }, [navComponents, activeSection])
 
-  // Automatically select column when entering bookcaseColumns tab
+  // Automatically select column when entering rackColumns tab
   useEffect(() => {
-    if (activeSection === 'bookcaseColumns') {
+    if (activeSection === 'rackColumns') {
       setSelectedColumnIndex((prevIndex) => {
         if (prevIndex === null) {
           setActiveColumnTab(0)
@@ -229,10 +229,10 @@ export const ProductPage: FC<ProductPageProps> = ({
             predefinedValue={values?.colors ?? undefined}
           />
         )
-      case 'bookcaseColumns':
+      case 'rackColumns':
         return (
-          <ProductBookcaseColumns
-            configuration={comp as ProductBookcaseColumnsComponent}
+          <ProductRackColumns
+            configuration={comp as ProductRackColumnsComponent}
             activeColumnIndex={activeColumnTab}
             onActiveColumnChange={handleTabChange}
           />
@@ -271,13 +271,13 @@ export const ProductPage: FC<ProductPageProps> = ({
     window.scrollTo(0, 0)
   }, [])
 
-  // Extract all 3D props using shared hook (bookcase uses automatic column layout)
+  // Extract all 3D props using shared hook (rack uses automatic column layout)
   const furniture3DProps = use3DFurnitureProps(
     currentComponents,
     values,
-    DEFAULT_BOOKCASE,
+    DEFAULT_RACK,
     true, // isWardrobe = true (enables automatic column layout)
-    'bookcase' // furnitureType
+    'rack' // furnitureType
   )
 
   // Handle column click from 3D viewer to update active tab
@@ -305,7 +305,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         {/* Right Side: Product Details */}
         <div className={styles.detailsContainer}>
           <h1 className={styles.visuallyHiddenTitle}>
-            <FormattedMessage id="meta.header.configurator.bookcase" />
+            <FormattedMessage id="meta.header.configurator.rack" />
           </h1>
           <h2 className={styles.title}>
             <FormattedMessage id={name} />
@@ -315,12 +315,12 @@ export const ProductPage: FC<ProductPageProps> = ({
               <ProductPrice
                 onAddItem={() => {
                   const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
-                  addItem('bookcase', currentComponents, { ...(values ?? {}), screenshot })
+                  addItem('rack', currentComponents, { ...(values ?? {}), screenshot })
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
                 shareConfig={urlConfigCtx?.config}
-                shareProduct="bookcase"
+                shareProduct="rack"
               />
             )}
           </div>

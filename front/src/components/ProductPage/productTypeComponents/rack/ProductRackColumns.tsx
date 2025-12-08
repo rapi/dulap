@@ -1,40 +1,40 @@
 import React, { FC, useState, useMemo, useCallback, useEffect } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { 
-  BookcaseColumnConfiguration
-} from '~/types/bookcaseConfigurationTypes'
+  RackColumnConfiguration
+} from '~/types/rackConfigurationTypes'
 import {
-  BOOKCASE_TEMPLATES,
+  RACK_TEMPLATES,
   getValidTemplates,
   calculateZonesFromTemplate
-} from '~/config/bookcaseTemplates'
+} from '~/config/rackTemplates'
 import { ButtonSelect, ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSelect'
 import layoutStyles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
-import styles from './ProductBookcaseColumns.module.css'
-import { BookcaseConfigurationIcon } from './BookcaseConfigurationIcon'
+import styles from './ProductRackColumns.module.css'
+import { RackConfigurationIcon } from './RackConfigurationIcon'
 import { useMediaQuery } from '@mui/material'
 
-export type ProductBookcaseColumnsComponent = {
-  type: 'bookcaseColumns'
+export type ProductRackColumnsComponent = {
+  type: 'rackColumns'
   selectedColumns: number
-  columnConfigurations: BookcaseColumnConfiguration[]
-  setColumnConfigurations: (configs: BookcaseColumnConfiguration[]) => void
+  columnConfigurations: RackColumnConfiguration[]
+  setColumnConfigurations: (configs: RackColumnConfiguration[]) => void
   columnWidth: number
   columnHeight: number // Internal height (without plinth)
   columnDepth: number
 }
 
-interface ProductBookcaseColumnsProps {
-  configuration: ProductBookcaseColumnsComponent
+interface ProductRackColumnsProps {
+  configuration: ProductRackColumnsComponent
   activeColumnIndex?: number
   onActiveColumnChange?: (index: number) => void
 }
 
 /**
- * Component for configuring individual bookcase columns with zone-based layouts
+ * Component for configuring individual rack columns with zone-based layouts
  */
-export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
+export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
   configuration,
   activeColumnIndex: externalActiveIndex,
   onActiveColumnChange
@@ -77,7 +77,7 @@ export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
       value: String(index),
       label: (
         <FormattedMessage
-          id="homepage.configurator.bookcase.column"
+          id="homepage.configurator.rack.column"
           defaultMessage={`Column ${index + 1}`}
           values={{ number: index + 1 }}
         />
@@ -92,7 +92,7 @@ export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
 
   // Handle template selection
   const handleTemplateSelect = useCallback((templateId: string) => {
-    const template = BOOKCASE_TEMPLATES[templateId]
+    const template = RACK_TEMPLATES[templateId]
     if (!template) {
       return
     }
@@ -101,7 +101,7 @@ export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
     const calculatedZones = calculateZonesFromTemplate(template, columnHeight)
     
     // Create new config for the selected column
-    const newConfig: BookcaseColumnConfiguration = {
+    const newConfig: RackColumnConfiguration = {
       zones: calculatedZones,
       totalHeight: columnHeight,
       doors: template.doors || [],
@@ -118,7 +118,7 @@ export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
         return columnConfigurations[i]
       }
       
-      const defaultTemplate = BOOKCASE_TEMPLATES['OPEN_SHELVES_ONLY']
+      const defaultTemplate = RACK_TEMPLATES['OPEN_SHELVES_ONLY']
       const defaultZones = calculateZonesFromTemplate(defaultTemplate, columnHeight)
       
       return {
@@ -142,24 +142,24 @@ export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
   const getTemplateTranslationKey = (templateId: string): { name: string; desc: string } => {
     const keyMap: Record<string, { name: string; desc: string }> = {
       'OPEN_SHELVES_ONLY': {
-        name: 'homepage.configurator.bookcase.template.openShelvesOnly',
-        desc: 'homepage.configurator.bookcase.template.openShelvesOnly.desc'
+        name: 'homepage.configurator.rack.template.openShelvesOnly',
+        desc: 'homepage.configurator.rack.template.openShelvesOnly.desc'
       },
       'SHELVES_WITH_FULL_DOOR': {
-        name: 'homepage.configurator.bookcase.template.shelvesWithFullDoor',
-        desc: 'homepage.configurator.bookcase.template.shelvesWithFullDoor.desc'
+        name: 'homepage.configurator.rack.template.shelvesWithFullDoor',
+        desc: 'homepage.configurator.rack.template.shelvesWithFullDoor.desc'
       },
       'HALF_OPEN_HALF_CLOSED': {
-        name: 'homepage.configurator.bookcase.template.halfOpenHalfClosed',
-        desc: 'homepage.configurator.bookcase.template.halfOpenHalfClosed.desc'
+        name: 'homepage.configurator.rack.template.halfOpenHalfClosed',
+        desc: 'homepage.configurator.rack.template.halfOpenHalfClosed.desc'
       },
       'DRAWERS_AND_SHELVES': {
-        name: 'homepage.configurator.bookcase.template.drawersAndShelves',
-        desc: 'homepage.configurator.bookcase.template.drawersAndShelves.desc'
+        name: 'homepage.configurator.rack.template.drawersAndShelves',
+        desc: 'homepage.configurator.rack.template.drawersAndShelves.desc'
       },
       'MIXED_STORAGE': {
-        name: 'homepage.configurator.bookcase.template.mixedStorage',
-        desc: 'homepage.configurator.bookcase.template.mixedStorage.desc'
+        name: 'homepage.configurator.rack.template.mixedStorage',
+        desc: 'homepage.configurator.rack.template.mixedStorage.desc'
       }
     }
     return keyMap[templateId] || { name: templateId, desc: templateId }
@@ -172,7 +172,7 @@ export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
       return {
         value: template.id,
         content: (
-          <BookcaseConfigurationIcon 
+          <RackConfigurationIcon 
             template={template} 
             width={45} 
             height={60} 
@@ -192,7 +192,7 @@ export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
       {!isMobile && (
         <p className={layoutStyles.sectionTitle}>
           <FormattedMessage 
-            id="homepage.configurator.bookcase.columnConfiguration"
+            id="homepage.configurator.rack.columnConfiguration"
             defaultMessage="Interior Configuration"
           />
         </p>
@@ -211,9 +211,9 @@ export const ProductBookcaseColumns: FC<ProductBookcaseColumnsProps> = ({
         )}
 
         {/* Configuration type selector */}
-        <div className={styles.bookcaseColumnsSection}>
+        <div className={styles.rackColumnsSection}>
           <ButtonImageSelect<string>
-            ariaLabel="Bookcase interior configuration"
+            ariaLabel="Rack interior configuration"
             options={imageSelectOptions}
             value={currentTemplateId || ''}
             onChange={handleTemplateSelect}

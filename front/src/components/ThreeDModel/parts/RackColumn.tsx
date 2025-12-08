@@ -12,13 +12,13 @@ import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
 import { Door } from './Door'
 import { applyMaterialToObject } from '../furnitureUtils'
 import {
-  BookcaseColumnConfiguration,
-  BookcaseZoneType,
-} from '~/types/bookcaseConfigurationTypes'
-import { BookcaseZoneRenderer } from './bookcase-zones/BookcaseZoneRenderer'
-import { calculateOptimalDrawerConfig } from '~/config/bookcaseTemplates'
+  RackColumnConfiguration,
+  RackZoneType,
+} from '~/types/rackConfigurationTypes'
+import { RackZoneRenderer } from './rack-zones/RackZoneRenderer'
+import { calculateOptimalDrawerConfig } from '~/config/rackTemplates'
 
-interface BookcaseColumnProps {
+interface RackColumnProps {
   horizontalPanelObject: THREE.Object3D
   roundHandleObject: THREE.Object3D
   profileHandleObject: THREE.Object3D
@@ -34,18 +34,18 @@ interface BookcaseColumnProps {
   columnIndex?: number
   isSelected?: boolean
   onColumnClick?: (index: number) => void
-  columnConfiguration?: BookcaseColumnConfiguration
+  columnConfiguration?: RackColumnConfiguration
 }
 
 /**
- * BookcaseColumn - Specialized column component for bookcases
+ * RackColumn - Specialized column component for racks
  *
  * Features:
  * - Zone-based rendering (shelves, drawers)
  * - Doors based on template configuration and column width
  * - Symmetric shelf rendering
  */
-const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
+const RackColumnComponent: React.FC<RackColumnProps> = ({
   horizontalPanelObject,
   roundHandleObject,
   profileHandleObject,
@@ -82,7 +82,7 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
       return 'none'
     }
 
-    // Get the first door configuration (bookcase columns typically have one door)
+    // Get the first door configuration (rack columns typically have one door)
     const doorConfig = columnConfiguration?.doors?.[0]
     if (!doorConfig) {
       return 'none'
@@ -241,7 +241,7 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
       // 1. Zone has doors (for visual alignment), OR
       // 2. Zone is DRAWERS type (to match height with door sections in other columns)
       const shouldSnapToGrid =
-        (hasDoorOverZone || zone.type === BookcaseZoneType.DRAWERS) && i > 0
+        (hasDoorOverZone || zone.type === RackZoneType.DRAWERS) && i > 0
 
       if (shouldSnapToGrid) {
         const originalTop = adjusted[i].adjustedTopY
@@ -266,7 +266,7 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
 
           // If this is a DRAWERS zone, recalculate drawer heights for the new zone height
           if (
-            zone.type === BookcaseZoneType.DRAWERS &&
+            zone.type === RackZoneType.DRAWERS &&
             zone.drawerCount &&
             zone.drawerCount > 0
           ) {
@@ -439,10 +439,10 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
     [columnWidth, columnHeight, columnDepth, panelThickness, isColumnHovered]
   )
 
-  // Note: No top shelf needed - the bookcase structure already has a top panel
+  // Note: No top shelf needed - the rack structure already has a top panel
   // from WardrobeTopAndPlinth component
 
-  // Render bookcase interior zones
+  // Render rack interior zones
   const interiorZones = useMemo(() => {
     if (
       !columnConfiguration ||
@@ -472,11 +472,11 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
         // This ensures consistent shelf positions across all columns,
         // even when some have doors and others don't
         const useMasterGrid =
-          zone.type === BookcaseZoneType.SHELVES ||
-          zone.type === BookcaseZoneType.SHELVES_FIXED
+          zone.type === RackZoneType.SHELVES ||
+          zone.type === RackZoneType.SHELVES_FIXED
 
         // Check if this is the top zone (index 0) - top zones don't need a ceiling shelf
-        // because the bookcase structure already has a top panel
+        // because the rack structure already has a top panel
         const isTopZone = index === 0
 
         // Check if the next zone below is a different type that needs separation
@@ -485,13 +485,13 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
         const needsSeparatorShelf =
           !!nextZone &&
           zone.type !== nextZone.type &&
-          (zone.type === BookcaseZoneType.SHELVES ||
-            zone.type === BookcaseZoneType.SHELVES_FIXED)
+          (zone.type === RackZoneType.SHELVES ||
+            zone.type === RackZoneType.SHELVES_FIXED)
 
         // Determine shelf position:
         // - Separator shelf: at bottom of current zone (top of next zone)
         // - Door shelf: at top of current zone (ceiling of closed compartment)
-        //   BUT: skip top shelf for top zone (index 0) as bookcase structure provides it
+        //   BUT: skip top shelf for top zone (index 0) as rack structure provides it
         const renderShelfAtTop = hasDoorOverZone && !isTopZone
         const shouldRenderShelf =
           (hasDoorOverZone && !isTopZone) || needsSeparatorShelf
@@ -503,7 +503,7 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
         }
 
         return (
-          <BookcaseZoneRenderer
+          <RackZoneRenderer
             key={`zone-${index}`}
             zone={adjustedZone}
             columnWidth={columnWidth}
@@ -679,4 +679,4 @@ const BookcaseColumnComponent: React.FC<BookcaseColumnProps> = ({
   )
 }
 
-export const BookcaseColumn = memo(BookcaseColumnComponent)
+export const RackColumn = memo(RackColumnComponent)

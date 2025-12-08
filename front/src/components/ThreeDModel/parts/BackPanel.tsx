@@ -9,11 +9,11 @@ interface BackPanelProps {
 }
 
 /**
- * BackPanel component - Renders a back panel for bookcase
+ * BackPanel component - Renders a back panel for rack
  * 
  * The panel:
  * - Spans the full width and height
- * - Is positioned at the back of the bookcase/wardrobe
+ * - Is positioned at the back of the rack/wardrobe
  * - Has configurable color (default white, or lighter version of selected color)
  * - Uses double-sided material to be visible from both sides
  */

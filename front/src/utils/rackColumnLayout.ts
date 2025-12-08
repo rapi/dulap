@@ -1,7 +1,7 @@
 import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 
 /**
- * Bookcase Column Layout Calculator
+ * Rack Column Layout Calculator
  * 
  * Automatically determines optimal column configuration based on total width.
  * 
@@ -12,7 +12,7 @@ import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
  * - 161-250cm: 3 columns (equal split)
  */
 
-export interface BookcaseColumnLayout {
+export interface RackColumnLayout {
   columnCount: number
   columnWidths: number[]
   columnPositions: number[] // X positions from left
@@ -27,11 +27,11 @@ interface ColumnSpec {
 
 /**
  * Gets default column configuration based on width
- * Bookcase columns typically use shelves with or without doors
+ * Rack columns typically use shelves with or without doors
  */
 function getDefaultConfiguration(width: number): ColumnConfigurationType {
-  // For bookcases, we'll use door configurations as placeholders
-  // The actual bookcase template will override these
+  // For racks, we'll use door configurations as placeholders
+  // The actual rack template will override these
   if (width >= 41 && width <= 60) {
     return ColumnConfigurationType.DOOR_3_SHELVES
   } else {
@@ -40,16 +40,16 @@ function getDefaultConfiguration(width: number): ColumnConfigurationType {
 }
 
 /**
- * Main function to calculate bookcase column layout
+ * Main function to calculate rack column layout
  * 
  * Rules:
  * - 40-80cm: 1 column (full width)
  * - 81-160cm: 2 columns (equal split)
  * - 161-250cm: 3 columns (equal split)
  */
-export function calculateBookcaseColumnLayout(totalWidth: number): BookcaseColumnLayout {
+export function calculateRackColumnLayout(totalWidth: number): RackColumnLayout {
   let columns: ColumnSpec[] = []
-  let layoutType: BookcaseColumnLayout['layoutType'] = 'single'
+  let layoutType: RackColumnLayout['layoutType'] = 'single'
   
   if (totalWidth >= 40 && totalWidth <= 80) {
     // 1 column - full width
@@ -111,7 +111,7 @@ export function calculateBookcaseColumnLayout(totalWidth: number): BookcaseColum
 /**
  * Helper to validate a layout
  */
-export function validateBookcaseLayout(layout: BookcaseColumnLayout): {
+export function validateRackLayout(layout: RackColumnLayout): {
   valid: boolean
   errors: string[]
 } {

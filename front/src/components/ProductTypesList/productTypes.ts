@@ -25,9 +25,9 @@ export const productTypes: ProductTypes[] = [
     image: '/renders-landing/bedside-1.png'
   },
   {
-    name: 'homepage.products.bookcase',
-    link: '/configurator/bookcase',
-    image: '/renders-landing/bookcase-1.png'
+    name: 'homepage.products.rack',
+    link: '/configurator/rack',
+    image: '/renders-landing/rack-1.png'
   },
   {
     name: 'homepage.products.openStand',

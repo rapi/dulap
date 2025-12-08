@@ -23,7 +23,7 @@ export const ProductTypesList: React.FC = () => {
             name === 'homepage.products.bedside' ||
             name === 'homepage.products.TVstand' ||
             name === 'homepage.products.stand' ||
-            name === 'homepage.products.bookcase'
+            name === 'homepage.products.rack'
 
           return (
             <div

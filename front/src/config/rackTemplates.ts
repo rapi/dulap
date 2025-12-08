@@ -1,28 +1,28 @@
 import {
-  BookcaseTemplate,
-  BookcaseZoneType,
-  BookcaseZone,
-} from '~/types/bookcaseConfigurationTypes'
+  RackTemplate,
+  RackZoneType,
+  RackZone,
+} from '~/types/rackConfigurationTypes'
 
 /**
- * Predefined bookcase column templates
- * Based on common bookcase configurations
+ * Predefined rack column templates
+ * Based on common rack configurations
  *
  * IMPORTANT: Zones are listed in TOP-TO-BOTTOM order
- * - First zone in array = top of bookcase
- * - Last zone in array = bottom of bookcase
+ * - First zone in array = top of rack
+ * - Last zone in array = bottom of rack
  *
  * Heights are specified as proportions (sum = 100)
  * Actual dimensions are calculated dynamically based on available space
  */
-export const BOOKCASE_TEMPLATES: Record<string, BookcaseTemplate> = {
+export const RACK_TEMPLATES: Record<string, RackTemplate> = {
   OPEN_SHELVES_ONLY: {
     id: 'OPEN_SHELVES_ONLY',
     name: 'Open Shelves Only',
     description: 'Multiple open shelves for books and display items',
     zones: [
       {
-        type: BookcaseZoneType.SHELVES,
+        type: RackZoneType.SHELVES,
         heightProportion: 100,
         shelfMinSpacing: 28,
         shelfMaxSpacing: 32,
@@ -45,7 +45,7 @@ export const BOOKCASE_TEMPLATES: Record<string, BookcaseTemplate> = {
     description: 'Shelves enclosed behind full-height door for clean look',
     zones: [
       {
-        type: BookcaseZoneType.SHELVES,
+        type: RackZoneType.SHELVES,
         heightProportion: 100,
         shelfMinSpacing: 28,
         shelfMaxSpacing: 32,
@@ -73,14 +73,14 @@ export const BOOKCASE_TEMPLATES: Record<string, BookcaseTemplate> = {
     description: 'Top shelves open for display, bottom shelves with door',
     zones: [
       {
-        type: BookcaseZoneType.SHELVES,
+        type: RackZoneType.SHELVES,
         heightProportion: 50,
         shelfMinSpacing: 28,
         shelfMaxSpacing: 32,
         shelfOptimalSpacing: 30,
       },
       {
-        type: BookcaseZoneType.SHELVES,
+        type: RackZoneType.SHELVES,
         heightProportion: 50,
         shelfMinSpacing: 28,
         shelfMaxSpacing: 32,
@@ -108,14 +108,14 @@ export const BOOKCASE_TEMPLATES: Record<string, BookcaseTemplate> = {
     description: 'Open shelves on top with drawers at bottom for storage',
     zones: [
       {
-        type: BookcaseZoneType.SHELVES,
+        type: RackZoneType.SHELVES,
         heightProportion: 50,
         shelfMinSpacing: 28,
         shelfMaxSpacing: 32,
         shelfOptimalSpacing: 30,
       },
       {
-        type: BookcaseZoneType.DRAWERS,
+        type: RackZoneType.DRAWERS,
         heightProportion: 50,
         minHeight: 60, // Minimum for drawers
         drawerMinHeight: 15,
@@ -139,14 +139,14 @@ export const BOOKCASE_TEMPLATES: Record<string, BookcaseTemplate> = {
     description: 'Combination of open shelves and enclosed drawers',
     zones: [
       {
-        type: BookcaseZoneType.SHELVES,
+        type: RackZoneType.SHELVES,
         heightProportion: 50,
         shelfMinSpacing: 28,
         shelfMaxSpacing: 32,
         shelfOptimalSpacing: 30,
       },
       {
-        type: BookcaseZoneType.DRAWERS,
+        type: RackZoneType.DRAWERS,
         heightProportion: 50,
         minHeight: 60, // Minimum for drawers
         drawerMinHeight: 15,
@@ -176,8 +176,8 @@ export const BOOKCASE_TEMPLATES: Record<string, BookcaseTemplate> = {
 export function getValidTemplates(
   width: number,
   height: number
-): BookcaseTemplate[] {
-  return Object.values(BOOKCASE_TEMPLATES).filter((template) => {
+): RackTemplate[] {
+  return Object.values(RACK_TEMPLATES).filter((template) => {
     const widthValid =
       width >= template.minWidth &&
       (!template.maxWidth || width <= template.maxWidth)
@@ -191,15 +191,15 @@ export function getValidTemplates(
 /**
  * Get template by ID
  */
-export function getTemplateById(id: string): BookcaseTemplate | undefined {
-  return BOOKCASE_TEMPLATES[id]
+export function getTemplateById(id: string): RackTemplate | undefined {
+  return RACK_TEMPLATES[id]
 }
 
 /**
  * Get templates by tags
  */
-export function getTemplatesByTags(tags: string[]): BookcaseTemplate[] {
-  return Object.values(BOOKCASE_TEMPLATES).filter((template) =>
+export function getTemplatesByTags(tags: string[]): RackTemplate[] {
+  return Object.values(RACK_TEMPLATES).filter((template) =>
     template.tags?.some((tag) => tags.includes(tag))
   )
 }
@@ -207,7 +207,7 @@ export function getTemplatesByTags(tags: string[]): BookcaseTemplate[] {
 /**
  * Validate that template proportions sum to 100
  */
-export function validateTemplate(template: BookcaseTemplate): boolean {
+export function validateTemplate(template: RackTemplate): boolean {
   const totalProportion = template.zones.reduce(
     (sum, zone) => sum + zone.heightProportion,
     0
@@ -325,9 +325,9 @@ export function calculateOptimalDrawerConfig(
  * - If proportions result in too-small door zones, we redistribute height
  */
 export function calculateZonesFromTemplate(
-  template: BookcaseTemplate,
+  template: RackTemplate,
   availableHeight: number
-): BookcaseZone[] {
+): RackZone[] {
   // Validate template first
   if (!validateTemplate(template)) {
     // Template has invalid proportions
@@ -427,7 +427,7 @@ export function calculateZonesFromTemplate(
     const zoneHeight = adjustedHeights[zoneIndex]
 
     // For shelves: calculate optimal shelf count and spacing
-    if (zoneTemplate.type === BookcaseZoneType.SHELVES) {
+    if (zoneTemplate.type === RackZoneType.SHELVES) {
       const minSpacing = zoneTemplate.shelfMinSpacing || 28
       const maxSpacing = zoneTemplate.shelfMaxSpacing || 32
       const optimalSpacing =
@@ -449,7 +449,7 @@ export function calculateZonesFromTemplate(
     }
 
     // For drawers: calculate optimal drawer count and heights
-    if (zoneTemplate.type === BookcaseZoneType.DRAWERS) {
+    if (zoneTemplate.type === RackZoneType.DRAWERS) {
       const minHeight = zoneTemplate.drawerMinHeight || 15
       const maxHeight = zoneTemplate.drawerMaxHeight || 25
       const optimalHeight = zoneTemplate.drawerOptimalHeight || 20
@@ -482,8 +482,8 @@ export function calculateZonesFromTemplate(
  * @deprecated Use calculateZonesFromTemplate instead
  */
 export function calculateTemplateAdjustment(
-  template: BookcaseTemplate,
+  template: RackTemplate,
   targetHeight: number
-): BookcaseZone[] {
+): RackZone[] {
   return calculateZonesFromTemplate(template, targetHeight)
 }
