@@ -197,7 +197,6 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
             height={60} 
           />
         ),
-        label: intl.formatMessage({ id: translationKeys.name, defaultMessage: template.name }),
         title: intl.formatMessage({ id: translationKeys.desc, defaultMessage: template.description }),
       }
     }),
@@ -209,7 +208,7 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
     <div className={layoutStyles.individualColumnsLabel}>
       {/* Section title */}
       {!isMobile && (
-        <p className={layoutStyles.sectionTitle}>
+        <p className={layoutStyles.sectionTitle} style={{ margin: '0' }}>
           <FormattedMessage 
             id="homepage.configurator.wardrobe.columnConfiguration"
             defaultMessage="Interior Configuration"

@@ -160,7 +160,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture':
         return (
           <ProductFurniture
-            configuration={component}
+            configuration={{ ...component, isWardrobe: true }}
             predefinedValue={values?.furniture ?? undefined}
             onOpeningTypeChange={handleOpeningTypeChange}
           />

@@ -16,6 +16,7 @@ export interface WardrobeColumnLayout {
   columnWidths: number[]
   columnPositions: number[] // X positions from left
   columnConfigurations: ColumnConfigurationType[]
+  doorOpeningSides: ('left' | 'right' | undefined)[] // Door opening side for each column (only for single doors)
   layoutType: 'symmetric' | 'asymmetric-2col' | 'asymmetric-3col'
 }
 
@@ -23,6 +24,7 @@ interface ColumnSpec {
   width: number
   type: 'narrow' | 'wide'
   doorType: 'single' | 'split'
+  doorOpeningSide?: 'left' | 'right' // Only for single doors
 }
 
 /**
@@ -75,7 +77,8 @@ export function calculateWardrobeColumnLayout(totalWidth: number): WardrobeColum
     columns = [{ 
       width: totalWidth, 
       type: 'narrow', 
-      doorType: 'single' 
+      doorType: 'single',
+      doorOpeningSide: 'right' // Default to right for single narrow columns
     }]
     
   } else if (totalWidth >= 61 && totalWidth <= 100) {
@@ -88,10 +91,11 @@ export function calculateWardrobeColumnLayout(totalWidth: number): WardrobeColum
     
   } else if (totalWidth >= 101 && totalWidth <= 120) {
     // 2 narrow columns (equal distribution)
+    // Left column opens left, right column opens right
     const halfWidth = totalWidth / 2
     columns = [
-      { width: halfWidth, type: 'narrow', doorType: 'single' },
-      { width: halfWidth, type: 'narrow', doorType: 'single' }
+      { width: halfWidth, type: 'narrow', doorType: 'single', doorOpeningSide: 'left' },
+      { width: halfWidth, type: 'narrow', doorType: 'single', doorOpeningSide: 'right' }
     ]
     
   } else if (totalWidth >= 121 && totalWidth <= 150) {
@@ -100,7 +104,7 @@ export function calculateWardrobeColumnLayout(totalWidth: number): WardrobeColum
     const narrowWidth = totalWidth / 3
     columns = [
       { width: wideWidth, type: 'wide', doorType: 'split' },
-      { width: narrowWidth, type: 'narrow', doorType: 'single' }
+      { width: narrowWidth, type: 'narrow', doorType: 'single', doorOpeningSide: 'right' }
     ]
     layoutType = 'asymmetric-2col'
     
@@ -119,16 +123,18 @@ export function calculateWardrobeColumnLayout(totalWidth: number): WardrobeColum
     columns = [
       { width: wideWidth, type: 'wide', doorType: 'split' },
       { width: wideWidth, type: 'wide', doorType: 'split' },
-      { width: narrowWidth, type: 'narrow', doorType: 'single' }
+      { width: narrowWidth, type: 'narrow', doorType: 'single', doorOpeningSide: 'right' }
     ]
     layoutType = 'asymmetric-3col'
     
   } else {
     // Fallback for out-of-range widths (< 40cm)
+    const isWide = totalWidth >= 61
     columns = [{ 
       width: totalWidth, 
-      type: totalWidth >= 61 ? 'wide' : 'narrow',
-      doorType: totalWidth >= 61 ? 'split' : 'single'
+      type: isWide ? 'wide' : 'narrow',
+      doorType: isWide ? 'split' : 'single',
+      doorOpeningSide: isWide ? undefined : 'right'
     }]
   }
   
@@ -144,11 +150,17 @@ export function calculateWardrobeColumnLayout(totalWidth: number): WardrobeColum
   // Get configurations
   const configurations = columns.map(col => getDefaultConfiguration(col.width))
   
+  // Extract door opening sides (only for single doors)
+  const doorOpeningSides = columns.map(col => 
+    col.doorType === 'single' ? col.doorOpeningSide : undefined
+  )
+  
   return {
     columnCount: columns.length,
     columnWidths: columns.map(c => c.width),
     columnPositions: positions,
     columnConfigurations: configurations,
+    doorOpeningSides,
     layoutType
   }
 }

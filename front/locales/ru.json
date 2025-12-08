@@ -346,6 +346,7 @@
   "homepage.configurator.fittings.guides": "Направляющие",
   "homepage.configurator.fittings.roundHandle": "круглая ручка",
   "homepage.configurator.fittings.profileHandle": "профильная ручка",
+  "homepage.configurator.fittings.profileHandleLong": "профильная ручка длинная",
   "homepage.configurator.fittings.pushToOpen": "без ручки",
   "maner": "круглая ручка",
   "profile-handle": "профильная ручка",
@@ -655,6 +656,9 @@
 
 
   "reviews.card.colorLabel": "Цвет:",
+  "reviews.language.label": "Оригинальный язык: ",
+  "reviews.language.ro": "румынский",
+  "reviews.language.ru": "русский",
   "reviews.summary.recommended": "100% наших клиентов рекомендуют dulap.md",
   "reviews.summary.learnMore": "Больше отзывов",
 
@@ -662,31 +666,32 @@
   "reviews.subtitle": "Мы ценим качество наших услуг и каждого клиента.",
 
   "reviews.list.1.author": "Diana D.",
-  "reviews.list.1.color": "Серый, цвет камня",
+  "reviews.list.1.color": "Grey Stone",
   "reviews.list.1.date": "20 августа 2025",
-  "reviews.list.1.title": "Мне понравилось, буду рекомендовать всем",
-  "reviews.list.1.body": "Классно, что можно заказать мебель онлайн по своим размерам. Несколько дней сомневалась, но решила заказать образцы с доставкой на дом, и тогда увидела качество материала. Не сравнить с готовой мебелью. Я довольна! Спасибо, ребята!",
-  "reviews.list.1.originalLanguageLabel": "Оригинальный язык: румынский",
-  "reviews.list.1.showOriginalLabel": "Показать оригинальный текст",
-  "reviews.list.1.imageAlt": "Серый шкаф цвета камня, три секции",
+  "reviews.list.1.title": "Am comandat dulap în antreu și am rămas mulțumită",
+  "reviews.list.1.body": "Am rămas uimită că poți comanda mobilă online, după mărimile tale. Am ezitat câteva zile, dar am zis să comand mostrele cu livrare la domiciliu, și atunci am văzut calitatea materialului. Nu se compară cu mobila gata făcută. Sunt mulțumită! Mersi, băieți!",
+  "reviews.list.1.imageAlt": "Dulap gri piatră trei secțiuni",
 
-  "reviews.list.2.author": "Anna T.",
-  "reviews.list.2.color": "Бежевый",
+  "reviews.list.2.author": "Анна Т.",
+  "reviews.list.2.color": "Beige",
   "reviews.list.2.date": "2 сентября 2025",
-  "reviews.list.2.title": "Комод в детской комнате",
-  "reviews.list.2.body": "Комод очень качественный, ящики выдвигаются легко, видно, что фурнитура хорошего качества. Рекомендую с уверенностью!",
-  "reviews.list.2.originalLanguageLabel": "Оригинальный язык: румынский",
-  "reviews.list.2.showOriginalLabel": "Показать оригинальный текст",
-  "reviews.list.2.imageAlt": "Бежевый комод с 5 секциями",
+  "reviews.list.2.title": "Заказали шкаф, всё отлично",
+  "reviews.list.2.body": "Давно в одном углу просился шкаф. Через знакомых узнали про dulap studio - заказ оформили быстро, пришли, замерили. Через 2 недели шкаф уже стоял. Гардеробная теперь полноценная. Рекомендую!",
+  "reviews.list.2.imageAlt": "Comodă bej 5 secțiuni",
 
   "reviews.list.3.author": "Felicia S.",
-  "reviews.list.3.color": "Сатиновый серый",
+  "reviews.list.3.color": "Beige",
   "reviews.list.3.date": "26 октября 2025",
-  "reviews.list.3.title": "100% как и ожидала",
-  "reviews.list.3.body": "Мне понравился подход. Даже если оформляешь заказ онлайн, ребята из dulap.md звонят, уточняют детали, ещё раз всё проверяют! Думаю, я сэкономила больше 30%. Спасибо команде dulap.md.",
-  "reviews.list.3.originalLanguageLabel": "Оригинальный язык: румынский",
-  "reviews.list.3.showOriginalLabel": "Показать оригинальный текст",
-  "reviews.list.3.imageAlt": "Шкаф для одежды, две секции"
+  "reviews.list.3.title": "Două noptiere în dormitor",
+  "reviews.list.3.body": "Cred că a fost o alegere reușită. Ne-am dorit ca noptierele să fie în aceeași nuanță cu restul mobilierului din dormitor. Am ales să comandăm pe dulap.md și nu am rămas dezamăgiți. Mersi mult echipei!",
+  "reviews.list.3.imageAlt": "Dulap pentru haine 2 secțiuni",
+
+  "reviews.list.4.author": "Влад",
+  "reviews.list.4.color": "White",
+  "reviews.list.4.date": "29 ноября 2025",
+  "reviews.list.4.title": "Заказывали тумбу в детскую - качество супер",
+  "reviews.list.4.body": "Был не лучший опыт с икеевским комодом, который быстро посыпался. К рождению ребенка хотели хороший комод в детскую купить, в итоге решили делать под заказ, так как нет времени ходить выбирать. Жена выбрала вас:)",
+  "reviews.list.4.imageAlt": "Dulap pentru haine 2 secțiuni"
 
 
 

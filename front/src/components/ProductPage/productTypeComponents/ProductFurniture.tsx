@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useMemo, useEffect } from 'react'
 import styles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { Modal } from '~/components/Modal/Modal'
@@ -20,6 +20,7 @@ export type ProductFurnitureComponent = {
   predefinedValue?: ProductFurniturePredefinedValue
   hinges: string
   is3DEnabled?: boolean
+  isWardrobe?: boolean // Whether this is for wardrobe (uses different door icons)
 }
 
 export type ProductFurniturePredefinedValue = {
@@ -37,19 +38,34 @@ export const openingOptions: ButtonImageOption<OpeningType>[] = [
   {
     value: OpeningType.RoundHandle,
     content: <img src="/assets/icons/roundHandle.svg" alt="Round handle" />,
-    label: <FormattedMessage id="homepage.configurator.fittings.roundHandle" />,
   },
   {
     value: OpeningType.ProfileHandle,
     content: <img src="/assets/icons/profileHandle.svg" alt="Profile handle" />,
-    label: (
-      <FormattedMessage id="homepage.configurator.fittings.profileHandle" />
-    ),
+  },
+  {
+    value: OpeningType.ProfileHandleLong,
+    content: <img src="/assets/icons/profileHandle.svg" alt="Profile handle long" />,
   },
   {
     value: OpeningType.Push,
     content: <img src="/assets/icons/push.svg" alt="Push to open" />,
-    label: <FormattedMessage id="homepage.configurator.fittings.pushToOpen" />,
+  },
+]
+
+/** Wardrobe-specific options with door-like icons */
+export const wardrobeOpeningOptions: ButtonImageOption<OpeningType>[] = [
+  {
+    value: OpeningType.RoundHandle,
+    content: <img src="/assets/icons/wardrobeRoundHandle.svg" alt="Round handle" />,
+  },
+  {
+    value: OpeningType.ProfileHandle,
+    content: <img src="/assets/icons/wardrobeProfileHandle.svg" alt="Profile handle" />,
+  },
+  {
+    value: OpeningType.ProfileHandleLong,
+    content: <img src="/assets/icons/wardrobeProfileHandleLong.svg" alt="Profile handle long" />,
   },
 ]
 
@@ -71,12 +87,39 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
   // Get URL context for synchronization
   const urlCtx = useConfiguratorConfigOptional()
 
+  // Choose icon set based on product type
+  const iconOptions = configuration.isWardrobe ? wardrobeOpeningOptions : openingOptions
+  
   // Filter opening options based on 3D availability
   const availableOpeningOptions = configuration.is3DEnabled
-    ? openingOptions
-    : openingOptions.filter(
-        (option) => option.value !== OpeningType.ProfileHandle
+    ? iconOptions
+    : iconOptions.filter(
+        (option) => option.value !== OpeningType.ProfileHandle && option.value !== OpeningType.ProfileHandleLong
       )
+  
+  // Ensure current value is in available options (safeguard for wardrobes where Push was removed)
+  const currentValue = useMemo(() => {
+    const isValueAvailable = availableOpeningOptions.some(opt => opt.value === configuration.openingOption)
+    if (!isValueAvailable && availableOpeningOptions.length > 0) {
+      // If current value is not available (e.g., Push for wardrobes), prefer ProfileHandleLong for wardrobes
+      if (configuration.isWardrobe) {
+        const longProfileOption = availableOpeningOptions.find(opt => opt.value === OpeningType.ProfileHandleLong)
+        if (longProfileOption) {
+          return longProfileOption.value
+        }
+      }
+      // Otherwise use first available option
+      return availableOpeningOptions[0].value
+    }
+    return configuration.openingOption
+  }, [configuration.openingOption, configuration.isWardrobe, availableOpeningOptions])
+  
+  // Update configuration if value was changed
+  useEffect(() => {
+    if (currentValue !== configuration.openingOption) {
+      configuration.setOpeningOption(currentValue)
+    }
+  }, [currentValue, configuration])
   
   // Handle opening type change with URL sync
   const handleOpeningTypeChange = (value: OpeningType) => {
@@ -85,12 +128,14 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
     
     // Sync to URL
     if (urlCtx) {
-      // Map OpeningType enum to URL format ('push' | 'round' | 'profile')
-      let urlValue: 'push' | 'round' | 'profile'
+      // Map OpeningType enum to URL format ('push' | 'round' | 'profile' | 'profile-long')
+      let urlValue: 'push' | 'round' | 'profile' | 'profile-long'
       if (value === OpeningType.Push) {
         urlValue = 'push'
       } else if (value === OpeningType.ProfileHandle) {
         urlValue = 'profile'
+      } else if (value === OpeningType.ProfileHandleLong) {
+        urlValue = 'profile-long'
       } else {
         urlValue = 'round' // RoundHandle is default for handles
       }
@@ -127,7 +172,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
                 id: 'homepage.configurator.fittings.handleType',
               })}
               options={availableOpeningOptions}
-              value={configuration.openingOption}
+              value={currentValue}
               onChange={handleOpeningTypeChange}
             />
           )}

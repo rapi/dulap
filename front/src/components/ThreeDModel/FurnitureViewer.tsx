@@ -412,10 +412,10 @@ const FurnitureViewerComponent = forwardRef<FurnitureViewerRef, Furniture3DProps
           dampingFactor={0}
           minDistance={config.minDistance}
           maxDistance={config.maxDistance}
-          // minAzimuthAngle={config.minAzimuthAngle}
-          // maxAzimuthAngle={config.maxAzimuthAngle}
-          // minPolarAngle={config.minPolarAngle}
-          // maxPolarAngle={config.maxPolarAngle}
+          minAzimuthAngle={config.minAzimuthAngle}
+          maxAzimuthAngle={config.maxAzimuthAngle}
+          minPolarAngle={config.minPolarAngle}
+          maxPolarAngle={config.maxPolarAngle}
           target={config.target}
         />
 

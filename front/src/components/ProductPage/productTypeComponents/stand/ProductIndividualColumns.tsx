@@ -206,7 +206,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   return (
     <div className={styles.individualColumnsLabel}>
       {!isMobile && (
-        <p className={styles.sectionTitle}>
+        <p className={styles.sectionTitle} style={{ margin: '0' }}>
           <FormattedMessage
             id="homepage.configurator.individualColumns.title"
             defaultMessage="Configure individual sections"

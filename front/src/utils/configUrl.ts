@@ -104,7 +104,7 @@ export function parseQueryToConfig(
   const openingTypeStr = Array.isArray(openingTypeParam)
     ? openingTypeParam[0]
     : openingTypeParam
-  if (openingTypeStr === 'push' || openingTypeStr === 'round' || openingTypeStr === 'profile') {
+  if (openingTypeStr === 'push' || openingTypeStr === 'round' || openingTypeStr === 'profile' || openingTypeStr === 'profile-long') {
     cfg.openingType = openingTypeStr
   }
   // Legacy support: 'handle' → 'round'

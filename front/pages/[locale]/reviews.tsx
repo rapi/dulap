@@ -1,14 +1,13 @@
 import React, { FC } from 'react'
 import { ReviewListPage } from '~/components/Reviews/ReviewListPage'
-import ReviewsSection from '~/components/Reviews/ReviewsSection'
-export { Reviews } from '~/components/Reviews/reviews'
+import ReviewsFullSection from '~/components/Reviews/ReviewsFullSection'
 
 const Reviews: FC = () => {
   return (
     <>
       <main>
         <ReviewListPage>
-            <ReviewsSection />
+          <ReviewsFullSection />
         </ReviewListPage>
       </main>
     </>
