@@ -45,14 +45,14 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     WardrobeColumnConfiguration[]
   >(() => {
     // Default initialization
-    return columnLayout.columnWidths.map((colWidth) => {
+    return columnLayout.columnWidths.map((colWidth, index) => {
       const defaultTemplateId = 'FULL_HANGING_WITH_1_SHELF'
       const template = WARDROBE_TEMPLATES[defaultTemplateId]
       return {
         zones: template?.zones || [],
         totalHeight: height - plintHeight,
         doorType: colWidth > 60 ? 'split' : 'single',
-        doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
+        doorOpeningSide: columnLayout.doorOpeningSides[index],
         templateId: defaultTemplateId,
       }
     })
@@ -163,10 +163,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
               doorType: (colWidth > 60 ? 'split' : 'single') as
                 | 'split'
                 | 'single',
-              doorOpeningSide: (colWidth <= 60 ? 'right' : undefined) as
-                | 'left'
-                | 'right'
-                | undefined,
+              doorOpeningSide: urlLayout.doorOpeningSides[index],
               templateId,
             }
           })
@@ -210,7 +207,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
             zones: template?.zones || [],
             totalHeight: height - plintHeight,
             doorType: colWidth > 60 ? 'split' : 'single',
-            doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
+            doorOpeningSide: newLayout.doorOpeningSides[index],
             templateId: defaultTemplateId,
           }
         })
@@ -222,7 +219,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
           ...config,
           totalHeight: height - plintHeight,
           doorType: newLayout.columnWidths[index] > 60 ? 'split' : 'single',
-          doorOpeningSide: newLayout.columnWidths[index] <= 60 ? 'right' : undefined,
+          doorOpeningSide: newLayout.doorOpeningSides[index],
         }))
       )
     }
