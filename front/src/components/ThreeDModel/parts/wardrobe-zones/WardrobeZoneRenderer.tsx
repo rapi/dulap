@@ -17,6 +17,7 @@ interface WardrobeZoneRendererProps {
   roundHandleObject: THREE.Object3D
   profileHandleObject: THREE.Object3D
   isColumnOpen?: boolean // Whether the column is hovered/selected (for drawer animation)
+  openingType: OpeningType // Opening type for drawers (matches door opening type)
 }
 
 /**
@@ -39,6 +40,7 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
   roundHandleObject,
   profileHandleObject,
   isColumnOpen = false,
+  openingType,
 }) => {
   // Helper function to render a top shelf if requested
   const renderTopShelf = () => {
@@ -180,7 +182,7 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
               horizontalPanelObject={horizontalPanelObject}
               roundHandleObject={roundHandleObject}
               profileHandleObject={profileHandleObject}
-              openingType={OpeningType.Push} // Wardrobes use push-to-open (no visible handles)
+              openingType={openingType} // Use the same opening type as the doors
               drawerWidth={columnWidth-8}
               drawerHeight={drawerHeight}
               drawerDepth={columnDepth-5}

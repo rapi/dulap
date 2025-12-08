@@ -26,6 +26,7 @@ interface DoorProps {
   horizontalPanelObject: THREE.Object3D
   roundHandleObject: THREE.Object3D
   profileHandleObject: THREE.Object3D
+  profileHandleLongObject?: THREE.Object3D
   hingeWingObject: THREE.Object3D
   hingeAnchorObject: THREE.Object3D
   openingType: OpeningType
@@ -41,12 +42,14 @@ interface DoorProps {
   hingeCount?: number
   hingePositionRule?: HingePositionRule
   handleHeightFromBottom?: number // Optional: Override handle height (measured from door bottom)
+  isSplitDoor?: boolean // Optional: Whether this door is part of split doors
 }
 
 const DoorComponent: React.FC<DoorProps> = ({
   horizontalPanelObject,
   roundHandleObject,
   profileHandleObject,
+  profileHandleLongObject,
   hingeWingObject,
   hingeAnchorObject,
   doorWidth,
@@ -62,6 +65,7 @@ const DoorComponent: React.FC<DoorProps> = ({
   hingeCount = 3,
   hingePositionRule = 'even',
   handleHeightFromBottom,
+  isSplitDoor = false,
 }) => {
   const doorGroupRef = useRef<THREE.Group | null>(null)
 
@@ -77,9 +81,10 @@ const DoorComponent: React.FC<DoorProps> = ({
         horizontalPanelObject,
         roundHandleObject,
         profileHandleObject,
-        doorIndex
+        doorIndex,
+        profileHandleLongObject
       ),
-    [horizontalPanelObject, roundHandleObject, profileHandleObject, doorIndex]
+    [horizontalPanelObject, roundHandleObject, profileHandleObject, doorIndex, profileHandleLongObject]
   )
 
   // Hinge wing pivots (rotate with the door)
@@ -185,6 +190,36 @@ const DoorComponent: React.FC<DoorProps> = ({
                 }
           )
         }
+      } else if (panelPivot.userData.profileHandleLong) {
+        // For split doors: only show long handle on right door
+        // For single doors: show long handle on the single door
+        const shouldShowLongHandle = openingType === OpeningType.ProfileHandleLong && 
+          (isSplitDoor ? (openingSide === 'right') : true)
+        
+        panelPivot.visible = shouldShowLongHandle
+
+        if (panelPivot.visible) {
+          // For wardrobes: use doorOffsetX, for stands: use parentWidth
+          const isWardrobe = handleHeightFromBottom !== undefined
+          setupProfileHandle(
+            panelPivot,
+            selectedColor,
+            innerHeight,
+            doorDepth,
+            isWardrobe
+              ? {
+                  doorOffsetX,
+                  isRightOpening: isRightOpening,
+                  handleHeightFromBottom,
+                  isLongHandle: true, // Flag for 120cm long handle
+                }
+              : {
+                  parentWidth: doorWidth,
+                  isRightOpening: isRightOpening,
+                  isLongHandle: true, // Flag for 120cm long handle
+                }
+          )
+        }
       }
     })
 
@@ -237,6 +272,8 @@ const DoorComponent: React.FC<DoorProps> = ({
     hingePositionRule,
     handleHeightFromBottom,
     selectedColor,
+    doorIndex,
+    isSplitDoor,
   ])
 
   // Apply colors to all door parts
@@ -245,7 +282,7 @@ const DoorComponent: React.FC<DoorProps> = ({
 
     // Color door panels (handles and hinges are colored by their respective setup functions)
     doorGroup.children.forEach((child) => {
-      if (!child.userData.roundHandle && !child.userData.profileHandle) {
+      if (!child.userData.roundHandle && !child.userData.profileHandle && !child.userData.profileHandleLong) {
         // Use smart material application for door panels (supports PBR textures)
         applyMaterialToObject(child, selectedColor)
       }

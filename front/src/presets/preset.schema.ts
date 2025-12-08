@@ -34,7 +34,7 @@ export const DetailsSchema = z.object({
   columns: z.number().int().min(1).max(50).optional(),
   columnConfigurations: z.array(z.unknown()).optional(),
   wardrobeCfg: z.string().optional(),
-  openingType: z.enum(["push", "round", "profile"]).optional(),
+  openingType: z.enum(["push", "round", "profile", "profile-long"]).optional(),
 });
 
 export type Details = z.infer<typeof DetailsSchema>;

@@ -64,14 +64,18 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
 
   // Opening option should behave like in StandProductConfigurator
   const [openingOption, setOpeningOption] = useState<OpeningType>(() => {
-    if (!urlCtx?.config.openingType) return OpeningType.Push
+    if (!urlCtx?.config.openingType) return OpeningType.ProfileHandleLong
     if (urlCtx.config.openingType === 'profile') {
       return OpeningType.ProfileHandle
+    }
+    if (urlCtx.config.openingType === 'profile-long') {
+      return OpeningType.ProfileHandleLong
     }
     if (urlCtx.config.openingType === 'round') {
       return OpeningType.RoundHandle
     }
-    return OpeningType.Push
+    // Fallback to long profile handle if push is specified (push no longer supported for wardrobes)
+    return OpeningType.ProfileHandleLong
   })
 
   // Calculate doors number based on width (used for pricing)

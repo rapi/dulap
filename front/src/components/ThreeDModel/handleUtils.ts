@@ -11,6 +11,7 @@ export const HANDLE_CONSTANTS = {
   ROUND_HANDLE_DEPTH_OFFSET: -1,
   ROUND_HANDLE_WIDTH: 2.5,
   PROFILE_HANDLE_LENGTH: 17.5,
+  PROFILE_HANDLE_LONG_LENGTH: 120, // 120cm long profile handle
   PROFILE_HANDLE_DEPTH: 1.2,
   PROFILE_HANDLE_METAL_WIDTH: 0.1,
   // TODO: 2.3 - magic number! The center positions of the 3d model are wrong, had to move it manually...
@@ -122,9 +123,11 @@ const positionProfileHandle = (
     isRightOpening?: boolean
     // For wardrobes: custom height from bottom (overrides default top position)
     handleHeightFromBottom?: number
+    // Whether this is the long (120cm) profile handle
+    isLongHandle?: boolean
   }
 ): void => {
-  const { PROFILE_HANDLE_LENGTH, PROFILE_HANDLE_DEPTH, PROFILE_HANDLE_METAL_WIDTH } = HANDLE_CONSTANTS
+  const { PROFILE_HANDLE_LENGTH, PROFILE_HANDLE_DEPTH, PROFILE_HANDLE_LONG_LENGTH, PROFILE_HANDLE_METAL_WIDTH } = HANDLE_CONSTANTS
   
   let xPosition = 0
   let yPosition = height - PROFILE_HANDLE_DEPTH / 2 // Default: top position (for stands, etc.)
@@ -133,6 +136,7 @@ const positionProfileHandle = (
   const isWardrobe = options?.handleHeightFromBottom !== undefined
   
   // Calculate X position if custom positioning is needed
+  // Note: Use same positioning logic for both regular and long handles
   if (options?.x !== undefined) {
     xPosition = options.x
   } else if (isWardrobe && options?.doorOffsetX !== undefined && options?.isRightOpening !== undefined) {
@@ -145,6 +149,7 @@ const positionProfileHandle = (
   } else if (options?.parentWidth !== undefined) {
     if (options.isRightOpening !== undefined) {
       // For doors (stands, etc.): position based on opening side (legacy calculation)
+      // Use same positioning for both regular and long handles
       if (options.isRightOpening) {
         xPosition = -options.parentWidth / 2  + PROFILE_HANDLE_LENGTH / 1.5
       } else {
@@ -158,8 +163,14 @@ const positionProfileHandle = (
 
   // Calculate Y position (handle height)
   if (isWardrobe) {
-    // For wardrobes: position at same level as round handles
-    yPosition = options.handleHeightFromBottom!
+    if (options?.isLongHandle) {
+      // For long handles: position at the bottom of the door
+      const BOTTOM_OFFSET = PROFILE_HANDLE_LONG_LENGTH / 2 + 1 // 1cm from bottom
+      yPosition = BOTTOM_OFFSET
+    } else {
+      // For regular handles: position at same level as round handles
+      yPosition = options.handleHeightFromBottom!
+    }
   }
 
   handlePivot.position.set(
@@ -214,6 +225,8 @@ export const setupProfileHandle = (
     isRightOpening?: boolean
     // For wardrobes: custom height from bottom (overrides default top position)
     handleHeightFromBottom?: number
+    // Whether this is the long (120cm) profile handle
+    isLongHandle?: boolean
   }
 ): void => {
   applyProfileHandleColor(handlePivot, selectedColor)

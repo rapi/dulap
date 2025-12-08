@@ -1,0 +1,5 @@
+<svg width="54" height="90" viewBox="15 20 50 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple door rectangle - same style as WardrobeConfigurationIcon -->
+  <rect x="21" y="23" width="38" height="75" rx="1.5" fill="none" stroke="#374151" stroke-width="1.5"/>
+  <!-- No handle - push to open -->
+</svg>

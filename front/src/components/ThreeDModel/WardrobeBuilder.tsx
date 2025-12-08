@@ -30,6 +30,7 @@ const VERTICAL_URL = '/assets/3d-models/vertical_sample.glb'
 const HORIZONTAL_URL = '/assets/3d-models/horizontal_sample.glb'
 const ROUND_HANDLE_URL = '/assets/3d-models/round-handle.glb'
 const PROFILE_HANDLE_URL = '/assets/3d-models/profile-handle.glb'
+const PROFILE_HANDLE_LONG_URL = '/assets/3d-models/profile_trex_long_handle_120.glb'
 const HINGE_WING_URL = '/assets/3d-models/hinge_wing.glb'
 const HINGE_ANCHOR_URL = '/assets/3d-models/hinge_anchor.glb'
 
@@ -37,6 +38,7 @@ useGLTF.preload(VERTICAL_URL)
 useGLTF.preload(HORIZONTAL_URL)
 useGLTF.preload(ROUND_HANDLE_URL)
 useGLTF.preload(PROFILE_HANDLE_URL)
+useGLTF.preload(PROFILE_HANDLE_LONG_URL)
 useGLTF.preload(HINGE_WING_URL)
 useGLTF.preload(HINGE_ANCHOR_URL)
 
@@ -63,6 +65,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
   const { scene: horizontalPanelObject } = useGLTF(HORIZONTAL_URL)
   const { scene: roundHandleObject } = useGLTF(ROUND_HANDLE_URL)
   const { scene: profileHandleObject } = useGLTF(PROFILE_HANDLE_URL)
+  const { scene: profileHandleLongObject } = useGLTF(PROFILE_HANDLE_LONG_URL)
   const { scene: hingeWingObject } = useGLTF(HINGE_WING_URL)
   const { scene: hingeAnchorObject } = useGLTF(HINGE_ANCHOR_URL)
 
@@ -72,10 +75,11 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
       horizontal: horizontalPanelObject,
       roundHandle: roundHandleObject,
       profileHandle: profileHandleObject,
+      profileHandleLong: profileHandleLongObject,
       hingeWing: hingeWingObject,
       hingeAnchor: hingeAnchorObject,
     }),
-    [verticalPanelObject, horizontalPanelObject, roundHandleObject, profileHandleObject, hingeWingObject, hingeAnchorObject]
+    [verticalPanelObject, horizontalPanelObject, roundHandleObject, profileHandleObject, profileHandleLongObject, hingeWingObject, hingeAnchorObject]
   )
 
   // Handle column selection
@@ -130,6 +134,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
           horizontalPanelObject={scenes.horizontal}
           roundHandleObject={scenes.roundHandle}
           profileHandleObject={scenes.profileHandle}
+          profileHandleLongObject={scenes.profileHandleLong}
           hingeWingObject={scenes.hingeWing}
           hingeAnchorObject={scenes.hingeAnchor}
           openingType={openingType}
@@ -158,6 +163,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
     scenes.horizontal,
     scenes.roundHandle,
     scenes.profileHandle,
+    scenes.profileHandleLong,
     scenes.hingeWing,
     scenes.hingeAnchor,
     selectedColumnIndex,

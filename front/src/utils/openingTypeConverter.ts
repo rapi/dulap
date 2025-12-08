@@ -20,6 +20,8 @@ export function convertToOpeningType(
       return OpeningType.RoundHandle
     case 'profile-handle':
       return OpeningType.ProfileHandle
+    case 'profile-handle-long':
+      return OpeningType.ProfileHandleLong
     case 'push':
     default:
       return OpeningType.Push

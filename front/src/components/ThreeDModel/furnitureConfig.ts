@@ -30,5 +30,6 @@ export type FurnitureConfig = typeof FURNITURE_CONFIG
 export enum OpeningType {
   RoundHandle = 'maner',
   ProfileHandle = 'profile-handle',
+  ProfileHandleLong = 'profile-handle-long',
   Push = 'push',
 }

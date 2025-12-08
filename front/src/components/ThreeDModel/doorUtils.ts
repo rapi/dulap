@@ -10,7 +10,8 @@ export const createDoorGroup = (
   horizontalPanelObject: THREE.Object3D,
   roundHandleObject: THREE.Object3D,
   profileHandleObject: THREE.Object3D,
-  doorIndex: number
+  doorIndex: number,
+  profileHandleLongObject?: THREE.Object3D
 ): THREE.Group | null => {
   if (!horizontalPanelObject) return null
 
@@ -32,6 +33,17 @@ export const createDoorGroup = (
 
   const group = new THREE.Group()
   group.add(frontPanelPivot, roundHandlePivot, profileHandlePivot)
+  
+  // Add long profile handle if provided
+  if (profileHandleLongObject) {
+    const profileHandleLongPivot = createPanelPivotWithFlag(
+      profileHandleLongObject,
+      'profileHandleLong',
+      { anchorY: 'center', anchorZ: 'center' }
+    )
+    group.add(profileHandleLongPivot)
+  }
+  
   group.userData.isDoorGroup = true
   group.userData.doorIndex = doorIndex
 

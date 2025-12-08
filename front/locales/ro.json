@@ -335,6 +335,7 @@
   "homepage.configurator.fittings.guides": "Glisiere",
   "homepage.configurator.fittings.roundHandle": "mâner rotund",
   "homepage.configurator.fittings.profileHandle": "mâner profil",
+  "homepage.configurator.fittings.profileHandleLong": "mâner profil lung",
   "homepage.configurator.fittings.pushToOpen": "fără mâner",
   "maner": "mâner rotund",
   "profile-handle": "mâner profil",
