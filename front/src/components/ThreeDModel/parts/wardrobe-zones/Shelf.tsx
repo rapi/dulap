@@ -35,10 +35,12 @@ const ShelfComponent: React.FC<ShelfProps> = ({
     }
   }, [selectedColor])
 
+  const shelfDepth = columnDepth-4
+  const offsetFromBottomPanel = 1.1
   // Position the shelf
   // Y: absolute position
   // Z: centered in the column depth
-  const positionZ = columnDepth / 2
+  const positionZ = (shelfDepth) / 2 + offsetFromBottomPanel
 
   return (
     <mesh
@@ -48,7 +50,7 @@ const ShelfComponent: React.FC<ShelfProps> = ({
       castShadow
       receiveShadow
     >
-      <boxGeometry args={[columnWidth, columnDepth-5, thickness]} />
+      <boxGeometry args={[columnWidth, shelfDepth, thickness]} />
       <meshStandardMaterial color="#ffffff" />
     </mesh>
   )

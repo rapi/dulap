@@ -8,8 +8,10 @@ import * as THREE from 'three'
 import { Furniture3DProps } from '~/types/furniture3D'
 import { FurnitureBuilder } from './FurnitureBuilder'
 import { WardrobeBuilder } from './WardrobeBuilder'
+import { RackBuilder } from './RackBuilder'
 import { getViewerConfig } from './furnitureViewerConfig'
 import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
+import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
 import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { captureScreenshot } from '~/utils/screenshotUtils'
 import styles from './FurnitureViewer.module.css'
@@ -181,6 +183,22 @@ const FurnitureScene = memo(function FurnitureScene({
             openingType={openingType}
             columns={columns}
             columnConfigurations={columnConfigurations as WardrobeColumnConfiguration[] | undefined}
+            columnWidths={columnWidths}
+            columnPositions={columnPositions}
+            selectedColumnIndex={selectedColumnIndex}
+            onColumnSelectionChange={handleColumnSelectionChange}
+          />
+        ) : furnitureType === 'rack' ? (
+          <RackBuilder
+            selectedColor={selectedColor}
+            desiredWidth={width}
+            desiredHeight={height}
+            desiredDepth={depth}
+            desiredPlintHeight={currentPlintHeight}
+            sectionsCount={sections}
+            openingType={openingType}
+            columns={columns}
+            columnConfigurations={columnConfigurations as RackColumnConfiguration[] | undefined}
             columnWidths={columnWidths}
             columnPositions={columnPositions}
             selectedColumnIndex={selectedColumnIndex}

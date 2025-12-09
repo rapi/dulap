@@ -160,7 +160,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture':
         return (
           <ProductFurniture
-            configuration={{ ...component, isWardrobe: true }}
+            configuration={{ ...component, furnitureType: 'wardrobe' }}
             predefinedValue={values?.furniture ?? undefined}
             onOpeningTypeChange={handleOpeningTypeChange}
           />
@@ -263,7 +263,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture': {
         return (
           <ProductFurniture
-            configuration={comp as ProductFurnitureComponent}
+            configuration={{ ...comp as ProductFurnitureComponent, furnitureType: 'wardrobe' }}
             predefinedValue={values?.furniture ?? undefined}
             onOpeningTypeChange={handleOpeningTypeChange}
           />
@@ -287,11 +287,6 @@ export const ProductPage: FC<ProductPageProps> = ({
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
-
-  const router = useRouter()
-  const route =
-    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
-  const configuratorRoute = '/configurator' + route
 
   // Extract all 3D props using shared hook (wardrobe uses automatic column layout)
   const furniture3DProps = use3DFurnitureProps(
