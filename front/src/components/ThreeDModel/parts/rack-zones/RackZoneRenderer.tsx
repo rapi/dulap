@@ -43,7 +43,6 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
   profileHandleObject,
   renderTopShelf = false,
   renderShelfAtTop = false,
-  isLastZone = false,
   masterShelfPositions,
   useMasterGrid = false,
   isColumnOpen = false,
@@ -53,7 +52,7 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
   // - At BOTTOM of zone: for separators (between different zone types)
   const shelfY = renderShelfAtTop 
     ? plintHeight + zoneBottomY + zone.height  // Top of zone
-    : plintHeight + zoneBottomY                 // Bottom of zone
+    : plintHeight + zoneBottomY                // Bottom of zone
   
   const topShelf = renderTopShelf ? (
     <Shelf
@@ -136,9 +135,9 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
       // - Creates cascading "one by one" visual effect
       if (zone.drawerCount && zone.drawerCount > 0 && zone.drawerHeights) {
         const DRAWER_MARGIN = 1 // 1cm margin between drawers
-        const BOTTOM_DRAWER_MARGIN = 2 // 2cm margin at bottom
+        const BOTTOM_DRAWER_MARGIN = 1 // 1cm margin at bottom
         const BASE_DRAWER_OFFSET_Z = 20 // Base offset for drawer animation (5cm more than stand)
-        const DRAWER_STAGGER = 3 // Stagger each drawer by 2cm
+        const DRAWER_STAGGER = 3 // Stagger each drawer by 3cm
         const LERP_SPEED = 0.15 // Smooth animation speed
         
         const elements = []
@@ -157,9 +156,9 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
               roundHandleObject={roundHandleObject}
               profileHandleObject={profileHandleObject}
               openingType={OpeningType.Push} // Racks use push-to-open
-              drawerWidth={columnWidth - 8}
+              drawerWidth={columnWidth - 6}
               drawerHeight={drawerHeight}
-              drawerDepth={columnDepth - 5}
+              drawerDepth={columnDepth - 3}
               selectedColor={selectedColor}
               drawerIndex={i}
               positionY={absoluteDrawerBottomY}

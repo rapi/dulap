@@ -132,42 +132,6 @@ export const RACK_TEMPLATES: Record<string, RackTemplate> = {
     icon: 'drawers-shelves',
     extraCost: 1500,
   },
-
-  SHELVES_AND_CLOSED_DRAWERS: {
-    id: 'SHELVES_AND_CLOSED_DRAWERS',
-    name: 'Mixed Storage',
-    description: 'Combination of open shelves and enclosed drawers',
-    zones: [
-      {
-        type: RackZoneType.SHELVES,
-        heightProportion: 50,
-        shelfMinSpacing: 28,
-        shelfMaxSpacing: 32,
-        shelfOptimalSpacing: 30,
-      },
-      {
-        type: RackZoneType.DRAWERS,
-        heightProportion: 50,
-        minHeight: 60, // Minimum for drawers
-        drawerMinHeight: 15,
-        drawerMaxHeight: 25,
-        drawerOptimalHeight: 20,
-      },
-    ],
-    doors: [
-      {
-        zoneIndices: [1], // Door covers drawer zone
-        type: 'single',
-      },
-    ],
-    minHeight: 0,
-    maxHeight: 9999,
-    minWidth: 40,
-    maxWidth: 100,
-    tags: ['mixed', 'drawers', 'storage'],
-    icon: 'mixed',
-    extraCost: 1800,
-  },
 };
 
 /**

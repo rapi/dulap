@@ -186,7 +186,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
       configurationOptions.map((option) => ({
         value: option.type,
         content: (
-          <ColumnConfigurationIcon type={option.type} width={60} height={75} />
+          <ColumnConfigurationIcon type={option.type} width={50} height={65} />
         ),
         label: (
           <FormattedMessage

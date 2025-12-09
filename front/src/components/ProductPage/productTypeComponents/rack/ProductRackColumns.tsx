@@ -190,7 +190,7 @@ export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
     <div className={layoutStyles.individualColumnsLabel}>
       {/* Section title */}
       {!isMobile && (
-        <p className={layoutStyles.sectionTitle}>
+        <p className={layoutStyles.sectionTitle} style={{ marginTop: '0' }}>
           <FormattedMessage 
             id="homepage.configurator.rack.columnConfiguration"
             defaultMessage="Interior Configuration"

@@ -151,7 +151,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture':
         return (
           <ProductFurniture
-            configuration={component}
+            configuration={{ ...component, furnitureType: 'rack' }}
             predefinedValue={values?.furniture ?? undefined}
           />
         )
@@ -247,7 +247,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture': {
         return (
           <ProductFurniture
-            configuration={comp as ProductFurnitureComponent}
+            configuration={{ ...comp as ProductFurnitureComponent, furnitureType: 'rack' }}
             predefinedValue={values?.furniture ?? undefined}
           />
         )

@@ -20,7 +20,7 @@ export type ProductFurnitureComponent = {
   predefinedValue?: ProductFurniturePredefinedValue
   hinges: string
   is3DEnabled?: boolean
-  isWardrobe?: boolean // Whether this is for wardrobe (uses different door icons)
+  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'rack'
 }
 
 export type ProductFurniturePredefinedValue = {
@@ -42,10 +42,6 @@ export const openingOptions: ButtonImageOption<OpeningType>[] = [
   {
     value: OpeningType.ProfileHandle,
     content: <img src="/assets/icons/profileHandle.svg" alt="Profile handle" />,
-  },
-  {
-    value: OpeningType.ProfileHandleLong,
-    content: <img src="/assets/icons/profileHandle.svg" alt="Profile handle long" />,
   },
   {
     value: OpeningType.Push,
@@ -88,7 +84,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
   const urlCtx = useConfiguratorConfigOptional()
 
   // Choose icon set based on product type
-  const iconOptions = configuration.isWardrobe ? wardrobeOpeningOptions : openingOptions
+  const iconOptions = configuration.furnitureType === 'wardrobe' ? wardrobeOpeningOptions : openingOptions
   
   // Filter opening options based on 3D availability
   const availableOpeningOptions = configuration.is3DEnabled
@@ -102,7 +98,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
     const isValueAvailable = availableOpeningOptions.some(opt => opt.value === configuration.openingOption)
     if (!isValueAvailable && availableOpeningOptions.length > 0) {
       // If current value is not available (e.g., Push for wardrobes), prefer ProfileHandleLong for wardrobes
-      if (configuration.isWardrobe) {
+      if (configuration.furnitureType === 'wardrobe') {
         const longProfileOption = availableOpeningOptions.find(opt => opt.value === OpeningType.ProfileHandleLong)
         if (longProfileOption) {
           return longProfileOption.value
@@ -112,7 +108,7 @@ export const ProductFurniture: FC<ProductSelectProps> = ({
       return availableOpeningOptions[0].value
     }
     return configuration.openingOption
-  }, [configuration.openingOption, configuration.isWardrobe, availableOpeningOptions])
+  }, [configuration.openingOption, configuration.furnitureType, availableOpeningOptions])
   
   // Update configuration if value was changed
   useEffect(() => {

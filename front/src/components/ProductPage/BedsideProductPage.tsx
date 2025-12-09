@@ -144,11 +144,6 @@ export const ProductPage: FC<ProductPageProps> = ({
     window.scrollTo(0, 0)
   }, [])
 
-  const router = useRouter()
-  const route =
-    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
-  const configuratorRoute = '/configurator' + route
-
   const handleColumnClick = useCallback((index: number | null) => {
     if (index !== null) {
       setActiveColumnTab(index)
@@ -210,7 +205,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         }
         return (
           <ProductFurniture
-            configuration={furnitureConfig}
+            configuration={{ ...furnitureConfig, furnitureType: 'bedside' }}
             predefinedValue={values?.furniture ?? undefined}
           />
         )
@@ -294,7 +289,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         }
         return (
           <ProductFurniture
-            configuration={furnitureConfig}
+            configuration={{ ...furnitureConfig, furnitureType: 'bedside' }}
             predefinedValue={values?.furniture ?? undefined}
           />
         )

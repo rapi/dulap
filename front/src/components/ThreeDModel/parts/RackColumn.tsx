@@ -566,7 +566,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
 
     if (doorType === 'split') {
       // Split doors (left and right)
-      const halfWidth = columnWidth / 2
+      const halfWidth = (columnWidth-2) / 2
       const doorWidth = halfWidth - panelSpacing / 2
 
       return (
@@ -582,7 +582,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
             openingType={openingType}
             doorWidth={doorWidth}
             doorHeight={doorHeight}
-            doorDepth={columnDepth}
+            doorDepth={columnDepth-2.5}
             selectedColor={selectedColor}
             doorIndex={0}
             positionY={doorPositionY}
@@ -604,7 +604,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
             openingType={openingType}
             doorWidth={doorWidth}
             doorHeight={doorHeight}
-            doorDepth={columnDepth}
+            doorDepth={columnDepth-2.5}
             selectedColor={selectedColor}
             doorIndex={1}
             positionY={doorPositionY}
@@ -620,7 +620,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
     }
 
     // Single door
-    const doorWidth = columnWidth - panelSpacing
+    const doorWidth = columnWidth - panelSpacing - 2
 
     return (
       <Door
@@ -633,7 +633,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
         openingType={openingType}
         doorWidth={doorWidth}
         doorHeight={doorHeight}
-        doorDepth={columnDepth}
+        doorDepth={columnDepth-2.5}
         selectedColor={selectedColor}
         doorIndex={0}
         positionY={doorPositionY}
