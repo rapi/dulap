@@ -9,8 +9,7 @@ const TEMPLATE_TO_CODE: Record<string, string> = {
   'OPEN_SHELVES_ONLY': 'OS',
   'SHELVES_WITH_FULL_DOOR': 'FD',
   'HALF_OPEN_HALF_CLOSED': 'HC',
-  'DRAWERS_AND_SHELVES': 'DS',
-  'MIXED_STORAGE': 'MS',
+  'OPEN_SHELVES_AND_DRAWERS': 'ODS',
 }
 
 const CODE_TO_TEMPLATE: Record<string, string> = Object.fromEntries(
