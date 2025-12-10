@@ -7,14 +7,11 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   images: {
-    // Disable image optimization for security and to prevent issues with missing images
-    unoptimized: false,
     // Only allow images from same origin
     remotePatterns: [],
     // Disable dangerous image optimization features
     dangerouslyAllowSVG: false,
     contentDispositionType: 'attachment',
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 }
 
