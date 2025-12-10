@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     root: __dirname, // lock the root to /dulap/front
   },
   reactStrictMode: true,
-
+}
 module.exports = {
   async rewrites() {
     return [
