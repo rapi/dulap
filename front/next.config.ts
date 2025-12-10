@@ -6,14 +6,6 @@ const nextConfig: NextConfig = {
     root: __dirname, // lock the root to /dulap/front
   },
   reactStrictMode: true,
-  images: {
-    // Only allow images from same origin
-    remotePatterns: [],
-    // Disable dangerous image optimization features
-    dangerouslyAllowSVG: false,
-    contentDispositionType: 'attachment',
-  },
-}
 
 module.exports = {
   async rewrites() {
