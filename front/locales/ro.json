@@ -301,6 +301,9 @@
 
   "homepage.configurator.wardrobe.column": "Coloana {number}",
   "homepage.configurator.wardrobe.columnConfiguration": "Configurează",
+  "homepage.configurator.wardrobe.columnDoor": "Ușă coloană",
+  "homepage.configurator.wardrobe.columnDoor.closed": "Închis",
+  "homepage.configurator.wardrobe.columnDoor.open": "Deschis",
   "homepage.configurator.wardrobe.currentConfig": "Configurație Actuală",
   "homepage.configurator.wardrobe.selectTemplate": "Selectează Aranjament Interior",
   "homepage.configurator.wardrobe.columnDimensions": "Coloană: {width}cm × {height}cm × {depth}cm",

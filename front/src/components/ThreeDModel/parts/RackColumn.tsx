@@ -359,7 +359,14 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
       }
     }
 
-    const doorHeight = maxTopY - minBottomY
+    let doorHeight = maxTopY - minBottomY
+    // Special case: For HALF_OPEN_HALF_CLOSED template, increase lower door height by 1cm
+    const isHalfOpenHalfClosed = columnConfiguration?.templateId === 'HALF_OPEN_HALF_CLOSED'
+    const isLowerDoor = maxTopY > 0 // Door doesn't start from top (not full height)
+    if (isHalfOpenHalfClosed && isLowerDoor) {
+      doorHeight += 1 // Add 1cm to lower door height
+    }
+    
     const doorPositionY = plintHeight + minBottomY
 
     let handleHeightFromBottom: number | undefined
@@ -566,7 +573,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
 
     if (doorType === 'split') {
       // Split doors (left and right)
-      const halfWidth = (columnWidth-2) / 2
+      const halfWidth = (columnWidth) / 2
       const doorWidth = halfWidth - panelSpacing / 2
 
       return (
@@ -582,7 +589,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
             openingType={openingType}
             doorWidth={doorWidth}
             doorHeight={doorHeight}
-            doorDepth={columnDepth-2.5}
+            doorDepth={columnDepth}
             selectedColor={selectedColor}
             doorIndex={0}
             positionY={doorPositionY}
@@ -604,7 +611,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
             openingType={openingType}
             doorWidth={doorWidth}
             doorHeight={doorHeight}
-            doorDepth={columnDepth-2.5}
+            doorDepth={columnDepth}
             selectedColor={selectedColor}
             doorIndex={1}
             positionY={doorPositionY}
@@ -620,7 +627,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
     }
 
     // Single door
-    const doorWidth = columnWidth - panelSpacing - 2
+    const doorWidth = columnWidth - panelSpacing
 
     return (
       <Door
@@ -633,7 +640,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
         openingType={openingType}
         doorWidth={doorWidth}
         doorHeight={doorHeight}
-        doorDepth={columnDepth-2.5}
+        doorDepth={columnDepth}
         selectedColor={selectedColor}
         doorIndex={0}
         positionY={doorPositionY}
