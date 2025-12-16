@@ -119,10 +119,10 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         rotation={[-Math.PI / 2, 0, 0]}
       >
         <planeGeometry args={[columnWidth, columnDepth]} />
-        <meshStandardMaterial color={'#ffffff'} side={THREE.DoubleSide} />
+        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
       </mesh>
     </>
-  ), [columnWidth, columnDepth, plintHeight])
+  ), [columnWidth, columnDepth, plintHeight, selectedColor])
 
 
   const hoverPanel = useMemo(() => (
@@ -236,6 +236,11 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
 
   // Memoize door components to prevent recreation when only hover state changes
   const doors = useMemo(() => {
+    // If column is configured as open (hasDoor === false), don't render doors
+    if (columnConfiguration?.hasDoor === false) {
+      return null
+    }
+
     const { doorHeight, handleHeightFromBottom, doorPositionY, hingeCount, hingePositionRule } = doorConfig
 
     if (doorType === 'split') {
@@ -342,6 +347,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     selectedColor,
     isColumnOpen,
     columnConfiguration?.doorOpeningSide,
+    columnConfiguration?.hasDoor,
   ])
 
   return (

@@ -229,7 +229,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
         <BackPanel
           width={desiredWidth}
           height={desiredHeight}
-          color="#ffffff"
+          color={selectedColor}
         />
         
         {columnComponents}

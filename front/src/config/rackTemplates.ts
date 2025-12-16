@@ -119,8 +119,8 @@ export const RACK_TEMPLATES: Record<string, RackTemplate> = {
         heightProportion: 50,
         minHeight: 60, // Minimum for drawers
         drawerMinHeight: 15,
-        drawerMaxHeight: 25,
-        drawerOptimalHeight: 20,
+        drawerMaxHeight: 30,
+        drawerOptimalHeight: 30,
       },
     ],
     doors: [], // No doors

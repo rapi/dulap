@@ -54,6 +54,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
         doorType: colWidth > 60 ? 'split' : 'single',
         doorOpeningSide: columnLayout.doorOpeningSides[index],
         templateId: defaultTemplateId,
+        hasDoor: true, // Default to closed (has door)
       }
     })
   })
@@ -151,15 +152,16 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       const wardrobeCfgStr = urlCtx.config.wardrobeCfg
 
       if (wardrobeCfgStr && typeof wardrobeCfgStr === 'string') {
-        // Decode configurations from URL
-        const templateIds = decodeWardrobeColumnConfigs(wardrobeCfgStr)
-        if (templateIds.length > 0) {
+        // Decode configurations from URL (now includes hasDoor state)
+        const decodedConfigs = decodeWardrobeColumnConfigs(wardrobeCfgStr)
+        if (decodedConfigs.length > 0) {
           // Calculate layout based on URL width, not current state width
           const urlWidth = urlCtx.config.width
           const urlLayout = calculateWardrobeColumnLayout(urlWidth)
 
           const newConfigs = urlLayout.columnWidths.map((colWidth, index) => {
-            const templateId = templateIds[index] || 'FULL_HANGING_WITH_1_SHELF'
+            const decoded = decodedConfigs[index] || { templateId: 'FULL_HANGING_WITH_1_SHELF', hasDoor: true }
+            const templateId = decoded.templateId
             const template = WARDROBE_TEMPLATES[templateId]
             return {
               zones: template?.zones || [],
@@ -169,6 +171,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
                 | 'single',
               doorOpeningSide: urlLayout.doorOpeningSides[index],
               templateId,
+              hasDoor: decoded.hasDoor, // Use decoded hasDoor state from URL
             }
           })
           setColumnConfigurations(newConfigs)
@@ -213,6 +216,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
             doorType: colWidth > 60 ? 'split' : 'single',
             doorOpeningSide: newLayout.doorOpeningSides[index],
             templateId: defaultTemplateId,
+            hasDoor: true, // Default to closed (has door)
           }
         })
       )
