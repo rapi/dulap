@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import styles from './ReviewCard.module.css'
 import { Review } from './reviewTypes'
 import { ReviewStars } from './ReviewStars'
@@ -20,8 +20,6 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
     body,
     originalBody,
     originalLanguageLabel,
-    originalLanguageCode,
-    showOriginalLabel,
     imageUrl,
     imageAlt,
   } = review
@@ -34,13 +32,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
   const colorText = color ? intl.formatMessage({ id: color }) : ''
   const titleText = title ? intl.formatMessage({ id: title }) : ''
   const translatedBodyText = body ? intl.formatMessage({ id: body }) : ''
-  const originalBodyText =
-    originalBody ? intl.formatMessage({ id: originalBody }) : ''
-  const originalLanguageText = originalLanguageLabel
-    ? intl.formatMessage({ id: originalLanguageLabel })
-    : ''
-  const showOriginalText = showOriginalLabel
-    ? intl.formatMessage({ id: showOriginalLabel })
+  const originalBodyText = originalBody
+    ? intl.formatMessage({ id: originalBody })
     : ''
   const colorLabelText = intl.formatMessage({ id: 'reviews.card.colorLabel' })
   const imageAltText = imageAlt
@@ -49,16 +42,8 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
 
   // Determine if current page language is the same as original language
   const locale = intl.locale.toLowerCase()
-  const baseLocale = locale.split('-')[0] // 'ro-RO' -> 'ro'
-  const isSameLanguage =
-    originalLanguageCode &&
-    originalLanguageCode.toLowerCase() === baseLocale
-
   // Toggle between translated text and original text
   const [showOriginalBody, setShowOriginalBody] = useState(false)
-
-  const shouldShowToggleButton =
-    !!showOriginalLabel && !!originalBody && !isSameLanguage
 
   const bodyToDisplay =
     showOriginalBody && originalBodyText ? originalBodyText : translatedBodyText
@@ -99,22 +84,15 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
 
         <p className={styles.body}>{bodyToDisplay}</p>
 
-        {(originalLanguageLabel || shouldShowToggleButton) && (
+        {originalLanguageLabel && (
           <div className={styles.originalRow}>
             {originalLanguageLabel && (
               <span className={styles.originalLabel}>
-                {originalLanguageText}
+                <FormattedMessage id={'reviews.language.label'} />
+                {originalLanguageLabel === 'ro'
+                  ? intl.formatMessage({ id: 'reviews.language.ro' })
+                  : intl.formatMessage({ id: 'reviews.language.ru' })}
               </span>
-            )}
-
-            {shouldShowToggleButton && (
-              <button
-                type="button"
-                className={styles.originalButton}
-                onClick={handleToggleOriginal}
-              >
-                {showOriginalText}
-              </button>
             )}
           </div>
         )}

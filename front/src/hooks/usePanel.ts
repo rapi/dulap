@@ -134,7 +134,13 @@ export const usePanels = (
 
   // Apply scale, position, and rotation to all panels
   useEffect(() => {
-    const currentConfigs = JSON.parse(configsStr) as PanelConfig[]
+    let currentConfigs: PanelConfig[]
+    try {
+      currentConfigs = JSON.parse(configsStr) as PanelConfig[]
+    } catch (error) {
+      console.error('Failed to parse panel configs:', error)
+      return // Skip this effect if parsing fails
+    }
     panels.forEach((panel, index) => {
       if (!panel) return
       
@@ -156,7 +162,13 @@ export const usePanels = (
 
   // Apply color/texture to all panels (with PBR support)
   useEffect(() => {
-    const currentConfigs = JSON.parse(configsStr) as PanelConfig[]
+    let currentConfigs: PanelConfig[]
+    try {
+      currentConfigs = JSON.parse(configsStr) as PanelConfig[]
+    } catch (error) {
+      console.error('Failed to parse panel configs:', error)
+      return // Skip this effect if parsing fails
+    }
     panels.forEach((panel, index) => {
       if (!panel) return
       const config = currentConfigs[index]

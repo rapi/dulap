@@ -12,6 +12,7 @@ interface WardrobeColumnProps {
   horizontalPanelObject: THREE.Object3D
   roundHandleObject: THREE.Object3D
   profileHandleObject: THREE.Object3D
+  profileHandleLongObject?: THREE.Object3D
   hingeWingObject: THREE.Object3D
   hingeAnchorObject: THREE.Object3D
   openingType: OpeningType
@@ -41,6 +42,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
   horizontalPanelObject,
   roundHandleObject,
   profileHandleObject,
+  profileHandleLongObject,
   hingeWingObject,
   hingeAnchorObject,
   openingType,
@@ -110,15 +112,6 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
   // Memoize panel geometry to prevent recreation
   const panels = useMemo(() => (
     <>
-      {/* Back panel (white interior) */}
-      <mesh
-        position={[0, columnHeight / 2, 2 * panelThickness]}
-        rotation={[0, Math.PI, 0]}
-      >
-        <planeGeometry args={[columnWidth, columnHeight]} />
-        <meshStandardMaterial color={'#ffffff'} side={THREE.DoubleSide} />
-      </mesh>
-
       {/* Bottom panel */}
       <mesh
         ref={bottomPanelRef}
@@ -126,10 +119,10 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         rotation={[-Math.PI / 2, 0, 0]}
       >
         <planeGeometry args={[columnWidth, columnDepth]} />
-        <meshStandardMaterial color={'#ffffff'} side={THREE.DoubleSide} />
+        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
       </mesh>
     </>
-  ), [columnWidth, columnHeight, columnDepth, plintHeight, panelThickness])
+  ), [columnWidth, columnDepth, plintHeight, selectedColor])
 
 
   const hoverPanel = useMemo(() => (
@@ -223,6 +216,8 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
           horizontalPanelObject={horizontalPanelObject}
           roundHandleObject={roundHandleObject}
           profileHandleObject={profileHandleObject}
+          isColumnOpen={isColumnOpen}
+          openingType={openingType}
         />
       )
     })
@@ -234,11 +229,18 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     selectedColor,
     horizontalPanelObject,
     roundHandleObject,
-    profileHandleObject
+    profileHandleObject,
+    isColumnOpen,
+    openingType,
   ])
 
   // Memoize door components to prevent recreation when only hover state changes
   const doors = useMemo(() => {
+    // If column is configured as open (hasDoor === false), don't render doors
+    if (columnConfiguration?.hasDoor === false) {
+      return null
+    }
+
     const { doorHeight, handleHeightFromBottom, doorPositionY, hingeCount, hingePositionRule } = doorConfig
 
     if (doorType === 'split') {
@@ -254,6 +256,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
             horizontalPanelObject={horizontalPanelObject}
             roundHandleObject={roundHandleObject}
             profileHandleObject={profileHandleObject}
+            profileHandleLongObject={profileHandleLongObject}
             hingeWingObject={hingeWingObject}
             hingeAnchorObject={hingeAnchorObject}
             openingType={openingType}
@@ -269,6 +272,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
             hingeCount={hingeCount}
             hingePositionRule={hingePositionRule}
             handleHeightFromBottom={handleHeightFromBottom}
+            isSplitDoor={true}
           />
           {/* Right Door */}
           <Door
@@ -276,6 +280,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
             horizontalPanelObject={horizontalPanelObject}
             roundHandleObject={roundHandleObject}
             profileHandleObject={profileHandleObject}
+            profileHandleLongObject={profileHandleLongObject}
             hingeWingObject={hingeWingObject}
             hingeAnchorObject={hingeAnchorObject}
             openingType={openingType}
@@ -291,6 +296,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
             hingeCount={hingeCount}
             hingePositionRule={hingePositionRule}
             handleHeightFromBottom={handleHeightFromBottom}
+            isSplitDoor={true}
           />
         </>
       )
@@ -298,6 +304,8 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
 
     // Single door
     const doorWidth = columnWidth - panelSpacing
+    // Use doorOpeningSide from columnConfiguration, default to 'right' if not specified
+    const doorOpeningSide = columnConfiguration?.doorOpeningSide || 'right'
 
     return (
       <Door
@@ -305,6 +313,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         horizontalPanelObject={horizontalPanelObject}
         roundHandleObject={roundHandleObject}
         profileHandleObject={profileHandleObject}
+        profileHandleLongObject={profileHandleLongObject}
         hingeWingObject={hingeWingObject}
         hingeAnchorObject={hingeAnchorObject}
         openingType={openingType}
@@ -317,7 +326,7 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
         positionX={0}
         isHovered={isColumnOpen}
         hingeCount={hingeCount}
-        openingSide="right"
+        openingSide={doorOpeningSide}
         hingePositionRule={hingePositionRule}
         handleHeightFromBottom={handleHeightFromBottom}
       />
@@ -331,11 +340,14 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     horizontalPanelObject,
     roundHandleObject,
     profileHandleObject,
+    profileHandleLongObject,
     hingeWingObject,
     hingeAnchorObject,
     openingType,
     selectedColor,
     isColumnOpen,
+    columnConfiguration?.doorOpeningSide,
+    columnConfiguration?.hasDoor,
   ])
 
   return (

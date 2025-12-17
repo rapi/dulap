@@ -1,35 +1,35 @@
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
+import React from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
 
-import styles from "./CatalogItem.module.css";
+import styles from './CatalogItem.module.css'
 
-import type { PresetIndexItem } from "~/presets/index";
-import { buildPresetHref } from "~/presets/presetLink";
-import { FormattedMessage } from "react-intl";
-import type { Dimension } from "../ProductListPage/products";
+import type { PresetIndexItem } from '~/presets/index'
+import { buildPresetHref } from '~/presets/presetLink'
+import { FormattedMessage } from 'react-intl'
+import type { Dimension } from '../ProductListPage/products'
 
 interface Props {
-  item?: PresetIndexItem;
+  item?: PresetIndexItem
   // Legacy props
-  button?: React.ReactNode;
-  image?: string;
-  link?: string;
-  isClickable?: boolean;
-  title?: React.ReactNode;
-  subtitle?: string;
-  price?: number;
-  dimensions?: Dimension;
-  alt?: string;
-  currencyMessage?: React.ReactNode;
+  button?: React.ReactNode
+  image?: string
+  link?: string
+  isClickable?: boolean
+  title?: React.ReactNode
+  subtitle?: string
+  price?: number
+  dimensions?: Dimension
+  alt?: string
+  currencyMessage?: React.ReactNode
 }
 
 export const CatalogItem: React.FC<Props> = (props) => {
   if (props.item) {
-    const { item } = props;
-    const href = buildPresetHref(item);
-    const title = item.meta.title ?? item.id;
-    const img = item.meta.previewImage;
+    const { item } = props
+    const href = buildPresetHref(item)
+    const title = item.meta.title ?? item.id
+    const img = item.meta.previewImage
 
     return (
       <Link key={item.id} href={href} className={styles.card}>
@@ -48,10 +48,13 @@ export const CatalogItem: React.FC<Props> = (props) => {
         </div>
 
         <div className={styles.cardBody}>
-          <div className={styles.title}><FormattedMessage id={item.meta.title} /></div>
+          <div className={styles.title}>
+            <FormattedMessage id={item.meta.title} />
+          </div>
 
           <div className={styles.dimensions}>
-            {item.details.width}×{item.details.height}×{item.details.depth} <FormattedMessage id="homepage.configurator.dimensions.cm"></FormattedMessage>
+            {item.details.width}×{item.details.height}×{item.details.depth}{' '}
+            <FormattedMessage id="homepage.configurator.dimensions.cm"></FormattedMessage>
           </div>
 
           <div className={styles.type}>{item.type}</div>
@@ -67,9 +70,9 @@ export const CatalogItem: React.FC<Props> = (props) => {
           ) : null}
         </div>
       </Link>
-    );
+    )
   }
 
   // Legacy API - not implemented, but props accepted for type compatibility
-  return null;
-};
+  return null
+}

@@ -101,13 +101,17 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
     const FIXED_ZONES_HEIGHT = 200
     const adjustedZones = calculateTemplateAdjustment(template, FIXED_ZONES_HEIGHT)
     
+    // Preserve hasDoor setting from current config, default to true (closed)
+    const currentHasDoor = currentConfig?.hasDoor !== false
+    
     // Create new config for the selected column
     const newConfig: WardrobeColumnConfiguration = {
       zones: adjustedZones,
       totalHeight: columnHeight,
       doorType: (columnWidth > 60 ? 'split' : 'single') as 'split' | 'single',
       doorOpeningSide: (columnWidth <= 60 ? 'right' : undefined) as 'left' | 'right' | undefined,
-      templateId: templateId
+      templateId: templateId,
+      hasDoor: currentHasDoor
     }
     
     // Ensure newConfigs has the right length, filling with existing configs or defaults
@@ -129,7 +133,8 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
         totalHeight: columnHeight,
         doorType: 'single' as 'single' | 'split',
         doorOpeningSide: 'right' as 'left' | 'right' | undefined,
-        templateId: 'FULL_HANGING_WITH_1_SHELF'
+        templateId: 'FULL_HANGING_WITH_1_SHELF',
+        hasDoor: true // Default to closed (has door)
       }
     })
     
@@ -145,9 +150,25 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
     columnHeight,
     columnWidth,
     selectedColumns,
-    onActiveColumnChange
+      onActiveColumnChange
   ])
 
+  // Handle door toggle (open/closed)
+  const handleDoorToggle = useCallback((value: 'open' | 'closed') => {
+    const hasDoor = value === 'closed'
+    
+    const newConfigs = columnConfigurations.map((config, index) => {
+      if (index === activeColumnIndex) {
+        return {
+          ...config,
+          hasDoor
+        }
+      }
+      return config
+    })
+    
+    setColumnConfigurations(newConfigs)
+  }, [activeColumnIndex, columnConfigurations, setColumnConfigurations])
 
   // Map template ID to translation key
   const getTemplateTranslationKey = (templateId: string): { name: string; desc: string } => {
@@ -197,7 +218,6 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
             height={60} 
           />
         ),
-        label: intl.formatMessage({ id: translationKeys.name, defaultMessage: template.name }),
         title: intl.formatMessage({ id: translationKeys.desc, defaultMessage: template.description }),
       }
     }),
@@ -209,7 +229,7 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
     <div className={layoutStyles.individualColumnsLabel}>
       {/* Section title */}
       {!isMobile && (
-        <p className={layoutStyles.sectionTitle}>
+        <p className={layoutStyles.sectionTitle} style={{ margin: '0' }}>
           <FormattedMessage 
             id="homepage.configurator.wardrobe.columnConfiguration"
             defaultMessage="Interior Configuration"
@@ -237,6 +257,27 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
             value={currentTemplateId || ''}
             onChange={handleTemplateSelect}
           />
+        </div>
+
+        {/* Door toggle (open/closed) */}
+        <div className={layoutStyles.furnitureLabel}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>
+              <FormattedMessage
+                id="homepage.configurator.wardrobe.columnDoor"
+                defaultMessage="Column door"
+              />
+              :
+            </span>
+            <ButtonSelect
+              options={[
+                { value: 'closed', label: <FormattedMessage id="homepage.configurator.wardrobe.columnDoor.closed" defaultMessage="Closed" /> },
+                { value: 'open', label: <FormattedMessage id="homepage.configurator.wardrobe.columnDoor.open" defaultMessage="Open" /> },
+              ]}
+              defaultSelected={currentConfig?.hasDoor !== false ? 'closed' : 'open'}
+              onChange={(value) => handleDoorToggle(value as 'open' | 'closed')}
+            />
+          </div>
         </div>
       </div>
     </div>

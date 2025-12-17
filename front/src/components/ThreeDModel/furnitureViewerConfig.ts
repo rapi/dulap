@@ -35,6 +35,13 @@ const DEFAULT_CONFIG: FurnitureViewerConfig = {
   fogFar: 900, // Extend fog further to fade distant background edges
 }
 
+// Default configuration for most furniture types
+const TV_STAND_CONFIG: FurnitureViewerConfig = {
+  ...DEFAULT_CONFIG,
+  backgroundScale: [250, 120, 150], // Larger scale to prevent edge visibility with distant camera
+  cameraPosition: [-120, 150, 300], // Left-side view: camera on left (negative X), slightly in front
+}
+
 // Wardrobe-specific configuration
 // Left-side view for wardrobe: camera positioned on the left side
 const WARDROBE_CONFIG: FurnitureViewerConfig = {
@@ -57,11 +64,12 @@ const WARDROBE_CONFIG: FurnitureViewerConfig = {
 export const FURNITURE_VIEWER_CONFIGS: Record<string, FurnitureViewerConfig> = {
   wardrobe: WARDROBE_CONFIG,
   stand: DEFAULT_CONFIG,
-  'tv-stand': DEFAULT_CONFIG,
+  'tv-stand': TV_STAND_CONFIG,
   bedside: DEFAULT_CONFIG,
   'office-table': DEFAULT_CONFIG,
   greenwall: DEFAULT_CONFIG,
   storage: DEFAULT_CONFIG,
+  rack: WARDROBE_CONFIG,
 }
 
 /**

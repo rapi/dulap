@@ -2,8 +2,11 @@ import { z } from 'zod'
 import type { BaseConfig, Constraints } from './configTypes'
 import { decodeColumnConfigs, encodeColumnConfigs } from './columnConfigUrl'
 
-/** Products supported in the dynamic route */
-export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside'
+/**
+ * Products supported in the dynamic route
+ * Exports: ProductKey, parseQueryToConfig, normalizeConfig, configToQuery
+ */
+export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside' | 'rack'
 
 /** Next.js query bag type */
 type NextQuery = Record<string, string | string[] | undefined>
@@ -104,7 +107,7 @@ export function parseQueryToConfig(
   const openingTypeStr = Array.isArray(openingTypeParam)
     ? openingTypeParam[0]
     : openingTypeParam
-  if (openingTypeStr === 'push' || openingTypeStr === 'round' || openingTypeStr === 'profile') {
+  if (openingTypeStr === 'push' || openingTypeStr === 'round' || openingTypeStr === 'profile' || openingTypeStr === 'profile-long') {
     cfg.openingType = openingTypeStr
   }
   // Legacy support: 'handle' → 'round'
@@ -119,6 +122,15 @@ export function parseQueryToConfig(
     : wardrobeCfgParam
   if (wardrobeCfgStr && typeof wardrobeCfgStr === 'string') {
     cfg.wardrobeCfg = wardrobeCfgStr
+  }
+
+  // Parse rack column configurations from URL
+  const rackCfgParam = q['rackCfg']
+  const rackCfgStr = Array.isArray(rackCfgParam)
+    ? rackCfgParam[0]
+    : rackCfgParam
+  if (rackCfgStr && typeof rackCfgStr === 'string') {
+    cfg.rackCfg = rackCfgStr
   }
 
   return cfg
@@ -207,6 +219,11 @@ export function configToQuery(
   // Serialize wardrobe column configurations
   if (cfg.wardrobeCfg && cfg.wardrobeCfg.length > 0) {
     out.wardrobeCfg = cfg.wardrobeCfg
+  }
+
+  // Serialize rack column configurations
+  if (cfg.rackCfg && cfg.rackCfg.length > 0) {
+    out.rackCfg = cfg.rackCfg
   }
 
   // Serialize opening type (only if not default 'push')

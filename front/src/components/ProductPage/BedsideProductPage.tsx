@@ -204,7 +204,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         }
         return (
           <ProductFurniture
-            configuration={furnitureConfig}
+            configuration={{ ...furnitureConfig, furnitureType: 'bedside' }}
             predefinedValue={values?.furniture ?? undefined}
           />
         )
@@ -288,7 +288,7 @@ export const ProductPage: FC<ProductPageProps> = ({
         }
         return (
           <ProductFurniture
-            configuration={furnitureConfig}
+            configuration={{ ...furnitureConfig, furnitureType: 'bedside' }}
             predefinedValue={values?.furniture ?? undefined}
           />
         )

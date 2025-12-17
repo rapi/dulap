@@ -45,15 +45,16 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     WardrobeColumnConfiguration[]
   >(() => {
     // Default initialization
-    return columnLayout.columnWidths.map((colWidth) => {
+    return columnLayout.columnWidths.map((colWidth, index) => {
       const defaultTemplateId = 'FULL_HANGING_WITH_1_SHELF'
       const template = WARDROBE_TEMPLATES[defaultTemplateId]
       return {
         zones: template?.zones || [],
         totalHeight: height - plintHeight,
         doorType: colWidth > 60 ? 'split' : 'single',
-        doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
+        doorOpeningSide: columnLayout.doorOpeningSides[index],
         templateId: defaultTemplateId,
+        hasDoor: true, // Default to closed (has door)
       }
     })
   })
@@ -64,14 +65,18 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
 
   // Opening option should behave like in StandProductConfigurator
   const [openingOption, setOpeningOption] = useState<OpeningType>(() => {
-    if (!urlCtx?.config.openingType) return OpeningType.Push
+    if (!urlCtx?.config.openingType) return OpeningType.ProfileHandleLong
     if (urlCtx.config.openingType === 'profile') {
       return OpeningType.ProfileHandle
+    }
+    if (urlCtx.config.openingType === 'profile-long') {
+      return OpeningType.ProfileHandleLong
     }
     if (urlCtx.config.openingType === 'round') {
       return OpeningType.RoundHandle
     }
-    return OpeningType.Push
+    // Fallback to long profile handle if push is specified (push no longer supported for wardrobes)
+    return OpeningType.ProfileHandleLong
   })
 
   // Calculate doors number based on width (used for pricing)
@@ -147,15 +152,16 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       const wardrobeCfgStr = urlCtx.config.wardrobeCfg
 
       if (wardrobeCfgStr && typeof wardrobeCfgStr === 'string') {
-        // Decode configurations from URL
-        const templateIds = decodeWardrobeColumnConfigs(wardrobeCfgStr)
-        if (templateIds.length > 0) {
+        // Decode configurations from URL (now includes hasDoor state)
+        const decodedConfigs = decodeWardrobeColumnConfigs(wardrobeCfgStr)
+        if (decodedConfigs.length > 0) {
           // Calculate layout based on URL width, not current state width
           const urlWidth = urlCtx.config.width
           const urlLayout = calculateWardrobeColumnLayout(urlWidth)
 
           const newConfigs = urlLayout.columnWidths.map((colWidth, index) => {
-            const templateId = templateIds[index] || 'FULL_HANGING_WITH_1_SHELF'
+            const decoded = decodedConfigs[index] || { templateId: 'FULL_HANGING_WITH_1_SHELF', hasDoor: true }
+            const templateId = decoded.templateId
             const template = WARDROBE_TEMPLATES[templateId]
             return {
               zones: template?.zones || [],
@@ -163,11 +169,9 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
               doorType: (colWidth > 60 ? 'split' : 'single') as
                 | 'split'
                 | 'single',
-              doorOpeningSide: (colWidth <= 60 ? 'right' : undefined) as
-                | 'left'
-                | 'right'
-                | undefined,
+              doorOpeningSide: urlLayout.doorOpeningSides[index],
               templateId,
+              hasDoor: decoded.hasDoor, // Use decoded hasDoor state from URL
             }
           })
           setColumnConfigurations(newConfigs)
@@ -210,8 +214,9 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
             zones: template?.zones || [],
             totalHeight: height - plintHeight,
             doorType: colWidth > 60 ? 'split' : 'single',
-            doorOpeningSide: colWidth <= 60 ? 'right' : undefined,
+            doorOpeningSide: newLayout.doorOpeningSides[index],
             templateId: defaultTemplateId,
+            hasDoor: true, // Default to closed (has door)
           }
         })
       )
@@ -222,7 +227,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
           ...config,
           totalHeight: height - plintHeight,
           doorType: newLayout.columnWidths[index] > 60 ? 'split' : 'single',
-          doorOpeningSide: newLayout.columnWidths[index] <= 60 ? 'right' : undefined,
+          doorOpeningSide: newLayout.doorOpeningSides[index],
         }))
       )
     }

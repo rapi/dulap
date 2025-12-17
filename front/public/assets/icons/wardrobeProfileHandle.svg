@@ -1,0 +1,6 @@
+<svg width="54" height="90" viewBox="15 20 50 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple door rectangle - same style as WardrobeConfigurationIcon -->
+  <rect x="21" y="23" width="38" height="75" rx="1.5" fill="none" stroke="#374151" stroke-width="1.5"/>
+  <!-- Short vertical line handle on the left side, approximately one-third up from bottom -->
+  <line x1="24" y1="69" x2="24" y2="78" stroke="#374151" stroke-width="2" stroke-linecap="round"/>
+</svg>

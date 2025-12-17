@@ -22,17 +22,6 @@ export function middleware(request: NextRequest) {
     return
   }
 
-  // Skip asset files
-  if (/\.(png|jpe?g|gif|svg|webp|avif|mp4|fbx|glb)$/.test(pathname)) {
-    // For all other assets - rewrite to production
-    const url = request.nextUrl.clone()
-    url.protocol = 'https'
-    url.hostname = 'dulap.md'
-    url.port = ''
-    url.pathname = url.pathname.replace(/^\/(ro|ru)/, '')
-    return NextResponse.rewrite(url)
-  }
-
   // Check if pathname starts with a supported locale
   const matchedLocale = locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`

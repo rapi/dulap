@@ -16,6 +16,8 @@ interface WardrobeZoneRendererProps {
   horizontalPanelObject: THREE.Object3D
   roundHandleObject: THREE.Object3D
   profileHandleObject: THREE.Object3D
+  isColumnOpen?: boolean // Whether the column is hovered/selected (for drawer animation)
+  openingType: OpeningType // Opening type for drawers (matches door opening type)
 }
 
 /**
@@ -37,6 +39,8 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
   horizontalPanelObject,
   roundHandleObject,
   profileHandleObject,
+  isColumnOpen = false,
+  openingType,
 }) => {
   // Helper function to render a top shelf if requested
   const renderTopShelf = () => {
@@ -139,6 +143,8 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
         const BOTTOM_DRAWER_MARGIN = 5 // 1cm margin below the bottom-most drawer
         const SHELF_HEIGHT = 2 // 2cm shelf thickness
         const SHELF_TOP_MARGIN = 3 // 3cm margin above the shelf (from zone top)
+        const DRAWER_OFFSET_Z = 15 // Base offset for drawer animation (same as Column)
+        const DRAWER_LERP_SPEED = 0.15 // Animation speed (same as Column)
         
         // Use explicit drawer heights if provided, otherwise distribute evenly
         let drawerHeights: number[]
@@ -166,13 +172,17 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
           const drawerHeight = drawerHeights[i]
           const absoluteDrawerBottomY = plintHeight + zoneBottomY + currentDrawerBottomY
           
+          // Stagger drawer offsets (same pattern as Column.tsx)
+          // Lower drawers slide out more to create a cascading effect
+          const drawerOffsetZ = DRAWER_OFFSET_Z - i * 2
+          
           elements.push(
             <Drawer
               key={`drawer-${i}`}
               horizontalPanelObject={horizontalPanelObject}
               roundHandleObject={roundHandleObject}
               profileHandleObject={profileHandleObject}
-              openingType={OpeningType.Push} // Wardrobes use push-to-open (no visible handles)
+              openingType={openingType} // Use the same opening type as the doors
               drawerWidth={columnWidth-8}
               drawerHeight={drawerHeight}
               drawerDepth={columnDepth-5}
@@ -180,8 +190,9 @@ const WardrobeZoneRendererComponent: React.FC<WardrobeZoneRendererProps> = ({
               drawerIndex={i}
               positionY={absoluteDrawerBottomY}
               positionX={0}
-              drawerOffsetZ={0} // No opening animation for closed wardrobe drawers
-              isHovered={false} // Never hover (controlled by wardrobe door)
+              drawerOffsetZ={drawerOffsetZ}
+              lerpSpeed={DRAWER_LERP_SPEED}
+              isHovered={isColumnOpen} // Animate when column is hovered/selected
             />
           )
           

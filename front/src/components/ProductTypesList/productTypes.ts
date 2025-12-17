@@ -25,6 +25,11 @@ export const productTypes: ProductTypes[] = [
     image: '/renders-landing/bedside-1.png'
   },
   {
+    name: 'homepage.products.rack',
+    link: '/configurator/rack',
+    image: '/renders-landing/rack-1.png'
+  },
+  {
     name: 'homepage.products.openStand',
     link: '/configurator/wardrobe',
     image: '/products/dulap-deschis-2x2.jpg',

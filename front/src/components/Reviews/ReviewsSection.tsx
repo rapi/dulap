@@ -1,5 +1,3 @@
-// e.g. src/app/reviews-demo/page.tsx or inside some product page
-
 import React from 'react'
 import { ReviewList } from './ReviewList'
 import { Review } from './reviewTypes'
@@ -13,10 +11,8 @@ const reviews: Review[] = [
     dateLabel: 'reviews.list.1.date',
     title: 'reviews.list.1.title',
     body: 'reviews.list.1.body',
-    originalLanguageCode: 'ro-RO',
-    originalLanguageLabel: 'reviews.list.1.originalLanguageLabel',
-    showOriginalLabel: 'reviews.list.1.showOriginalLabel',
-    imageUrl: '/front/src/utils/reviews/review_01.png',
+    originalLanguageLabel: 'ro',
+    imageUrl: '/reviews/review_01.png',
     imageAlt: 'reviews.list.1.imageAlt',
   },
   {
@@ -27,10 +23,8 @@ const reviews: Review[] = [
     dateLabel: 'reviews.list.2.date',
     title: 'reviews.list.2.title',
     body: 'reviews.list.2.body',
-    originalLanguageCode: 'RO',
-    originalLanguageLabel: 'reviews.list.2.originalLanguageLabel',
-    showOriginalLabel: 'reviews.list.2.showOriginalLabel',
-    imageUrl: '/images/reviews/review-2.jpg',
+    originalLanguageLabel: 'ru',
+    imageUrl: '/reviews/review_02.jpg',
     imageAlt: 'reviews.list.2.imageAlt',
   },
   {
@@ -41,14 +35,11 @@ const reviews: Review[] = [
     dateLabel: 'reviews.list.3.date',
     title: 'reviews.list.3.title',
     body: 'reviews.list.3.body',
-    originalLanguageCode: 'RO',
-    originalLanguageLabel: 'reviews.list.3.originalLanguageLabel',
-    showOriginalLabel: 'reviews.list.3.showOriginalLabel',
-    imageUrl: '/images/reviews/review-3.jpg',
+    originalLanguageLabel: 'ro',
+    imageUrl: '/reviews/review_03.jpg',
     imageAlt: 'reviews.list.3.imageAlt',
   },
 ]
-
 
 const ReviewsSection: React.FC = () => {
   return (

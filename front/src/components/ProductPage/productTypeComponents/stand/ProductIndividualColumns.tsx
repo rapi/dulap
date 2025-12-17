@@ -186,7 +186,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
       configurationOptions.map((option) => ({
         value: option.type,
         content: (
-          <ColumnConfigurationIcon type={option.type} width={60} height={75} />
+          <ColumnConfigurationIcon type={option.type} width={50} height={65} />
         ),
         label: (
           <FormattedMessage
@@ -206,7 +206,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
   return (
     <div className={styles.individualColumnsLabel}>
       {!isMobile && (
-        <p className={styles.sectionTitle}>
+        <p className={styles.sectionTitle} style={{ margin: '0' }}>
           <FormattedMessage
             id="homepage.configurator.individualColumns.title"
             defaultMessage="Configure individual sections"

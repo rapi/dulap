@@ -13,6 +13,7 @@
   "meta_title.configurator.stand": "Comoda la comanda Chisinau ✅ Dulap.md",
   "meta_title.configurator.tv-stand": "Comoda TV la comanda Chisinau ✅ Dulap.md",
   "meta_title.configurator.bedside": "Noptiera la comanda Chisinau ✅ Dulap.md",
+  "meta_title.configurator.rack": "Etajeră la comandă Chișinău ✅ Dulap.md",
   "meta_title.about-us": "Despre noi - echipa dulap.md",
   "meta_title.contacts": "Contactați-ne - dulap.md",
   "meta_title.cart": "Coșul meu - dulap.md",
@@ -24,6 +25,7 @@
   "meta_description.configurator.stand": "Comode la comanda in Chisinau, adaptate stilului si spatiului tau. Dulap.md ofera design unic, executie de calitate si montaj rapid.",
   "meta_description.configurator.tv-stand": "Comode pentru TV la comanda in Chisinau – solutii moderne pentru living. Dulap.md realizeaza mobilier personalizat cu materiale premium si montaj profesionist.",
   "meta_description.configurator.bedside": "Noptiere la comanda in Chisinau – mobilier personalizat pentru dormitor. Design unic, calitate premium si montaj rapid de la Dulap.md.",
+  "meta_description.configurator.rack": "Etajere la comandă în Chișinău – mobilier personalizat pentru cărți și depozitare. Design unic, calitate premium și montaj rapid de la Dulap.md.",
   "meta_description.about-us": "Află mai multe despre dulap.md: cine suntem, ce facem și cum creăm mobilă la comandă. Echipa noastră este formată din specialiști în design, calitate și soluții personalizate.",
   "meta_description.contacts": "Doriți să comandați mobilă sau să adresați o întrebare? Contactați dulap.md — suntem mereu disponibili. Aici găsiți adresa, telefonul, emailul și formularul de contact.",
   "meta_description.cart": "Coșul dvs. pe dulap.md. Verificați produsele selectate și pregătiți-vă să finalizați comanda pentru mobila creată special pentru dvs.",
@@ -34,6 +36,7 @@
   "meta.header.configurator.stand": "Comoda la comanda in Chisinau",
   "meta.header.configurator.tv-stand": "Comoda TV la comanda in Chisinau",
   "meta.header.configurator.bedside": "Noptiera la comanda in Chisinau",
+  "meta.header.configurator.rack": "Etajeră la comandă în Chișinău",
 
   "homepage.banner.title.0": "Dulapul tău -",
   "homepage.banner.title.1": " exact cum îl vrei",
@@ -129,6 +132,7 @@
   "homepage.products.TVstand": "Comodă TV",
   "homepage.products.wardrobe": "Dulap pentru haine",
   "homepage.products.bedside": "Noptieră",
+  "homepage.products.rack": "Etajeră",
   "homepage.products.dulap": "Dulap",
 
   "homepage.label.comingSoon": "În curând",
@@ -222,6 +226,9 @@
   "homepage.configurator.bedside.title": "Noptieră",
   "homepage.configurator.tv-stand.title": "Comodă TV",
   "homepage.configurator.wardrobe.title": "Dulap pentru haine",
+  "homepage.configurator.rack.title": "Etajeră",
+  "homepage.configurator.rack.column": "Coloană {number}",
+  "homepage.configurator.rack.columnConfiguration": "Configurare Internă",
 
 
   "homepage.configurator.dimensions.title": "Dimensiuni",
@@ -294,6 +301,9 @@
 
   "homepage.configurator.wardrobe.column": "Coloana {number}",
   "homepage.configurator.wardrobe.columnConfiguration": "Configurează",
+  "homepage.configurator.wardrobe.columnDoor": "Ușă coloană",
+  "homepage.configurator.wardrobe.columnDoor.closed": "Închis",
+  "homepage.configurator.wardrobe.columnDoor.open": "Deschis",
   "homepage.configurator.wardrobe.currentConfig": "Configurație Actuală",
   "homepage.configurator.wardrobe.selectTemplate": "Selectează Aranjament Interior",
   "homepage.configurator.wardrobe.columnDimensions": "Coloană: {width}cm × {height}cm × {depth}cm",
@@ -329,12 +339,24 @@
   "homepage.configurator.wardrobe.template.oneTopShelf": "Un Raft Sus",
   "homepage.configurator.wardrobe.template.oneTopShelf.desc": "Un raft în partea de sus cu spațiu liber dedesubt",
 
+  "homepage.configurator.rack.template.openShelvesOnly": "Doar Rafturi Deschise",
+  "homepage.configurator.rack.template.openShelvesOnly.desc": "Rafturi multiple deschise pentru cărți și articole de expunere",
+  "homepage.configurator.rack.template.shelvesWithFullDoor": "Rafturi cu Ușă Completă",
+  "homepage.configurator.rack.template.shelvesWithFullDoor.desc": "Rafturi închise în spatele unei uși pe toată înălțimea pentru un aspect curat",
+  "homepage.configurator.rack.template.halfOpenHalfClosed": "Jumătate Deschis, Jumătate Închis",
+  "homepage.configurator.rack.template.halfOpenHalfClosed.desc": "Rafturi superioare deschise pentru expunere, rafturi inferioare cu ușă",
+  "homepage.configurator.rack.template.drawersAndShelves": "Sertare și Rafturi",
+  "homepage.configurator.rack.template.drawersAndShelves.desc": "Rafturi deschise în partea de sus cu sertare în partea de jos pentru depozitare",
+  "homepage.configurator.rack.template.mixedStorage": "Depozitare Mixtă",
+  "homepage.configurator.rack.template.mixedStorage.desc": "Combinație de rafturi deschise, rafturi închise și sertare",
+
   "homepage.configurator.fittings.title": "Feronerie",
   "homepage.configurator.fittings.handleType": "Mânere",
   "homepage.configurator.fittings.hinges": "Balamale",
   "homepage.configurator.fittings.guides": "Glisiere",
   "homepage.configurator.fittings.roundHandle": "mâner rotund",
   "homepage.configurator.fittings.profileHandle": "mâner profil",
+  "homepage.configurator.fittings.profileHandleLong": "mâner profil lung",
   "homepage.configurator.fittings.pushToOpen": "fără mâner",
   "maner": "mâner rotund",
   "profile-handle": "mâner profil",
@@ -649,6 +671,9 @@
   "blog.colors.section.final.conf.aria": "Deschide configuratorul dulapului",
 
   "reviews.card.colorLabel": "Culoarea:",
+  "reviews.language.label": "Limba originală: ",
+  "reviews.language.ro": "română",
+  "reviews.language.ru": "rusă",
   "reviews.summary.recommended": "100% din clienții noștri recomandă dulap.md",
   "reviews.summary.learnMore": "Mai multe recenzii",
 
@@ -656,32 +681,32 @@
   "reviews.subtitle": "Ținem la calitate și la experiența clienților noștri.",
 
   "reviews.list.1.author": "Diana D.",
-  "reviews.list.1.color": "Gri piatră",
+  "reviews.list.1.color": "Grey Stone",
   "reviews.list.1.date": "20 august 2025",
-  "reviews.list.1.title": "Mi-a plăcut și o să recomand tuturor",
-  "reviews.list.1.body": "E fantastic că poți comanda mobilă online, după mărimile tale. Am ezitat câteva zile, dar am zis să comand mostrele cu livrare la domiciliu, și atunci am văzut calitatea materialului. Nu se compară cu mobila gata făcută. Sunt mulțumită! Mersi, băieți!",
-  "reviews.list.1.originalLanguageLabel": "Limba originală: română",
-  "reviews.list.1.showOriginalLabel": "Vezi textul original",
-  "reviews.list.1.imageAlt": "Dulap gri piatră trei secțiuni",
+  "reviews.list.1.title": "Am comandat dulap în antreu și am rămas mulțumită",
+  "reviews.list.1.body": "Am rămas uimită că poți comanda mobilă online, după mărimile tale. Am ezitat câteva zile, dar am zis să comand mostrele cu livrare la domiciliu, și atunci am văzut calitatea materialului. Nu se compară cu mobila gata făcută. Sunt mulțumită! Mersi, băieți!",
+ "reviews.list.1.imageAlt": "Dulap gri piatră trei secțiuni",
 
-  "reviews.list.2.author": "Anna T.",
-  "reviews.list.2.color": "Bej",
+  "reviews.list.2.author": "Анна Т.",
+  "reviews.list.2.color": "Biege",
   "reviews.list.2.date": "2 septembrie 2025",
-  "reviews.list.2.title": "Comodă în camera copiilor",
-  "reviews.list.2.body": "E foarte calitativă comoda, sertarele se deschid ușor, mecanismele se vede că sunt calitative. Recomand cu încredere!",
-  "reviews.list.2.originalLanguageLabel": "Limba originală: română",
-  "reviews.list.2.showOriginalLabel": "Vezi textul original",
+  "reviews.list.2.title": "Заказали шкаф, всё отлично",
+  "reviews.list.2.body": "Давно в одном углу просился шкаф. Через знакомых узнали про dulap studio - заказ оформили быстро, пришли, замерили. Через 2 недели шкаф уже стоял. Гардеробная теперь полноценная. Рекомендую!",
   "reviews.list.2.imageAlt": "Comodă bej 5 secțiuni",
 
   "reviews.list.3.author": "Felicia S.",
-  "reviews.list.3.color": "Gri sidefat",
+  "reviews.list.3.color": "Biege",
   "reviews.list.3.date": "26 octombrie 2025",
-  "reviews.list.3.title": "100% după așteptări",
-  "reviews.list.3.body": "Mi-a plăcut abordarea. Chiar dacă comanda o plasezi online, cei de la dulap.md te sună, concretizează, mai verifică o dată! Am economisit, cred că, peste 30%. Mersi echipei dulap.md.",
-  "reviews.list.3.originalLanguageLabel": "Limba originală: română",
-  "reviews.list.3.showOriginalLabel": "Vezi textul original",
-  "reviews.list.3.imageAlt": "Dulap pentru haine 2 secțiuni"
+  "reviews.list.3.title": "Două noptiere în dormitor",
+  "reviews.list.3.body": "Cred că a fost o alegere reușită. Ne-am dorit ca noptierele să fie în aceeași nuanță cu restul mobilierului din dormitor. Am ales să comandăm pe dulap.md și nu am rămas dezamăgiți. Mersi mult echipei!",
+  "reviews.list.3.imageAlt": "Dulap pentru haine 2 secțiuni",
 
+  "reviews.list.4.author": "Vlad",
+  "reviews.list.4.color": "White",
+  "reviews.list.4.date": "29 noiembrie 2025",
+  "reviews.list.4.title": "Заказывали тумбу в детскую - качество супер",
+  "reviews.list.4.body": "Был не лучший опыт с икеевским комодом, который быстро посыпался. К рождению ребенка хотели хороший комод в детскую купить, в итоге решили делать под заказ, так как нет времени ходить выбирать. Жена выбрала вас:)",
+  "reviews.list.4.imageAlt": "Dulap pentru haine 2 secțiuni"
 
 
 }

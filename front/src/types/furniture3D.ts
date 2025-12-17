@@ -1,6 +1,7 @@
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 import { ColumnConfigurationType } from './columnConfigurationTypes'
 import { WardrobeColumnConfiguration } from './wardrobeConfigurationTypes'
+import { RackColumnConfiguration } from './rackConfigurationTypes'
 
 /**
  * Extended column configuration that includes type and door opening side
@@ -26,8 +27,10 @@ export interface FurnitureDefaults {
 
 /**
  * Props required for 3D furniture rendering
- * columnConfigurations can be either ColumnConfigurationType[] (for stand/bedside/tv-stand)
- * or WardrobeColumnConfiguration[] (for wardrobe)
+ * columnConfigurations can be:
+ * - ColumnConfigurationType[] (for stand/bedside/tv-stand)
+ * - WardrobeColumnConfiguration[] (for wardrobe)
+ * - RackColumnConfiguration[] (for rack)
  */
 export interface Furniture3DProps {
   selectedColor: string
@@ -38,11 +41,11 @@ export interface Furniture3DProps {
   sections: number
   openingType: OpeningType
   columns: number
-  columnConfigurations?: ColumnConfigurationType[] | WardrobeColumnConfiguration[]
+  columnConfigurations?: ColumnConfigurationType[] | WardrobeColumnConfiguration[] | RackColumnConfiguration[]
   columnConfigurationsWithOptions?: ColumnConfigurationWithOptions[] // Extended config with door opening side (for stand)
-  columnWidths?: number[] // Optional: variable column widths (for wardrobe)
-  columnPositions?: number[] // Optional: custom column X positions (for wardrobe)
-  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage'
+  columnWidths?: number[] // Optional: variable column widths (for wardrobe/rack)
+  columnPositions?: number[] // Optional: custom column X positions (for wardrobe/rack)
+  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'rack'
   selectedColumnIndex?: number | null // Optional: externally controlled selected column index
   onColumnClick?: (index: number | null) => void // Callback when a column is clicked in 3D (null = deselect)
   onDeselectFunctionReady?: (deselectFn: () => void) => void // Called with the deselection function that parent can store and call

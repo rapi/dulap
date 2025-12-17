@@ -7,7 +7,6 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
 }
-
 module.exports = {
   async rewrites() {
     return [

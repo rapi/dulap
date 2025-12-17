@@ -53,6 +53,7 @@ export interface WardrobeColumnConfiguration {
   totalHeight: number // Internal height (excluding plinth)
   doorType: 'single' | 'split'
   doorOpeningSide?: 'left' | 'right' // For single doors
+  hasDoor?: boolean // If false, column is open (no doors). Defaults to true.
 
   // Metadata
   templateId?: string // If based on a template

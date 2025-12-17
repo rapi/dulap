@@ -380,6 +380,80 @@ export const WARDROBE_CONSTRAINTS: ProductConstraints = {
 }
 
 // ============================================================================
+// RACK CONSTRAINTS
+// ============================================================================
+export const RACK_CONSTRAINTS: ProductConstraints = {
+  dimensions: {
+    width: { min: 40, max: 250, default: 120, unit: 'cm' },
+    height: { min: 90, max: 270, default: 200, unit: 'cm' },
+    depth: { min: 25, max: 65, default: 35, unit: 'cm' },
+    plintHeight: { min: 2, max: 8, default: 2, unit: 'cm' },
+  },
+
+  steps: {
+    heightStep: 1,
+    depthStep: 5,
+  },
+
+  sections: {
+    rule: 'width-based',
+    min: 1,
+    max: 3,
+    default: 1,
+    getAvailableSections: ({ width }) => {
+      // Width-based sections for rack
+      if (width <= 80) return [1]
+      if (width <= 160) return [1, 2]
+      return [1, 2, 3]
+    },
+  },
+
+  columns: {
+    min: 1,
+    max: 3,
+    default: 2,
+    allowCustomConfiguration: true,
+    getAvailableColumns: ({ width }) => {
+      // Width-based column limits for rack
+      // 40-80cm: 1 column
+      // 81-160cm: 2 columns
+      // 161-250cm: 3 columns
+      if (width <= 80) return [1]
+      if (width <= 160) return [2]
+      return [3]
+    },
+  },
+
+  pricing: {
+    basePrice: 800,
+    perDrawer: 600,
+    perCmWidth: 25,
+    perCmHeightAbove: { threshold: 200, rate: 4 },
+    perCmDepthAbove: { threshold: 30, rate: 7 },
+    vatMultiplier: 1.35,
+  },
+
+  images: {
+    heightThresholds: [
+      { maxHeight: 150, imageDimension: 1500 },
+      { maxHeight: 220, imageDimension: 2000 },
+      { maxHeight: Infinity, imageDimension: 2400 },
+    ],
+    widthThresholds: [
+      { maxWidth: 80, imageDimension: 80 },
+      { maxWidth: 160, imageDimension: 120 },
+      { maxWidth: Infinity, imageDimension: 180 },
+    ],
+    plintHeightThresholds: [
+      { maxPlintHeight: 5, imageDimension: 20 },
+      { maxPlintHeight: Infinity, imageDimension: 60 },
+    ],
+  },
+
+  colors: ['White', 'Biege', 'Light Grey', 'Grey'],
+}
+
+// ============================================================================
 // WARDROBE PRICE CALCULATION
 // ============================================================================
 
@@ -434,6 +508,54 @@ export function calculateWardrobePrice(params: WardrobePriceParams): number {
 }
 
 // ============================================================================
+// RACK PRICE CALCULATION
+// ============================================================================
+
+export interface RackPriceParams {
+  width: number
+  height: number
+  depth: number
+  columns: number
+  templatesExtraCost: number
+}
+
+/**
+ * Rack-specific price calculation
+ * Similar to wardrobe but adjusted for rack specifics
+ */
+export function calculateRackPrice(params: RackPriceParams): number {
+  const { width, height, depth, columns, templatesExtraCost } = params
+  const { pricing } = getConstraints('rack')
+
+  const extraHeightCm =
+    height > pricing.perCmHeightAbove.threshold
+      ? height - pricing.perCmHeightAbove.threshold
+      : 0
+
+  const extraDepthCm =
+    depth > pricing.perCmDepthAbove.threshold
+      ? depth - pricing.perCmDepthAbove.threshold
+      : 0
+
+  const basePerWidth = width * pricing.perCmWidth
+  const heightPart = extraHeightCm * pricing.perCmHeightAbove.rate
+  const depthPart = extraDepthCm * pricing.perCmDepthAbove.rate
+
+  const columnsBase = pricing.basePrice * columns
+
+  const totalBeforeVat =
+    basePerWidth +
+    heightPart +
+    depthPart +
+    columnsBase +
+    templatesExtraCost
+
+  const round10 = (n: number): number => Math.round(n / 10) * 10
+
+  return round10(Math.round(totalBeforeVat * pricing.vatMultiplier))
+}
+
+// ============================================================================
 // CONSTRAINT REGISTRY
 // ============================================================================
 
@@ -442,6 +564,7 @@ export const FURNITURE_CONSTRAINTS = {
   bedside: BEDSIDE_CONSTRAINTS,
   'tv-stand': TV_STAND_CONSTRAINTS,
   wardrobe: WARDROBE_CONSTRAINTS,
+  rack: RACK_CONSTRAINTS,
 } as const
 
 export type FurnitureType = keyof typeof FURNITURE_CONSTRAINTS

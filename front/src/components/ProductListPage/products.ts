@@ -19,7 +19,7 @@ export type SectionWardrobe = {
 }
 
 export type FurnitureConfig = {
-  openingType: 'maner' | 'profile-handle' | 'push'
+  openingType: 'maner' | 'profile-handle' | 'profile-handle-long' | 'push'
   hinges?:
     | 'homepage.configurator.fittings.hinges.options.1'
     | 'homepage.configurator.fittings.hinges.options.2'
