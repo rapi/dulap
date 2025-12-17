@@ -52,7 +52,7 @@ const AboutUs: React.FC = () => {
             {/* Founder 3 */}
             <div className={styles.founderCard}>
               <img
-                src="/about-us/Margareta.jpg"
+                src="/about-us/Margareta-new.jpg"
                 alt="Margareta"
                 className={styles.founderImage}
               />
