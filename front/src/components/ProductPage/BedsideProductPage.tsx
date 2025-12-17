@@ -2,7 +2,6 @@ import styles from '../ProductPageLayout/ProductPageLayout.module.css'
 import React, { FC, useState, useCallback, useRef, useEffect } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { useMediaQuery } from '@mui/material'
-import { useRouter } from 'next/router'
 
 import {
   ProductDimensions,
@@ -143,11 +142,6 @@ export const ProductPage: FC<ProductPageProps> = ({
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
-
-  const router = useRouter()
-  const route =
-    router.pathname.match(/^\/[^/]+\/product(\/.+?)\/[^/]+$/)?.[1] ?? ''
-  const configuratorRoute = '/configurator' + route
 
   const handleColumnClick = useCallback((index: number | null) => {
     if (index !== null) {
