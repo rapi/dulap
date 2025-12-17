@@ -52,6 +52,22 @@ const AboutUs: React.FC = () => {
             {/* Founder 3 */}
             <div className={styles.founderCard}>
               <img
+                src="/about-us/Margareta.jpg"
+                alt="Margareta"
+                className={styles.founderImage}
+              />
+              <h3 className={styles.founderName}>Margareta Galaju</h3>
+              <p className={styles.founderRole}>
+                <FormattedMessage id="aboutUs.founder5.subtitle" />
+              </p>
+              <p className={styles.founderDetails}>
+                <FormattedMessage id="aboutUs.founder5.details" />
+              </p>
+            </div>
+
+            {/* Founder 4 */}
+            <div className={styles.founderCard}>
+              <img
                 src="/about-us/Roman.jpg"
                 alt="Roman"
                 className={styles.founderImage}
@@ -65,7 +81,7 @@ const AboutUs: React.FC = () => {
               </p>
             </div>
 
-            {/* Founder 4 */}
+            {/* Founder 5 */}
             <div className={styles.founderCard}>
               <img
                 src="/about-us/Iulia.jpg"
