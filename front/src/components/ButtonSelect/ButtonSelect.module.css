@@ -19,7 +19,7 @@
   --btnselect-padding-x: 10px;
   --btnselect-radius: 15px;
   --btnselect-font-size: 12px;
-  --btnselect-font-weight: 450;
+  --btnselect-font-weight: 300;
   --btnselect-gap: 7px;
   --btnselect-image-size: 24px;
 }
@@ -30,7 +30,7 @@
   --btnselect-padding-x: 14px;
   --btnselect-radius: 18px;
   --btnselect-font-size: 13px;
-  --btnselect-font-weight: 450;
+  --btnselect-font-weight: 300;
   --btnselect-gap: 8px;
   --btnselect-image-size: 28px;
 }
@@ -44,15 +44,15 @@
   padding: 0 var(--btnselect-padding-x, 10px);
   justify-content: center;
   border-radius: var(--btnselect-radius, 15px);
-  border: 1px solid #e7e7e7;
-  background-color: #fff;
-  color: #333;
+  border: 1px solid #f9f9f9;
+  background-color: #f9f9f9;
+  color: #505050;
   font-size: var(--btnselect-font-size, 12px);
   cursor: pointer;
   transition:
     background-color 0.1s ease-in-out,
     border-color 0.1s ease-in-out;
-  font-weight: var(--btnselect-font-weight, 450);
+  font-weight: var(--btnselect-font-weight, 300);
   font-family: 'Onest', sans-serif;
 
   /* 👇 keep each chip from shrinking so they make one scrollable row */
@@ -60,19 +60,19 @@
 }
 
 .button:hover {
-  border: 1px solid #777777;
+  border: 1px solid #505050;
 }
 
 .selected {
-  border-color: #777777;
-  background-color: #777777;
-  color: #fff;
-  font-weight: 500;
+  border-color: #505050;
+  background-color: #505050;
+  color: #f9f9f9;
+  font-weight: 300;
   cursor: auto;
 }
 
 .button.disabled {
-  color: #ebebeb;
+  color: #f9f9f9;
   pointer-events: none;
 }
 

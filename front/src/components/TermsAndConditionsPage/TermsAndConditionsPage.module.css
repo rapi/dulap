@@ -21,9 +21,9 @@
 
 .title {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 300;
   text-align: center;
-  color: #333;
+  color: #505050;
 }
 /* 3. Hero / Page Title */
 .pageHero {
@@ -34,13 +34,13 @@
 
 .pageHero h1 {
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 8px;
 }
 
 .pageHero p {
   font-size: 1rem;
-  color: #666666;
+  color: #505050;
 }
 
 /* 4. Contact Section */
@@ -68,9 +68,9 @@
 
 .contactForm label {
   display: block;
-  font-weight: 500;
+  font-weight: 300;
   margin-bottom: 8px;
-  color: #333333;
+  color: #505050;
 }
 
 .contactForm input,
@@ -82,7 +82,7 @@
   border-radius: 4px;
   font-size: 1rem;
   font-family: 'Onest', sans-serif;
-  color: #333333;
+  color: #505050;
   box-sizing: border-box;
 }
 
@@ -94,11 +94,11 @@
 
 .btnSubmit {
   background-color: #c0392b;
-  color: #ffffff;
+  color: #f9f9f9;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 300;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -142,18 +142,18 @@
 
 .infoLabel {
   display: block;
-  font-weight: 500;
-  color: #333333;
+  font-weight: 300;
+  color: #505050;
   margin-bottom: 8px;
 }
 
 .infoText {
-  color: #666666;
+  color: #505050;
   font-size: 0.95rem;
 }
 
 .infoText:hover {
-  color: #333333;
+  color: #505050;
   text-decoration: underline;
 }
 

@@ -1,6 +1,6 @@
 .breadcrumb {
   font-size: 14px;
-  color: #444; /* Darker text for better readability */
+  color: #505050; /* Darker text for better readability */
   margin: 0.76em auto;
   text-decoration: none;
 }
@@ -11,14 +11,14 @@
 }
 
 .breadcrumb .inactive a:hover {
-  color: #333!important; /* Darker on hover */
+  color: #505050!important; /* Darker on hover */
   text-decoration: none;
 }
 
 .breadcrumb .active,
 .breadcrumb .active a {
-  color: #333!important; /* Strong contrast for active item */
-  font-weight: 500;
+  color: #505050!important; /* Strong contrast for active item */
+  font-weight: 300;
   text-decoration: none;
 }
 

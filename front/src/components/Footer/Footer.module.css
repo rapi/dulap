@@ -29,7 +29,7 @@
 .menu li {
   margin: 0;
   font-size: 15px;
-  color: #333;
+  color: #505050;
 }
 
 .menu li a {
@@ -38,7 +38,7 @@
 }
 
 .menu li a:hover {
-  color: #585858;
+  color: #505050;
   cursor: pointer;
 }
 
@@ -67,7 +67,7 @@
 .location {
   margin-top: 10px;
   font-size: 0.9em;
-  color: #555;
+  color: #505050;
 }
 
 @media (max-width: 480px) {

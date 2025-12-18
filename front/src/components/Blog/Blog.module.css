@@ -3,13 +3,13 @@
   margin: 0 auto;
   padding: 24px 20px 80px;
   line-height: 1.75;
-  color: #111;
+  color: #505050;
 }
 
 .breadcrumbs {
   font-size: 12px;
   margin-bottom: 16px;
-  color: #666;
+  color: #505050;
 }
 .breadcrumbs ol {
   list-style: none;
@@ -43,7 +43,7 @@
 
 .description {
   font-size: 18px;
-  color: #444;
+  color: #505050;
   margin: 0 0 16px 0;
 }
 
@@ -52,7 +52,7 @@
   flex-wrap: wrap;
   gap: 10px 16px;
   font-size: 13px;
-  color: #666;
+  color: #505050;
   margin-bottom: 20px;
 }
 .metaItem {
@@ -71,7 +71,7 @@
 }
 .caption {
   font-size: 12px;
-  color: #777;
+  color: #505050;
   margin-top: 8px;
 }
 
@@ -116,14 +116,14 @@
 }
 .quoteCite {
   font-size: 13px;
-  color: #666;
+  color: #505050;
 }
 
 .listWrap {
   margin: 20px 0;
 }
 .listTitle {
-  font-weight: 600;
+  font-weight: 400;
   margin: 0 0 6px 0;
 }
 .list {
@@ -166,7 +166,7 @@
 }
 .tag {
   font-size: 12px;
-  color: #444;
+  color: #505050;
   background: #f4f4f4;
   border: 1px solid #eee;
   border-radius: 999px;

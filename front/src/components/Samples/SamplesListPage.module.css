@@ -19,9 +19,9 @@
 
 .title {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 300;
   text-align: center;
-  color: #333;
+  color: #505050;
 }
 
 .visuallyHiddenTitle {
@@ -90,8 +90,8 @@
   display: flex;
   justify-content: center;
   font-size: 18px;
-  font-weight: 500;
-  color: #333;
+  font-weight: 300;
+  color: #505050;
 }
 
 @keyframes fadeInOut {

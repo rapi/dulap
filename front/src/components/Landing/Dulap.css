@@ -1,7 +1,7 @@
 .customizeButton {
   padding: 0.8rem 1.5rem;
   background-color: #ff9500;
-  color: white;
+  color: #f9f9f9;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -12,9 +12,9 @@
 
 .productCard,
 .readyProductCard {
-  background-color: #fff;
+  background-color: #f9f9f9;
   padding: 1rem;
-  border: 1px solid #eee;
+  border: 1px solid #f9f9f9;
   border-radius: 8px;
   text-align: center;
 }
@@ -23,8 +23,8 @@
 .footer {
   text-align: center;
   padding: 1.5rem;
-  background-color: #333;
-  color: white;
+  background-color: #505050;
+  color: #f9f9f9;
 }
 
 .footerLinks {
@@ -35,7 +35,7 @@
 }
 
 .footerLinks a {
-  color: white;
+  color: #f9f9f9;
   text-decoration: none;
 }
 

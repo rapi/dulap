@@ -1,7 +1,7 @@
 .container {
   font-family: 'Onest', sans-serif;
   font-size: 16px;
-  color: #333333;
+  color: #505050;
   line-height: 1.5;
   margin: 0;
   padding: 0;
@@ -20,19 +20,19 @@
 
 .title {
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 8px;
-  color: #333333;
+  color: #505050;
 }
 
 .intro {
-  font-size: 1rem;
-  color: #666666;
+  font-size: 1.1rem;
+  color: #505050;
   margin-bottom: 32px;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  font-weight: 400;
+  font-weight: 200;
 }
 
 /* 4. Team Grid */
@@ -65,15 +65,15 @@
 
 .founderName {
   font-size: 1.3rem;
-  font-weight: 500;
+  font-weight: 400;
   margin-bottom: 0;
-  color: #333333;
+  color: #505050;
 }
 
 .founderRole {
   font-size: 1rem;
   font-weight: 400;
-  color: #444444;
+  color: #505050;
 }
 
 .founderDetails {
@@ -81,7 +81,7 @@
   line-height: 1.7;
   letter-spacing: 0.4;
   font-weight: 350;
-  color: #888888;
+  color: #505050;
 }
 
 @media (max-width: 768px) {

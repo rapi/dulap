@@ -10,7 +10,7 @@ body {
   font-size: 14px;
   font-optical-sizing: auto;
   font-style: normal;
-  color: #333;
+  color: #505050;
   background-color: #f9f9f9;
   width: 100%;
   overscroll-behavior-y: contain;
@@ -31,7 +31,7 @@ body {
 
 .promocode {
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 200;
 }
 
 @media (max-width: 1024px) {

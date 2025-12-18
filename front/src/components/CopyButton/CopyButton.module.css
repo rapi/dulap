@@ -1,11 +1,11 @@
 /* components/CopyButton/CopyButton.module.css */
 .copyButton {
   font-family: 'Onest', sans-serif;
-  font-weight: 500;
+  font-weight: 300;
   height: 45px;
   width: 150px;
   text-transform: none;
-  color: #ffffff;
+  color: #f9f9f9;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -14,7 +14,7 @@
   padding: 0.5em 1em;
   border: none;
   background-color: #fba85c;
-  color: white;
+  color: #f9f9f9;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s;

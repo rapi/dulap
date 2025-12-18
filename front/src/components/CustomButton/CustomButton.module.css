@@ -2,9 +2,9 @@
 a.ctaButton,
 button.ctaButton {
   font-family: 'Onest', sans-serif;
-  font-weight: 500;
+  font-weight: 300;
   text-transform: none;
-  color: #ffffff;
+  color: #f9f9f9;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -78,7 +78,7 @@ button.ctaButton.primaryVariant {
 a.ctaButton.primaryVariant:hover,
 button.ctaButton.primaryVariant:hover {
   background-color: #f1953f;
-  color: white;
+  color: #f9f9f9;
 }
 
 a.ctaButton.primaryVariant.outlined,
@@ -93,7 +93,7 @@ button.ctaButton.primaryVariant.outlined:hover {
 }
 a.ctaButton.primaryVariant.outlined:hover {
   background-color: #fba85c;
-  color: white;
+  color: #f9f9f9;
 }
 
 /*Danger Variant*/
@@ -115,7 +115,7 @@ button.ctaButton.dangerVariant.outlined {
 a.ctaButton.dangerVariant.outlined:hover,
 button.ctaButton.dangerVariant.outlined:hover {
   background-color: #f15e4d;
-  color: white;
+  color: #f9f9f9;
   border: 2px solid #f15e4d;
 }
 
@@ -127,7 +127,7 @@ button.ctaButton.greyVariant {
 a.ctaButton.greyVariant:hover,
 button.ctaButton.greyVariant:hover {
   background-color: #8b8b8b;
-  color: white;
+  color: #f9f9f9;
 }
 
 a.ctaButton.greyVariant.outlined,
@@ -142,7 +142,7 @@ button.ctaButton.greyVariant.outlined:hover {
 }
 a.ctaButton.greyVariant.outlined:hover {
   background-color: #8b8b8b;
-  color: white;
+  color: #f9f9f9;
 }
 
 /* icon boost */

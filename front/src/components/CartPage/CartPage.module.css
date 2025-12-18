@@ -18,14 +18,14 @@
   text-align: center;
   font-size: 26px;
   margin-bottom: 25px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .emptyCartMessage {
   font-size: 16px;
   text-align: center;
   margin-bottom: 300px;
-  font-weight: 500;
+  font-weight: 300;
 }
 
 .cartTable {
@@ -46,7 +46,7 @@
 
 .cartHeader {
   background-color: #f9f9f9;
-  font-weight: 500;
+  font-weight: 300;
 }
 
 .productImageContainer {
@@ -135,7 +135,7 @@
   justify-content: space-between;
   margin-top: 30px;
   font-size: 20px;
-  font-weight: bold;
+  font-weight: 400;
   padding: 15px 0;
   border-top: 2px solid #ddd;
 }
@@ -150,7 +150,7 @@
   cursor: pointer;
   margin-top: 25px;
   border-radius: 8px;
-  font-weight: bold;
+  font-weight: 400;
   text-transform: uppercase;
 }
 
@@ -198,7 +198,7 @@
 
   .productName {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 400;
     text-align: center;
     margin-bottom: 8px;
   }
@@ -218,7 +218,7 @@
 
   .price {
     font-size: 20px;
-    font-weight: 700;
+    font-weight: 400;
     color: #f4a261;
     margin-bottom: 12px;
   }
@@ -230,7 +230,7 @@
   }
   .actions .MuiIconButton-root {
     background: #e63946;
-    color: #fff;
+    color: #f9f9f9;
   }
 }
 

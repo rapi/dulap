@@ -5,13 +5,13 @@
   padding: 2rem;
   /*background: #f9f8f7;*/
   /*background: #f1f1f1;*/
-  color: #111;
+  color: #505050;
 }
 
 .wrapper h2 {
   flex: 1 1 200px;
   font-size: 1.8rem;
-  font-weight: 550;
+  font-weight: 400;
 }
 
 .section {
@@ -34,7 +34,7 @@
   justify-content: space-between;
   width: 100%;
   font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: 300;
   padding: 0.8rem 0;
   cursor: pointer;
 }
@@ -43,9 +43,9 @@
   font-size: 1.1rem;
   margin: 0.4rem 0 1rem;
   font-family: inherit;
-  font-weight: 300;
+  font-weight: 200;
   white-space: pre-wrap;
-  color: #444;
+  color: #505050;
   line-height: 1.5;
 }
 

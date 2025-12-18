@@ -43,7 +43,7 @@
 
 .title {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 400;
   margin-bottom: 40px;
   margin-block: 0;
 }
@@ -107,7 +107,7 @@
 .tooltipContainer .tooltipText {
   visibility: hidden;
   width: 75px;
-  color: #fff;
+  color: #f9f9f9;
   text-align: center;
   padding: 5px 0;
   position: absolute;
@@ -150,10 +150,10 @@
   transform: translateX(-50%) translateY(4px);
   padding: 6px 10px;
   background: #333;
-  color: #fff;
+  color: #f9f9f9;
   border-radius: 6px;
   font-size: 12px;
-  font-weight: 300;
+  font-weight: 200;
   line-height: 1.2;
   white-space: nowrap;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -226,7 +226,7 @@
 .subtitle,
 .sectionsTitle {
   font-size: 15px;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .sectionLabel,
@@ -294,7 +294,7 @@
 .infoboxContainer {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: #f9f9f9;
   border: 1px solid #c2c2c2;
   border-radius: 10px;
   padding: 30px 25px;
@@ -310,7 +310,7 @@
 
 .infoboxContainer {
   margin-top: 20px;
-  color: #555;
+  color: #505050;
 }
 
 .infoboxTitle {
@@ -318,7 +318,7 @@
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  font-weight: 500;
+  font-weight: 300;
 }
 
 .infoboxContainer p,
@@ -341,21 +341,21 @@
 .price {
   margin: 0;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 400;
   color: #f15e4d;
 }
 
 .newPrice {
   margin: 0;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 400;
   color: #f15e4d;
 }
 
 .crossedPrice {
   margin: 2px 0 0 15px;
-  color: #555;
-  font-weight: 400;
+  color: #505050;
+  font-weight: 200;
   font-size: 16px;
   text-decoration: line-through;
 }
@@ -367,13 +367,13 @@
 .priceTitleText {
   margin: 0;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 300;
 }
 
 .price h2 {
   margin: 0;
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 400;
   color: #f15e4d;
 }
 
@@ -385,7 +385,7 @@
 
 .underBtnText {
   font-size: 11px;
-  color: #555;
+  color: #505050;
   margin: 2px 0 0;
   display: flex;
   justify-content: center;
@@ -402,7 +402,7 @@
 }
 
 .assemblyNote {
-  color: #666;
+  color: #505050;
   font-size: 12px;
 }
 
@@ -547,7 +547,7 @@
     justify-content: center;
   }
   .dimensionsMobileTooltip {
-    color: #555;
+    color: #505050;
   }
   .mobileCorePanel {
     display: flex;
@@ -625,7 +625,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  background-color: #fff;
+  background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -638,7 +638,7 @@
 }
 
 .columnTypeImageSelected {
-  border-color: #2c2c2c;
+  border-color: #505050;
   border-width: 2px;
   background-color: #f9f9f9;
 }
@@ -649,23 +649,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: #505050;
 }
 
 .columnTypeImageSelected .columnTypeIcon {
-  color: #2c2c2c;
+  color: #505050;
 }
 
 .columnTypeLabel {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 300;
   text-align: center;
-  color: #666;
+  color: #505050;
 }
 
 .columnTypeImageSelected .columnTypeLabel {
-  color: #2c2c2c;
-  font-weight: 600;
+  color: #505050;
+  font-weight: 400;
 }
 
 .columnTypeCheckmark {
@@ -674,14 +674,14 @@
   right: 6px;
   width: 20px;
   height: 20px;
-  background-color: #2c2c2c;
+  background-color: #505050;
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 @media (max-width: 768px) {
@@ -703,7 +703,7 @@
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: #ccc #f0f0f0;
+  scrollbar-color: #ccc #f9f9f9;
 }
 
 .columnConfigScrollContainer::-webkit-scrollbar {
@@ -737,7 +737,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
-  background-color: #fff;
+  background-color: #f9f9f9;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -755,7 +755,7 @@
 }
 
 .columnConfigSelected {
-  border-color: #2c2c2c;
+  border-color: #505050;
   border-width: 2px;
   background-color: #f9f9f9;
 }
@@ -766,18 +766,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: #505050;
 }
 
 .columnConfigSelected .columnConfigIcon {
-  color: #2c2c2c;
+  color: #505050;
 }
 
 .columnConfigLabel {
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 300;
   text-align: center;
-  color: #666;
+  color: #505050;
   line-height: 1.2;
   max-width: 100%;
   overflow: hidden;
@@ -785,8 +785,8 @@
 }
 
 .columnConfigSelected .columnConfigLabel {
-  color: #2c2c2c;
-  font-weight: 600;
+  color: #505050;
+  font-weight: 400;
 }
 
 @media (max-width: 768px) {

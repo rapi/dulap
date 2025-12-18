@@ -23,13 +23,13 @@ body {
   font-style: normal;
   margin: 0;
   padding: 0;
-  color: #333;
+  color: #505050;
   background-color: #f9f9f9;
 }
 
 .onest-font {
   font-family: 'Onest', sans-serif;
   font-optical-sizing: auto;
-  font-weight: 300;
+  font-weight: 100;
   font-style: normal;
 }

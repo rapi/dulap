@@ -18,13 +18,13 @@
 
 .scoreValue {
   font-size: 56px;
-  font-weight: 500;
+  font-weight: 300;
   letter-spacing: 0.04em;
 }
 
 .scoreMax {
   font-size: 32px;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .starsRow {
@@ -35,7 +35,7 @@
   margin: 0 0 26px;
   font-size: 14px;
   line-height: 1.5;
-  color: #555555;
+  color: #505050;
 }
 
 .learnMoreButton {
@@ -43,7 +43,7 @@
   border: 1px solid #111111;
   background: transparent;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   padding: 9px 18px;
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
@@ -51,5 +51,5 @@
 
 .learnMoreButton:hover {
   background: #111111;
-  color: #ffffff;
+  color: #f9f9f9;
 }
