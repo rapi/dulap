@@ -23,9 +23,7 @@ import {
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
 } from '~/components/ProductPage/productTypeComponents/ProductFurniture'
-import {
-  ProductSectionPredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
+import { ProductSectionPredefinedValue } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
 import {
   ProductPrice,
   ProductPriceComponent,
@@ -39,7 +37,10 @@ import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { DEFAULT_RACK } from './productTypes/rack'
-import { FurnitureViewer, FurnitureViewerRef } from '../ThreeDModel/FurnitureViewer'
+import {
+  FurnitureViewer,
+  FurnitureViewerRef,
+} from '../ThreeDModel/FurnitureViewer'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
 import {
@@ -103,9 +104,11 @@ export const ProductPage: FC<ProductPageProps> = ({
   const { addItem } = useCart()
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [activeColumnTab, setActiveColumnTab] = useState(0)
-  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
+  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(
+    null
+  )
   const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
-  
+
   // Get current config for share functionality
   const urlConfigCtx = useConfiguratorConfigOptional()
 
@@ -153,6 +156,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           <ProductFurniture
             configuration={{ ...component, furnitureType: 'rack' }}
             predefinedValue={values?.furniture ?? undefined}
+            onOpeningTypeChange={handleOpeningTypeChange}
           />
         )
       case 'rackColumns':
@@ -170,12 +174,11 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   // ---------- MOBILE: chips + core-only panel ----------
   // Build available sections (present + valid for current mode)
-  const navComponents = filterNavigable(currentComponents)
-    .sort(
-      (a, b) =>
-        NAV_ORDER.indexOf(a.type as NavSection) -
-        NAV_ORDER.indexOf(b.type as NavSection)
-    )
+  const navComponents = filterNavigable(currentComponents).sort(
+    (a, b) =>
+      NAV_ORDER.indexOf(a.type as NavSection) -
+      NAV_ORDER.indexOf(b.type as NavSection)
+  )
 
   const [activeSection, setActiveSection] = useState<NavSection | null>(
     navComponents[0]?.type ?? null
@@ -247,8 +250,12 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture': {
         return (
           <ProductFurniture
-            configuration={{ ...comp as ProductFurnitureComponent, furnitureType: 'rack' }}
+            configuration={{
+              ...(comp as ProductFurnitureComponent),
+              furnitureType: 'rack',
+            }}
             predefinedValue={values?.furniture ?? undefined}
+            onOpeningTypeChange={handleOpeningTypeChange}
           />
         )
       }
@@ -280,6 +287,30 @@ export const ProductPage: FC<ProductPageProps> = ({
     'rack' // furnitureType
   )
 
+  // Get the number of columns from rack columns component
+  const rackColumnsComponent = currentComponents.find(
+    (c) => c.type === 'rackColumns'
+  ) as ProductRackColumnsComponent | undefined
+  const selectedColumns = rackColumnsComponent?.selectedColumns ?? 1
+
+  // Auto-select nearest column when active column disappears due to width reduction
+  useEffect(() => {
+    // Check if selected column index is out of bounds
+    if (
+      selectedColumnIndex !== null &&
+      selectedColumnIndex >= selectedColumns
+    ) {
+      const nearestIndex = selectedColumns - 1
+      setSelectedColumnIndex(nearestIndex)
+      setActiveColumnTab(nearestIndex)
+    }
+    // Also check active tab
+    if (activeColumnTab >= selectedColumns) {
+      const nearestIndex = selectedColumns - 1
+      setActiveColumnTab(nearestIndex)
+    }
+  }, [selectedColumns, selectedColumnIndex, activeColumnTab])
+
   // Handle column click from 3D viewer to update active tab
   const handleColumnClick = useCallback((index: number | null) => {
     if (index !== null) {
@@ -288,6 +319,11 @@ export const ProductPage: FC<ProductPageProps> = ({
     } else {
       setSelectedColumnIndex(null)
     }
+  }, [])
+
+  // Handle opening type change - close all doors when handle type changes
+  const handleOpeningTypeChange = useCallback(() => {
+    setSelectedColumnIndex(null)
   }, [])
 
   return (
@@ -314,8 +350,12 @@ export const ProductPage: FC<ProductPageProps> = ({
             {priceComponent && (
               <ProductPrice
                 onAddItem={() => {
-                  const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
-                  addItem('rack', currentComponents, { ...(values ?? {}), screenshot })
+                  const screenshot =
+                    furnitureViewerRef.current?.captureScreenshot() || undefined
+                  addItem('rack', currentComponents, {
+                    ...(values ?? {}),
+                    screenshot,
+                  })
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
@@ -349,7 +389,9 @@ export const ProductPage: FC<ProductPageProps> = ({
 
               {/* Always render colors component (hidden) so effects run */}
               {(() => {
-                const colorsComponent = navComponents.find((c) => c.type === 'colors')
+                const colorsComponent = navComponents.find(
+                  (c) => c.type === 'colors'
+                )
                 if (colorsComponent && colorsComponent.type !== activeSection) {
                   return (
                     <div key="colors-hidden" style={{ display: 'none' }}>

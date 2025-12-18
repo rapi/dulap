@@ -75,7 +75,6 @@
   "homepage.copyButton.coppied": "Copiat !",
   "btn.textBelow.delivery": "Livrăm în 15 zile lucrătoare",
 
-
   "homepage.menu.productsTitle": "Produse",
   "homepage.menu.aboutUsTitle": "Despre noi",
   "homepage.menu.contactsTitle": "Contacte",
@@ -158,8 +157,6 @@
   "products.bedside.1.name": "Noptieră 80cm",
   "products.bedside.2.name": "Noptieră 60cm",
 
-
-  
   "products.presets.WR-101.title": "Dulap pentru haine 180cm",
   "products.presets.WR-101.shortDescription": "Dulap pentru haine cu lățime de 180 cm.",
   "products.presets.WR-101.tag.1": "dulap",
@@ -214,10 +211,6 @@
   "products.presets.BS-402.tag.1": "noptieră",
   "products.presets.BS-402.tag.2": "60 cm",
 
-
-
-
- 
   "homepage.configurator.breadcrumb.1": "Pagina principală",
   "homepage.configurator.breadcrumb.2": "Produse",
   "homepage.configurator.breadcrumb.3": "Dulap pentru haine",
@@ -229,7 +222,6 @@
   "homepage.configurator.rack.title": "Etajeră",
   "homepage.configurator.rack.column": "Coloană {number}",
   "homepage.configurator.rack.columnConfiguration": "Configurare Internă",
-
 
   "homepage.configurator.dimensions.title": "Dimensiuni",
   "dimensions.title.tooltip": "Cum să alegi corect mărimile?",
@@ -246,7 +238,7 @@
   "homepage.configurator.dimensions.hintPlintHeight.3": "Ce înălțime să alegi?",
   "homepage.configurator.dimensions.hintPlintHeight.4": "Dacă optezi pentru un stil minimalist, alege înălțimea plintei 2 cm.",
   "homepage.configurator.dimensions.hintPlintHeight.5": "Dacă ai plinte la pereți, optează pentru o plintă de aceeași înălțime la dulap, pentru un design uniform.",
-  
+
   "homepage.configurator.colors.title": "Culori",
   "colors.title.tooltip": "Cum să alegi corect culoarea?",
 
@@ -273,7 +265,7 @@
   "homepage.configurator.individualColumns.doorOpeningSide": "Latura de deschidere a ușii",
   "homepage.configurator.individualColumns.doorOpeningSide.left": "Stânga",
   "homepage.configurator.individualColumns.doorOpeningSide.right": "Dreapta",
-  
+
   "homepage.configurator.columnConfig.drawers1": "1 Sertar",
   "homepage.configurator.columnConfig.drawers2": "2 Sertare",
   "homepage.configurator.columnConfig.drawers3": "3 Sertare",
@@ -345,6 +337,10 @@
   "homepage.configurator.rack.template.shelvesWithFullDoor.desc": "Rafturi închise în spatele unei uși pe toată înălțimea pentru un aspect curat",
   "homepage.configurator.rack.template.halfOpenHalfClosed": "Jumătate Deschis, Jumătate Închis",
   "homepage.configurator.rack.template.halfOpenHalfClosed.desc": "Rafturi superioare deschise pentru expunere, rafturi inferioare cu ușă",
+  "homepage.configurator.rack.template.openAndBottomClosed": "Deschis cu Fund Închis",
+  "homepage.configurator.rack.template.openAndBottomClosed.desc": "Rafturi deschise în partea de sus cu secțiune închisă în partea de jos (30%)",
+  "homepage.configurator.rack.template.openAndSmallBottomClosed": "Deschis cu Mică Ușă Jos",
+  "homepage.configurator.rack.template.openAndSmallBottomClosed.desc": "Rafturi deschise cu doar un raft mic închis în partea de jos",
   "homepage.configurator.rack.template.drawersAndShelves": "Sertare și Rafturi",
   "homepage.configurator.rack.template.drawersAndShelves.desc": "Rafturi deschise în partea de sus cu sertare în partea de jos pentru depozitare",
   "homepage.configurator.rack.template.mixedStorage": "Depozitare Mixtă",
@@ -576,7 +572,6 @@
   "faqPage.title": "Află răspunsuri la întrebările tale",
   "faqPage.subtitle": "Dacă nu găsești răspunsul dorit, nu ezita să ne contactezi.",
 
-
   "breadcrumb.home": "Acasă",
   "breadcrumb.journal": "Blog",
 
@@ -635,8 +630,6 @@
   "blog.measurements.section.5.p1": "Mergi pe <conf>link</conf> și creează-ți dulapul de vis.",
   "blog.measurements.section.5.conf.label": "Link spre configurator de dulapuri pentru haine",
 
-
-
   "tag.colors": "Culori",
 
   "blog.colors.title": "Cum alegi culoarea potrivită pentru dulapul tău",
@@ -689,7 +682,7 @@
   "reviews.list.1.date": "20 august 2025",
   "reviews.list.1.title": "Am comandat dulap în antreu și am rămas mulțumită",
   "reviews.list.1.body": "Am rămas uimită că poți comanda mobilă online, după mărimile tale. Am ezitat câteva zile, dar am zis să comand mostrele cu livrare la domiciliu, și atunci am văzut calitatea materialului. Nu se compară cu mobila gata făcută. Sunt mulțumită! Mersi, băieți!",
- "reviews.list.1.imageAlt": "Dulap gri piatră trei secțiuni",
+  "reviews.list.1.imageAlt": "Dulap gri piatră trei secțiuni",
 
   "reviews.list.2.author": "Анна Т.",
   "reviews.list.2.color": "Biege",
@@ -711,6 +704,4 @@
   "reviews.list.4.title": "Заказывали тумбу в детскую - качество супер",
   "reviews.list.4.body": "Был не лучший опыт с икеевским комодом, который быстро посыпался. К рождению ребенка хотели хороший комод в детскую купить, в итоге решили делать под заказ, так как нет времени ходить выбирать. Жена выбрала вас:)",
   "reviews.list.4.imageAlt": "Dulap pentru haine 2 secțiuni"
-
-
 }

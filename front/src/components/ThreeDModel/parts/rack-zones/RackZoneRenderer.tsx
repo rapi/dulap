@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { RackZone, RackZoneType } from '~/types/rackConfigurationTypes'
 import { Shelf } from '../wardrobe-zones/Shelf'
 import { Drawer } from '../Drawer'
-import { OpeningType } from '../../furnitureConfig'
+import { OpeningType, FURNITURE_CONFIG } from '../../furnitureConfig'
 
 interface RackZoneRendererProps {
   zone: RackZone
@@ -88,8 +88,6 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
 
         const shelves = shelvesInZone.map((shelfPos, i) => {
           const absoluteShelfY = plintHeight + shelfPos
-          console.log('absoluteShelfY', absoluteShelfY)
-          console.log('index', i)
           return (
             <Shelf
               key={`shelf-master-${i}`}
@@ -115,7 +113,6 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
           const shelfYInZone = shelfSpacing * (i + 1)
           const absoluteShelfY = plintHeight + zoneBottomY + shelfYInZone
 
-          console.log('absoluteShelfYfrfrfrff', absoluteShelfY)
           shelves.push(
             <Shelf
               key={`shelf-${i}`}
@@ -141,7 +138,8 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
       // - Each drawer above opens 2cm less than the one below
       // - Creates cascading "one by one" visual effect
       if (zone.drawerCount && zone.drawerCount > 0 && zone.drawerHeights) {
-        const DRAWER_MARGIN = 0.2 // 0.2cm margin between drawers
+        // Use centralized constants from FURNITURE_CONFIG
+        const DRAWER_MARGIN = FURNITURE_CONFIG.drawerMargin
         const BASE_DRAWER_OFFSET_Z = 20 // Base offset for drawer animation (5cm more than stand)
         const DRAWER_STAGGER = 3 // Stagger each drawer by 3cm
         const LERP_SPEED = 0.15 // Smooth animation speed
@@ -152,8 +150,7 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
         let currentDrawerBottomY = 0
 
         for (let i = 0; i < zone.drawerCount; i++) {
-          const drawerHeight = zone.drawerHeights[i] + 1.25
-          console.log('drawerHeight', zone.drawerHeights)
+          const drawerHeight = zone.drawerHeights[i]
           const absoluteDrawerBottomY =
             plintHeight + zoneBottomY + currentDrawerBottomY
 

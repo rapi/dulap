@@ -4,7 +4,11 @@ import { useRouter } from 'next/router'
 import { colorHexCodes, ColorName } from '~/utils/colorDictionary'
 import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
 import { calculateRackColumnLayout } from '~/utils/rackColumnLayout'
-import { RACK_TEMPLATES, calculateZonesFromTemplate } from '~/config/rackTemplates'
+import {
+  RACK_TEMPLATES,
+  calculateZonesFromTemplate,
+  getValidTemplates,
+} from '~/config/rackTemplates'
 import { useConfiguratorConfigOptional } from '~/context/urlConfigContext'
 import {
   encodeRackColumnConfigs,
@@ -35,10 +39,7 @@ export const RackProductConfigurator: () => ProductComponent[] = () => {
   )
 
   // Column configuration state
-  const columnLayout = useMemo(
-    () => calculateRackColumnLayout(width),
-    [width]
-  )
+  const columnLayout = useMemo(() => calculateRackColumnLayout(width), [width])
 
   // Initialize column configurations
   const [columnConfigurations, setColumnConfigurations] = useState<
@@ -49,10 +50,10 @@ export const RackProductConfigurator: () => ProductComponent[] = () => {
       const defaultTemplateId = 'OPEN_SHELVES_ONLY'
       const template = RACK_TEMPLATES[defaultTemplateId]
       const calculatedZones = calculateZonesFromTemplate(
-        template, 
+        template,
         height - plintHeight
       )
-      
+
       return {
         zones: calculatedZones,
         totalHeight: height - plintHeight,
@@ -80,9 +81,14 @@ export const RackProductConfigurator: () => ProductComponent[] = () => {
 
   // Track if initial render has happened (to prevent URL sync during initialization)
   const hasHydratedRef = useRef(false)
-  
+
   // Track previous values to avoid unnecessary state updates
-  const prevDimensionsRef = useRef({ width: 120, height: 200, plintHeight: 2, columnCount: columnLayout.columnCount })
+  const prevDimensionsRef = useRef({
+    width: 120,
+    height: 200,
+    plintHeight: 2,
+    columnCount: columnLayout.columnCount,
+  })
 
   // Mark hydration as complete after first render
   useEffect(() => {
@@ -171,36 +177,75 @@ export const RackProductConfigurator: () => ProductComponent[] = () => {
   // Recalculate zones when height changes (height-dependent dynamic calculation)
   useEffect(() => {
     if (!urlInitialized || !hasHydratedRef.current) return
-    
+
     const prev = prevDimensionsRef.current
-    
+
     // Only recalculate if height or plintHeight changed (width handled separately)
     if (prev.height === height && prev.plintHeight === plintHeight) return
-    
-    // Recalculate all zones with new height
-    setColumnConfigurations((prevConfigs) =>
-      prevConfigs.map((config) => {
+
+    const availableHeight = height - plintHeight
+    const columnWidth = columnLayout.columnWidths[0] || 60 // Default to 60cm if not available
+
+    // Get valid templates for new height
+    const validTemplates = getValidTemplates(columnWidth, availableHeight)
+    const validTemplateIds = new Set(validTemplates.map((t) => t.id))
+
+    // Recalculate all zones with new height and validate configurations
+    setColumnConfigurations((prevConfigs) => {
+      const updatedConfigs = prevConfigs.map((config) => {
         if (!config.templateId) return config
-        
+
         const template = RACK_TEMPLATES[config.templateId]
         if (!template) return config
-        
-        const newZones = calculateZonesFromTemplate(
-          template,
-          height - plintHeight
-        )
-        
+
+        // Check if current template is valid for new height
+        const isTemplateValid = validTemplateIds.has(config.templateId)
+
+        if (!isTemplateValid) {
+          // Template is no longer valid - switch to HALF_OPEN_HALF_CLOSED as fallback
+          const fallbackTemplateId = 'HALF_OPEN_HALF_CLOSED'
+          const fallbackTemplate = RACK_TEMPLATES[fallbackTemplateId]
+
+          if (fallbackTemplate) {
+            const newZones = calculateZonesFromTemplate(
+              fallbackTemplate,
+              availableHeight
+            )
+
+            return {
+              zones: newZones,
+              totalHeight: availableHeight,
+              doors: fallbackTemplate.doors || [],
+              templateId: fallbackTemplateId,
+            }
+          }
+        }
+
+        // Template is valid - just recalculate zones
+        const newZones = calculateZonesFromTemplate(template, availableHeight)
+
         return {
           ...config,
           zones: newZones,
-          totalHeight: height - plintHeight,
+          totalHeight: availableHeight,
         }
       })
-    )
-    
+
+      // Sync to URL if changed
+      if (urlCtx) {
+        const encoded = encodeRackColumnConfigs(updatedConfigs)
+        urlCtx.setConfig({
+          ...urlCtx.config,
+          rackCfg: encoded,
+        })
+      }
+
+      return updatedConfigs
+    })
+
     // Update height in ref (width updated in other effect)
     prevDimensionsRef.current = { ...prev, height, plintHeight }
-  }, [height, plintHeight, urlInitialized])
+  }, [height, plintHeight, urlInitialized, columnLayout.columnWidths, urlCtx])
 
   // Update column configurations when dimensions change
   useEffect(() => {
@@ -211,24 +256,27 @@ export const RackProductConfigurator: () => ProductComponent[] = () => {
 
     const newLayout = calculateRackColumnLayout(width)
     const prev = prevDimensionsRef.current
-    
+
     // Check if we actually need to update (avoid calling setter unnecessarily)
     const columnCountChanged = prev.columnCount !== newLayout.columnCount
-    
+
     if (!columnCountChanged) {
       return // Don't even call setColumnConfigurations
     }
-    
+
     // Update ref for next comparison (only width and columnCount, height handled separately)
-    prevDimensionsRef.current = { ...prev, width, columnCount: newLayout.columnCount }
+    prevDimensionsRef.current = {
+      ...prev,
+      width,
+      columnCount: newLayout.columnCount,
+    }
 
     if (columnCountChanged) {
       // Reset configurations if column count changed with dynamic zone calculation
-      setColumnConfigurations((prevConfigs) => 
+      setColumnConfigurations((prevConfigs) =>
         newLayout.columnWidths.map((colWidth, index) => {
           const existingTemplate = prevConfigs[index]?.templateId
-          const defaultTemplateId =
-            existingTemplate || 'OPEN_SHELVES_ONLY'
+          const defaultTemplateId = existingTemplate || 'OPEN_SHELVES_ONLY'
           const template = RACK_TEMPLATES[defaultTemplateId]
           const calculatedZones = calculateZonesFromTemplate(
             template,
@@ -269,7 +317,7 @@ export const RackProductConfigurator: () => ProductComponent[] = () => {
   return [
     {
       type: 'dimensions',
-      widthRange: [40, 250],
+      widthRange: [40, 350],
       heightRange: [90, 270],
       depthRange: [25, 65],
       plintHeightRange: [2, 8],

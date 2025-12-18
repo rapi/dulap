@@ -407,7 +407,7 @@ const RackDecorationsComponent: React.FC<RackDecorationsProps> = ({
   // Render unique books (no repeats) on ~60% of shelves
   return (
     <group>
-      <Suspense fallback={<DecorationLoader />}>
+      <Suspense>
         {/* Unique book decorations - each type used only once */}
         {decorations.map((decor) => (
           <GLBModel

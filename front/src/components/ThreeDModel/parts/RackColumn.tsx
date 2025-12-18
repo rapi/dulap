@@ -182,7 +182,14 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
     // GOAL: Door zone TOP should align with a master grid position for visual symmetry
     // STRATEGY: Find the CLOSEST grid position to the target (within spacing distance)
     //           This minimizes visual jumps when height changes by small amounts
-    const MIN_DOOR_ZONE_HEIGHT = 60
+
+    // Get zone-specific minimum heights from adjusted zones
+    const getZoneMinHeight = (zoneIndex: number): number => {
+      // Use 28cm (one shelf) as default minimum for all zones
+      // This is a reasonable minimum for visual quality
+      return 28
+    }
+
     const MAX_DOOR_ZONE_HEIGHT = 130 // Maximum 130cm for bottom door section
     const MIN_ADJACENT_ZONE_HEIGHT = 28
 
@@ -190,8 +197,11 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
     const findBestGridPosition = (
       targetValue: number,
       doorBottomY: number,
-      adjacentTopY: number
+      adjacentTopY: number,
+      doorZoneIndex: number
     ): number | null => {
+      const minDoorHeight = getZoneMinHeight(doorZoneIndex)
+
       // Collect all valid positions with their distance from target
       const validPositions: Array<{ pos: number; distance: number }> = []
 
@@ -199,9 +209,9 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
         const doorHeight = pos - doorBottomY
         const adjacentHeight = adjacentTopY - pos
 
-        // Check constraints: door must be 60-130cm, adjacent zone must be >= 28cm
+        // Check constraints: door must meet zone's minimum, adjacent zone must be >= 28cm
         if (
-          doorHeight >= MIN_DOOR_ZONE_HEIGHT &&
+          doorHeight >= minDoorHeight &&
           doorHeight <= MAX_DOOR_ZONE_HEIGHT &&
           adjacentHeight >= MIN_ADJACENT_ZONE_HEIGHT
         ) {
@@ -252,7 +262,8 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
         const gridCandidate = findBestGridPosition(
           originalTop,
           bottomY,
-          adjacentTopY
+          adjacentTopY,
+          i // Pass zone index to get correct min height
         )
 
         if (gridCandidate !== null) {
@@ -361,12 +372,15 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
 
     let doorHeight = maxTopY - minBottomY
     // Special case: For HALF_OPEN_HALF_CLOSED template, increase lower door height by 1cm
-    const isHalfOpenHalfClosed = columnConfiguration?.templateId === 'HALF_OPEN_HALF_CLOSED'
+    const isHalfOpenHalfClosed =
+      columnConfiguration?.templateId === 'HALF_OPEN_HALF_CLOSED' ||
+      columnConfiguration?.templateId === 'OPEN_AND_SMALL_BOTTOM_CLOSED' ||
+      columnConfiguration?.templateId === 'OPEN_AND_BOTTOM_CLOSED'
     const isLowerDoor = maxTopY > 0 // Door doesn't start from top (not full height)
     if (isHalfOpenHalfClosed && isLowerDoor) {
       doorHeight += 1 // Add 1cm to lower door height
     }
-    
+
     const doorPositionY = plintHeight + minBottomY
 
     let handleHeightFromBottom: number | undefined
@@ -573,7 +587,7 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
 
     if (doorType === 'split') {
       // Split doors (left and right)
-      const halfWidth = (columnWidth) / 2
+      const halfWidth = columnWidth / 2
       const doorWidth = halfWidth - panelSpacing / 2
 
       return (

@@ -6,10 +6,13 @@ import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
  * Using short codes to keep URLs manageable
  */
 const TEMPLATE_TO_CODE: Record<string, string> = {
-  'OPEN_SHELVES_ONLY': 'OS',
-  'SHELVES_WITH_FULL_DOOR': 'FD',
-  'HALF_OPEN_HALF_CLOSED': 'HC',
-  'OPEN_SHELVES_AND_DRAWERS': 'ODS',
+  OPEN_SHELVES_ONLY: 'OS',
+  SHELVES_WITH_FULL_DOOR: 'FD',
+  HALF_OPEN_HALF_CLOSED: 'HC',
+  OPEN_AND_BOTTOM_CLOSED: 'OB',
+  OPEN_AND_SMALL_BOTTOM_CLOSED: 'OSB',
+  OPEN_SHELVES_AND_DRAWERS: 'ODS',
+  OPEN_SHELVES_AND_BOTTOM_DRAWERS: 'OBD',
 }
 
 const CODE_TO_TEMPLATE: Record<string, string> = Object.fromEntries(
@@ -19,7 +22,7 @@ const CODE_TO_TEMPLATE: Record<string, string> = Object.fromEntries(
 /**
  * Encode rack column configurations to URL-friendly string
  * Format: "OS,FD,HC" (comma-separated template codes)
- * 
+ *
  * @example
  * encodeRackColumnConfigs([
  *   { templateId: 'OPEN_SHELVES_ONLY', ... },
@@ -44,20 +47,18 @@ export function encodeRackColumnConfigs(
 /**
  * Decode URL string to rack column configurations
  * Returns template IDs only - the component will reconstruct full configs
- * 
+ *
  * @example
  * decodeRackColumnConfigs("OS,FD,HC")
  * // Returns: ["OPEN_SHELVES_ONLY", "SHELVES_WITH_FULL_DOOR", "HALF_OPEN_HALF_CLOSED"]
  */
-export function decodeRackColumnConfigs(
-  encoded: string
-): string[] {
+export function decodeRackColumnConfigs(encoded: string): string[] {
   if (!encoded || typeof encoded !== 'string') {
     return []
   }
 
   const results: string[] = []
-  
+
   for (const code of encoded.split(',')) {
     const trimmedCode = code.trim()
     if (!trimmedCode) continue
@@ -71,7 +72,7 @@ export function decodeRackColumnConfigs(
       results.push(templateId)
     }
   }
-  
+
   return results
 }
 

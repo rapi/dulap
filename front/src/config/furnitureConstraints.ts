@@ -384,7 +384,7 @@ export const WARDROBE_CONSTRAINTS: ProductConstraints = {
 // ============================================================================
 export const RACK_CONSTRAINTS: ProductConstraints = {
   dimensions: {
-    width: { min: 40, max: 250, default: 120, unit: 'cm' },
+    width: { min: 40, max: 350, default: 120, unit: 'cm' },
     height: { min: 90, max: 270, default: 200, unit: 'cm' },
     depth: { min: 25, max: 65, default: 35, unit: 'cm' },
     plintHeight: { min: 2, max: 8, default: 2, unit: 'cm' },
@@ -544,11 +544,7 @@ export function calculateRackPrice(params: RackPriceParams): number {
   const columnsBase = pricing.basePrice * columns
 
   const totalBeforeVat =
-    basePerWidth +
-    heightPart +
-    depthPart +
-    columnsBase +
-    templatesExtraCost
+    basePerWidth + heightPart + depthPart + columnsBase + templatesExtraCost
 
   const round10 = (n: number): number => Math.round(n / 10) * 10
 
