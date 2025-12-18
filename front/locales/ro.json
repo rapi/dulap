@@ -349,6 +349,8 @@
   "homepage.configurator.rack.template.drawersAndShelves.desc": "Rafturi deschise în partea de sus cu sertare în partea de jos pentru depozitare",
   "homepage.configurator.rack.template.mixedStorage": "Depozitare Mixtă",
   "homepage.configurator.rack.template.mixedStorage.desc": "Combinație de rafturi deschise, rafturi închise și sertare",
+  "homepage.configurator.rack.template.openShelvesAndDrawers": "Rafturi și Sertare",
+  "homepage.configurator.rack.template.openShelvesAndDrawers.desc": "Rafturi deschise în partea de sus cu sertare în partea de jos pentru depozitare",
 
   "homepage.configurator.fittings.title": "Feronerie",
   "homepage.configurator.fittings.handleType": "Mânere",

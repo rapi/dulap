@@ -17,18 +17,31 @@ import { Furniture3DProps } from '~/types/furniture3D'
 import { FurnitureBuilder } from './FurnitureBuilder'
 import { WardrobeBuilder } from './WardrobeBuilder'
 import { RackBuilder } from './RackBuilder'
+import { RackDecorations } from './parts/RackDecorations'
 import { getViewerConfig } from './furnitureViewerConfig'
 import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
 import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
 import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { captureScreenshot } from '~/utils/screenshotUtils'
+import { preloadDecorations } from '~/utils/preloadDecorations'
 import styles from './FurnitureViewer.module.css'
 
 // Preload models
 useGLTF.preload('/assets/3d-models/bg.glb')
+useGLTF.preload('/assets/3d-models/books-horizontal.glb')
+useGLTF.preload('/assets/3d-models/books-horizontal-2.glb')
+useGLTF.preload('/assets/3d-models/books-white.glb')
+useGLTF.preload('/assets/3d-models/books.glb')
+useGLTF.preload('/assets/3d-models/books-tall.glb')
+useGLTF.preload('/assets/3d-models/books-long-97.glb')
 useGLTF.preload('/assets/3d-models/shadow_man.glb')
+useGLTF.preload('/assets/3d-models/pouf.glb')
 useGLTF.preload('/assets/3d-models/pouf-toy.glb')
 useGLTF.preload('/assets/3d-models/waze-flowers.glb')
+useGLTF.preload('/assets/3d-models/waze-with-flowers.glb')
+
+// Preload rack decoration models
+preloadDecorations()
 
 function ModelLoadingFallback() {
   return (
@@ -180,6 +193,7 @@ const FurnitureScene = memo(function FurnitureScene({
           onClick={handleBackgroundClick}
           userData={{ isBackground: true }}
         />
+
         <GLBModel
           modelUrl="/assets/3d-models/shadow_man.glb"
           modelPosition={[config.getShadowManXPosition(width), 0, 2]}
@@ -190,7 +204,8 @@ const FurnitureScene = memo(function FurnitureScene({
           onClick={handleBackgroundClick}
           userData={{ isShadowMan: true }}
         />
-        {/* Pouf-toy on the left side of the wardrobe */}
+
+        {/* Pouf-toy on the left side of the wardrobe
         {furnitureType === 'wardrobe' && (
           <GLBModel
             modelUrl="/assets/3d-models/pouf-toy.glb"
@@ -198,27 +213,50 @@ const FurnitureScene = memo(function FurnitureScene({
             modelScale={[1, 1, 1]}
             shouldCastShadow={true}
             shouldReceiveShadow={true}
-            // overrideColorHex="#baa397"
+            // overrideColorHex="#d9c9be"
+
             onClick={handleBackgroundClick}
             userData={{ isPoufToy: true }}
           />
-        )}
+        )} */}
 
         {furnitureType === 'wardrobe' && (
           <GLBModel
-            modelUrl="/assets/3d-models/waze-flowers.glb"
-            modelPosition={[width / 2 + 150, 0, depth / 2 + 33]}
+            modelUrl="/assets/3d-models/pouf.glb"
+            modelPosition={[width / 2 + 30, 0, 60]}
             modelScale={[1, 1, 1]}
             shouldCastShadow={true}
-            shouldReceiveShadow={true}
-            // overrideColorHex="#baa397"
+            shouldReceiveShadow={false}
             onClick={handleBackgroundClick}
-            userData={{ isPoufToy: true }}
+            userData={{ isPouf: true }}
+          />
+        )}
+
+        {furnitureType === 'tv-stand' && (
+          <GLBModel
+            modelUrl="/assets/3d-models/waze-flowers.glb"
+            modelPosition={[-10, height, 33]}
+            modelScale={[2.0, 2.0, 2.0]}
+            shouldCastShadow={true}
+            shouldReceiveShadow={true}
+            onClick={handleBackgroundClick}
+            userData={{ isWazeWithFlowers: true }}
+          />
+        )}
+
+        {(furnitureType === 'stand' || furnitureType === 'bedside') && (
+          <GLBModel
+            modelUrl="/assets/3d-models/waze-with-flowers.glb"
+            modelPosition={[-15, height, 40]}
+            modelScale={[0.9, 0.9, 0.9]}
+            shouldCastShadow={true}
+            shouldReceiveShadow={true}
+            onClick={handleBackgroundClick}
+            userData={{ isWazeWithFlowers: true }}
           />
         )}
       </Suspense>
 
-      {/* Furniture Model built from individual components */}
       <Suspense fallback={<ModelLoadingFallback />}>
         {furnitureType === 'wardrobe' ? (
           <WardrobeBuilder
@@ -239,23 +277,37 @@ const FurnitureScene = memo(function FurnitureScene({
             onColumnSelectionChange={handleColumnSelectionChange}
           />
         ) : furnitureType === 'rack' ? (
-          <RackBuilder
-            selectedColor={selectedColor}
-            desiredWidth={width}
-            desiredHeight={height}
-            desiredDepth={depth}
-            desiredPlintHeight={currentPlintHeight}
-            sectionsCount={sections}
-            openingType={openingType}
-            columns={columns}
-            columnConfigurations={
-              columnConfigurations as RackColumnConfiguration[] | undefined
-            }
-            columnWidths={columnWidths}
-            columnPositions={columnPositions}
-            selectedColumnIndex={selectedColumnIndex}
-            onColumnSelectionChange={handleColumnSelectionChange}
-          />
+          <>
+            <RackBuilder
+              selectedColor={selectedColor}
+              desiredWidth={width}
+              desiredHeight={height}
+              desiredDepth={depth}
+              desiredPlintHeight={currentPlintHeight}
+              sectionsCount={sections}
+              openingType={openingType}
+              columns={columns}
+              columnConfigurations={
+                columnConfigurations as RackColumnConfiguration[] | undefined
+              }
+              columnWidths={columnWidths}
+              columnPositions={columnPositions}
+              selectedColumnIndex={selectedColumnIndex}
+              onColumnSelectionChange={handleColumnSelectionChange}
+            />
+            <RackDecorations
+              columnConfigurations={
+                columnConfigurations as RackColumnConfiguration[] | undefined
+              }
+              columnWidths={columnWidths}
+              columnPositions={columnPositions}
+              columns={columns}
+              desiredWidth={width}
+              desiredHeight={height}
+              desiredDepth={depth}
+              desiredPlintHeight={currentPlintHeight}
+            />
+          </>
         ) : (
           <FurnitureBuilder
             selectedColor={selectedColor}

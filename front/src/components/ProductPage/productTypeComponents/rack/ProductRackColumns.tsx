@@ -160,6 +160,10 @@ export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
       'MIXED_STORAGE': {
         name: 'homepage.configurator.rack.template.mixedStorage',
         desc: 'homepage.configurator.rack.template.mixedStorage.desc'
+      },
+      'OPEN_SHELVES_AND_DRAWERS': {
+        name: 'homepage.configurator.rack.template.openShelvesAndDrawers',
+        desc: 'homepage.configurator.rack.template.openShelvesAndDrawers.desc'
       }
     }
     return keyMap[templateId] || { name: templateId, desc: templateId }
