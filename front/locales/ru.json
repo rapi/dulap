@@ -342,6 +342,8 @@
   "homepage.configurator.rack.template.drawersAndShelves.desc": "Открытые полки вверху с ящиками внизу для хранения",
   "homepage.configurator.rack.template.mixedStorage": "Смешанное Хранение",
   "homepage.configurator.rack.template.mixedStorage.desc": "Комбинация открытых полок, закрытых полок и ящиков",
+  "homepage.configurator.rack.template.openShelvesAndDrawers": "Полки и Ящики",
+  "homepage.configurator.rack.template.openShelvesAndDrawers.desc": "Открытые полки вверху с ящиками внизу для хранения",
 
   "homepage.configurator.fittings.title": "Фурнитура",
   "homepage.configurator.fittings.handleType": "Ручки",

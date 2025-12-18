@@ -25,7 +25,7 @@ interface RackZoneRendererProps {
 
 /**
  * RackZoneRenderer - Renders a single rack zone based on its type
- * 
+ *
  * This component determines which interior elements to render based on the zone type:
  * - SHELVES zones: render multiple shelves with calculated spacing
  * - DRAWERS zones: render drawer fronts with calculated heights
@@ -50,10 +50,10 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
   // Calculate shelf position based on purpose:
   // - At TOP of zone: for doors (ceiling of closed compartment)
   // - At BOTTOM of zone: for separators (between different zone types)
-  const shelfY = renderShelfAtTop 
-    ? plintHeight + zoneBottomY + zone.height  // Top of zone
-    : plintHeight + zoneBottomY                // Bottom of zone
-  
+  const shelfY = renderShelfAtTop
+    ? plintHeight + zoneBottomY + zone.height // Top of zone
+    : plintHeight + zoneBottomY // Bottom of zone
+
   const topShelf = renderTopShelf ? (
     <Shelf
       key="zone-shelf"
@@ -71,19 +71,25 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
     case RackZoneType.SHELVES:
     case RackZoneType.SHELVES_FIXED:
       // Render shelves - either using master grid (for symmetric alignment) or zone-local calculation
-      if (useMasterGrid && masterShelfPositions && masterShelfPositions.length > 0) {
+      if (
+        useMasterGrid &&
+        masterShelfPositions &&
+        masterShelfPositions.length > 0
+      ) {
         // USE MASTER GRID: Filter master positions that fall within this zone's bounds
         const zoneTop = zoneBottomY + zone.height
         const SHELF_MARGIN = 5 // Minimum margin from zone edges to place a shelf
-        
+
         // Filter master positions to those within this zone (with margin)
-        const shelvesInZone = masterShelfPositions.filter(pos => 
-          pos > (zoneBottomY + SHELF_MARGIN) && pos < (zoneTop - SHELF_MARGIN)
+        const shelvesInZone = masterShelfPositions.filter(
+          (pos) =>
+            pos > zoneBottomY + SHELF_MARGIN && pos < zoneTop - SHELF_MARGIN
         )
-        
+
         const shelves = shelvesInZone.map((shelfPos, i) => {
           const absoluteShelfY = plintHeight + shelfPos
-          
+          console.log('absoluteShelfY', absoluteShelfY)
+          console.log('index', i)
           return (
             <Shelf
               key={`shelf-master-${i}`}
@@ -95,20 +101,21 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
             />
           )
         })
-        
+
         zoneContent = <>{shelves}</>
       } else if (zone.shelfCount && zone.shelfCount > 0) {
         // ZONE-LOCAL CALCULATION: Distribute shelves evenly within zone
         const shelves = []
         // shelfCount + 1 creates equal spaces: bottom | shelf | shelf | ... | top
         const shelfSpacing = zone.height / (zone.shelfCount + 1)
-        
+
         // Render shelves evenly distributed within the zone
         for (let i = 0; i < zone.shelfCount; i++) {
           // Position shelf from bottom of zone (i+1 to skip the first space at bottom)
           const shelfYInZone = shelfSpacing * (i + 1)
           const absoluteShelfY = plintHeight + zoneBottomY + shelfYInZone
-          
+
+          console.log('absoluteShelfYfrfrfrff', absoluteShelfY)
           shelves.push(
             <Shelf
               key={`shelf-${i}`}
@@ -120,7 +127,7 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
             />
           )
         }
-        
+
         zoneContent = <>{shelves}</>
       } else {
         zoneContent = null
@@ -138,17 +145,18 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
         const BASE_DRAWER_OFFSET_Z = 20 // Base offset for drawer animation (5cm more than stand)
         const DRAWER_STAGGER = 3 // Stagger each drawer by 3cm
         const LERP_SPEED = 0.15 // Smooth animation speed
-        
+
         const elements = []
 
         // Render each drawer from bottom to top
         let currentDrawerBottomY = 0
-        
+
         for (let i = 0; i < zone.drawerCount; i++) {
           const drawerHeight = zone.drawerHeights[i] + 1.25
-          console.log('drawerHeight', zone.drawerHeights);
-          const absoluteDrawerBottomY = plintHeight + zoneBottomY + currentDrawerBottomY
-          
+          console.log('drawerHeight', zone.drawerHeights)
+          const absoluteDrawerBottomY =
+            plintHeight + zoneBottomY + currentDrawerBottomY
+
           elements.push(
             <Drawer
               key={`drawer-${i}`}
@@ -168,11 +176,11 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
               isHovered={isColumnOpen} // Open when column is hovered or selected
             />
           )
-          
+
           // Move up by drawer height + margin for next drawer
           currentDrawerBottomY += drawerHeight + DRAWER_MARGIN
         }
-        
+
         zoneContent = <>{elements}</>
       } else {
         zoneContent = null
@@ -197,4 +205,3 @@ const RackZoneRendererComponent: React.FC<RackZoneRendererProps> = ({
 }
 
 export const RackZoneRenderer = memo(RackZoneRendererComponent)
-

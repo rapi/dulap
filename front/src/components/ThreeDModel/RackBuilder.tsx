@@ -57,9 +57,13 @@ const RackBuilderComponent: React.FC<RackBuilderProps> = ({
   onColumnSelectionChange,
 }) => {
   // Use local state if no external state is provided
-  const [internalSelectedColumnIndex, setInternalSelectedColumnIndex] = useState<number | null>(null)
-  
-  const selectedColumnIndex = externalSelectedColumnIndex !== undefined ? externalSelectedColumnIndex : internalSelectedColumnIndex
+  const [internalSelectedColumnIndex, setInternalSelectedColumnIndex] =
+    useState<number | null>(null)
+
+  const selectedColumnIndex =
+    externalSelectedColumnIndex !== undefined
+      ? externalSelectedColumnIndex
+      : internalSelectedColumnIndex
   // Load 3D models
   const { scene: vertical } = useGLTF(VERTICAL_URL)
   const { scene: horizontal } = useGLTF(HORIZONTAL_URL)
@@ -81,15 +85,20 @@ const RackBuilderComponent: React.FC<RackBuilderProps> = ({
   )
 
   // Handle column selection
-  const handleColumnClick = useCallback((index: number) => {
-    if (onColumnSelectionChange) {
-      // External setter - calculate new value
-      onColumnSelectionChange(selectedColumnIndex === index ? null : index)
-    } else {
-      // Internal setter - use functional update
-      setInternalSelectedColumnIndex((prevIndex) => (prevIndex === index ? null : index))
-    }
-  }, [onColumnSelectionChange, selectedColumnIndex])
+  const handleColumnClick = useCallback(
+    (index: number) => {
+      if (onColumnSelectionChange) {
+        // External setter - calculate new value
+        onColumnSelectionChange(selectedColumnIndex === index ? null : index)
+      } else {
+        // Internal setter - use functional update
+        setInternalSelectedColumnIndex((prevIndex) =>
+          prevIndex === index ? null : index
+        )
+      }
+    },
+    [onColumnSelectionChange, selectedColumnIndex]
+  )
 
   // Calculate column data
   const columnData = useMemo(() => {
@@ -114,8 +123,9 @@ const RackBuilderComponent: React.FC<RackBuilderProps> = ({
   // Create column components with zone rendering
   const columnComponents = useMemo(() => {
     return Array.from({ length: columns }, (_, index) => {
-      const { width: columnWidth, positionX: columnPositionX } = columnData[index]
-      
+      const { width: columnWidth, positionX: columnPositionX } =
+        columnData[index]
+
       // Get column configuration for this column
       const columnConfiguration = columnConfigurations?.[index]
 

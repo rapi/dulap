@@ -29,17 +29,20 @@ export const GLBModel = memo(function GLBModel({
 }) {
   const { scene: gltfScene } = useGLTF(modelUrl)
   
-  // Apply userData to the scene root
+  // Clone the scene to allow multiple instances with different positions
+  const clonedScene = React.useMemo(() => gltfScene.clone(), [gltfScene])
+  
+  // Apply userData to the cloned scene root
   React.useEffect(() => {
-    if (gltfScene && userData) {
-      Object.assign(gltfScene.userData, userData)
+    if (clonedScene && userData) {
+      Object.assign(clonedScene.userData, userData)
     }
-  }, [gltfScene, userData])
+  }, [clonedScene, userData])
 
   React.useEffect(() => {
-    if (!gltfScene) return
+    if (!clonedScene) return
 
-    gltfScene.traverse((object3D) => {
+    clonedScene.traverse((object3D) => {
       if (object3D instanceof THREE.Mesh) {
         const mesh = object3D
 
@@ -76,11 +79,11 @@ export const GLBModel = memo(function GLBModel({
         mesh.receiveShadow = shouldReceiveShadow
       }
     })
-  }, [gltfScene, overrideColorHex, shouldCastShadow, shouldReceiveShadow, forceFlatColorHex, useLambertWhiteMaterial])
+  }, [clonedScene, overrideColorHex, shouldCastShadow, shouldReceiveShadow, forceFlatColorHex, useLambertWhiteMaterial])
 
   return (
     <primitive
-      object={gltfScene}
+      object={clonedScene}
       position={modelPosition}
       scale={modelScale}
       rotation={modelRotation}
