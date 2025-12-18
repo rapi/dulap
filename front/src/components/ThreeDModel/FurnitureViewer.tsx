@@ -28,15 +28,9 @@ import styles from './FurnitureViewer.module.css'
 
 // Preload models
 useGLTF.preload('/assets/3d-models/bg.glb')
-useGLTF.preload('/assets/3d-models/books-horizontal.glb')
-useGLTF.preload('/assets/3d-models/books-horizontal-2.glb')
-useGLTF.preload('/assets/3d-models/books-white.glb')
-useGLTF.preload('/assets/3d-models/books.glb')
-useGLTF.preload('/assets/3d-models/books-tall.glb')
-useGLTF.preload('/assets/3d-models/books-long-97.glb')
-useGLTF.preload('/assets/3d-models/shadow_man.glb')
+
 useGLTF.preload('/assets/3d-models/pouf.glb')
-useGLTF.preload('/assets/3d-models/pouf-toy.glb')
+useGLTF.preload('/assets/3d-models/tree.glb')
 useGLTF.preload('/assets/3d-models/waze-flowers.glb')
 useGLTF.preload('/assets/3d-models/waze-with-flowers.glb')
 
@@ -194,42 +188,28 @@ const FurnitureScene = memo(function FurnitureScene({
           userData={{ isBackground: true }}
         />
 
-        <GLBModel
-          modelUrl="/assets/3d-models/shadow_man.glb"
-          modelPosition={[config.getShadowManXPosition(width), 0, 2]}
-          modelScale={[1, 1, 1]}
-          overrideColorHex="#ffffff"
-          shouldReceiveShadow={false}
-          forceFlatColorHex="#ffffff"
-          onClick={handleBackgroundClick}
-          userData={{ isShadowMan: true }}
-        />
-
-        {/* Pouf-toy on the left side of the wardrobe
         {furnitureType === 'wardrobe' && (
-          <GLBModel
-            modelUrl="/assets/3d-models/pouf-toy.glb"
-            modelPosition={[width / 2 + 30, 0, depth / 2 + 33]}
-            modelScale={[1, 1, 1]}
-            shouldCastShadow={true}
-            shouldReceiveShadow={true}
-            // overrideColorHex="#d9c9be"
+          <>
+            <GLBModel
+              modelUrl="/assets/3d-models/pouf.glb"
+              modelPosition={[width / 2 + 4, 0, 0]}
+              modelScale={[0.9, 0.9, 0.9]}
+              shouldCastShadow={true}
+              shouldReceiveShadow={false}
+              onClick={handleBackgroundClick}
+              userData={{ isPouf: true }}
+            />
 
-            onClick={handleBackgroundClick}
-            userData={{ isPoufToy: true }}
-          />
-        )} */}
-
-        {furnitureType === 'wardrobe' && (
-          <GLBModel
-            modelUrl="/assets/3d-models/pouf.glb"
-            modelPosition={[width / 2 + 30, 0, 60]}
-            modelScale={[1, 1, 1]}
-            shouldCastShadow={true}
-            shouldReceiveShadow={false}
-            onClick={handleBackgroundClick}
-            userData={{ isPouf: true }}
-          />
+            <GLBModel
+              modelUrl="/assets/3d-models/tree.glb"
+              modelPosition={[width / 2 + 50, 0, -30]}
+              modelScale={[1.5, 1.5, 1.5]}
+              shouldCastShadow={true}
+              shouldReceiveShadow={false}
+              onClick={handleBackgroundClick}
+              userData={{ isPouf: true }}
+            />
+          </>
         )}
 
         {furnitureType === 'tv-stand' && (
@@ -577,12 +557,12 @@ const FurnitureViewerComponent = forwardRef<
             enableRotate={true}
             enableDamping={false}
             dampingFactor={0}
-            // minDistance={config.minDistance}
-            // maxDistance={config.maxDistance}
-            // minAzimuthAngle={config.minAzimuthAngle}
-            // maxAzimuthAngle={config.maxAzimuthAngle}
-            // minPolarAngle={config.minPolarAngle}
-            // maxPolarAngle={config.maxPolarAngle}
+            minDistance={config.minDistance}
+            maxDistance={config.maxDistance}
+            minAzimuthAngle={config.minAzimuthAngle}
+            maxAzimuthAngle={config.maxAzimuthAngle}
+            minPolarAngle={config.minPolarAngle}
+            maxPolarAngle={config.maxPolarAngle}
             target={config.target}
           />
 
