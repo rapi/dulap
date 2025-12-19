@@ -138,39 +138,39 @@ export const RACK_TEMPLATES: Record<string, RackTemplate> = {
     extraCost: 600,
   },
 
-  OPEN_AND_SMALL_BOTTOM_CLOSED: {
-    id: 'OPEN_AND_SMALL_BOTTOM_CLOSED',
-    name: 'Open and Small Bottom Closed',
-    description:
-      'Top shelves open for display, only 1 shelf at the bottom closed',
-    zones: [
-      {
-        type: RackZoneType.SHELVES,
-        heightProportion: 90,
-        shelfMinSpacing: 28,
-        shelfMaxSpacing: 32,
-        shelfOptimalSpacing: 30,
-      },
-      {
-        type: RackZoneType.SHELVES,
-        heightProportion: 10,
-        minHeight: 20, // Allow small door zone - just one shelf height
-      },
-    ],
-    doors: [
-      {
-        zoneIndices: [1], // Only bottom zone has door
-        type: 'single',
-      },
-    ],
-    minHeight: 0,
-    maxHeight: 9999,
-    minWidth: 40,
-    maxWidth: 100,
-    tags: ['mixed', 'display', 'storage'],
-    icon: 'half-half',
-    extraCost: 600,
-  },
+  // OPEN_AND_SMALL_BOTTOM_CLOSED: {
+  //   id: 'OPEN_AND_SMALL_BOTTOM_CLOSED',
+  //   name: 'Open and Small Bottom Closed',
+  //   description:
+  //     'Top shelves open for display, only 1 shelf at the bottom closed',
+  //   zones: [
+  //     {
+  //       type: RackZoneType.SHELVES,
+  //       heightProportion: 90,
+  //       shelfMinSpacing: 28,
+  //       shelfMaxSpacing: 32,
+  //       shelfOptimalSpacing: 30,
+  //     },
+  //     {
+  //       type: RackZoneType.SHELVES,
+  //       heightProportion: 10,
+  //       minHeight: 20, // Allow small door zone - just one shelf height
+  //     },
+  //   ],
+  //   doors: [
+  //     {
+  //       zoneIndices: [1], // Only bottom zone has door
+  //       type: 'single',
+  //     },
+  //   ],
+  //   minHeight: 0,
+  //   maxHeight: 9999,
+  //   minWidth: 40,
+  //   maxWidth: 100,
+  //   tags: ['mixed', 'display', 'storage'],
+  //   icon: 'half-half',
+  //   extraCost: 600,
+  // },
 
   OPEN_SHELVES_AND_DRAWERS: {
     id: 'OPEN_SHELVES_AND_DRAWERS',
