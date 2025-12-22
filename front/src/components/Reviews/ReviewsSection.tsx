@@ -36,7 +36,7 @@ const reviews: Review[] = [
     title: 'reviews.list.3.title',
     body: 'reviews.list.3.body',
     originalLanguageLabel: 'ro',
-    imageUrl: '/reviews/review_03.jpg',
+    imageUrl: '/reviews/review03.jpg',
     imageAlt: 'reviews.list.3.imageAlt',
   },
 ]

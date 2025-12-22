@@ -261,7 +261,7 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
 
         {/* Door toggle (open/closed) */}
         <div className={layoutStyles.furnitureLabel}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '5px' }}>
             <span style={{ fontSize: '14px', fontWeight: 500 }}>
               <FormattedMessage
                 id="homepage.configurator.wardrobe.columnDoor"

@@ -341,20 +341,20 @@
 .price {
   margin: 0;
   font-size: 24px;
-  font-weight: 400;
-  color: #f15e4d;
+  font-weight: 500;
+  color: #553333;
 }
 
 .newPrice {
   margin: 0;
   font-size: 20px;
-  font-weight: 400;
-  color: #f15e4d;
+  font-weight: 500;
+  color: #553333;
 }
 
 .crossedPrice {
   margin: 2px 0 0 15px;
-  color: #505050;
+  color: #553333;
   font-weight: 200;
   font-size: 16px;
   text-decoration: line-through;
@@ -374,7 +374,7 @@
   margin: 0;
   font-size: 24px;
   font-weight: 400;
-  color: #f15e4d;
+  color: #505050;
 }
 
 .priceRow {
@@ -559,6 +559,7 @@
 
   .individualColumnsLabel {
     margin-top: 0;
+    justify-content: center;
   }
   .furnitureLabel {
     justify-content: center;

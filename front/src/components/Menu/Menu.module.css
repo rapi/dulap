@@ -26,10 +26,11 @@
 .navigation {
   display: flex;
   align-items: center;
+  gap: 2vw;
 }
 
 .navigation a {
-  margin: 0 1.2rem;
+  margin: 0;
   text-decoration: none;
   color: #505050;
   font-size: 15px;

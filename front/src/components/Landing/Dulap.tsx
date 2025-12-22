@@ -8,7 +8,6 @@ import { ProductCatalog } from '~/components/ProductCatalog/ProductCatalog'
 import { Gallery } from '~/components/Gallery/Gallery'
 import { AboutUs } from '~/components/AboutUs/AboutUs'
 import ContactBox from '~/components/ContactBox/ContactBox'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { FAQ } from '~/components/FAQ/FAQ'
 import { landingInfoBarContent } from '~/components/InfoBar/LandingInfoBarContent'
@@ -66,13 +65,6 @@ export const Dulap: React.FC = () => {
         </h2>
         <ProductTypesList></ProductTypesList>
       </section>
-      <ContactBox
-        title={<FormattedMessage id="contactBox.title" />}
-        subtitle={<FormattedMessage id="contactBox.subtitle" />}
-        showEmail={true}
-        showTextarea={true}
-        modalThankYouMessage="contactForm.modal.thankYouMessage"
-      ></ContactBox>
 
       <section className={classes.readyProducts}>
         <h2 
@@ -115,7 +107,7 @@ export const Dulap: React.FC = () => {
       <section className={classes.aboutUs}>
         <AboutUs></AboutUs>
       </section>
-      <ContactBox
+      {/* <ContactBox
         title={
           <span className={classes.contactBoxContainer}>
             <FormattedMessage id="contactBox.subscribe.title" />
@@ -125,6 +117,13 @@ export const Dulap: React.FC = () => {
         subtitle={<FormattedMessage id="contactBox.subscribe.subtitle" />}
         showEmail={true}
         modalThankYouMessage="contactForm.modal.subscribe.thankYouMessage"
+      ></ContactBox> */}
+      <ContactBox
+        title={<FormattedMessage id="contactBox.title" />}
+        subtitle={<FormattedMessage id="contactBox.subtitle" />}
+        showEmail={true}
+        showTextarea={true}
+        modalThankYouMessage="contactForm.modal.thankYouMessage"
       ></ContactBox>
       <br />
       <br />

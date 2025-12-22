@@ -77,7 +77,7 @@
 
 .selected {
   border-color: var(--bis-ring);
-  border-width: 2px;
+  border-width: 1px;
   background: var(--bis-bg-selected);
   box-shadow: 0 2px 8px rgba(17, 24, 39, 0.12);
 }

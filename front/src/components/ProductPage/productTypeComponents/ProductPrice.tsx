@@ -71,6 +71,7 @@ export const ProductPrice: FC<ProductPriceProps> = ({
               size="medium"
               variant="primary"
               onClick={() => setIsShareModalOpen(true)}
+              outlined
             >
               <FormattedMessage id="homepage.button.share" />
             </CustomButton>
@@ -80,7 +81,7 @@ export const ProductPrice: FC<ProductPriceProps> = ({
             <CustomButton
               icon={<ShoppingCartIcon />}
               size="medium"
-              variant="danger"
+              variant="primary"
               onClick={() => {
                 setIsModalOpen(true)
                 onAddItem()

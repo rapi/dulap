@@ -3,8 +3,7 @@ import { useRouter } from 'next/router'
 import classes from './Menu.module.css'
 import Image from 'next/image'
 import Button from '@mui/material/Button'
-import { CustomButton } from '~/components/CustomButton/CustomButton'
-import { CartIcon, WardrobeIconMedium } from '~/components/Icons/Icons'
+import { CartIcon } from '~/components/Icons/Icons'
 import MenuMui from '@mui/material/Menu'
 import MenuIcon from '@mui/icons-material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -140,6 +139,15 @@ export const Menu: React.FC = () => {
           <MenuItem
             onClick={() => {
               handleClose()
+              router.push('/blog')
+            }}
+            className={classes.menuItem}
+          >
+            <FormattedMessage id="homepage.menu.blogTitle" />
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleClose()
               router.push('/contacts')
             }}
             className={classes.menuItem}
@@ -153,7 +161,7 @@ export const Menu: React.FC = () => {
               </Badge>
             </Link>
           </MenuItem>
-          <MenuItem onClick={handleClose}>
+          {/* <MenuItem onClick={handleClose}>
             <CustomButton
               icon={<WardrobeIconMedium />}
               size="medium"
@@ -161,7 +169,7 @@ export const Menu: React.FC = () => {
             >
               <FormattedMessage id="homepage.button.yourWardrobe" />
             </CustomButton>
-          </MenuItem>
+          </MenuItem> */}
         </MenuMui>
 
         <nav className={classes.navigation}>
@@ -171,17 +179,20 @@ export const Menu: React.FC = () => {
           <Link href="/about-us">
             <FormattedMessage id="homepage.menu.aboutUsTitle" />
           </Link>
+          <Link href="/blog">
+            <FormattedMessage id="homepage.menu.blogTitle" />
+          </Link>
           <Link href="/contacts">
             <FormattedMessage id="homepage.menu.contactsTitle" />
           </Link>
 
-          <CustomButton
+          {/* <CustomButton
             icon={<WardrobeIconMedium />}
             size="medium"
             href="/products"
           >
             <FormattedMessage id="homepage.button.yourWardrobe" />
-          </CustomButton>
+          </CustomButton> */}
 
           <Select
             options={['ro', 'ru']}

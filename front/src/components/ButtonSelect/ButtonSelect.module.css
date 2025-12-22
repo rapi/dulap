@@ -19,7 +19,7 @@
   --btnselect-padding-x: 10px;
   --btnselect-radius: 15px;
   --btnselect-font-size: 12px;
-  --btnselect-font-weight: 300;
+  --btnselect-font-weight: 400;
   --btnselect-gap: 7px;
   --btnselect-image-size: 24px;
 }
@@ -30,7 +30,7 @@
   --btnselect-padding-x: 14px;
   --btnselect-radius: 18px;
   --btnselect-font-size: 13px;
-  --btnselect-font-weight: 300;
+  --btnselect-font-weight: 400;
   --btnselect-gap: 8px;
   --btnselect-image-size: 28px;
 }
@@ -54,8 +54,6 @@
     border-color 0.1s ease-in-out;
   font-weight: var(--btnselect-font-weight, 300);
   font-family: 'Onest', sans-serif;
-
-  /* 👇 keep each chip from shrinking so they make one scrollable row */
   flex: 0 0 auto;
 }
 
@@ -72,7 +70,7 @@
 }
 
 .button.disabled {
-  color: #f9f9f9;
+  color: #d3d3d3;
   pointer-events: none;
 }
 

@@ -7,31 +7,31 @@ export const productTypes: ProductTypes[] = [
   {
     name: 'homepage.products.wardrobe',
     link: '/configurator/wardrobe',
-    image: '/renders-landing/wardrobe-1.png',
+    image: '/renders-landing/wardrobe.png',
   },
   {
     name: 'homepage.products.stand',
     link: '/configurator/stand',
-    image: '/renders-landing/stand-1.png',
+    image: '/renders-landing/stand.png',
   },
   {
     name: 'homepage.products.TVstand',
     link: '/configurator/tv-stand',
-    image: '/renders-landing/tv-stand-1.png',
+    image: '/renders-landing/tv-stand.png',
   },
   {
     name: 'homepage.products.bedside',
     link: '/configurator/bedside',
-    image: '/renders-landing/bedside-1.png'
+    image: '/renders-landing/bedside.png'
   },
   {
     name: 'homepage.products.rack',
     link: '/configurator/rack',
-    image: '/renders-landing/rack-1.png'
+    image: '/renders-landing/rack.png'
   },
   {
-    name: 'homepage.products.openStand',
-    link: '/configurator/wardrobe',
-    image: '/products/dulap-deschis-2x2.jpg',
+    name: 'homepage.products.showRack',
+    link: '/configurator/show-rack',
+    image: '/renders-landing/show-rack.png',
   },
 ]

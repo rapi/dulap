@@ -2,7 +2,7 @@
 a.ctaButton,
 button.ctaButton {
   font-family: 'Onest', sans-serif;
-  font-weight: 300;
+  font-weight: 350;
   text-transform: none;
   color: #f9f9f9;
   display: inline-flex;
@@ -51,7 +51,7 @@ button.ctaButton.mediumSize {
 }
 a.ctaButton.mediumSize p,
 button.ctaButton.mediumSize p {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 /* Large */
@@ -73,51 +73,49 @@ button.ctaButton.largeSize p {
 /*Primary Variant*/
 a.ctaButton.primaryVariant,
 button.ctaButton.primaryVariant {
-  background-color: #fba85c;
+  background-color: #505050;
 }
 a.ctaButton.primaryVariant:hover,
 button.ctaButton.primaryVariant:hover {
-  background-color: #f1953f;
+  background-color: #a7a8af;
   color: #f9f9f9;
 }
 
 a.ctaButton.primaryVariant.outlined,
 button.ctaButton.primaryVariant.outlined {
   background-color: transparent;
-  color: #fba85c;
-  border: 3px solid #fba85c;
+  color: #505050;
+  border: 2px solid #505050;
 }
 a.ctaButton.primaryVariant.outlined:hover,
 button.ctaButton.primaryVariant.outlined:hover {
-  background-color: #fba85c;
-}
-a.ctaButton.primaryVariant.outlined:hover {
-  background-color: #fba85c;
+  background-color: #505050;
   color: #f9f9f9;
 }
 
 /*Danger Variant*/
 a.ctaButton.dangerVariant,
 button.ctaButton.dangerVariant {
-  background-color: #f46d5e;
+  background-color: #f9f9f9;
+  color: #505050;
 }
 a.ctaButton.dangerVariant:hover,
 button.ctaButton.dangerVariant:hover {
-  background-color: #eb5646;
+  background-color: #f9f9f9;
 }
 
-a.ctaButton.dangerVariant.outlined,
+/* a.ctaButton.dangerVariant.outlined,
 button.ctaButton.dangerVariant.outlined {
   background-color: transparent;
-  color: #f15e4d;
-  border: 2px solid #f15e4d;
-}
-a.ctaButton.dangerVariant.outlined:hover,
+  color: #505050;
+  border: 2px solid #f9f9f9;
+} */
+/* a.ctaButton.dangerVariant.outlined:hover,
 button.ctaButton.dangerVariant.outlined:hover {
-  background-color: #f15e4d;
+  background-color: #f9f9f9;
   color: #f9f9f9;
-  border: 2px solid #f15e4d;
-}
+  border: 2px solid #f9f9f9;
+} */
 
 /*Grey Variant*/
 a.ctaButton.greyVariant,
@@ -134,7 +132,7 @@ a.ctaButton.greyVariant.outlined,
 button.ctaButton.greyVariant.outlined {
   background-color: transparent;
   color: #979797;
-  border: 3px solid #979797;
+  border: 2px solid #979797;
 }
 a.ctaButton.greyVariant.outlined:hover,
 button.ctaButton.greyVariant.outlined:hover {

@@ -33,8 +33,9 @@ export const BannerContent = () => {
 
       <div className={`${classes.heroButtonContainer} ${animationStyles.fadeInUp}`} style={{ animationDelay: '0.6s' }}>
         <CustomButton
-          size="large"
-          icon={<AutoFixHighIcon sx={{ color: 'white' }} />}
+          size="medium"
+          variant="danger"
+          // icon={<AutoFixHighIcon />}
           href="/products"
         >
           {/* <FormattedMessage id="homepage.button.tryIt" /> */}
