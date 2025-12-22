@@ -24,7 +24,7 @@
 }
 
 .logo img {
-  height: 30px;
+  height: 23px;
 }
 
 /* Footer */
@@ -55,7 +55,7 @@
   }
 
   .logo img {
-    height: 30px;
+    height: 23px;
   }
   .navigation {
     flex-direction: column;
