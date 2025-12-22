@@ -78,8 +78,8 @@ export const Menu: React.FC = () => {
         <div className="logo">
           <Link href="/">
             <Image
-              width={190}
-              height={30}
+              width={158}
+              height={25}
               src="/logo-red.svg"
               alt="Dulap.md Logo"
             />
