@@ -14,10 +14,42 @@ function getLocaleFromRequest(request: NextRequest): string {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  // List of static file extensions that should bypass locale routing
+  const staticFileExtensions = [
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.gif',
+    '.svg',
+    '.webp',
+    '.ico',
+    '.glb',
+    '.gltf',
+    '.mp4',
+    '.webm',
+    '.pdf',
+    '.json',
+    '.xml',
+    '.woff',
+    '.woff2',
+    '.ttf',
+    '.eot',
+    '.otf',
+    '.css',
+    '.js',
+  ]
+
+  // Check if the pathname is a static file
+  const isStaticFile = staticFileExtensions.some((ext) =>
+    pathname.toLowerCase().endsWith(ext)
+  )
+
   if (
     pathname.startsWith('/api') ||
     pathname.endsWith('sitemap.xml') ||
-    pathname.endsWith('robots.txt')
+    pathname.endsWith('robots.txt') ||
+    isStaticFile
   ) {
     return
   }
