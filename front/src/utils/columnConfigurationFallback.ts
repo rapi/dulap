@@ -59,9 +59,8 @@ export function findNearestAvailableConfiguration(
   }
 
   // Find and return the first valid configuration
-  const firstValid = allTypes.find(type => isValid(type, dimensions))
-  
-  return firstValid || null
+  const validTypes = allTypes.filter(type => isValid(type, dimensions))
+  return validTypes[0] || null
 }
 
 /**

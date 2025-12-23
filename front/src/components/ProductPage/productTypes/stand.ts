@@ -1,6 +1,5 @@
 import { ProductComponent } from '~/components/ProductPage/StandProductPage'
 import { useState, useEffect, useMemo, useRef } from 'react'
-import { ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
 import { OpeningType } from '~/components/ThreeDModel/furnitureConfig'
 import {
   ColumnConfigurationType,
@@ -54,6 +53,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
   const [selectedColumns, setSelectedColumns] = useState(
     () => urlCtx?.config.columns ?? CONSTRAINTS.columns.default
   )
+
   const [columnConfigurations, setColumnConfigurations] = useState<
     ColumnConfigurationWithOptions[]
   >(() =>
@@ -79,7 +79,8 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
 
   // --- NEW: independent gallery color + who changed last ---
   const [galleryColor, setGalleryColor] = useState<string>('Biege Almond')
-  const [galleryImageColor, setGalleryImageColor] = useState<string>('Biege Almond')
+  const [galleryImageColor, setGalleryImageColor] =
+    useState<string>('Biege Almond')
   const [lastColorChanged, setLastColorChanged] = useState<'main' | 'gallery'>(
     'main'
   )
@@ -166,34 +167,102 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     openingOption === OpeningType.Push
   )
 
-  // Update column configurations when number of columns changes OR on first mount if count mismatch
+  // Track previous dimensions to detect changes
+  const prevDimensionsRef = useRef<{
+    width: number
+    height: number
+    depth: number
+    plintHeight: number
+  } | null>(null)
+
+  // Check which column counts are valid based on dimensions AND stand-specific width rules
+  // IMPORTANT: This must be defined BEFORE the effect that uses it
+  const validColumnCounts = useMemo(() => {
+    // Get valid counts based on column dimensions (width, height, depth)
+    const dimensionBasedCounts = getValidColumnCounts(
+      width,
+      height,
+      depth,
+      plintHeight
+    )
+
+    // Get valid counts based on stand width rules
+    const standWidthBasedCounts = getValidColumnCountsForStand(width)
+
+    // Combine both: a count is valid only if it passes BOTH checks
+    const combined: Record<number, boolean> = {
+      1: dimensionBasedCounts[1] && standWidthBasedCounts[1],
+      2: dimensionBasedCounts[2] && standWidthBasedCounts[2],
+      3: dimensionBasedCounts[3] && standWidthBasedCounts[3],
+      4: dimensionBasedCounts[4] && standWidthBasedCounts[4],
+    }
+    return combined
+  }, [width, height, depth, plintHeight])
+
+  // Update column configurations when number of columns changes OR dimensions change
+  // This is the ONLY place where configurations are validated/updated
   useEffect(() => {
     setColumnConfigurations((prev) => {
       // Check if this is first run
       const isFirstRun = prevSelectedColumnsRef.current === null
+      const columnCountChanged =
+        !isFirstRun && prevSelectedColumnsRef.current !== selectedColumns
 
-      // If not first run and value didn't change, skip
-      if (!isFirstRun && prevSelectedColumnsRef.current === selectedColumns) {
+      // Check if dimensions changed
+      const dimensionsChanged =
+        prevDimensionsRef.current !== null &&
+        (prevDimensionsRef.current.width !== width ||
+          prevDimensionsRef.current.height !== height ||
+          prevDimensionsRef.current.depth !== depth ||
+          prevDimensionsRef.current.plintHeight !== plintHeight)
+
+      // Update dimension ref
+      prevDimensionsRef.current = { width, height, depth, plintHeight }
+
+      // Calculate dimensions for validation
+      const columnWidth = width / selectedColumns
+      const dimensions = {
+        width: columnWidth,
+        height: height - plintHeight,
+        depth: depth,
+      }
+
+      // If column count didn't change but dimensions did - just validate existing configs
+      // BUT ONLY if the current column count is still valid!
+      // If it's invalid, another effect will change selectedColumns soon
+      if (!isFirstRun && !columnCountChanged && dimensionsChanged) {
+        if (prev.length === selectedColumns) {
+          // Check if current column count will be changed by auto-select effect
+          const currentCountStillValid = validColumnCounts[selectedColumns]
+
+          if (!currentCountStillValid) {
+            return prev // Don't validate yet - wait for column count to change first
+          }
+
+          const validatedConfigs = validateAndUpdateConfigurations(
+            prev,
+            dimensions,
+            'stand'
+          )
+
+          return validatedConfigs
+        }
+      }
+
+      // If not first run and column count didn't change and dimensions didn't change, skip
+      if (!isFirstRun && !columnCountChanged && !dimensionsChanged) {
         return prev
       }
 
-      // If we already have the correct number of configurations, don't recreate them
-      // This prevents overwriting configurations loaded from URL during hydration
-      if (prev.length === selectedColumns) {
-        // Update the ref since we're keeping the config
-        if (isFirstRun || prevSelectedColumnsRef.current !== selectedColumns) {
+      // If we already have the correct number of configurations and column count didn't change
+      if (prev.length === selectedColumns && !columnCountChanged) {
+        if (isFirstRun) {
           prevSelectedColumnsRef.current = selectedColumns
         }
         return prev
       }
 
       prevSelectedColumnsRef.current = selectedColumns
-
-      const dimensions = {
-        width: width / selectedColumns,
-        height: height - plintHeight,
-        depth: depth,
-      }
 
       // Create new configurations array, preserving existing ones
       const newConfigs = Array(selectedColumns)
@@ -218,28 +287,16 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
           )
         })
 
-      return newConfigs
+      // Validate the newly created/updated configs
+      const validatedConfigs = validateAndUpdateConfigurations(
+        newConfigs,
+        dimensions,
+        'stand'
+      )
+
+      return validatedConfigs
     })
-  }, [selectedColumns, width, height, depth, plintHeight])
-
-  // Validate existing configurations when dimensions change
-  useEffect(() => {
-    // Skip validation until hydration completes
-    if (!hasHydratedRef.current) return
-
-    // Skip if columns and configs are mismatched (indicates we're mid-update)
-    setColumnConfigurations((prev) => {
-      if (prev.length !== selectedColumns) return prev
-
-      const dimensions = {
-        width: width / selectedColumns,
-        height: height - plintHeight,
-        depth: depth,
-      }
-
-      return validateAndUpdateConfigurations(prev, dimensions, 'stand')
-    })
-  }, [width, height, depth, plintHeight, selectedColumns])
+  }, [selectedColumns, width, height, depth, plintHeight, validColumnCounts])
 
   // Calculate individual column dimensions for constraint evaluation
   const columnWidth = useMemo(
@@ -251,29 +308,6 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
     [height, plintHeight]
   )
   const columnDepth = depth
-
-  // Check which column counts are valid based on dimensions AND stand-specific width rules
-  const validColumnCounts = useMemo(() => {
-    // Get valid counts based on column dimensions (width, height, depth)
-    const dimensionBasedCounts = getValidColumnCounts(
-      width,
-      height,
-      depth,
-      plintHeight
-    )
-
-    // Get valid counts based on stand width rules
-    const standWidthBasedCounts = getValidColumnCountsForStand(width)
-
-    // Combine both: a count is valid only if it passes BOTH checks
-    const combined: Record<number, boolean> = {
-      1: dimensionBasedCounts[1] && standWidthBasedCounts[1],
-      2: dimensionBasedCounts[2] && standWidthBasedCounts[2],
-      3: dimensionBasedCounts[3] && standWidthBasedCounts[3],
-      4: dimensionBasedCounts[4] && standWidthBasedCounts[4],
-    }
-    return combined
-  }, [width, height, depth, plintHeight])
 
   // Create column options with disabled states
   const columnOptions = useMemo(
@@ -412,6 +446,7 @@ export const StandProductConfigurator: () => ProductComponent[] = () => {
       columnWidth,
       columnHeight,
       columnDepth,
+      productType: 'stand',
     },
     {
       type: 'furniture',

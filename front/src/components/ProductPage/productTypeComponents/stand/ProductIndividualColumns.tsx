@@ -21,8 +21,10 @@ import {
   FurnitureProductType,
 } from '~/hooks/useColumnConfigurationConstraints'
 import { useActiveColumnTab } from '~/hooks/useActiveColumnTab'
-import { useColumnConfigurationSync } from '~/hooks/useColumnConfigurationSync'
-import { synchronizeDrawerCounts, getDefaultDoorOpeningSide } from '~/utils/columnConfigurationUtils'
+import {
+  synchronizeDrawerCounts,
+  getDefaultDoorOpeningSide,
+} from '~/utils/columnConfigurationUtils'
 
 export type ProductIndividualColumnsComponent = {
   type: 'individualColumns'
@@ -94,27 +96,21 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
     productType
   )
 
-  // Auto-sync configurations when dimensions change
-  useColumnConfigurationSync(
-    columnConfigurations,
-    setColumnConfigurations,
-    columnWidth,
-    columnHeight,
-    columnDepth,
-    isValid
-  )
-
   // Handle column type change with drawer count synchronization
   const handleColumnTypeChange = useCallback(
     (columnIndex: number, value: ColumnConfigurationType) => {
       setColumnConfigurations((prev) => {
         const metadata = getConfigurationMetadata(value)
-        
+
         // Use user's explicit choice, or position-based default
-        const defaultSide = getDefaultDoorOpeningSide(columnIndex, selectedColumns)
-        const doorOpeningSide = metadata.doorCount === 1 
-          ? (prev[columnIndex]?.doorOpeningSide || defaultSide)
-          : undefined
+        const defaultSide = getDefaultDoorOpeningSide(
+          columnIndex,
+          selectedColumns
+        )
+        const doorOpeningSide =
+          metadata.doorCount === 1
+            ? prev[columnIndex]?.doorOpeningSide || defaultSide
+            : undefined
 
         let newConfigurations = [...prev]
         newConfigurations[columnIndex] = { type: value, doorOpeningSide }
@@ -122,7 +118,12 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
         // Auto-sync drawer counts: synchronize all columns with drawers to match the selected drawer count
         if (hasDrawers(value)) {
           const newDrawerCount = getDrawerCount(value)
-          newConfigurations = synchronizeDrawerCounts(newConfigurations, columnIndex, newDrawerCount, isValid)
+          newConfigurations = synchronizeDrawerCounts(
+            newConfigurations,
+            columnIndex,
+            newDrawerCount,
+            isValid
+          )
         }
 
         return newConfigurations
@@ -148,7 +149,7 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
           type: currentConfig.type,
           doorOpeningSide: side,
         }
-        
+
         return newConfigurations
       })
     },
@@ -218,7 +219,11 @@ export const ProductIndividualColumns: FC<ProductIndividualColumnsProps> = ({
         {/* Column tabs (only show if multiple columns) */}
         {selectedColumns > 1 && (
           <div className={styles.furnitureLabel}>
-            <ButtonSelect options={columnTabOptions} defaultSelected={String(activeTab)} onChange={(value) => setActiveTab(parseInt(value))} />
+            <ButtonSelect
+              options={columnTabOptions}
+              defaultSelected={String(activeTab)}
+              onChange={(value) => setActiveTab(parseInt(value))}
+            />
           </div>
         )}
 

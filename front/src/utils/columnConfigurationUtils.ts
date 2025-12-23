@@ -143,7 +143,7 @@ export function validateAndUpdateConfigurations(
   productType?: FurnitureProductType
 ): ColumnConfigurationWithOptions[] {
   const isValid = getValidationFunction(productType)
-  
+
   const needsUpdate = configurations.some(
     (config) => !isValid(config.type, dimensions)
   )
@@ -154,9 +154,9 @@ export function validateAndUpdateConfigurations(
 
   const totalColumns = configurations.length
 
-  return configurations.map((config, columnIndex) => {
+  const result = configurations.map((config, columnIndex) => {
     const valid = isValid(config.type, dimensions)
-    
+
     if (valid) {
       return config
     }
@@ -177,6 +177,8 @@ export function validateAndUpdateConfigurations(
 
     return { type: nearestType, doorOpeningSide }
   })
+
+  return result
 }
 
 /**
