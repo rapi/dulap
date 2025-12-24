@@ -1,17 +1,17 @@
 import React from 'react'
 import styles from './GreenWall.module.css'
 import Grid2 from '../Grid/grid2'
-import { Banner } from '../Banner/Banner'
 import { BannerStool } from '../Banner/BannerStool'
+import { BannerWoodenCollection } from '~/components/Banner/BannerWoodenCollection'
 
 export const Stool: React.FC = () => {
   return (
     <div className={styles.page}>
       {/* HERO */}
-      <Banner
+      <BannerWoodenCollection
         href="/stool/landing.png"
         content={BannerStool}
-      ></Banner>
+      ></BannerWoodenCollection>
 
       <section>
         <Grid2
