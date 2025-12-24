@@ -99,9 +99,22 @@
 
   "homepage.dulapLanding.title1": "Alege ce tip de dulap ai nevoie și începe personalizarea!",
   "homepage.dulapLanding.title2": "Alege produse gata din lista noastră",
+  "homepage.dulapLanding.title1.2": "Colecție nouă în curând",
   "homepage.dulapLanding.title3": "descoperă colecția noastră de dulapuri gata făcute...",
   "homepage.dulapLanding.title4": "Citește mai multe informații utile aici...",
   "homepage.dulapLanding.reviewsTitle": "Recenziile spun totul pentru noi...",
+
+  "landing.table.title": "Masă Dining",
+  "landing.table.subtitle": "Masă Dining, realizată din faneră cu furnir, cu o textură naturală de lemn bine evidențiată.",
+
+  "landing.bench.title": "Banchetă",
+  "landing.bench.subtitle": "Banchetă, realizată din faneră cu furnir, cu o textură naturală de lemn bine evidențiată.",
+
+  "landing.woodenRack.title": "Etajeră",
+  "landing.woodenRack.subtitle": "Etajeră, realizată din faneră cu furnir, cu o textură naturală de lemn bine evidențiată.",
+
+  "landing.stool.title": "Taburet",
+  "landing.stool.subtitle": "Taburet, realizat din faneră cu furnir, cu o textură naturală de lemn bine evidențiată.",
 
   "homepage.dulapLanding.aboutUs.title": "Despre noi",
   "homepage.dulapLanding.aboutUs.body.1": "La dulap.md facem mobilier personalizat, la prețuri corecte. Simplu.",
@@ -132,8 +145,13 @@
   "homepage.products.wardrobe": "Dulap pentru haine",
   "homepage.products.bedside": "Noptieră",
   "homepage.products.rack": "Etajeră",
-  "homepage.products.showRack": "Comodă pentru încălțăminte",
+  "homepage.products.showRack": "Pantofar",
   "homepage.products.dulap": "Dulap",
+
+  "homepage.products.table": "Masă",
+  "homepage.products.bench": "Banchetă",
+  "homepage.products.rack-2": "Etajeră",
+  "homepage.products.stool": "Taburet",
 
   "homepage.label.comingSoon": "În curând",
 

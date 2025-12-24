@@ -4,7 +4,18 @@
   left: 50%;
   transform: translateX(-50%); /* centers horizontally */
   width: 90vw;  /* fills most of the screen */
-  max-width: 730px;
+  max-width: 800px;
+  padding: 3rem;
+  box-sizing: border-box;
+}
+
+.heroContentWoodenRack {
+  position: absolute;
+  top: 14vh;
+  left: 20%;
+  transform: translateX(-50%); /* centers horizontally */
+  width: 90vw;  /* fills most of the screen */
+  max-width: 600px;
   padding: 3rem;
   box-sizing: border-box;
 }

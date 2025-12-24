@@ -62,7 +62,7 @@ export const Footer: React.FC = () => {
         </nav>
         <div className={styles.logoSection}>
           <Link href="/">
-            <img alt="logo" src="/logo.svg" width={130} />
+            <img alt="logo" src="/logo-red.svg" width={200} />
           </Link>
           <p>
             <FormattedMessage id="homepage.footer.followUs" />

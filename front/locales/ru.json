@@ -95,6 +95,7 @@
   
   "homepage.dulapLanding.title1": "Выбери тип шкафа, который тебе нужен, и начни персонализацию!",
   "homepage.dulapLanding.title2": "Выбери готовые товары из нашего списка",
+  "homepage.dulapLanding.title1.2": "Новая колекция СКОРО",
   "homepage.dulapLanding.title3": "открой для себя новый стиль...",
   "homepage.dulapLanding.title4": "Читай больше полезной информации тут...",
   "homepage.dulapLanding.reviewsTitle": "Отзывы говорят за нас...",
@@ -105,6 +106,18 @@
   "homepage.dulapLanding.aboutUs.body.3": "Мы работаем с качественными материалами, опытными мастерами и надёжными поставщиками. Мы не продаём обещания, а долговечные продукты, сделанные с заботой и вниманием к деталям.",
   "homepage.dulapLanding.aboutUs.body.4": "Мы только начинаем, но вкладываем душу в каждый проект. Для нас каждый клиент важен.",
   "homepage.dulapLanding.aboutUs.body.5": "dulap.md – каждое пространство заслуживает хороший шкаф.",
+  
+  "landing.table.title": "Обеденный стол Wooden",
+  "landing.table.subtitle": "Выполненный из шпонированной фанеры, с выразительной натуральной текстурой дерева.",
+
+  "landing.bench.title": "Скамья Wooden",
+  "landing.bench.subtitle": "Выполненная из шпонированной фанеры, с выразительной натуральной текстурой дерева.",
+
+  "landing.woodenRack.title": "Стеллаж Wooden",
+  "landing.woodenRack.subtitle": "Выполненный из шпонированной фанеры, с выразительной натуральной текстурой дерева.",
+
+  "landing.stool.title": "Табурет Wooden",
+  "landing.stool.subtitle": "Выполненный из шпонированной фанеры, с выразительной натуральной текстурой дерева.",
 
   "contactBox.title": "Есть идеи новых продуктов?",
   "contactBox.subtitle": "Расскажи нам о своих идеях, и мы сделаем всё возможное, чтобы воплотить их в жизнь. П.С. Можешь оставить свой имейл, если хочешь чтобы мы с тобой связались, когда его запустим.",
@@ -130,6 +143,11 @@
   "homepage.products.rack": "Стеллаж",
   "homepage.products.showRack": "Обувная тумба",
   "homepage.products.dulap": "Шкаф",
+
+  "homepage.products.table": "Обеденный стол",
+  "homepage.products.bench": "Скамья",
+  "homepage.products.rack-2": "Стеллаж",
+  "homepage.products.stool": "Табурет",
 
   "homepage.label.comingSoon": "Совсем скоро",
 

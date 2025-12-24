@@ -4,6 +4,7 @@ import classes from './Dulap.module.css'
 import { Banner } from '~/components/Banner/Banner'
 import { FormattedMessage } from 'react-intl'
 import { ProductTypesList } from '~/components/ProductTypesList/ProductTypesList'
+import { ProductTypesListNew } from '~/components/ProductTypesList/productTypesListNew'
 import { ProductCatalog } from '~/components/ProductCatalog/ProductCatalog'
 import { Gallery } from '~/components/Gallery/Gallery'
 import { AboutUs } from '~/components/AboutUs/AboutUs'
@@ -41,6 +42,9 @@ export const Dulap: React.FC = () => {
   const { ref: titleRef, isVisible: isTitleVisible } = useScrollAnimation({ 
     threshold: 0.3 
   })
+  const { ref: titleRef2, isVisible: isTitleVisible2 } = useScrollAnimation({ 
+    threshold: 0.3 
+  })
   const { ref: catalogTitleRef, isVisible: isCatalogTitleVisible } = useScrollAnimation({ 
     threshold: 0.3 
   })
@@ -65,7 +69,16 @@ export const Dulap: React.FC = () => {
         </h2>
         <ProductTypesList></ProductTypesList>
       </section>
-
+      
+      <section className={classes.productTypes}>
+        <h2 
+          ref={titleRef2 as React.RefObject<HTMLHeadingElement>}
+          className={`${classes.productTypesTitle} ${isTitleVisible2 ? animationStyles.fadeInDown : ''}`}
+        >
+          <FormattedMessage id="homepage.dulapLanding.title1.2" />
+        </h2>
+        <ProductTypesListNew></ProductTypesListNew>
+      </section>
       <section className={classes.readyProducts}>
         <h2 
           ref={catalogTitleRef as React.RefObject<HTMLHeadingElement>}
