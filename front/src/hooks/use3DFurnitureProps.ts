@@ -1,5 +1,9 @@
 import { useMemo } from 'react'
-import { Furniture3DProps, FurnitureDefaults, ColumnConfigurationWithOptions } from '~/types/furniture3D'
+import {
+  Furniture3DProps,
+  FurnitureDefaults,
+  ColumnConfigurationWithOptions,
+} from '~/types/furniture3D'
 import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
 import { getColorItemByName } from '~/utils/colorDictionary'
 import { convertToOpeningType } from '~/utils/openingTypeConverter'
@@ -10,7 +14,7 @@ import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
 /**
  * Custom hook to extract and compute 3D furniture props from product components
  * Eliminates code duplication across BedsideProductPage, TVStandProductPage, and StandProductPage
- * 
+ *
  * @param currentComponents - Array of product components (dimensions, colors, sections, etc.)
  * @param values - Optional predefined values from URL or configuration
  * @param defaults - Default values for the product type
@@ -25,13 +29,20 @@ export function use3DFurnitureProps(
   values: any = {},
   defaults: FurnitureDefaults,
   isWardrobe: boolean = false,
-  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'rack'
+  furnitureType?:
+    | 'wardrobe'
+    | 'stand'
+    | 'tv-stand'
+    | 'bedside'
+    | 'office-table'
+    | 'greenwall'
+    | 'storage'
+    | 'rack'
+    | 'shoe-rack'
 ): Furniture3DProps {
   return useMemo(() => {
     // Extract color component and convert name to HEX
-    const colorsComponent = currentComponents.find(
-      (c) => c.type === 'colors'
-    )
+    const colorsComponent = currentComponents.find((c) => c.type === 'colors')
     const selectedColorNameOrHex =
       colorsComponent?.selectedColor ?? defaults.selectedColor
     const selectedColorHex =
@@ -54,19 +65,17 @@ export function use3DFurnitureProps(
     )
     const sections =
       sectionsComponent?.selectedSections ??
-      (typeof values?.sections === 'number' 
-        ? values.sections 
-        : defaults.sections ?? 1)
+      (typeof values?.sections === 'number'
+        ? values.sections
+        : (defaults.sections ?? 1))
 
     // Extract columns component
-    const columnsComponent = currentComponents.find(
-      (c) => c.type === 'columns'
-    )
+    const columnsComponent = currentComponents.find((c) => c.type === 'columns')
     const columns =
       columnsComponent?.selectedColumns ??
-      (typeof values?.columns === 'number' 
-        ? values.columns 
-        : defaults.columns ?? 1)
+      (typeof values?.columns === 'number'
+        ? values.columns
+        : (defaults.columns ?? 1))
 
     // Extract opening type from furniture component
     const furnitureComponent = currentComponents.find(
@@ -88,25 +97,33 @@ export function use3DFurnitureProps(
     const rackColumnsComponent = currentComponents.find(
       (c) => c.type === 'rackColumns'
     )
-    const columnConfigs = wardrobeColumnsComponent?.columnConfigurations ?? rackColumnsComponent?.columnConfigurations ?? individualColumnsComponent?.columnConfigurations
-    
+    const columnConfigs =
+      wardrobeColumnsComponent?.columnConfigurations ??
+      rackColumnsComponent?.columnConfigurations ??
+      individualColumnsComponent?.columnConfigurations
+
     // Check if we have extended config (with doorOpeningSide) or simple config
     // Extended config is an array of objects with 'type' property (ColumnConfigurationWithOptions[])
     // Simple config is an array of ColumnConfigurationType enum values
-    const hasExtendedConfig = columnConfigs && 
-      columnConfigs.length > 0 && 
-      typeof columnConfigs[0] === 'object' && 
+    const hasExtendedConfig =
+      columnConfigs &&
+      columnConfigs.length > 0 &&
+      typeof columnConfigs[0] === 'object' &&
       'type' in columnConfigs[0]
-    
+
     // Extract column configuration types for backward compatibility
-    const columnConfigurations = hasExtendedConfig 
-      ? (columnConfigs as ColumnConfigurationWithOptions[])?.map((config) => config.type)
+    const columnConfigurations = hasExtendedConfig
+      ? (columnConfigs as ColumnConfigurationWithOptions[])?.map(
+          (config) => config.type
+        )
       : (columnConfigs as ColumnConfigurationType[] | undefined)
-    
+
     // Extract extended config if available (for stand)
     // Create a new array with new objects to ensure reference changes when content changes
-    const columnConfigurationsWithOptions = hasExtendedConfig 
-      ? (columnConfigs as ColumnConfigurationWithOptions[]).map(config => ({ ...config }))
+    const columnConfigurationsWithOptions = hasExtendedConfig
+      ? (columnConfigs as ColumnConfigurationWithOptions[]).map((config) => ({
+          ...config,
+        }))
       : undefined
 
     // Extract metadata component (contains derivedSections for new 3D system)
@@ -120,7 +137,7 @@ export function use3DFurnitureProps(
     let wardrobeLayout
     let rackLayout
     if (isWardrobe) {
-      if (furnitureType === 'rack') {
+      if (furnitureType === 'rack' || furnitureType === 'shoe-rack') {
         rackLayout = calculateRackColumnLayout(width)
       } else {
         wardrobeLayout = calculateWardrobeColumnLayout(width)
@@ -130,12 +147,15 @@ export function use3DFurnitureProps(
     // For wardrobes/racks: use zone-based configs if available, otherwise use old string-based configs
     // wardrobeLayout/rackLayout.columnConfigurations is just for fallback/compatibility
     const layoutToUse = wardrobeLayout ?? rackLayout
-    
-    // For racks: pass rack configurations directly (they will be rendered by RackBuilder)
+
+    // For racks and shoe-racks: pass rack configurations directly (they will be rendered by RackBuilder)
     // For wardrobes: pass wardrobe configurations directly
     // For others: use standard column configurations
     let finalColumnConfigurations
-    if (furnitureType === 'rack' && columnConfigs) {
+    if (
+      (furnitureType === 'rack' || furnitureType === 'shoe-rack') &&
+      columnConfigs
+    ) {
       // Pass rack configurations directly - RackBuilder will handle rendering
       finalColumnConfigurations = columnConfigs as RackColumnConfiguration[]
     } else if (furnitureType === 'wardrobe' && columnConfigs) {
@@ -143,7 +163,10 @@ export function use3DFurnitureProps(
       finalColumnConfigurations = columnConfigs
     } else {
       // Use standard column configurations
-      finalColumnConfigurations = columnConfigs ?? layoutToUse?.columnConfigurations ?? columnConfigurations
+      finalColumnConfigurations =
+        columnConfigs ??
+        layoutToUse?.columnConfigurations ??
+        columnConfigurations
     }
 
     return {
@@ -163,4 +186,3 @@ export function use3DFurnitureProps(
     }
   }, [currentComponents, values, defaults, isWardrobe, furnitureType])
 }
-

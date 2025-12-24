@@ -9,6 +9,7 @@
   "meta_title.configurator.tv-stand": "Комод ТВ на заказ Кишинев ✅ Dulap.md",
   "meta_title.configurator.bedside": "Тумбочка на заказ Кишинев ✅ Dulap.md",
   "meta_title.configurator.rack": "Стеллаж на заказ Кишинев ✅ Dulap.md",
+  "meta_title.configurator.shoe-rack": "Комод для обуви на заказ Кишинев ✅ Dulap.md",
   "meta_title.about-us": "О нас - команда dulap.md",
   "meta_title.contacts": "Свяжитесь с нами - Контакты dulap.md",
   "meta_title.cart": "Моя корзина - dulap.md",
@@ -21,6 +22,7 @@
   "meta_description.configurator.tv-stand": "Комод ТВ на заказ в Кишиневе – современные решения для гостиной. Dulap.md создает персонализированную мебель из премиальных материалов с профессиональным монтажом.",
   "meta_description.configurator.bedside": "Тумбочки на заказ в Кишиневе – персонализированная мебель для спальни. Уникальный дизайн, премиальное качество и быстрая установка от Dulap.md.",
   "meta_description.configurator.rack": "Стеллажи на заказ в Кишиневе – персонализированная мебель для книг и хранения. Уникальный дизайн, премиальное качество и быстрая установка от Dulap.md.",
+  "meta_description.configurator.shoe-rack": "Комоды для обуви на заказ в Кишиневе – современные решения для прихожей. Dulap.md создает персонализированную мебель из премиальных материалов с быстрой установкой.",
   "meta_description.about-us": "Узнайте больше о dulap.md: кто мы, чем занимаемся и как создаём мебель на заказ. Наша команда — специалисты по дизайну, качеству и индивидуальным решениям.",
   "meta_description.contacts": "Хотите заказать мебель или задать вопрос? Свяжитесь с dulap.md — мы всегда на связи. Адрес, телефон, email и форма обратной связи доступны здесь.",
   "meta_description.cart": "Ваша корзина на dulap.md. Проверьте выбранные товары и подготовьтесь к оформлению заказа на мебель, созданную специально для вас.",
@@ -32,6 +34,7 @@
   "meta.header.configurator.tv-stand": "Комод ТВ на заказ в Кишиневе",
   "meta.header.configurator.bedside": "Тумбочка на заказ в Кишиневе",
   "meta.header.configurator.rack": "Стеллаж на заказ в Кишиневе",
+  "meta.header.configurator.shoe-rack": "Комод для обуви на заказ в Кишиневе",
 
   "homepage.banner.title.0": "Шкаф - ",
   "homepage.banner.title.1": "созданный по твоим желаниям",
@@ -221,6 +224,7 @@
   "homepage.configurator.tv-stand.title": "Тумба ТВ",
   "homepage.configurator.wardrobe.title": "Шкаф для одежды",
   "homepage.configurator.rack.title": "Стеллаж",
+  "homepage.configurator.shoe-rack.title": "Комод для обуви",
   "homepage.configurator.rack.column": "Колонна {number}",
   "homepage.configurator.rack.columnConfiguration": "Внутренняя конфигурация",
 
@@ -349,6 +353,10 @@
   "homepage.configurator.rack.template.mixedStorage.desc": "Комбинация открытых полок, закрытых полок и ящиков",
   "homepage.configurator.rack.template.openShelvesAndDrawers": "Полки и Ящики",
   "homepage.configurator.rack.template.openShelvesAndDrawers.desc": "Открытые полки вверху с ящиками внизу для хранения",
+  "homepage.configurator.rack.template.openShelvesAndBottomDrawers": "Полки с Нижними Ящиками",
+  "homepage.configurator.rack.template.openShelvesAndBottomDrawers.desc": "Открытые полки для обуви, ящики внизу для аксессуаров",
+  "homepage.configurator.rack.template.drawersOnly": "Только Ящики",
+  "homepage.configurator.rack.template.drawersOnly.desc": "Несколько ящиков для организованного хранения обуви",
 
   "homepage.configurator.fittings.title": "Фурнитура",
   "homepage.configurator.fittings.handleType": "Ручки",

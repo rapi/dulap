@@ -18,6 +18,7 @@ import { FurnitureBuilder } from './FurnitureBuilder'
 import { WardrobeBuilder } from './WardrobeBuilder'
 import { RackBuilder } from './RackBuilder'
 import { RackDecorations } from './parts/RackDecorations'
+import { ShoeRackDecorations } from './parts/ShoeRackDecorations'
 import { getViewerConfig } from './furnitureViewerConfig'
 import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
 import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
@@ -276,6 +277,38 @@ const FurnitureScene = memo(function FurnitureScene({
               onColumnSelectionChange={handleColumnSelectionChange}
             />
             <RackDecorations
+              columnConfigurations={
+                columnConfigurations as RackColumnConfiguration[] | undefined
+              }
+              columnWidths={columnWidths}
+              columnPositions={columnPositions}
+              columns={columns}
+              desiredWidth={width}
+              desiredHeight={height}
+              desiredDepth={depth}
+              desiredPlintHeight={currentPlintHeight}
+            />
+          </>
+        ) : furnitureType === 'shoe-rack' ? (
+          <>
+            <RackBuilder
+              selectedColor={selectedColor}
+              desiredWidth={width}
+              desiredHeight={height}
+              desiredDepth={depth}
+              desiredPlintHeight={currentPlintHeight}
+              sectionsCount={sections}
+              openingType={openingType}
+              columns={columns}
+              columnConfigurations={
+                columnConfigurations as RackColumnConfiguration[] | undefined
+              }
+              columnWidths={columnWidths}
+              columnPositions={columnPositions}
+              selectedColumnIndex={selectedColumnIndex}
+              onColumnSelectionChange={handleColumnSelectionChange}
+            />
+            <ShoeRackDecorations
               columnConfigurations={
                 columnConfigurations as RackColumnConfiguration[] | undefined
               }

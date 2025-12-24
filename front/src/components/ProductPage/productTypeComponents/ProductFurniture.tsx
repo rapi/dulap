@@ -20,7 +20,7 @@ export type ProductFurnitureComponent = {
   predefinedValue?: ProductFurniturePredefinedValue
   hinges: string
   is3DEnabled?: boolean
-  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'rack'
+  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'rack' | 'shoe-rack'
 }
 
 export type ProductFurniturePredefinedValue = {

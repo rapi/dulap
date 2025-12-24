@@ -6,7 +6,7 @@ import { decodeColumnConfigs, encodeColumnConfigs } from './columnConfigUrl'
  * Products supported in the dynamic route
  * Exports: ProductKey, parseQueryToConfig, normalizeConfig, configToQuery
  */
-export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside' | 'rack'
+export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside' | 'rack' | 'shoe-rack'
 
 /** Next.js query bag type */
 type NextQuery = Record<string, string | string[] | undefined>

@@ -14,6 +14,7 @@
   "meta_title.configurator.tv-stand": "Comoda TV la comanda Chisinau ✅ Dulap.md",
   "meta_title.configurator.bedside": "Noptiera la comanda Chisinau ✅ Dulap.md",
   "meta_title.configurator.rack": "Etajeră la comandă Chișinău ✅ Dulap.md",
+  "meta_title.configurator.shoe-rack": "Comodă pentru încălțăminte la comandă Chișinău ✅ Dulap.md",
   "meta_title.about-us": "Despre noi - echipa dulap.md",
   "meta_title.contacts": "Contactați-ne - dulap.md",
   "meta_title.cart": "Coșul meu - dulap.md",
@@ -26,6 +27,7 @@
   "meta_description.configurator.tv-stand": "Comode pentru TV la comanda in Chisinau – solutii moderne pentru living. Dulap.md realizeaza mobilier personalizat cu materiale premium si montaj profesionist.",
   "meta_description.configurator.bedside": "Noptiere la comanda in Chisinau – mobilier personalizat pentru dormitor. Design unic, calitate premium si montaj rapid de la Dulap.md.",
   "meta_description.configurator.rack": "Etajere la comandă în Chișinău – mobilier personalizat pentru cărți și depozitare. Design unic, calitate premium și montaj rapid de la Dulap.md.",
+  "meta_description.configurator.shoe-rack": "Comode pentru încălțăminte la comandă în Chișinău – soluții moderne pentru hol. Dulap.md realizează mobilier personalizat cu materiale premium și montaj rapid.",
   "meta_description.about-us": "Află mai multe despre dulap.md: cine suntem, ce facem și cum creăm mobilă la comandă. Echipa noastră este formată din specialiști în design, calitate și soluții personalizate.",
   "meta_description.contacts": "Doriți să comandați mobilă sau să adresați o întrebare? Contactați dulap.md — suntem mereu disponibili. Aici găsiți adresa, telefonul, emailul și formularul de contact.",
   "meta_description.cart": "Coșul dvs. pe dulap.md. Verificați produsele selectate și pregătiți-vă să finalizați comanda pentru mobila creată special pentru dvs.",
@@ -37,6 +39,7 @@
   "meta.header.configurator.tv-stand": "Comoda TV la comanda in Chisinau",
   "meta.header.configurator.bedside": "Noptiera la comanda in Chisinau",
   "meta.header.configurator.rack": "Etajeră la comandă în Chișinău",
+  "meta.header.configurator.shoe-rack": "Comodă pentru încălțăminte la comandă în Chișinău",
 
   "homepage.banner.title.0": "Dulapul tău -",
   "homepage.banner.title.1": " exact cum îl vrei",
@@ -221,6 +224,7 @@
   "homepage.configurator.tv-stand.title": "Comodă TV",
   "homepage.configurator.wardrobe.title": "Dulap pentru haine",
   "homepage.configurator.rack.title": "Etajeră",
+  "homepage.configurator.shoe-rack.title": "Comodă pentru încălțăminte",
   "homepage.configurator.rack.column": "Coloană {number}",
   "homepage.configurator.rack.columnConfiguration": "Configurare Internă",
 
@@ -348,6 +352,10 @@
   "homepage.configurator.rack.template.mixedStorage.desc": "Combinație de rafturi deschise, rafturi închise și sertare",
   "homepage.configurator.rack.template.openShelvesAndDrawers": "Rafturi și Sertare",
   "homepage.configurator.rack.template.openShelvesAndDrawers.desc": "Rafturi deschise în partea de sus cu sertare în partea de jos pentru depozitare",
+  "homepage.configurator.rack.template.openShelvesAndBottomDrawers": "Rafturi cu Sertare Jos",
+  "homepage.configurator.rack.template.openShelvesAndBottomDrawers.desc": "Rafturi deschise pentru încălțăminte, sertare în partea de jos pentru accesorii",
+  "homepage.configurator.rack.template.drawersOnly": "Doar Sertare",
+  "homepage.configurator.rack.template.drawersOnly.desc": "Sertare multiple pentru depozitare organizată a încălțămintei",
 
   "homepage.configurator.fittings.title": "Feronerie",
   "homepage.configurator.fittings.handleType": "Mânere",

@@ -88,6 +88,7 @@ interface ProductPageProps {
   components: () => ProductComponent[]
   name: string
   values?: PredefinedValue
+  furnitureType?: 'rack' | 'shoe-rack' // Add furnitureType prop
 }
 
 // Helpers
@@ -100,6 +101,7 @@ export const ProductPage: FC<ProductPageProps> = ({
   components,
   name,
   values,
+  furnitureType = 'rack', // Default to 'rack' for backward compatibility
 }) => {
   const { addItem } = useCart()
   const isMobile = useMediaQuery('(max-width: 768px)')
@@ -154,7 +156,7 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture':
         return (
           <ProductFurniture
-            configuration={{ ...component, furnitureType: 'rack' }}
+            configuration={{ ...component, furnitureType }}
             predefinedValue={values?.furniture ?? undefined}
             onOpeningTypeChange={handleOpeningTypeChange}
           />
@@ -252,7 +254,7 @@ export const ProductPage: FC<ProductPageProps> = ({
           <ProductFurniture
             configuration={{
               ...(comp as ProductFurnitureComponent),
-              furnitureType: 'rack',
+              furnitureType,
             }}
             predefinedValue={values?.furniture ?? undefined}
             onOpeningTypeChange={handleOpeningTypeChange}
@@ -284,7 +286,7 @@ export const ProductPage: FC<ProductPageProps> = ({
     values,
     DEFAULT_RACK,
     true, // isWardrobe = true (enables automatic column layout)
-    'rack' // furnitureType
+    furnitureType // Pass dynamic furnitureType
   )
 
   // Get the number of columns from rack columns component

@@ -1,11 +1,19 @@
 import React, { FC, useState, useMemo, useCallback, useEffect } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { RackColumnConfiguration } from '~/types/rackConfigurationTypes'
+import {
+  RackColumnConfiguration,
+  RackTemplate,
+} from '~/types/rackConfigurationTypes'
 import {
   RACK_TEMPLATES,
   getValidTemplates,
   calculateZonesFromTemplate,
 } from '~/config/rackTemplates'
+import {
+  SHOE_RACK_TEMPLATES,
+  getValidShoeRackTemplates,
+  calculateShoeRackZonesFromTemplate,
+} from '~/config/shoeRackTemplates'
 import {
   ButtonSelect,
   ButtonOptionsType,
@@ -24,6 +32,7 @@ export type ProductRackColumnsComponent = {
   columnWidth: number
   columnHeight: number // Internal height (without plinth)
   columnDepth: number
+  furnitureType?: 'rack' | 'shoe-rack' // Add furnitureType to component config
 }
 
 interface ProductRackColumnsProps {
@@ -47,7 +56,16 @@ export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
     setColumnConfigurations,
     columnWidth,
     columnHeight,
+    furnitureType = 'rack', // Default to 'rack' for backwards compatibility
   } = configuration
+
+  console.log('[ProductRackColumns] furnitureType:', furnitureType)
+  console.log(
+    '[ProductRackColumns] columnWidth:',
+    columnWidth,
+    'columnHeight:',
+    columnHeight
+  )
 
   // Local state for active column
   const [activeColumnIndex, setActiveColumnIndex] = useState(
@@ -82,11 +100,21 @@ export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
     [onActiveColumnChange]
   )
 
-  // Get valid templates for current dimensions
-  const validTemplates = useMemo(
-    () => getValidTemplates(columnWidth, columnHeight),
-    [columnWidth, columnHeight]
-  )
+  // Get valid templates for current dimensions based on furniture type
+  const validTemplates = useMemo(() => {
+    const templates =
+      furnitureType === 'shoe-rack'
+        ? getValidShoeRackTemplates(columnWidth, columnHeight)
+        : getValidTemplates(columnWidth, columnHeight)
+
+    console.log(
+      '[ProductRackColumns] validTemplates for',
+      furnitureType,
+      ':',
+      templates.map((t) => t.id)
+    )
+    return templates
+  }, [columnWidth, columnHeight, furnitureType])
 
   // Column tab options
   const columnTabOptions: ButtonOptionsType[] = useMemo(
@@ -108,16 +136,61 @@ export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
   const currentConfig = columnConfigurations[activeColumnIndex]
   const currentTemplateId = currentConfig?.templateId
 
+  console.log(
+    '[ProductRackColumns] Active column:',
+    activeColumnIndex,
+    'templateId:',
+    currentTemplateId,
+    'zones:',
+    currentConfig?.zones
+  )
+  
+  // Log detailed zone info
+  if (currentConfig?.zones?.[0]) {
+    console.log('[ProductRackColumns] Zone 0 detail:', {
+      type: currentConfig.zones[0].type,
+      height: currentConfig.zones[0].height,
+      shelfCount: currentConfig.zones[0].shelfCount,
+      shelfSpacing: currentConfig.zones[0].shelfSpacing,
+    })
+  }
+
   // Handle template selection
   const handleTemplateSelect = useCallback(
     (templateId: string) => {
-      const template = RACK_TEMPLATES[templateId]
+      // Get the correct template based on furniture type
+      const TEMPLATES =
+        furnitureType === 'shoe-rack' ? SHOE_RACK_TEMPLATES : RACK_TEMPLATES
+      const calculateZones =
+        furnitureType === 'shoe-rack'
+          ? calculateShoeRackZonesFromTemplate
+          : calculateZonesFromTemplate
+      const defaultTemplateId =
+        furnitureType === 'shoe-rack'
+          ? 'SHELVES_WITH_FULL_DOOR'
+          : 'OPEN_SHELVES_ONLY'
+
+      const template = TEMPLATES[templateId]
       if (!template) {
+        console.warn(
+          '[ProductRackColumns] Template not found:',
+          templateId,
+          'in',
+          furnitureType,
+          'templates'
+        )
         return
       }
 
+      console.log(
+        '[ProductRackColumns] Selected template:',
+        templateId,
+        'for',
+        furnitureType
+      )
+
       // Calculate zones dynamically based on actual column height
-      const calculatedZones = calculateZonesFromTemplate(template, columnHeight)
+      const calculatedZones = calculateZones(template, columnHeight)
 
       // Create new config for the selected column
       const newConfig: RackColumnConfiguration = {
@@ -137,17 +210,14 @@ export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
           return columnConfigurations[i]
         }
 
-        const defaultTemplate = RACK_TEMPLATES['OPEN_SHELVES_ONLY']
-        const defaultZones = calculateZonesFromTemplate(
-          defaultTemplate,
-          columnHeight
-        )
+        const defaultTemplate = TEMPLATES[defaultTemplateId]
+        const defaultZones = calculateZones(defaultTemplate, columnHeight)
 
         return {
           zones: defaultZones,
           totalHeight: columnHeight,
           doors: defaultTemplate.doors || [],
-          templateId: 'OPEN_SHELVES_ONLY',
+          templateId: defaultTemplateId,
         }
       })
 
@@ -163,6 +233,7 @@ export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
       columnHeight,
       selectedColumns,
       onActiveColumnChange,
+      furnitureType,
     ]
   )
 
@@ -202,6 +273,14 @@ export const ProductRackColumns: FC<ProductRackColumnsProps> = ({
       OPEN_SHELVES_AND_DRAWERS: {
         name: 'homepage.configurator.rack.template.openShelvesAndDrawers',
         desc: 'homepage.configurator.rack.template.openShelvesAndDrawers.desc',
+      },
+      OPEN_SHELVES_AND_BOTTOM_DRAWERS: {
+        name: 'homepage.configurator.rack.template.openShelvesAndBottomDrawers',
+        desc: 'homepage.configurator.rack.template.openShelvesAndBottomDrawers.desc',
+      },
+      DRAWERS_ONLY: {
+        name: 'homepage.configurator.rack.template.drawersOnly',
+        desc: 'homepage.configurator.rack.template.drawersOnly.desc',
       },
     }
     return keyMap[templateId] || { name: templateId, desc: templateId }

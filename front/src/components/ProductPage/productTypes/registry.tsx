@@ -4,7 +4,13 @@ import type { ComponentType, FC } from 'react'
 /**
  * Product registry - exports: ProductKey, ProductUiEntry, PRODUCT_UI, isProductKey
  */
-export type ProductKey = 'stand' | 'wardrobe' | 'tv-stand' | 'bedside' | 'rack'
+export type ProductKey =
+  | 'stand'
+  | 'wardrobe'
+  | 'tv-stand'
+  | 'bedside'
+  | 'rack'
+  | 'shoe-rack'
 
 /** No props needed right now; keeps it strictly typed and uniform */
 type ShellProps = Record<string, never>
@@ -69,6 +75,17 @@ const RackShell: FC<ShellProps> = () => (
   />
 )
 
+/* ---- Shoe Rack ---- */
+import { ShoeRackProductConfigurator } from '~/components/ProductPage/productTypes/shoe-rack'
+
+const ShoeRackShell: FC<ShellProps> = () => (
+  <RackProductPage
+    components={ShoeRackProductConfigurator}
+    name="homepage.configurator.shoe-rack.title"
+    furnitureType="shoe-rack"
+  />
+)
+
 export const PRODUCT_UI: Record<ProductKey, ProductUiEntry> = {
   bedside: {
     titleKey: 'homepage.configurator.bedside.title',
@@ -87,9 +104,13 @@ export const PRODUCT_UI: Record<ProductKey, ProductUiEntry> = {
     titleKey: 'homepage.configurator.rack.title',
     Shell: RackShell,
   },
+  'shoe-rack': {
+    titleKey: 'homepage.configurator.shoe-rack.title',
+    Shell: ShoeRackShell,
+  },
 }
 
 export const isProductKey = (v: string): v is ProductKey =>
-  (['stand', 'wardrobe', 'tv-stand', 'bedside', 'rack'] as const).includes(
-    v as ProductKey
-  )
+  (
+    ['stand', 'wardrobe', 'tv-stand', 'bedside', 'rack', 'shoe-rack'] as const
+  ).includes(v as ProductKey)

@@ -552,6 +552,80 @@ export function calculateRackPrice(params: RackPriceParams): number {
 }
 
 // ============================================================================
+// SHOE RACK CONSTRAINTS (Комод для обуви / Comodă pentru încălțăminte)
+// ============================================================================
+export const SHOE_RACK_CONSTRAINTS: ProductConstraints = {
+  dimensions: {
+    width: { min: 30, max: 300, default: 120, unit: 'cm' },
+    height: { min: 30, max: 120, default: 80, unit: 'cm' },
+    depth: { min: 25, max: 50, default: 35, unit: 'cm' },
+    plintHeight: { min: 2, max: 8, default: 2, unit: 'cm' },
+  },
+
+  steps: {
+    heightStep: 1,
+    depthStep: 5,
+  },
+
+  sections: {
+    rule: 'width-based',
+    min: 1,
+    max: 3,
+    default: 1,
+    getAvailableSections: ({ width }) => {
+      // Width-based sections for shoe rack
+      if (width <= 100) return [1]
+      if (width <= 200) return [1, 2]
+      return [1, 2, 3]
+    },
+  },
+
+  columns: {
+    min: 1,
+    max: 3,
+    default: 2,
+    allowCustomConfiguration: true,
+    getAvailableColumns: ({ width }) => {
+      // Width-based column limits for shoe rack
+      // 30-100cm: 1 column
+      // 101-200cm: 2 columns
+      // 201-300cm: 3 columns
+      if (width <= 100) return [1]
+      if (width <= 200) return [2]
+      return [3]
+    },
+  },
+
+  pricing: {
+    basePrice: 700,
+    perDrawer: 550,
+    perCmWidth: 22,
+    perCmHeightAbove: { threshold: 80, rate: 3.5 },
+    perCmDepthAbove: { threshold: 30, rate: 6 },
+    vatMultiplier: 1.35,
+  },
+
+  images: {
+    heightThresholds: [
+      { maxHeight: 60, imageDimension: 600 },
+      { maxHeight: 90, imageDimension: 900 },
+      { maxHeight: Infinity, imageDimension: 1200 },
+    ],
+    widthThresholds: [
+      { maxWidth: 100, imageDimension: 100 },
+      { maxWidth: 200, imageDimension: 150 },
+      { maxWidth: Infinity, imageDimension: 200 },
+    ],
+    plintHeightThresholds: [
+      { maxPlintHeight: 5, imageDimension: 20 },
+      { maxPlintHeight: Infinity, imageDimension: 60 },
+    ],
+  },
+
+  colors: ['White', 'Biege', 'Light Grey', 'Grey'],
+}
+
+// ============================================================================
 // CONSTRAINT REGISTRY
 // ============================================================================
 
@@ -561,6 +635,7 @@ export const FURNITURE_CONSTRAINTS = {
   'tv-stand': TV_STAND_CONSTRAINTS,
   wardrobe: WARDROBE_CONSTRAINTS,
   rack: RACK_CONSTRAINTS,
+  'shoe-rack': SHOE_RACK_CONSTRAINTS,
 } as const
 
 export type FurnitureType = keyof typeof FURNITURE_CONSTRAINTS

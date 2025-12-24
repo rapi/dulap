@@ -489,12 +489,17 @@ const RackColumnComponent: React.FC<RackColumnProps> = ({
             door.zoneIndices.includes(index)
           ) ?? false
 
-        // ALL SHELVES zones should use master grid for symmetric alignment
-        // This ensures consistent shelf positions across all columns,
-        // even when some have doors and others don't
+        // Use master grid for SHELVES zones ONLY if they don't have an explicit shelfCount
+        // If a zone has an explicit shelfCount (from template constraints like minShelfCount/maxShelfCount),
+        // we should respect that instead of using the master grid
         const useMasterGrid =
-          zone.type === RackZoneType.SHELVES ||
-          zone.type === RackZoneType.SHELVES_FIXED
+          (zone.type === RackZoneType.SHELVES ||
+            zone.type === RackZoneType.SHELVES_FIXED) &&
+          zone.shelfCount === undefined
+
+        console.log(
+          `[RackColumn] Zone ${index}: type=${zone.type}, shelfCount=${zone.shelfCount}, useMasterGrid=${useMasterGrid}`
+        )
 
         // Check if this is the top zone (index 0) - top zones don't need a ceiling shelf
         // because the rack structure already has a top panel

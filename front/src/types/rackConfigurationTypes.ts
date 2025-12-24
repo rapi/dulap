@@ -33,11 +33,15 @@ export interface RackZoneTemplate {
   shelfMinSpacing?: number // Minimum space between shelves
   shelfMaxSpacing?: number // Maximum space between shelves
   shelfOptimalSpacing?: number // Preferred spacing (default: average of min/max)
+  minShelfCount?: number // Minimum number of shelves (overrides spacing calculations)
+  maxShelfCount?: number // Maximum number of shelves (overrides spacing calculations)
 
   // For drawers
   drawerMinHeight?: number // Minimum drawer height
   drawerMaxHeight?: number // Maximum drawer height
   drawerOptimalHeight?: number // Preferred drawer height (default: 20cm)
+  drawerMinCount?: number // Minimum number of drawers (overrides height calculations)
+  drawerMaxCount?: number // Maximum number of drawers (overrides height calculations)
 }
 
 /**

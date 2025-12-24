@@ -31,7 +31,7 @@ export const productTypes: ProductTypes[] = [
   },
   {
     name: 'homepage.products.showRack',
-    link: '/configurator/show-rack',
-    image: '/renders-landing/show-rack.png',
+    link: '/configurator/shoe-rack',
+    image: '/renders-landing/shoe-rack.png',
   },
 ]

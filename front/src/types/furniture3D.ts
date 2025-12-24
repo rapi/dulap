@@ -41,11 +41,23 @@ export interface Furniture3DProps {
   sections: number
   openingType: OpeningType
   columns: number
-  columnConfigurations?: ColumnConfigurationType[] | WardrobeColumnConfiguration[] | RackColumnConfiguration[]
+  columnConfigurations?:
+    | ColumnConfigurationType[]
+    | WardrobeColumnConfiguration[]
+    | RackColumnConfiguration[]
   columnConfigurationsWithOptions?: ColumnConfigurationWithOptions[] // Extended config with door opening side (for stand)
   columnWidths?: number[] // Optional: variable column widths (for wardrobe/rack)
   columnPositions?: number[] // Optional: custom column X positions (for wardrobe/rack)
-  furnitureType?: 'wardrobe' | 'stand' | 'tv-stand' | 'bedside' | 'office-table' | 'greenwall' | 'storage' | 'rack'
+  furnitureType?:
+    | 'wardrobe'
+    | 'stand'
+    | 'tv-stand'
+    | 'bedside'
+    | 'office-table'
+    | 'greenwall'
+    | 'storage'
+    | 'rack'
+    | 'shoe-rack'
   selectedColumnIndex?: number | null // Optional: externally controlled selected column index
   onColumnClick?: (index: number | null) => void // Callback when a column is clicked in 3D (null = deselect)
   onDeselectFunctionReady?: (deselectFn: () => void) => void // Called with the deselection function that parent can store and call
@@ -59,4 +71,3 @@ export interface ProductComponentData {
   values?: any // eslint-disable-line @typescript-eslint/no-explicit-any -- Predefined values
   defaults: FurnitureDefaults
 }
-
