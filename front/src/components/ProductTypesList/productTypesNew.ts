@@ -7,7 +7,7 @@ export const productTypesNew: ProductTypes[] = [
   {
     name: 'homepage.products.table',
     link: '/table',
-    image: '/table/table.png',
+    image: '/table/table-2.png',
   },
   {
     name: 'homepage.products.bench',
@@ -22,6 +22,6 @@ export const productTypesNew: ProductTypes[] = [
   {
     name: 'homepage.products.stool',
     link: '/stool',
-    image: '/stool/stool.png'
+    image: '/stool/stool.png',
   },
 ]

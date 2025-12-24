@@ -25,8 +25,8 @@ export const Banner: FC<BannerProps> = ({
       />
       {/* mobile image */}
       <Image
-        width={1440}
-        height={700}
+        height={600}
+        width={400}
         src={mobileHref || '/banner-2.jpg'}
         loading="lazy"
         decoding="async"
