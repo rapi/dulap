@@ -1,7 +1,7 @@
 import styles from './ProductListPage.module.css'
 import { FormattedMessage } from 'react-intl'
 import { ProductTypesList } from '~/components/ProductTypesList/ProductTypesList'
-
+import { ProductTypesListNew } from '~/components/ProductTypesList/productTypesListNew'
 import { ProductCatalog } from '~/components/ProductCatalog/ProductCatalog'
 
 export const ProductListPage: React.FC = () => {
@@ -16,6 +16,11 @@ export const ProductListPage: React.FC = () => {
         </h2>
 
         <ProductTypesList></ProductTypesList>
+        <br/>
+        <h2 className={styles.title}>
+          <FormattedMessage id="homepage.dulapLanding.title1.2" />
+        </h2>
+        <ProductTypesListNew></ProductTypesListNew>
 
         <h2 className={styles.title}>
           <FormattedMessage id="homepage.productListPage.title.2" />
