@@ -1,6 +1,5 @@
 FROM node:lts-alpine AS deps
 WORKDIR /app
-run apk add curl
 
 # Copy package manifests
 COPY package.json yarn.lock ./
@@ -23,6 +22,7 @@ RUN yarn build
 # 3. Production image, copy all the files and run next
 FROM node:lts-alpine AS runner
 WORKDIR /app
+run apk add curl
 
 # Set production environment
 ENV NODE_ENV=production
