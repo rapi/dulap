@@ -86,8 +86,11 @@ jobs:
           command: |
             ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST \
               "docker pull $DOCKERHUB_USERNAME/dulap:latest && \
-               if [ \$(docker ps -aq -f name=dulap) ]; then docker stop dulap && docker rm dulap; fi && \
+               if [ \$(docker ps -aq -f name=dulap) ]; then docker stack rm dulap && docker stop dulap && docker rm dulap; fi && \
                docker run -d --name dulap -p 8080:8080 $DOCKERHUB_USERNAME/dulap:latest && \
+               echo 'y' | docker image prune"
+               if [ \$(docker ps -aq -f name=dulap) ]; then docker stack rm dulap && docker stop dulap && docker rm dulap; fi && \
+               docker run -d --name dulap -p 8081:8080 rapiok/dulap:latest && \
                echo 'y' | docker image prune"
 
   slack-deploy-success:
