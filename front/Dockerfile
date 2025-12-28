@@ -1,12 +1,12 @@
 FROM node:lts-alpine AS deps
 WORKDIR /app
+run apk add curl
 
 # Copy package manifests
 COPY package.json yarn.lock ./
 
 # Install dependencies with Yarn
 RUN yarn install --frozen-lockfile
-run apk --no-cache add curl
 
 # 2. Rebuild the source code only when needed
 FROM node:lts-alpine AS builder
