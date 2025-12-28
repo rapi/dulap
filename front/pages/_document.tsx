@@ -26,7 +26,7 @@ export default function Document() {
             });
           `}
         </Script>
-
+        <base href="/" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
