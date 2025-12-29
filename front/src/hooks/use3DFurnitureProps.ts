@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Furniture3DProps, FurnitureDefaults, ColumnConfigurationWithOptions } from '~/types/furniture3D'
 import { ColumnConfigurationType } from '~/types/columnConfigurationTypes'
+import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
 import { getColorItemByName } from '~/utils/colorDictionary'
 import { convertToOpeningType } from '~/utils/openingTypeConverter'
 import { calculateWardrobeColumnLayout } from '~/utils/wardrobeColumnLayout'
@@ -123,7 +124,9 @@ export function use3DFurnitureProps(
       if (furnitureType === 'rack') {
         rackLayout = calculateRackColumnLayout(width)
       } else {
-        wardrobeLayout = calculateWardrobeColumnLayout(width)
+        // For wardrobe: get isMirrored from values or wardrobeColumns component
+        const isMirrored = values?.isMirrored ?? wardrobeColumnsComponent?.isMirrored ?? false
+        wardrobeLayout = calculateWardrobeColumnLayout(width, isMirrored)
       }
     }
 

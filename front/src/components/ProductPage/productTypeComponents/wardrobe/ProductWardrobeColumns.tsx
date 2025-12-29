@@ -1,14 +1,15 @@
 import React, { FC, useState, useMemo, useCallback, useEffect } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { 
-  WardrobeColumnConfiguration
-} from '~/types/wardrobeConfigurationTypes'
+import { WardrobeColumnConfiguration } from '~/types/wardrobeConfigurationTypes'
 import {
   WARDROBE_TEMPLATES,
   getValidTemplates,
-  calculateTemplateAdjustment
+  calculateTemplateAdjustment,
 } from '~/config/wardrobeTemplates'
-import { ButtonSelect, ButtonOptionsType } from '~/components/ButtonSelect/ButtonSelect'
+import {
+  ButtonSelect,
+  ButtonOptionsType,
+} from '~/components/ButtonSelect/ButtonSelect'
 import { ButtonImageSelect } from '~/components/ButtonImageSelect/ButtonImageSelect'
 import layoutStyles from '~/components/ProductPageLayout/ProductPageLayout.module.css'
 import styles from './ProductWardrobeColumns.module.css'
@@ -20,9 +21,13 @@ export type ProductWardrobeColumnsComponent = {
   selectedColumns: number
   columnConfigurations: WardrobeColumnConfiguration[]
   setColumnConfigurations: (configs: WardrobeColumnConfiguration[]) => void
-  columnWidth: number
+  columnWidths?: number[] // Array of all column widths
+  columnWidth: number // Deprecated: kept for backwards compatibility
   columnHeight: number // Internal height (without plinth)
   columnDepth: number
+  onMirrorToggle?: () => void // Optional mirror toggle callback
+  isMirrored?: boolean // Mirror state for 3D rendering
+  doorOpeningSides?: ('left' | 'right' | undefined)[] // Calculated door opening sides from layout
 }
 
 interface ProductWardrobeColumnsProps {
@@ -37,20 +42,25 @@ interface ProductWardrobeColumnsProps {
 export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
   configuration,
   activeColumnIndex: externalActiveIndex,
-  onActiveColumnChange
+  onActiveColumnChange,
 }) => {
   const intl = useIntl()
   const {
     selectedColumns,
     columnConfigurations,
     setColumnConfigurations,
-    columnWidth,
-    columnHeight
+    columnWidths,
+    columnWidth, // Deprecated but kept for compatibility
+    columnHeight,
+    onMirrorToggle,
+    doorOpeningSides,
   } = configuration
 
   // Local state for active column
-  const [activeColumnIndex, setActiveColumnIndex] = useState(externalActiveIndex ?? 0)
-  
+  const [activeColumnIndex, setActiveColumnIndex] = useState(
+    externalActiveIndex ?? 0
+  )
+
   // Sync with external index if provided
   useEffect(() => {
     if (externalActiveIndex !== undefined) {
@@ -59,11 +69,14 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
   }, [externalActiveIndex])
 
   // Handle column tab change
-  const handleColumnTabChange = useCallback((value: string) => {
-    const index = parseInt(value, 10)
-    setActiveColumnIndex(index)
-    onActiveColumnChange?.(index)
-  }, [onActiveColumnChange])
+  const handleColumnTabChange = useCallback(
+    (value: string) => {
+      const index = parseInt(value, 10)
+      setActiveColumnIndex(index)
+      onActiveColumnChange?.(index)
+    },
+    [onActiveColumnChange]
+  )
 
   // Get valid templates for current dimensions
   const validTemplates = useMemo(
@@ -73,16 +86,17 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
 
   // Column tab options
   const columnTabOptions: ButtonOptionsType[] = useMemo(
-    () => Array.from({ length: selectedColumns }).map((_, index) => ({
-      value: String(index),
-      label: (
-        <FormattedMessage
-          id="homepage.configurator.wardrobe.column"
-          defaultMessage={`Column ${index + 1}`}
-          values={{ number: index + 1 }}
-        />
-      ),
-    })),
+    () =>
+      Array.from({ length: selectedColumns }).map((_, index) => ({
+        value: String(index),
+        label: (
+          <FormattedMessage
+            id="homepage.configurator.wardrobe.column"
+            defaultMessage={`Column ${index + 1}`}
+            values={{ number: index + 1 }}
+          />
+        ),
+      })),
     [selectedColumns]
   )
 
@@ -91,195 +105,401 @@ export const ProductWardrobeColumns: FC<ProductWardrobeColumnsProps> = ({
   const currentTemplateId = currentConfig?.templateId
 
   // Handle template selection
-  const handleTemplateSelect = useCallback((templateId: string) => {
-    const template = WARDROBE_TEMPLATES[templateId]
-    if (!template) {
-      return
-    }
+  const handleTemplateSelect = useCallback(
+    (templateId: string) => {
+      const template = WARDROBE_TEMPLATES[templateId]
+      if (!template) {
+        return
+      }
 
-    // Zones always total 200cm regardless of column height
-    const FIXED_ZONES_HEIGHT = 200
-    const adjustedZones = calculateTemplateAdjustment(template, FIXED_ZONES_HEIGHT)
-    
-    // Preserve hasDoor setting from current config, default to true (closed)
-    const currentHasDoor = currentConfig?.hasDoor !== false
-    
-    // Create new config for the selected column
-    const newConfig: WardrobeColumnConfiguration = {
-      zones: adjustedZones,
-      totalHeight: columnHeight,
-      doorType: (columnWidth > 60 ? 'split' : 'single') as 'split' | 'single',
-      doorOpeningSide: (columnWidth <= 60 ? 'right' : undefined) as 'left' | 'right' | undefined,
-      templateId: templateId,
-      hasDoor: currentHasDoor
-    }
-    
-    // Ensure newConfigs has the right length, filling with existing configs or defaults
-    const newConfigs = Array.from({ length: selectedColumns }, (_, i) => {
-      if (i === activeColumnIndex) {
-        return newConfig
-      }
-      // Use existing config or create default with FULL_HANGING_WITH_1_SHELF template
-      if (columnConfigurations[i]) {
-        return columnConfigurations[i]
-      }
-      
-      const defaultTemplate = WARDROBE_TEMPLATES['FULL_HANGING_WITH_1_SHELF']
+      // Zones always total 200cm regardless of column height
       const FIXED_ZONES_HEIGHT = 200
-      const defaultZones = calculateTemplateAdjustment(defaultTemplate, FIXED_ZONES_HEIGHT)
-      
-      return {
-        zones: defaultZones,
+      const adjustedZones = calculateTemplateAdjustment(
+        template,
+        FIXED_ZONES_HEIGHT
+      )
+
+      // Preserve hasDoor setting from current config, default to true (closed)
+      const currentHasDoor = currentConfig?.hasDoor !== false
+
+      // Get the correct door opening side from the layout (which accounts for mirroring)
+      const correctDoorOpeningSide = doorOpeningSides?.[activeColumnIndex]
+
+      // Get the ACTUAL width of the ACTIVE column
+      const activeColumnWidth = columnWidths?.[activeColumnIndex] ?? columnWidth
+
+      // Create new config for the selected column
+      const newConfig: WardrobeColumnConfiguration = {
+        zones: adjustedZones,
         totalHeight: columnHeight,
-        doorType: 'single' as 'single' | 'split',
-        doorOpeningSide: 'right' as 'left' | 'right' | undefined,
-        templateId: 'FULL_HANGING_WITH_1_SHELF',
-        hasDoor: true // Default to closed (has door)
+        doorType: (activeColumnWidth > 60 ? 'split' : 'single') as
+          | 'split'
+          | 'single',
+        doorOpeningSide: correctDoorOpeningSide,
+        templateId: templateId,
+        hasDoor: currentHasDoor,
       }
-    })
-    
-    setColumnConfigurations(newConfigs)
-    
-    // Open doors by selecting the current column when configuration is changed
-    // This ensures doors open on desktop when user selects internal configuration
-    onActiveColumnChange?.(activeColumnIndex)
-  }, [
-    activeColumnIndex, 
-    columnConfigurations, 
-    setColumnConfigurations,
-    columnHeight,
-    columnWidth,
-    selectedColumns,
-      onActiveColumnChange
-  ])
+
+      // Ensure newConfigs has the right length, filling with existing configs or defaults
+      const newConfigs = Array.from({ length: selectedColumns }, (_, i) => {
+        if (i === activeColumnIndex) {
+          return newConfig
+        }
+        // Use existing config or create default with FULL_HANGING_WITH_1_SHELF template
+        if (columnConfigurations[i]) {
+          return columnConfigurations[i]
+        }
+
+        const defaultTemplate = WARDROBE_TEMPLATES['FULL_HANGING_WITH_1_SHELF']
+        const FIXED_ZONES_HEIGHT = 200
+        const defaultZones = calculateTemplateAdjustment(
+          defaultTemplate,
+          FIXED_ZONES_HEIGHT
+        )
+
+        return {
+          zones: defaultZones,
+          totalHeight: columnHeight,
+          doorType: 'single' as 'single' | 'split',
+          doorOpeningSide: 'right' as 'left' | 'right' | undefined,
+          templateId: 'FULL_HANGING_WITH_1_SHELF',
+          hasDoor: true, // Default to closed (has door)
+        }
+      })
+
+      setColumnConfigurations(newConfigs)
+
+      // Open doors by selecting the current column when configuration is changed
+      // This ensures doors open on desktop when user selects internal configuration
+      onActiveColumnChange?.(activeColumnIndex)
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      activeColumnIndex,
+      columnConfigurations,
+      setColumnConfigurations,
+      columnHeight,
+      columnWidths,
+      selectedColumns,
+      onActiveColumnChange,
+      doorOpeningSides,
+      // currentConfig is derived from columnConfigurations[activeColumnIndex], so we don't need it explicitly
+    ]
+  )
 
   // Handle door toggle (open/closed)
-  const handleDoorToggle = useCallback((value: 'open' | 'closed') => {
-    const hasDoor = value === 'closed'
-    
-    const newConfigs = columnConfigurations.map((config, index) => {
-      if (index === activeColumnIndex) {
-        return {
-          ...config,
-          hasDoor
+  const handleDoorToggle = useCallback(
+    (value: 'open' | 'closed') => {
+      const hasDoor = value === 'closed'
+
+      const newConfigs = columnConfigurations.map((config, index) => {
+        if (index === activeColumnIndex) {
+          return {
+            ...config,
+            hasDoor,
+          }
         }
+        return config
+      })
+
+      setColumnConfigurations(newConfigs)
+    },
+    [activeColumnIndex, columnConfigurations, setColumnConfigurations]
+  )
+
+  // Handle mirror direction change (left/right)
+  const handleMirrorDirectionChange = useCallback(
+    (value: 'left' | 'right') => {
+      const shouldBeMirrored = value === 'left'
+      const currentlyMirrored = configuration.isMirrored ?? false
+
+      // Only toggle if the state needs to change
+      if (shouldBeMirrored !== currentlyMirrored && onMirrorToggle) {
+        // Calculate the mirrored column index to keep the same door open
+        // Formula: newIndex = (totalColumns - 1) - oldIndex
+        // Example: For 3 columns (0,1,2): column 2 → column 0, column 0 → column 2
+        const mirroredIndex = selectedColumns - 1 - activeColumnIndex
+
+        // Update active column to the mirrored position
+        setActiveColumnIndex(mirroredIndex)
+        if (onActiveColumnChange) {
+          onActiveColumnChange(mirroredIndex)
+        }
+
+        // Trigger mirror toggle
+        onMirrorToggle()
       }
-      return config
-    })
-    
-    setColumnConfigurations(newConfigs)
-  }, [activeColumnIndex, columnConfigurations, setColumnConfigurations])
+    },
+    [
+      configuration.isMirrored,
+      onMirrorToggle,
+      selectedColumns,
+      activeColumnIndex,
+      onActiveColumnChange,
+    ]
+  )
 
   // Map template ID to translation key
-  const getTemplateTranslationKey = (templateId: string): { name: string; desc: string } => {
+  const getTemplateTranslationKey = (
+    templateId: string
+  ): { name: string; desc: string } => {
     const keyMap: Record<string, { name: string; desc: string }> = {
-      'FULL_HANGING_WITH_1_SHELF': {
+      FULL_HANGING_WITH_1_SHELF: {
         name: 'homepage.configurator.wardrobe.template.fullHangingWith1Shelf',
-        desc: 'homepage.configurator.wardrobe.template.fullHangingWith1Shelf.desc'
+        desc: 'homepage.configurator.wardrobe.template.fullHangingWith1Shelf.desc',
       },
-      'FULL_HANGING_WITH_2_DRAWERS': {
+      FULL_HANGING_WITH_2_DRAWERS: {
         name: 'homepage.configurator.wardrobe.template.fullHangingWith2Drawers',
-        desc: 'homepage.configurator.wardrobe.template.fullHangingWith2Drawers.desc'
+        desc: 'homepage.configurator.wardrobe.template.fullHangingWith2Drawers.desc',
       },
-      'SHELVES_ONLY': {
+      SHELVES_ONLY: {
         name: 'homepage.configurator.wardrobe.template.shelvesOnly',
-        desc: 'homepage.configurator.wardrobe.template.shelvesOnly.desc'
+        desc: 'homepage.configurator.wardrobe.template.shelvesOnly.desc',
       },
-      'MIXED_STORAGE_COMPLEX': {
+      MIXED_STORAGE_COMPLEX: {
         name: 'homepage.configurator.wardrobe.template.mixedStorage',
-        desc: 'homepage.configurator.wardrobe.template.mixedStorage.desc'
+        desc: 'homepage.configurator.wardrobe.template.mixedStorage.desc',
       },
-      'HANGING_WITH_DRAWERS': {
+      HANGING_WITH_DRAWERS: {
         name: 'homepage.configurator.wardrobe.template.hangingDrawers',
-        desc: 'homepage.configurator.wardrobe.template.hangingDrawers.desc'
+        desc: 'homepage.configurator.wardrobe.template.hangingDrawers.desc',
       },
-      'DOUBLE_HANGING': {
+      DOUBLE_HANGING: {
         name: 'homepage.configurator.wardrobe.template.doubleHanging',
-        desc: 'homepage.configurator.wardrobe.template.doubleHanging.desc'
+        desc: 'homepage.configurator.wardrobe.template.doubleHanging.desc',
       },
-      'ONE_TOP_SHELF': {
+      ONE_TOP_SHELF: {
         name: 'homepage.configurator.wardrobe.template.oneTopShelf',
-        desc: 'homepage.configurator.wardrobe.template.oneTopShelf.desc'
-      }
+        desc: 'homepage.configurator.wardrobe.template.oneTopShelf.desc',
+      },
     }
     return keyMap[templateId] || { name: templateId, desc: templateId }
   }
 
   // Map templates to ButtonImageSelect options
   const imageSelectOptions = useMemo(
-    () => validTemplates.map(template => {
-      const translationKeys = getTemplateTranslationKey(template.id)
-      return {
-        value: template.id,
-        content: (
-          <WardrobeConfigurationIcon 
-            template={template} 
-            width={45} 
-            height={60} 
-          />
-        ),
-        title: intl.formatMessage({ id: translationKeys.desc, defaultMessage: template.description }),
-      }
-    }),
+    () =>
+      validTemplates.map((template) => {
+        const translationKeys = getTemplateTranslationKey(template.id)
+        return {
+          value: template.id,
+          content: (
+            <WardrobeConfigurationIcon
+              template={template}
+              width={45}
+              height={60}
+            />
+          ),
+          title: intl.formatMessage({
+            id: translationKeys.desc,
+            defaultMessage: template.description,
+          }),
+        }
+      }),
     [validTemplates, intl]
   )
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   return (
-    <div className={layoutStyles.individualColumnsLabel}>
-      {/* Section title */}
-      {!isMobile && (
-        <p className={layoutStyles.sectionTitle} style={{ margin: '0' }}>
-          <FormattedMessage 
-            id="homepage.configurator.wardrobe.columnConfiguration"
-            defaultMessage="Interior Configuration"
-          />
-        </p>
-      )}
+    <>
+      <div className={layoutStyles.individualColumnsLabel}>
+        {/* Section title */}
 
-      <div className={layoutStyles.columnsConfig}>
-        {/* Column selector (if multiple columns) */}
-        {selectedColumns > 1 && (
-          <div className={layoutStyles.furnitureLabel}>
-            <ButtonSelect
-              options={columnTabOptions}
-              defaultSelected={String(activeColumnIndex)}
-              onChange={handleColumnTabChange}
+        {!isMobile && (
+          <p className={layoutStyles.sectionTitle} style={{ margin: '0' }}>
+            <FormattedMessage
+              id="homepage.configurator.wardrobe.columnConfiguration"
+              defaultMessage="Interior Configuration"
             />
-          </div>
+          </p>
         )}
 
-        {/* Configuration type selector */}
-        <div className={styles.wardrobeColumnsSection}>
-          <ButtonImageSelect<string>
-            ariaLabel="Wardrobe interior configuration"
-            options={imageSelectOptions}
-            value={currentTemplateId || ''}
-            onChange={handleTemplateSelect}
-          />
-        </div>
-
-        {/* Door toggle (open/closed) */}
-        <div className={layoutStyles.furnitureLabel}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '5px' }}>
-            <span style={{ fontSize: '14px', fontWeight: 500 }}>
-              <FormattedMessage
-                id="homepage.configurator.wardrobe.columnDoor"
-                defaultMessage="Column door"
+        <div className={layoutStyles.columnsConfig}>
+          {/* Column selector (if multiple columns) */}
+          {selectedColumns > 1 && (
+            <div className={layoutStyles.furnitureLabel}>
+              <ButtonSelect
+                options={columnTabOptions}
+                defaultSelected={String(activeColumnIndex)}
+                onChange={handleColumnTabChange}
               />
-              :
-            </span>
-            <ButtonSelect
-              options={[
-                { value: 'closed', label: <FormattedMessage id="homepage.configurator.wardrobe.columnDoor.closed" defaultMessage="Closed" /> },
-                { value: 'open', label: <FormattedMessage id="homepage.configurator.wardrobe.columnDoor.open" defaultMessage="Open" /> },
-              ]}
-              defaultSelected={currentConfig?.hasDoor !== false ? 'closed' : 'open'}
-              onChange={(value) => handleDoorToggle(value as 'open' | 'closed')}
+            </div>
+          )}
+
+          {/* Configuration type selector */}
+          <div className={styles.wardrobeColumnsSection}>
+            <ButtonImageSelect<string>
+              ariaLabel="Wardrobe interior configuration"
+              options={imageSelectOptions}
+              value={currentTemplateId || ''}
+              onChange={handleTemplateSelect}
             />
           </div>
+
+          {/* Door toggle (open/closed) */}
+          <div className={layoutStyles.furnitureLabel}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                marginTop: '5px',
+              }}
+            >
+              <span style={{ fontSize: '14px', fontWeight: 500 }}>
+                <FormattedMessage
+                  id="homepage.configurator.wardrobe.columnDoor"
+                  defaultMessage="Column door"
+                />
+                :
+              </span>
+              <ButtonSelect
+                options={[
+                  {
+                    value: 'closed',
+                    label: (
+                      <FormattedMessage
+                        id="homepage.configurator.wardrobe.columnDoor.closed"
+                        defaultMessage="Closed"
+                      />
+                    ),
+                  },
+                  {
+                    value: 'open',
+                    label: (
+                      <FormattedMessage
+                        id="homepage.configurator.wardrobe.columnDoor.open"
+                        defaultMessage="Open"
+                      />
+                    ),
+                  },
+                ]}
+                defaultSelected={
+                  currentConfig?.hasDoor !== false ? 'closed' : 'open'
+                }
+                onChange={(value) =>
+                  handleDoorToggle(value as 'open' | 'closed')
+                }
+              />
+            </div>
+          </div>
+
+          {/* Mirror direction toggle */}
+          {selectedColumns > 1 && isMobile && (
+            <div
+              className={layoutStyles.columnsConfig}
+              style={{ marginTop: '10px' }}
+            >
+              <div className={layoutStyles.furnitureLabel}>
+                <span
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    marginRight: '12px',
+                  }}
+                >
+                  <FormattedMessage
+                    id="homepage.configurator.wardrobe.mirrorDirection"
+                    defaultMessage="Oglindire"
+                  />
+                  :
+                </span>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginTop: '5px',
+                  }}
+                >
+                  <ButtonSelect
+                    options={[
+                      {
+                        value: 'left',
+                        label: (
+                          <FormattedMessage
+                            id="homepage.configurator.wardrobe.mirrorDirection.left"
+                            defaultMessage="Stânga"
+                          />
+                        ),
+                      },
+                      {
+                        value: 'right',
+                        label: (
+                          <FormattedMessage
+                            id="homepage.configurator.wardrobe.mirrorDirection.right"
+                            defaultMessage="Dreapta"
+                          />
+                        ),
+                      },
+                    ]}
+                    defaultSelected={
+                      configuration.isMirrored ? 'left' : 'right'
+                    }
+                    onChange={(value) =>
+                      handleMirrorDirectionChange(value as 'left' | 'right')
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+
+      {/* Mirror direction toggle */}
+      {selectedColumns > 1 && !isMobile && (
+        <div className={layoutStyles.individualColumnsLabel}>
+          {/* Section title */}
+
+          <p className={layoutStyles.sectionTitle} style={{ margin: '7px 0' }}>
+            <FormattedMessage
+              id="homepage.configurator.wardrobe.mirrorDirection"
+              defaultMessage="Oglindire"
+            />
+          </p>
+
+          <div className={layoutStyles.columnsConfig}>
+            <div className={layoutStyles.furnitureLabel}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  marginTop: '5px',
+                }}
+              >
+                <ButtonSelect
+                  options={[
+                    {
+                      value: 'left',
+                      label: (
+                        <FormattedMessage
+                          id="homepage.configurator.wardrobe.mirrorDirection.left"
+                          defaultMessage="Stânga"
+                        />
+                      ),
+                    },
+                    {
+                      value: 'right',
+                      label: (
+                        <FormattedMessage
+                          id="homepage.configurator.wardrobe.mirrorDirection.right"
+                          defaultMessage="Dreapta"
+                        />
+                      ),
+                    },
+                  ]}
+                  defaultSelected={configuration.isMirrored ? 'left' : 'right'}
+                  onChange={(value) =>
+                    handleMirrorDirectionChange(value as 'left' | 'right')
+                  }
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }

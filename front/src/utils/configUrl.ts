@@ -107,7 +107,12 @@ export function parseQueryToConfig(
   const openingTypeStr = Array.isArray(openingTypeParam)
     ? openingTypeParam[0]
     : openingTypeParam
-  if (openingTypeStr === 'push' || openingTypeStr === 'round' || openingTypeStr === 'profile' || openingTypeStr === 'profile-long') {
+  if (
+    openingTypeStr === 'push' ||
+    openingTypeStr === 'round' ||
+    openingTypeStr === 'profile' ||
+    openingTypeStr === 'profile-long'
+  ) {
     cfg.openingType = openingTypeStr
   }
   // Legacy support: 'handle' → 'round'
@@ -131,6 +136,17 @@ export function parseQueryToConfig(
     : rackCfgParam
   if (rackCfgStr && typeof rackCfgStr === 'string') {
     cfg.rackCfg = rackCfgStr
+  }
+
+  // Parse isMirrored flag from URL (for wardrobe)
+  const isMirroredParam = q['isMirrored']
+  const isMirroredStr = Array.isArray(isMirroredParam)
+    ? isMirroredParam[0]
+    : isMirroredParam
+  if (isMirroredStr === 'true' || isMirroredStr === '1') {
+    cfg.isMirrored = true
+  } else if (isMirroredStr === 'false' || isMirroredStr === '0') {
+    cfg.isMirrored = false
   }
 
   return cfg
@@ -230,6 +246,12 @@ export function configToQuery(
   if (cfg.openingType && cfg.openingType !== 'push') {
     out.openingType = cfg.openingType
   }
+
+  // Serialize isMirrored flag (for wardrobe)
+  if (cfg.isMirrored === true) {
+    out.isMirrored = '1' // Use '1' for true to keep URL short
+  }
+  // Don't include isMirrored if false (default state)
 
   // Type-safe default comparison
   const isDefault = (

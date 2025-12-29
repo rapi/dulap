@@ -309,7 +309,7 @@ export const TV_STAND_CONSTRAINTS: ProductConstraints = {
 export const WARDROBE_CONSTRAINTS: ProductConstraints = {
   dimensions: {
     width: { min: 40, max: 250, default: 200, unit: 'cm' },
-    height: { min: 237, max: 270, default: 260, unit: 'cm' },
+    height: { min: 237, max: 280, default: 260, unit: 'cm' },
     depth: { min: 35, max: 60, default: 50, unit: 'cm' },
     plintHeight: { min: 2, max: 8, default: 2, unit: 'cm' },
   },

@@ -34,11 +34,13 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     colorHexCodes[ColorName.White]
   )
 
-  // Column configuration state
-  const columnLayout = useMemo(
-    () => calculateWardrobeColumnLayout(width),
-    [width]
-  )
+  // Mirror state - tracks if wardrobe columns should be reversed
+  const [isMirrored, setIsMirrored] = useState(false)
+
+  // Column configuration state - calculate layout with mirroring applied
+  const columnLayout = useMemo(() => {
+    return calculateWardrobeColumnLayout(width, isMirrored)
+  }, [width, isMirrored])
 
   // Initialize column configurations
   const [columnConfigurations, setColumnConfigurations] = useState<
@@ -79,6 +81,13 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     return OpeningType.ProfileHandleLong
   })
 
+  // Initialize isMirrored from URL
+  useEffect(() => {
+    if (urlCtx?.config.isMirrored !== undefined) {
+      setIsMirrored(urlCtx.config.isMirrored)
+    }
+  }, [urlCtx?.config.isMirrored])
+
   // Calculate doors number based on width (used for pricing)
   const doorsNr = useMemo(() => {
     if (width <= 60) return 1
@@ -91,9 +100,17 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
 
   // Track if initial render has happened (to prevent URL sync during initialization)
   const hasHydratedRef = useRef(false)
-  
+
+  // Track previous mirror state to detect actual changes (not initialization)
+  const prevMirroredRef = useRef(isMirrored)
+
   // Track previous values to avoid unnecessary state updates
-  const prevDimensionsRef = useRef({ width: 200, height: 260, plintHeight: 2, columnCount: columnLayout.columnCount })
+  const prevDimensionsRef = useRef({
+    width: 200,
+    height: 260,
+    plintHeight: 2,
+    columnCount: columnLayout.columnCount,
+  })
 
   // Mark hydration as complete after first render
   useEffect(() => {
@@ -146,6 +163,71 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     [urlCtx]
   )
 
+  // Function to toggle mirror state with URL sync
+  const toggleMirror = useCallback(() => {
+    const newMirrorState = !isMirrored
+    setIsMirrored(newMirrorState)
+
+    // Sync mirror state to URL (configurations will be synced by the effect below)
+    if (urlCtx) {
+      urlCtx.setConfig({
+        ...urlCtx.config,
+        isMirrored: newMirrorState,
+      })
+    }
+  }, [isMirrored, urlCtx, width, columnConfigurations])
+
+  // Reverse configurations when mirror state changes (but not during initialization)
+  useEffect(() => {
+    // Skip if not initialized yet
+    if (!urlInitialized || !hasHydratedRef.current) {
+      return
+    }
+
+    // Skip if mirror state hasn't actually changed (prevents reversal on mount)
+    if (prevMirroredRef.current === isMirrored) {
+      return
+    }
+
+    // Update ref for next comparison
+    prevMirroredRef.current = isMirrored
+
+    // Calculate the NEW layout with the NEW mirror state
+    const newLayout = calculateWardrobeColumnLayout(width, isMirrored)
+
+    // When mirror state changes, reverse the configurations to match the new layout
+    setColumnConfigurations((prevConfigs) => {
+      const reversed = [...prevConfigs].reverse()
+
+      // Also update door opening sides for single doors after mirroring
+      const reversedWithUpdatedDoors = reversed.map((config, index) => {
+        // Get the new column width and door side from the NEW layout
+        const newColumnWidth = newLayout.columnWidths[index]
+        const newDoorOpeningSide = newLayout.doorOpeningSides[index]
+
+        // Only update if it's a single door (narrow column)
+        if (config.doorType === 'single' && newColumnWidth <= 60) {
+          return {
+            ...config,
+            doorOpeningSide: newDoorOpeningSide,
+          }
+        }
+        return config
+      })
+
+      // Sync to URL
+      if (urlCtx) {
+        const encoded = encodeWardrobeColumnConfigs(reversedWithUpdatedDoors)
+        urlCtx.setConfig({
+          ...urlCtx.config,
+          wardrobeCfg: encoded,
+        })
+      }
+
+      return reversedWithUpdatedDoors
+    })
+  }, [isMirrored, urlInitialized, urlCtx, width])
+
   // Initialize from URL after component mounts
   useEffect(() => {
     if (!urlInitialized && router.isReady && urlCtx) {
@@ -154,15 +236,22 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       if (wardrobeCfgStr && typeof wardrobeCfgStr === 'string') {
         // Decode configurations from URL (now includes hasDoor state)
         const decodedConfigs = decodeWardrobeColumnConfigs(wardrobeCfgStr)
+
         if (decodedConfigs.length > 0) {
-          // Calculate layout based on URL width, not current state width
+          // Calculate layout based on URL width and mirror state
           const urlWidth = urlCtx.config.width
-          const urlLayout = calculateWardrobeColumnLayout(urlWidth)
+          const urlMirrored = urlCtx.config.isMirrored ?? false
+
+          const urlLayout = calculateWardrobeColumnLayout(urlWidth, urlMirrored)
 
           const newConfigs = urlLayout.columnWidths.map((colWidth, index) => {
-            const decoded = decodedConfigs[index] || { templateId: 'FULL_HANGING_WITH_1_SHELF', hasDoor: true }
+            const decoded = decodedConfigs[index] || {
+              templateId: 'FULL_HANGING_WITH_1_SHELF',
+              hasDoor: true,
+            }
             const templateId = decoded.templateId
             const template = WARDROBE_TEMPLATES[templateId]
+
             return {
               zones: template?.zones || [],
               totalHeight: height - plintHeight,
@@ -175,6 +264,10 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
             }
           })
           setColumnConfigurations(newConfigs)
+
+          // IMPORTANT: Set prevMirroredRef to current mirror state to prevent
+          // the mirror effect from reversing configs on initial load
+          prevMirroredRef.current = urlMirrored
         }
       }
       setUrlInitialized(true)
@@ -188,25 +281,33 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       return
     }
 
-    const newLayout = calculateWardrobeColumnLayout(width)
+    const newLayout = calculateWardrobeColumnLayout(width, isMirrored)
     const prev = prevDimensionsRef.current
-    
+
     // Check if we actually need to update (avoid calling setter unnecessarily)
     const columnCountChanged = prev.columnCount !== newLayout.columnCount
-    const dimensionsChanged = prev.height !== height || prev.plintHeight !== plintHeight
-    
+    const dimensionsChanged =
+      prev.height !== height || prev.plintHeight !== plintHeight
+
     if (!columnCountChanged && !dimensionsChanged) {
       return // Don't even call setColumnConfigurations
     }
-    
+
     // Update ref for next comparison
-    prevDimensionsRef.current = { width, height, plintHeight, columnCount: newLayout.columnCount }
+    prevDimensionsRef.current = {
+      width,
+      height,
+      plintHeight,
+      columnCount: newLayout.columnCount,
+    }
 
     if (columnCountChanged) {
       // Reset configurations if column count changed
-      setColumnConfigurations((prevConfigs) => 
+      setColumnConfigurations((prevConfigs) =>
         newLayout.columnWidths.map((colWidth, index) => {
-          const existingTemplate = prevConfigs[index]?.templateId
+          const existingConfig = prevConfigs[index]
+          const existingTemplate = existingConfig?.templateId
+          const existingHasDoor = existingConfig?.hasDoor ?? true // Preserve hasDoor state
           const defaultTemplateId =
             existingTemplate || 'FULL_HANGING_WITH_1_SHELF'
           const template = WARDROBE_TEMPLATES[defaultTemplateId]
@@ -216,7 +317,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
             doorType: colWidth > 60 ? 'split' : 'single',
             doorOpeningSide: newLayout.doorOpeningSides[index],
             templateId: defaultTemplateId,
-            hasDoor: true, // Default to closed (has door)
+            hasDoor: existingHasDoor, // Preserve existing hasDoor state
           }
         })
       )
@@ -231,7 +332,14 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
         }))
       )
     }
-  }, [width, height, plintHeight, urlInitialized, columnLayout.columnCount])
+  }, [
+    width,
+    height,
+    plintHeight,
+    urlInitialized,
+    columnLayout.columnCount,
+    isMirrored,
+  ])
 
   const templatesExtraCost = useMemo(() => {
     return columnConfigurations.reduce((sum, config) => {
@@ -258,7 +366,7 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
     {
       type: 'dimensions',
       widthRange: [40, 250],
-      heightRange: [237, 270],
+      heightRange: [237, 280],
       depthRange: [35, 60],
       plintHeightRange: [2, 8],
       heightStep: 1,
@@ -282,9 +390,13 @@ export const WardrobeProductConfigurator: () => ProductComponent[] = () => {
       selectedColumns: columnLayout.columnCount,
       columnConfigurations,
       setColumnConfigurations: updateColumnConfigurations,
-      columnWidth: columnLayout.columnWidths[0], // Will be dynamic per column in future
+      columnWidths: columnLayout.columnWidths, // Pass array of all column widths
+      columnWidth: columnLayout.columnWidths[0], // Keep for backwards compatibility
       columnHeight: height - plintHeight,
       columnDepth: depth,
+      onMirrorToggle: toggleMirror,
+      isMirrored, // Pass mirror state for 3D rendering
+      doorOpeningSides: columnLayout.doorOpeningSides, // Pass calculated door opening sides
     } as unknown as ProductComponent,
     {
       type: 'furniture',

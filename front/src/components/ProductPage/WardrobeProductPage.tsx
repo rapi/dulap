@@ -24,9 +24,7 @@ import {
   ProductFurnitureComponent,
   ProductFurniturePredefinedValue,
 } from '~/components/ProductPage/productTypeComponents/ProductFurniture'
-import {
-  ProductSectionPredefinedValue,
-} from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
+import { ProductSectionPredefinedValue } from '~/components/ProductPage/productTypeComponents/wardrobe/ProductSections'
 import {
   ProductPrice,
   ProductPriceComponent,
@@ -40,7 +38,10 @@ import { useCart } from '~/context/cartContext'
 import { Dimension } from '../ProductListPage/products'
 import { use3DFurnitureProps } from '~/hooks/use3DFurnitureProps'
 import { DEFAULT_WARDROBE } from './productTypes/wardrobe'
-import { FurnitureViewer, FurnitureViewerRef } from '../ThreeDModel/FurnitureViewer'
+import {
+  FurnitureViewer,
+  FurnitureViewerRef,
+} from '../ThreeDModel/FurnitureViewer'
 import { InfoBar } from '~/components/InfoBar/InfoBar'
 import { productInfoBarContent } from '~/components/InfoBar/ProductInfoBarContent'
 import {
@@ -104,9 +105,11 @@ export const ProductPage: FC<ProductPageProps> = ({
   const { addItem } = useCart()
   const isMobile = useMediaQuery('(max-width: 768px)')
   const [activeColumnTab, setActiveColumnTab] = useState(0)
-  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(null)
+  const [selectedColumnIndex, setSelectedColumnIndex] = useState<number | null>(
+    null
+  )
   const furnitureViewerRef = useRef<FurnitureViewerRef>(null)
-  
+
   // Get current config for share functionality
   const urlConfigCtx = useConfiguratorConfigOptional()
 
@@ -180,12 +183,11 @@ export const ProductPage: FC<ProductPageProps> = ({
 
   // ---------- MOBILE: chips + core-only panel ----------
   // Build available sections (present + valid for current mode)
-  const navComponents = filterNavigable(currentComponents)
-    .sort(
-      (a, b) =>
-        NAV_ORDER.indexOf(a.type as NavSection) -
-        NAV_ORDER.indexOf(b.type as NavSection)
-    )
+  const navComponents = filterNavigable(currentComponents).sort(
+    (a, b) =>
+      NAV_ORDER.indexOf(a.type as NavSection) -
+      NAV_ORDER.indexOf(b.type as NavSection)
+  )
 
   const [activeSection, setActiveSection] = useState<NavSection | null>(
     navComponents[0]?.type ?? null
@@ -263,7 +265,10 @@ export const ProductPage: FC<ProductPageProps> = ({
       case 'furniture': {
         return (
           <ProductFurniture
-            configuration={{ ...comp as ProductFurnitureComponent, furnitureType: 'wardrobe' }}
+            configuration={{
+              ...(comp as ProductFurnitureComponent),
+              furnitureType: 'wardrobe',
+            }}
             predefinedValue={values?.furniture ?? undefined}
             onOpeningTypeChange={handleOpeningTypeChange}
           />
@@ -334,8 +339,12 @@ export const ProductPage: FC<ProductPageProps> = ({
               <ProductPrice
                 onAddItem={() => {
                   // Capture screenshot before adding to cart
-                  const screenshot = furnitureViewerRef.current?.captureScreenshot() || undefined
-                  addItem('wardrobe', currentComponents, { ...(values ?? {}), screenshot })
+                  const screenshot =
+                    furnitureViewerRef.current?.captureScreenshot() || undefined
+                  addItem('wardrobe', currentComponents, {
+                    ...(values ?? {}),
+                    screenshot,
+                  })
                 }}
                 configuration={priceComponent}
                 predefinedValue={values?.price ?? undefined}
@@ -370,7 +379,9 @@ export const ProductPage: FC<ProductPageProps> = ({
 
               {/* Always render colors component (hidden) so effects run and color changes apply immediately */}
               {(() => {
-                const colorsComponent = navComponents.find((c) => c.type === 'colors')
+                const colorsComponent = navComponents.find(
+                  (c) => c.type === 'colors'
+                )
                 if (colorsComponent && colorsComponent.type !== activeSection) {
                   return (
                     <div key="colors-hidden" style={{ display: 'none' }}>

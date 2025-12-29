@@ -1,4 +1,11 @@
-import React, { memo, useState, useCallback, useMemo, useEffect, useRef } from 'react'
+import React, {
+  memo,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from 'react'
 import * as THREE from 'three'
 import { ThreeEvent } from '@react-three/fiber'
 import { FURNITURE_CONFIG, OpeningType } from '../furnitureConfig'
@@ -31,7 +38,7 @@ interface WardrobeColumnProps {
 
 /**
  * WardrobeColumn - Specialized column component for wardrobes
- * 
+ *
  * Key differences from standard Column:
  * - Full-height doors (from plinth to near top)
  * - No drawers
@@ -60,10 +67,10 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
 }) => {
   const { panelThickness, panelSpacing } = FURNITURE_CONFIG
   const [isColumnHovered, setIsColumnHovered] = useState(false)
-  
+
   // Combine hover and selected states - column should be "open" if either is true
   const isColumnOpen = isSelected || isColumnHovered
-  
+
   // Refs for panels to apply textures
   const bottomPanelRef = useRef<THREE.Mesh>(null)
 
@@ -71,15 +78,16 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
   const doorConfig = useMemo(() => {
     // Wardrobe-specific: Doors are taller, extending to the top
     const doorHeight = columnHeight - plintHeight
-    
+
     // Wardrobe-specific: Handles at ~100cm from floor (ergonomic height)
     const WARDROBE_HANDLE_HEIGHT_FROM_FLOOR = 100
-    const handleHeightFromBottom = WARDROBE_HANDLE_HEIGHT_FROM_FLOOR - plintHeight
-    
+    const handleHeightFromBottom =
+      WARDROBE_HANDLE_HEIGHT_FROM_FLOOR - plintHeight
+
     const doorPositionY = plintHeight
     const hingeCount = 4
     const hingePositionRule = 'even' as const
-    
+
     return {
       doorHeight,
       handleHeightFromBottom,
@@ -102,50 +110,57 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
   }, [])
 
   // Click handler for column selection
-  const handleClick = useCallback((event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation()
-    if (onColumnClick) {
-      onColumnClick(columnIndex)
-    }
-  }, [columnIndex, onColumnClick])
+  const handleClick = useCallback(
+    (event: ThreeEvent<PointerEvent>) => {
+      event.stopPropagation()
+      if (onColumnClick) {
+        onColumnClick(columnIndex)
+      }
+    },
+    [columnIndex, onColumnClick]
+  )
 
   // Memoize panel geometry to prevent recreation
-  const panels = useMemo(() => (
-    <>
-      {/* Bottom panel */}
-      <mesh
-        ref={bottomPanelRef}
-        position={[0, plintHeight, columnDepth / 2]}
-        rotation={[-Math.PI / 2, 0, 0]}
-      >
-        <planeGeometry args={[columnWidth, columnDepth]} />
-        <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
-      </mesh>
-    </>
-  ), [columnWidth, columnDepth, plintHeight, selectedColor])
+  const panels = useMemo(
+    () => (
+      <>
+        {/* Bottom panel */}
+        <mesh
+          ref={bottomPanelRef}
+          position={[0, plintHeight, columnDepth / 2]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
+          <planeGeometry args={[columnWidth, columnDepth]} />
+          <meshStandardMaterial color={selectedColor} side={THREE.DoubleSide} />
+        </mesh>
+      </>
+    ),
+    [columnWidth, columnDepth, plintHeight, selectedColor]
+  )
 
-
-  const hoverPanel = useMemo(() => (
-    <>
-      {/* HOVER panel 
+  const hoverPanel = useMemo(
+    () => (
+      <>
+        {/* HOVER panel 
       - It becomes transparent red only on hover
       */}
-      <mesh
-        position={[0, columnHeight / 2, columnDepth-panelThickness+0.1]}
-        rotation={[0, Math.PI, 0]}
-      >
-        <planeGeometry args={[columnWidth, columnHeight]} />
-        <meshStandardMaterial 
-          color={isColumnHovered ? '#ff0000' : '#ffffff'} 
-          transparent={true}
-          opacity={isColumnHovered ? 0.3 : 0}
-          side={THREE.DoubleSide} 
-        />
-      </mesh>
-    </>
-  ), [columnWidth, columnHeight, columnDepth, panelThickness, isColumnHovered])
+        <mesh
+          position={[0, columnHeight / 2, columnDepth - panelThickness + 0.1]}
+          rotation={[0, Math.PI, 0]}
+        >
+          <planeGeometry args={[columnWidth, columnHeight]} />
+          <meshStandardMaterial
+            color={isColumnHovered ? '#ff0000' : '#ffffff'}
+            transparent={true}
+            opacity={isColumnHovered ? 0.3 : 0}
+            side={THREE.DoubleSide}
+          />
+        </mesh>
+      </>
+    ),
+    [columnWidth, columnHeight, columnDepth, panelThickness, isColumnHovered]
+  )
 
-  
   // Apply color/texture to panels
   useEffect(() => {
     if (bottomPanelRef.current) {
@@ -160,21 +175,21 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
     const shelves = [
       <Shelf
         key="top-shelf-200"
-        columnWidth={columnWidth-1}
+        columnWidth={columnWidth - 1}
         columnDepth={columnDepth}
         positionY={SHELF_HEIGHT}
         selectedColor={selectedColor}
         thickness={2}
-      />
+      />,
     ]
 
     // Add middle shelf if column height > 260
-    if (columnHeight > 260) {
+    if (columnHeight > 260 && columnHeight <= 300) {
       const middleShelfHeight = 200 + (columnHeight - 200) / 2
       shelves.push(
         <Shelf
           key="top-shelf-middle"
-          columnWidth={columnWidth-1}
+          columnWidth={columnWidth - 1}
           columnDepth={columnDepth}
           positionY={middleShelfHeight}
           selectedColor={selectedColor}
@@ -183,17 +198,44 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
       )
     }
 
+    if (columnHeight > 300) {
+      const shelfHeights = [
+        200,
+        200 + (columnHeight - 200) / 3,
+        200 + (2 * (columnHeight - 200)) / 3,
+      ]
+      shelfHeights.forEach((height, index) => {
+        shelves.push(
+          <Shelf
+            key={`top-shelf-${index}`}
+            columnWidth={columnWidth - 1}
+            columnDepth={columnDepth}
+            positionY={height}
+            selectedColor={selectedColor}
+            thickness={2}
+          />
+        )
+      })
+    }
+
     return <>{shelves}</>
   }, [columnWidth, columnDepth, columnHeight, selectedColor])
 
   // Render wardrobe interior zones
   const interiorZones = useMemo(() => {
-    if (!columnConfiguration || !columnConfiguration.zones || columnConfiguration.zones.length === 0) {
+    if (
+      !columnConfiguration ||
+      !columnConfiguration.zones ||
+      columnConfiguration.zones.length === 0
+    ) {
       return null
     }
 
     // Calculate total height of all zones
-    const totalZonesHeight = columnConfiguration.zones.reduce((sum, zone) => sum + zone.height, 0)
+    const totalZonesHeight = columnConfiguration.zones.reduce(
+      (sum, zone) => sum + zone.height,
+      0
+    )
 
     // Stack zones from TOP to BOTTOM (zones array is in top-to-bottom order)
     // Start from the top of the wardrobe and work down
@@ -222,10 +264,10 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
       )
     })
   }, [
-    columnConfiguration, 
-    columnWidth, 
-    columnDepth, 
-    plintHeight, 
+    columnConfiguration,
+    columnWidth,
+    columnDepth,
+    plintHeight,
     selectedColor,
     horizontalPanelObject,
     roundHandleObject,
@@ -241,7 +283,13 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
       return null
     }
 
-    const { doorHeight, handleHeightFromBottom, doorPositionY, hingeCount, hingePositionRule } = doorConfig
+    const {
+      doorHeight,
+      handleHeightFromBottom,
+      doorPositionY,
+      hingeCount,
+      hingePositionRule,
+    } = doorConfig
 
     if (doorType === 'split') {
       // Split doors (left and right)
@@ -352,21 +400,20 @@ const WardrobeColumnComponent: React.FC<WardrobeColumnProps> = ({
 
   return (
     <>
-    <group 
-      position={[positionX, 0, 0]}
-      onPointerOver={handlePointerOver}
-      onPointerOut={handlePointerOut}
+      <group
+        position={[positionX, 0, 0]}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
         onClick={handleClick}
-    >
-      {hoverPanel}
-      {panels}
-      {topShelf}
-      {interiorZones}
-      {doors}
+      >
+        {hoverPanel}
+        {panels}
+        {topShelf}
+        {interiorZones}
+        {doors}
       </group>
     </>
   )
 }
 
 export const WardrobeColumn = memo(WardrobeColumnComponent)
-

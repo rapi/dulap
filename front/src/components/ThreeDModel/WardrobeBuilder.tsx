@@ -103,7 +103,7 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
 
   // Calculate column data (widths and positions) for divider calculation
   const columnData = useMemo(() => {
-    return Array.from({ length: columns }, (_, index) => {
+    const data = Array.from({ length: columns }, (_, index) => {
       const columnWidth = useVariableWidths ? columnWidths![index] : defaultColumnWidth
       let columnPositionX: number
       if (useCustomPositions) {
@@ -113,6 +113,8 @@ const WardrobeBuilderComponent: React.FC<WardrobeBuilderProps> = ({
       }
       return { width: columnWidth, positionX: columnPositionX }
     })
+
+    return data
   }, [columns, useVariableWidths, columnWidths, useCustomPositions, columnPositions, defaultColumnWidth, desiredWidth])
 
   // Memoize column generation to prevent unnecessary recreation on every render
