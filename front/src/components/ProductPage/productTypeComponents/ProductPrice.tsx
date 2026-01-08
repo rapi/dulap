@@ -56,10 +56,10 @@ export const ProductPrice: FC<ProductPriceProps> = ({
             &nbsp;
             <FormattedMessage id="homepage.configurator.price.currencyLei" />
           </p>
-          <p className={styles.crossedPrice}>
-            {roundedCrossedPrice}&nbsp;
-            <FormattedMessage id="homepage.configurator.price.currencyLei" />
-          </p>
+          {/*<p className={styles.crossedPrice}>*/}
+          {/*  {roundedCrossedPrice}&nbsp;*/}
+          {/*  <FormattedMessage id="homepage.configurator.price.currencyLei" />*/}
+          {/*</p>*/}
         </div>
 
         
