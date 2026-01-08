@@ -39,7 +39,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   const canonicalUrl = `https://dulap.md${path}`
 
   useEffect(() => {
-    const delayMs = 300
+    const delayMs = 40000
     const already = localStorage.getItem('promoShown')
     if (!already) {
       const timer = setTimeout(() => {
