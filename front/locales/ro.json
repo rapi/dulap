@@ -53,9 +53,11 @@
 
   "homepage.banner.comment": "Lansarea: 10 iulie 2025",
 
-  "homepage.modal.promo.title": "Promocod de -10% pentru tine!",
+  "homepage.modal.promo.title": "Promocod de bun-venit pentru tine",
   "homepage.modal.promo.preorder10": "LAUNCH10",
+  "homepage.modal.promo.welcome10": "WELCOME10",
   "homepage.modal.promo.buttonCopy": "Copiază și închide",
+  "homepage.modal.promo.subtitle": "Lasă-ne adresa ta de email și îți dăruim un promocod 10%.",
 
   "homepage.button.tryIt": "Încearcă aici",
   "homepage.button.yourWardrobe": "Dulapul tău",

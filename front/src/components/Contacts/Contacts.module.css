@@ -103,6 +103,28 @@
   border-color: #c0392b;
 }
 
+.modalTitle {
+  font-weight: 400;
+}
+
+.emailForm input,
+.emailForm textarea {
+  width: 80%;
+  padding: 8px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: 'Onest', sans-serif;
+  color: #505050;
+  box-sizing: border-box;
+}
+
+.emailForm input:focus,
+.emailForm textarea:focus {
+  outline: none;
+  border-color: #c0392b;
+}
+
 .btnSubmit {
   background-color: #c0392b;
   color: #f9f9f9;

@@ -48,9 +48,11 @@
 
   "homepage.banner.comment": "Запуск: 10 июля 2025",
 
-  "homepage.modal.promo.title": "Промокод -10% для тебя!",
+  "homepage.modal.promo.title": "Промокод для вас",
   "homepage.modal.promo.preorder10": "LAUNCH10",
+  "homepage.modal.promo.welcome10": "WELCOME10",
   "homepage.modal.promo.buttonCopy": "Скопируй и закрой",
+  "homepage.modal.promo.subtitle": "Оставьте свой email, и мы подарим вам промокод со скидкой 10%.",
 
   "homepage.button.tryIt": "Попробуй",
   "homepage.button.yourWardrobe": "Твой шкаф",
